@@ -10,12 +10,18 @@ class mps {
 
 private:
     int mantisse_length;
+    int exponent_length;
+
+    long double double_value;
 
 public:
 
-    mps(int mantisse);
+    mps(int mantisse, int exponent, long double value);
 
     int getMantisseLength() const;
+    int getExponentLength() const;
+
+    long double getDoubleValue() const;
 
 
 };
