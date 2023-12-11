@@ -8,15 +8,28 @@
 
 #include "mps.h"
 
+template<typename T = double>
 class mps_side : public mps {
 
 private:
-    long double side_calculation_value;
+    T side_calculation_value{};
 
 public:
-    mps_side(int mantisse, int exponent, long double value);
+    mps_side(int mantisse, int exponent, T value);
 
-    [[nodiscard]] long double getSideCalculationValue() const;
+    [[nodiscard]] T getSideCalculationValue() const;
 };
+
+template<typename T>
+T mps_side<T>::getSideCalculationValue() const {
+    return this->side_calculation_value;
+}
+
+template<typename T>
+mps_side<T>::mps_side(int mantisse, int exponent, T value):mps(mantisse, exponent, value) {
+
+    this->side_calculation_value = value;
+}
+
 
 #endif //MPS_MPS_SIDE_H

@@ -15,7 +15,7 @@
  * @param exponent Exponent of the floating point representation.
  * @param value Value of the floating point number.
  */
-mps::mps(int mantisse, int exponent, long double value) {
+mps::mps(int mantisse, int exponent, double value) {
     this->mantisse_length = mantisse;
     this->exponent_length = exponent;
     this->bit_array_length = 1 + this->mantisse_length + this->exponent_length;

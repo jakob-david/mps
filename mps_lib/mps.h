@@ -21,7 +21,7 @@ private:
     // the value saved as long double
     //-------------------------------
     bool side_calculation_active{};
-    long double* side_calculation_value;
+    long double* side_calculation_value{};
     //-------------------------------
 
     // the actual bit array
@@ -33,7 +33,7 @@ public:
 
     // constructors and destructor
     //-------------------------------
-    mps(int mantisse, int exponent, long double value);
+    mps(int mantisse, int exponent, double value);
     ~mps();
     //-------------------------------
 
