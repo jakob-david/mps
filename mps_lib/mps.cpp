@@ -32,10 +32,6 @@ mps::mps(int mantisse, int exponent, double value) {
 mps::~mps() {
 
     delete this->bit_array;
-
-    if(this->side_calculation_active){
-        delete this->side_calculation_value;
-    }
 }
 
 //-------------------------------
