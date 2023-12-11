@@ -18,7 +18,6 @@
 mps::mps(int mantisse, int exponent, long double value) {
     this->mantisse_length = mantisse;
     this->exponent_length = exponent;
-    this->double_value = value;
     this->bit_array_length = 1 + this->mantisse_length + this->exponent_length;
 
     this->bit_array = new bool[this->bit_array_length]();
@@ -31,7 +30,12 @@ mps::mps(int mantisse, int exponent, long double value) {
  * Destructor for the multiprecision simulator.
  */
 mps::~mps() {
+
     delete this->bit_array;
+
+    if(this->side_calculation_active){
+        delete this->side_calculation_value;
+    }
 }
 
 //-------------------------------
@@ -66,15 +70,6 @@ int mps::getExponentLength() const {
  */
 int mps::getBitArrayLength() const {
     return this->bit_array_length;
-}
-
-/**
- * Returns the value of the LONG DOUBLE SIDE CALCULATION.
- *
- * @return value (long double side calculation)
- */
-long double mps::getDoubleValue() const {
-    return this->double_value;
 }
 
 /**

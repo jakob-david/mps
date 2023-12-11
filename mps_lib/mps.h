@@ -7,7 +7,6 @@
 #ifndef MPS_LIB_MPS_H
 #define MPS_LIB_MPS_H
 
-
 class mps {
 
 private:
@@ -22,7 +21,7 @@ private:
     // the value saved as long double
     //-------------------------------
     bool side_calculation_active{};
-    long double double_value;
+    long double* side_calculation_value;
     //-------------------------------
 
     // the actual bit array
@@ -44,7 +43,6 @@ public:
     [[nodiscard]] int getMantisseLength() const;
     [[nodiscard]] int getExponentLength() const;
     [[nodiscard]] int getBitArrayLength() const;
-    [[nodiscard]] long double getDoubleValue() const;
     [[nodiscard]] bool* getBitArray();
     //-------------------------------
 
