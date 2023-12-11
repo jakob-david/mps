@@ -2,6 +2,8 @@
 // Created by Jakob on 11.12.23.
 //
 
+#include <cstdlib>
+
 #ifndef MPS_LIB_MPS_H
 #define MPS_LIB_MPS_H
 
@@ -9,20 +11,42 @@
 class mps {
 
 private:
-    int mantisse_length;
-    int exponent_length;
 
+    // properties of the bit array
+    //-------------------------------
+    int mantisse_length;    // The length of the mantisse of the bit array.
+    int exponent_length;    // The length of the exponent of the bit array.
+    int bit_array_length;   // The total length of the bit array (sigh + mantisse + exponent).
+    //-------------------------------
+
+    // the value saved as long double
+    //-------------------------------
+    bool side_calculation_active{};
     long double double_value;
+    //-------------------------------
+
+    // the actual bit array
+    //-------------------------------
+    bool* bit_array;
+    //-------------------------------
 
 public:
 
+    // constructors and destructor
+    //-------------------------------
     mps(int mantisse, int exponent, long double value);
+    ~mps();
+    //-------------------------------
 
-    int getMantisseLength() const;
-    int getExponentLength() const;
 
-    long double getDoubleValue() const;
-
+    // getter methods
+    //-------------------------------
+    [[nodiscard]] int getMantisseLength() const;
+    [[nodiscard]] int getExponentLength() const;
+    [[nodiscard]] int getBitArrayLength() const;
+    [[nodiscard]] long double getDoubleValue() const;
+    [[nodiscard]] bool* getBitArray();
+    //-------------------------------
 
 };
 
