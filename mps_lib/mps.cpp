@@ -1,5 +1,5 @@
 #include "mps.h"
-
+#include <iostream>
 
 
 // constructors and destructor
@@ -80,4 +80,20 @@ vector<bool>* mps::getBitArrayReference() {
     return &this->bit_vector;
 }
 
+//-------------------------------
+
+
+// helper methods
+//-------------------------------
+vector<bool> mps::intToBinary(int value) {
+
+    vector<bool> ret;
+
+    for(int i = value; i >0; i /= 2){
+        ret.insert(ret.begin(), i%2);
+        cout << i << endl;
+    }
+
+    return ret;
+}
 //-------------------------------

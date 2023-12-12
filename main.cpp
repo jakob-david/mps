@@ -4,6 +4,9 @@
 
 using namespace std;
 
+#include <bitset>
+#include <iostream>
+
 
 void func(bool* test_1, bool* test_2, bool* test_3, int size){
     for (int i = 0; i < 10000000; i++) {
@@ -25,10 +28,9 @@ void func(vector<bool> test_1, vector<bool> test_2, vector<bool> test_3, int siz
 
 
 int main() {
-
+/*
     for (int i = 0; i < 50; i++) {
 
-/*
         bool test_1[i];
         bool test_2[i];
         bool test_3[i];
@@ -37,7 +39,7 @@ int main() {
             test_1[j] = j % 3;
             test_2[j] = j % 2;
         }
-*/
+
 
         vector<bool> test_1;
         vector<bool> test_2;
@@ -63,7 +65,17 @@ int main() {
         chrono::milliseconds t = t_2 - t_1;
 
         std::cout << t.count() << std::endl;
-    }
+    }*/
+
+
+    float test = 1;
+
+    float f = 0.125;
+    char* bits = reinterpret_cast<char*>(&f);
+    for(std::size_t n = 0; n < sizeof f; ++n)
+        std::cout << std::bitset<8>(bits[n]);
+    std::cout << '\n';
+
 }
 
 

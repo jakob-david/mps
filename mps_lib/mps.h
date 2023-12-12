@@ -29,7 +29,6 @@ public:
     ~mps();
     //-------------------------------
 
-
     // getter methods
     //-------------------------------
     [[nodiscard]] int getMantisseLength() const;
@@ -37,6 +36,13 @@ public:
     [[nodiscard]] unsigned long getBitArrayLength() const;
     [[nodiscard]] vector<bool> getBitArray();
     [[nodiscard]] vector<bool>* getBitArrayReference();
+    //-------------------------------
+
+public:
+
+    // helper functions
+    //-------------------------------
+    vector<bool> intToBinary(int value);
     //-------------------------------
 
 };
