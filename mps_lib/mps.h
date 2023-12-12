@@ -3,9 +3,12 @@
 //
 
 #include <cstdlib>
+#include <vector>
 
 #ifndef MPS_LIB_MPS_H
 #define MPS_LIB_MPS_H
+
+using namespace std;
 
 class mps {
 
@@ -15,18 +18,12 @@ private:
     //-------------------------------
     int mantisse_length;    // The length of the mantisse of the bit array.
     int exponent_length;    // The length of the exponent of the bit array.
-    int bit_array_length;   // The total length of the bit array (sigh + mantisse + exponent).
     //-------------------------------
 
-    // the value saved as long double
-    //-------------------------------
-    bool side_calculation_active{};
-    long double* side_calculation_value{};
-    //-------------------------------
 
     // the actual bit array
     //-------------------------------
-    bool* bit_array;
+    vector<bool> bit_vector;
     //-------------------------------
 
 public:
@@ -42,8 +39,9 @@ public:
     //-------------------------------
     [[nodiscard]] int getMantisseLength() const;
     [[nodiscard]] int getExponentLength() const;
-    [[nodiscard]] int getBitArrayLength() const;
-    [[nodiscard]] bool* getBitArray();
+    [[nodiscard]] unsigned long getBitArrayLength() const;
+    [[nodiscard]] vector<bool> getBitArray();
+    [[nodiscard]] vector<bool>* getBitArrayReference();
     //-------------------------------
 
 };

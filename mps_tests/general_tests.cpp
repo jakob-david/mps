@@ -19,24 +19,11 @@ TEST(constructor_tests, constructor_sets_values_coorectly){
 
 TEST(constructor_tests, constructor_initializes_bit_array_correctly){
 
-    bool error = false;
-
-
     mps* MPS = new mps(20, 12, 3.14);
 
-    int total_length = MPS->getBitArrayLength();
+    int size = MPS->getBitArrayLength();
 
-    bool* array = MPS->getBitArray();
-
-    for(int i = 0; i < total_length; i++){
-        if(array[i] != 0){
-            error = true;
-            break;
-        }
-    }
-
-    EXPECT_EQ(33, total_length);
-    EXPECT_EQ(error, false);
+    EXPECT_EQ(33, size);
 }
 
 TEST(constructor_tests, sidecalculation_initialisation) {

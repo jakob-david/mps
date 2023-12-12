@@ -3,7 +3,6 @@
 //
 
 #include "mps.h"
-#include <iostream>
 
 // constructors and destructor
 //-------------------------------
@@ -18,21 +17,18 @@
 mps::mps(int mantisse, int exponent, double value) {
     this->mantisse_length = mantisse;
     this->exponent_length = exponent;
-    this->bit_array_length = 1 + this->mantisse_length + this->exponent_length;
 
-    this->bit_array = new bool[this->bit_array_length]();
-    for(int i = 0; i < this->bit_array_length; i++){
-        this->bit_array[i] = false;
+    int length = 1 + this->mantisse_length + this->exponent_length;
+
+    for(int i = 0; i < length; i++){
+        this->bit_vector.push_back(false);
     }
 }
 
 /**
  * Destructor for the multiprecision simulator.
  */
-mps::~mps() {
-
-    delete this->bit_array;
-}
+mps::~mps() = default;
 
 //-------------------------------
 
@@ -46,7 +42,7 @@ mps::~mps() {
  * @return length matisse
  */
 int mps::getMantisseLength() const {
-    return mps::mantisse_length;
+    return this->mantisse_length;
 }
 
 /**
@@ -64,17 +60,26 @@ int mps::getExponentLength() const {
  *
  * @return length matisse
  */
-int mps::getBitArrayLength() const {
-    return this->bit_array_length;
+unsigned long mps::getBitArrayLength() const {
+    return this->bit_vector.size();
 }
 
 /**
- * Returns a pointer to the bit array.
+ * Returns the bit vector.
  *
- * @return pointer to bit array.
+ * @return bit vector
  */
-bool *mps::getBitArray() {
-    return this->bit_array;
+vector<bool> mps::getBitArray() {
+    return this->bit_vector;
+}
+
+/**
+ * Returns a pointer to the bit vector.
+ *
+ * @return pointer to bit vector
+ */
+vector<bool>* mps::getBitArrayReference() {
+    return &this->bit_vector;
 }
 
 //-------------------------------

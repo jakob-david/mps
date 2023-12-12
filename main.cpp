@@ -4,16 +4,19 @@
 
 using namespace std;
 
+
 void func(bool* test_1, bool* test_2, bool* test_3, int size){
     for (int i = 0; i < 10000000; i++) {
+
         for (int j = 0; j < size; j++) {
             test_3[j] = test_1[j] * test_2[j];
+
         }
     }
 }
 
 void func(vector<bool> test_1, vector<bool> test_2, vector<bool> test_3, int size){
-    for (int i = 0; i < 100000; i++) {
+    for (int i = 0; i < 1000000; i++) {
         for (int j = 0; j < size; j++) {
             test_3[j] = test_1[j] * test_2[j];
         }
@@ -23,7 +26,7 @@ void func(vector<bool> test_1, vector<bool> test_2, vector<bool> test_3, int siz
 
 int main() {
 
-    for (int i = 0; i < 100; i++) {
+    for (int i = 0; i < 50; i++) {
 
 /*
         bool test_1[i];
@@ -34,7 +37,6 @@ int main() {
             test_1[j] = j % 3;
             test_2[j] = j % 2;
         }
-
 */
 
         vector<bool> test_1;

@@ -12,7 +12,7 @@ template<typename T = double>
 class mps_side : public mps {
 
 private:
-    T side_calculation_value{};
+    T side_calculation_value;
 
 public:
     mps_side(int mantisse, int exponent, T value);
