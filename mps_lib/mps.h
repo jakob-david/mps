@@ -1,12 +1,7 @@
-//
-// Created by Jakob on 11.12.23.
-//
-
-#include <cstdlib>
-#include <vector>
-
 #ifndef MPS_LIB_MPS_H
 #define MPS_LIB_MPS_H
+
+#include <vector>
 
 using namespace std;
 

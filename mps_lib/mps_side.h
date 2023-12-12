@@ -1,7 +1,3 @@
-//
-// Created by Jakob on 11.12.23.
-//
-
 #ifndef MPS_MPS_SIDE_H
 #define MPS_MPS_SIDE_H
 
