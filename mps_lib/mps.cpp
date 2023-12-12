@@ -91,7 +91,6 @@ vector<bool> mps::intToBinary(int value) {
 
     for(int i = value; i >0; i /= 2){
         ret.insert(ret.begin(), i%2);
-        cout << i << endl;
     }
 
     return ret;
