@@ -95,4 +95,34 @@ vector<bool> mps::intToBinary(int value) {
 
     return ret;
 }
+
+vector<bool> mps::getDecimalPart(double value, int length){
+
+    vector<bool> ret;
+
+    int int_part = (int) value;
+    double reminder = value - int_part;
+
+    for(int i = 0; i < length; i++){
+
+        reminder *= 2;
+
+        if(reminder >= 1){
+            ret.push_back(true);
+            reminder -= 1;
+        } else{
+            ret.push_back(false);
+        }
+    }
+
+    return ret;
+}
+
+vector<bool> mps::getFloatingPointRepresentation(double value, int exponent, int mantissa) {
+
+    vector<bool> ret;
+
+
+    return ret;
+}
 //-------------------------------

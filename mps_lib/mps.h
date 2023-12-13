@@ -43,6 +43,8 @@ public:
     // helper functions
     //-------------------------------
     vector<bool> intToBinary(int value);
+    vector<bool> getDecimalPart(double value, int length);
+    vector<bool> getFloatingPointRepresentation(double value, int exponent, int mantissa);
     //-------------------------------
 
 };

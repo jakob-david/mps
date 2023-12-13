@@ -54,3 +54,69 @@ TEST(converter_tests, test_intToBit) {
     EXPECT_EQ("10000100", str);
 
 }
+
+TEST(converter_tests, test_getDecimalPart) {
+
+    auto MPS = new mps_side(20, 12, 3.14159265359);
+
+    auto binary = MPS->getDecimalPart(132.64, 15);
+
+    string str;
+    for(bool bit : binary){
+        if(bit){
+            str.append("1");
+        } else {
+            str.append("0");
+        }
+    }
+
+    EXPECT_EQ("101000111101011", str);
+
+}
+
+TEST(converter_tests, test_getDecimalPart2) {
+
+    auto MPS = new mps_side(20, 12, 3.14159265359);
+
+    auto binary = MPS->getDecimalPart(0.3452, 20);
+
+    string str;
+    for(bool bit : binary){
+        if(bit){
+            str.append("1");
+        } else {
+            str.append("0");
+        }
+    }
+
+    EXPECT_EQ("01011000010111110000", str);
+
+}
+
+TEST(converter_tests, test_getFloatingPointRepresentation) {
+
+    double test_value = 342.45636;
+
+    auto MPS = new mps_side(20, 12, 3.14159265359);
+
+    auto binary = MPS->getFloatingPointRepresentation(test_value, 11, 52);
+
+    string str;
+    for(bool bit : binary){
+        if(bit){
+            str.append("1");
+        } else {
+            str.append("0");
+        }
+    }
+
+
+    string compare_str;
+    char* bits = reinterpret_cast<char*>(&test_value);
+    for(std::size_t n = 0; n < sizeof test_value; ++n) {
+        compare_str.append(std::bitset<8>(bits[n]).to_string());
+    }
+
+    EXPECT_EQ("01011000010111110000", str);
+
+}
