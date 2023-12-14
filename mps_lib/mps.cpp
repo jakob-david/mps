@@ -12,15 +12,11 @@
  * @param exponent Exponent of the floating point representation.
  * @param value Value of the floating point number.
  */
-mps::mps(int mantisse, int exponent, double value) {
-    this->mantisse_length = mantisse;
-    this->exponent_length = exponent;
+mps::mps(int mantissa_length, int exponent_length, double value) {
+    this->mantissa_length = mantissa_length;
+    this->exponent_length = exponent_length;
 
-    int length = 1 + this->mantisse_length + this->exponent_length;
-
-    for(int i = 0; i < length; i++){
-        this->bit_vector.push_back(false);
-    }
+    this->bit_vector = getFloatingPointRepresentation(value, this->exponent_length,this->mantissa_length);
 }
 
 /**
@@ -40,7 +36,7 @@ mps::~mps() = default;
  * @return length matisse
  */
 int mps::getMantisseLength() const {
-    return this->mantisse_length;
+    return this->mantissa_length;
 }
 
 /**
@@ -85,9 +81,7 @@ vector<bool>* mps::getBitArrayReference() {
 
 // helper methods
 //-------------------------------
-
-
-vector<bool> mps::getFloatingPointRepresentation(double value, int exponent_length, int mantissa_length) {
+vector<bool> mps::getFloatingPointRepresentation(double value, int exponent_len, int mantissa_len) {
 
     /*
      * Small function to convert an integer to a bit string.
@@ -139,20 +133,20 @@ vector<bool> mps::getFloatingPointRepresentation(double value, int exponent_leng
 
     auto integerPart = getIntegerPart((int) value);
 
-    int decimal_length = mantissa_length - (int) integerPart.size() + 1;
+    int decimal_length = mantissa_len - (int) integerPart.size() + 1;
     vector<bool> decimalPart = getDecimalPart(value, decimal_length);
 
     int mantissa_shift = (int) integerPart.size() - 1;
-    int mantissa_adjustment = ((int) pow (2, exponent_length))/2 - 1;
+    int mantissa_adjustment = ((int) pow (2, exponent_len)) / 2 - 1;
     int exponent_int = mantissa_shift + mantissa_adjustment;
 
     vector<bool> exponent = getIntegerPart(exponent_int);
 
-    if(exponent.size() > exponent_length) {
+    if(exponent.size() > exponent_len) {
         cout << "ERROR: exponent too large" << endl;
         // TODO: add propper error handling.
     } else {
-        for(int i = (int) exponent.size(); i < exponent_length; i++){
+        for(int i = (int) exponent.size(); i < exponent_len; i++){
             exponent.insert(exponent.begin(), false);
         }
     }

@@ -11,7 +11,7 @@ private:
 
     // properties of the bit array
     //-------------------------------
-    int mantisse_length;    // The length of the mantisse of the bit array.
+    int mantissa_length;    // The length of the mantissa of the bit array.
     int exponent_length;    // The length of the exponent of the bit array.
     //-------------------------------
 
@@ -25,7 +25,7 @@ public:
 
     // constructors and destructor
     //-------------------------------
-    mps(int mantisse, int exponent, double value);
+    mps(int mantissa_length, int exponent_length, double value);
     ~mps();
     //-------------------------------
 
@@ -38,11 +38,11 @@ public:
     [[nodiscard]] vector<bool>* getBitArrayReference();
     //-------------------------------
 
-public:
+private:
 
     // helper functions
     //-------------------------------
-    vector<bool> getFloatingPointRepresentation(double value, int exponent_length, int mantissa_length);
+    vector<bool> getFloatingPointRepresentation(double value, int exponent_len, int mantissa_len);
     //-------------------------------
 
 };
