@@ -70,7 +70,6 @@ TEST(converter_tests, test_positive_double_using_getBitArrayReference) {
 
     auto MPS = new mps_side(52, 11, test_value);
 
-    //auto biary = MPS->getFloatingPointRepresentation(test_value, 11, 52);
     auto binary = MPS->getBitArrayReference();
 
     string str;
@@ -98,7 +97,6 @@ TEST(converter_tests, test_negative_double) {
 
     auto MPS = new mps_side(52, 11, test_value);
 
-    //auto biary = MPS->getFloatingPointRepresentation(test_value, 11, 52);
     auto binary = MPS->getBitArray();
 
     string str;
@@ -126,7 +124,6 @@ TEST(converter_tests, test_positive_float) {
 
     auto MPS = new mps_side(23, 8, test_value);
 
-    //auto biary = MPS->getFloatingPointRepresentation(test_value, 11, 52);
     auto binary = MPS->getBitArray();
 
     string str;
@@ -154,7 +151,6 @@ TEST(converter_tests, test_negative_float) {
 
     auto MPS = new mps_side(23, 8, test_value);
 
-    //auto biary = MPS->getFloatingPointRepresentation(test_value, 11, 52);
     auto binary = MPS->getBitArray();
 
     string str;

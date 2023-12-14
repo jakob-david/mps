@@ -33,7 +33,7 @@ public:
     //-------------------------------
     [[nodiscard]] int getMantisseLength() const;
     [[nodiscard]] int getExponentLength() const;
-    [[nodiscard]] unsigned long getBitArrayLength() const;
+    [[nodiscard]] int getBitArrayLength() const;
     [[nodiscard]] vector<bool> getBitArray();
     [[nodiscard]] vector<bool>* getBitArrayReference();
     //-------------------------------
@@ -42,7 +42,7 @@ private:
 
     // helper functions
     //-------------------------------
-    vector<bool> getFloatingPointRepresentation(double value, int exponent_len, int mantissa_len);
+    static vector<bool> getFloatingPointRepresentation(double value, int exponent_len, int mantissa_len);
     //-------------------------------
 
 };

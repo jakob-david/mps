@@ -54,8 +54,8 @@ int mps::getExponentLength() const {
  *
  * @return length matisse
  */
-unsigned long mps::getBitArrayLength() const {
-    return this->bit_vector.size();
+int mps::getBitArrayLength() const {
+    return (int) this->bit_vector.size();
 }
 
 /**
@@ -144,7 +144,7 @@ vector<bool> mps::getFloatingPointRepresentation(double value, int exponent_len,
 
     if(exponent.size() > exponent_len) {
         cout << "ERROR: exponent too large" << endl;
-        // TODO: add propper error handling.
+        // TODO: add proper error handling.
     } else {
         for(int i = (int) exponent.size(); i < exponent_len; i++){
             exponent.insert(exponent.begin(), false);
