@@ -36,43 +36,6 @@ TEST(constructor_tests, sidecalculation_initialisation) {
 
 }
 
-TEST(converter_tests, test_getDecimalPart) {
-
-    auto MPS = new mps_side(20, 12, 3.14159265359);
-
-    auto binary = MPS->getDecimalPart(132.64, 15);
-
-    string str;
-    for(bool bit : binary){
-        if(bit){
-            str.append("1");
-        } else {
-            str.append("0");
-        }
-    }
-
-    EXPECT_EQ("101000111101011", str);
-
-}
-
-TEST(converter_tests, test_getDecimalPart2) {
-
-    auto MPS = new mps_side(20, 12, 3.14159265359);
-
-    auto binary = MPS->getDecimalPart(0.3452, 20);
-
-    string str;
-    for(bool bit : binary){
-        if(bit){
-            str.append("1");
-        } else {
-            str.append("0");
-        }
-    }
-
-    EXPECT_EQ("01011000010111110000", str);
-
-}
 
 TEST(converter_tests, test_positive_double) {
 

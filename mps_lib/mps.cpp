@@ -85,31 +85,7 @@ vector<bool>* mps::getBitArrayReference() {
 
 // helper methods
 //-------------------------------
-vector<bool> mps::getDecimalPart(double value, int length){
 
-    vector<bool> ret;
-
-    if(value < 0){
-        value *= -1;
-    }
-
-    int int_part = (int) value;
-    double reminder = value - int_part;
-
-    for(int i = 0; i < length; i++){
-
-        reminder *= 2;
-
-        if(reminder >= 1){
-            ret.push_back(true);
-            reminder -= 1;
-        } else{
-            ret.push_back(false);
-        }
-    }
-
-    return ret;
-}
 
 vector<bool> mps::getFloatingPointRepresentation(double value, int exponent_length, int mantissa_length) {
 
@@ -130,12 +106,41 @@ vector<bool> mps::getFloatingPointRepresentation(double value, int exponent_leng
         return ret;
     };
 
+    /*
+     * Small function to convert the part after the decimal point to a bit string.
+     * The sign is not relevant. Always returns a "positive" value.
+     * */
+    auto getDecimalPart = [](double value, int length)
+    {
+        vector<bool> ret;
+
+        if(value < 0){value *= -1;}
+
+        int int_part = (int) value;
+        double reminder = value - int_part;
+
+        for(int i = 0; i < length; i++){
+
+            reminder *= 2;
+
+            if(reminder >= 1){
+                ret.push_back(true);
+                reminder -= 1;
+            } else{
+                ret.push_back(false);
+            }
+        }
+
+        return ret;
+    };
+
+
     vector<bool> ret;
 
     auto integerPart = getIntegerPart((int) value);
 
     int decimal_length = mantissa_length - (int) integerPart.size() + 1;
-    vector<bool> decimalPart = this->getDecimalPart(value, decimal_length);
+    vector<bool> decimalPart = getDecimalPart(value, decimal_length);
 
     int mantissa_shift = (int) integerPart.size() - 1;
     int mantissa_adjustment = ((int) pow (2, exponent_length))/2 - 1;
