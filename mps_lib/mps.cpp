@@ -85,21 +85,6 @@ vector<bool>* mps::getBitArrayReference() {
 
 // helper methods
 //-------------------------------
-vector<bool> mps::getIntegerPart(int value) {
-
-    vector<bool> ret;
-
-    if(value < 0){
-        value *= -1;
-    }
-
-    for(int i = value; i > 0; i /= 2){
-        ret.insert(ret.begin(), i%2);
-    }
-
-    return ret;
-}
-
 vector<bool> mps::getDecimalPart(double value, int length){
 
     vector<bool> ret;
@@ -128,9 +113,26 @@ vector<bool> mps::getDecimalPart(double value, int length){
 
 vector<bool> mps::getFloatingPointRepresentation(double value, int exponent_length, int mantissa_length) {
 
+    /*
+     * Small function to convert an integer to a bit string.
+     * The sign is not relevant. Always returns a "positive" value.
+     * */
+    auto getIntegerPart = [](int value)
+    {
+        vector<bool> ret;
+
+        if(value < 0){value *= -1;}
+
+        for(int i = value; i > 0; i /= 2){
+            ret.insert(ret.begin(), i%2);
+        }
+
+        return ret;
+    };
+
     vector<bool> ret;
 
-    auto integerPart = mps::getIntegerPart((int) value);
+    auto integerPart = getIntegerPart((int) value);
 
     int decimal_length = mantissa_length - (int) integerPart.size() + 1;
     vector<bool> decimalPart = this->getDecimalPart(value, decimal_length);
@@ -139,7 +141,7 @@ vector<bool> mps::getFloatingPointRepresentation(double value, int exponent_leng
     int mantissa_adjustment = ((int) pow (2, exponent_length))/2 - 1;
     int exponent_int = mantissa_shift + mantissa_adjustment;
 
-    vector<bool> exponent = this->getIntegerPart(exponent_int);
+    vector<bool> exponent = getIntegerPart(exponent_int);
 
     if(exponent.size() > exponent_length) {
         cout << "ERROR: exponent too large" << endl;

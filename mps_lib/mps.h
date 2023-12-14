@@ -42,7 +42,6 @@ public:
 
     // helper functions
     //-------------------------------
-    static vector<bool> getIntegerPart(int value);
     vector<bool> getDecimalPart(double value, int length);
     vector<bool> getFloatingPointRepresentation(double value, int exponent_length, int mantissa_length);
     //-------------------------------

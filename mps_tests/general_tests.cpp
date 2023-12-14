@@ -36,25 +36,6 @@ TEST(constructor_tests, sidecalculation_initialisation) {
 
 }
 
-TEST(converter_tests, test_intToBit) {
-
-    auto MPS = new mps_side(20, 12, 3.14159265359);
-
-    auto binary = MPS->getIntegerPart(132);
-
-    string str;
-    for(bool bit : binary){
-        if(bit){
-            str.append("1");
-        } else {
-            str.append("0");
-        }
-    }
-
-    EXPECT_EQ("10000100", str);
-
-}
-
 TEST(converter_tests, test_getDecimalPart) {
 
     auto MPS = new mps_side(20, 12, 3.14159265359);
