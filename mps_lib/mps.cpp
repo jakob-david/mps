@@ -85,11 +85,15 @@ vector<bool>* mps::getBitArrayReference() {
 
 // helper methods
 //-------------------------------
-vector<bool> mps::intToBinary(int value) {
+vector<bool> mps::getIntegerPart(int value) {
 
     vector<bool> ret;
 
-    for(int i = value; i >0; i /= 2){
+    if(value < 0){
+        value *= -1;
+    }
+
+    for(int i = value; i > 0; i /= 2){
         ret.insert(ret.begin(), i%2);
     }
 
@@ -99,6 +103,10 @@ vector<bool> mps::intToBinary(int value) {
 vector<bool> mps::getDecimalPart(double value, int length){
 
     vector<bool> ret;
+
+    if(value < 0){
+        value *= -1;
+    }
 
     int int_part = (int) value;
     double reminder = value - int_part;
@@ -118,10 +126,40 @@ vector<bool> mps::getDecimalPart(double value, int length){
     return ret;
 }
 
-vector<bool> mps::getFloatingPointRepresentation(double value, int exponent, int mantissa) {
+vector<bool> mps::getFloatingPointRepresentation(double value, int exponent_length, int mantissa_length) {
 
     vector<bool> ret;
 
+    auto integerPart = mps::getIntegerPart((int) value);
+
+    int decimal_length = mantissa_length - (int) integerPart.size() + 1;
+    vector<bool> decimalPart = this->getDecimalPart(value, decimal_length);
+
+    int mantissa_shift = (int) integerPart.size() - 1;
+    int mantissa_adjustment = ((int) pow (2, exponent_length))/2 - 1;
+    int exponent_int = mantissa_shift + mantissa_adjustment;
+
+    vector<bool> exponent = this->getIntegerPart(exponent_int);
+
+    if(exponent.size() > exponent_length) {
+        cout << "ERROR: exponent too large" << endl;
+        // TODO: add propper error handling.
+    } else {
+        for(int i = (int) exponent.size(); i < exponent_length; i++){
+            exponent.insert(exponent.begin(), false);
+        }
+    }
+
+
+    if(value > 0){
+        ret.push_back(false);
+    } else {
+        ret.push_back(true);
+    }
+
+    ret.insert(ret.end(), exponent.begin(), exponent.end());
+    ret.insert(ret.end(), ++integerPart.begin(), integerPart.end());
+    ret.insert(ret.end(), decimalPart.begin(), decimalPart.end());
 
     return ret;
 }

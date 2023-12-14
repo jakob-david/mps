@@ -40,7 +40,7 @@ TEST(converter_tests, test_intToBit) {
 
     auto MPS = new mps_side(20, 12, 3.14159265359);
 
-    auto binary = MPS->intToBinary(132);
+    auto binary = MPS->getIntegerPart(132);
 
     string str;
     for(bool bit : binary){
@@ -93,11 +93,11 @@ TEST(converter_tests, test_getDecimalPart2) {
 
 }
 
-TEST(converter_tests, test_getFloatingPointRepresentation) {
+TEST(converter_tests, test_positive_double) {
 
     double test_value = 342.45636;
 
-    auto MPS = new mps_side(20, 12, 3.14159265359);
+    auto MPS = new mps_side(52, 11, test_value);
 
     auto binary = MPS->getFloatingPointRepresentation(test_value, 11, 52);
 
@@ -114,9 +114,11 @@ TEST(converter_tests, test_getFloatingPointRepresentation) {
     string compare_str;
     char* bits = reinterpret_cast<char*>(&test_value);
     for(std::size_t n = 0; n < sizeof test_value; ++n) {
-        compare_str.append(std::bitset<8>(bits[n]).to_string());
+        string tmp = std::bitset<8>(bits[n]).to_string();
+        compare_str.insert (0, tmp);
     }
 
-    EXPECT_EQ("01011000010111110000", str);
+
+    EXPECT_EQ(compare_str, str);
 
 }
