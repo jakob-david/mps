@@ -9,11 +9,11 @@ TEST(constructor_tests, constructor_sets_values_coorectly){
 
     mps* MPS = new mps(5, 6, 3.14);
 
-    int mantisse_actual = MPS->getMantisseLength();
+    int mantissa_actual = MPS->getMantisseLength();
     int exponent_actual = MPS->getExponentLength();
     int length_actual = MPS->getBitArrayLength();
 
-    EXPECT_EQ(5, mantisse_actual);
+    EXPECT_EQ(5, mantissa_actual);
     EXPECT_EQ(6, exponent_actual);
     EXPECT_EQ(12, length_actual);
 }
