@@ -2,6 +2,7 @@
 
 #include "mps.h"
 #include "mps_side.h"
+#include <bitset>
 
 
 TEST(constructor_tests, constructor_sets_values_coorectly){

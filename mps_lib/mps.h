@@ -2,6 +2,7 @@
 #define MPS_LIB_MPS_H
 
 #include <vector>
+#include <cmath>
 
 using namespace std;
 
