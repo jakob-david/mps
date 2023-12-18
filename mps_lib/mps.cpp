@@ -91,7 +91,7 @@ vector<bool> mps::getFloatingPointRepresentation(double value, int exponent_len,
     {
         vector<bool> ret;
 
-        if(value < 0){value *= -1;}
+        value = abs(value);
 
         for(int i = value; i > 0; i /= 2){
             ret.insert(ret.begin(), i%2);
@@ -108,7 +108,7 @@ vector<bool> mps::getFloatingPointRepresentation(double value, int exponent_len,
     {
         vector<bool> ret;
 
-        if(value < 0){value *= -1;}
+        value = abs(value);
 
         double reminder = value - floor(value);
 
@@ -153,19 +153,23 @@ vector<bool> mps::getFloatingPointRepresentation(double value, int exponent_len,
         return ret;
     }
 
-    //auto integerPart = getIntegerPart(floor(value));
+    int mantissa_shift = 0;
+    if(value > numeric_limits<float>::max()){
+        double tmp_value = abs(value);
+        int tmp_count = 0;
 
-    //int decimal_length = mantissa_len - (int) integerPart.size() + 1;
-    //vector<bool> decimalPart = getDecimalPart(value, decimal_length);
+        while(tmp_value > 1){
+            tmp_value /= 2;
+            tmp_count++;
+        }
 
-    int mantissa_shift = floor(log2(abs(value)));
+        mantissa_shift = tmp_count-1;
+    } else {
+        mantissa_shift = floor(log2(abs(value)));
+    }
+
     int mantissa_adjustment = ((int) pow (2, exponent_len)) / 2 -1;
-    int exponent_int =  mantissa_shift + (int) mantissa_adjustment;
-
-    //if(numeric_limits<double>::max() == value){
-    //    exponent_int -= 1;
-    //    mantissa_shift -= 1;
-    //}
+    int exponent_int =  mantissa_shift + mantissa_adjustment;
 
     vector<bool> exponent = getIntegerPart(exponent_int);
 
@@ -178,15 +182,8 @@ vector<bool> mps::getFloatingPointRepresentation(double value, int exponent_len,
         }
     }
 
-    // new code
-    double tmp_value = value;
-    tmp_value = tmp_value / pow(2, mantissa_shift);
-    auto tmp_mantissa = getDecimalPart(tmp_value, mantissa_len);
-
-
-    //if(integerPart.size() > mantissa_len){
-    //    integerPart.resize(mantissa_len + 1);
-    //}
+    value = value / pow(2, mantissa_shift);
+    auto tmp_mantissa = getDecimalPart(value, mantissa_len);
 
     if(value > 0){
         ret.push_back(false);
@@ -196,8 +193,6 @@ vector<bool> mps::getFloatingPointRepresentation(double value, int exponent_len,
 
     ret.insert(ret.end(), exponent.begin(), exponent.end());
     ret.insert(ret.end(), tmp_mantissa.begin(), tmp_mantissa.end());
-    //ret.insert(ret.end(), ++integerPart.begin(), integerPart.end());
-    //ret.insert(ret.end(), decimalPart.begin(), decimalPart.end());
 
     return ret;
 }
