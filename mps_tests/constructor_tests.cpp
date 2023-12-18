@@ -1,7 +1,6 @@
 #include "gtest/gtest.h"
 
 #include "mps.h"
-#include "mps_side.h"
 #include <bitset>
 
 
@@ -27,22 +26,12 @@ TEST(constructor_tests, constructor_initializes_bit_array_correctly){
     EXPECT_EQ(33, size);
 }
 
-TEST(constructor_tests, sidecalculation_initialisation) {
-
-    auto MPS = new mps_side(20, 12, 3.14159265359);
-
-    auto value_actual = MPS->getSideCalculationValue();
-
-    EXPECT_EQ(3.14159265359, value_actual);
-
-}
-
 
 TEST(converter_tests, test_positive_double) {
 
     double test_value = 342.45636;
 
-    auto MPS = new mps_side(52, 11, test_value);
+    auto MPS = new mps(52, 11, test_value);
 
     auto binary = MPS->getBitArray();
 
@@ -69,7 +58,7 @@ TEST(converter_tests, test_positive_double_using_getBitArrayReference) {
 
     double test_value = 572496.394863845;
 
-    auto MPS = new mps_side(52, 11, test_value);
+    auto MPS = new mps(52, 11, test_value);
 
     auto binary = MPS->getBitArrayReference();
 
@@ -96,7 +85,7 @@ TEST(converter_tests, test_negative_double) {
 
     double test_value = -38758285.203858387583005867;
 
-    auto MPS = new mps_side(52, 11, test_value);
+    auto MPS = new mps(52, 11, test_value);
 
     auto binary = MPS->getBitArray();
 
@@ -123,7 +112,7 @@ TEST(converter_tests, test_positive_float) {
 
     float test_value = 345.3456;
 
-    auto MPS = new mps_side(23, 8, test_value);
+    auto MPS = new mps(23, 8, test_value);
 
     auto binary = MPS->getBitArray();
 
@@ -150,7 +139,7 @@ TEST(converter_tests, test_negative_float) {
 
     float test_value = -2354.3456;
 
-    auto MPS = new mps_side(23, 8, test_value);
+    auto MPS = new mps(23, 8, test_value);
 
     auto binary = MPS->getBitArray();
 
