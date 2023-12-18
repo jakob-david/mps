@@ -87,13 +87,13 @@ vector<bool> mps::getFloatingPointRepresentation(double value, int exponent_len,
      * Small function to convert an integer to a bit string.
      * The sign is not relevant. Always returns a "positive" value.
      * */
-    auto getIntegerPart = [](int value)
+    auto getIntegerPart = [](long long value)
     {
         vector<bool> ret;
 
         if(value < 0){value *= -1;}
 
-        for(int i = value; i > 0; i /= 2){
+        for(long long i = value; i > 0; i /= 2){
             ret.insert(ret.begin(), i%2);
         }
 
@@ -131,12 +131,37 @@ vector<bool> mps::getFloatingPointRepresentation(double value, int exponent_len,
 
     vector<bool> ret;
 
-    auto integerPart = getIntegerPart((int) value);
+    if(0 == value){
+        for(int i = 0; i < exponent_len + mantissa_len + 1; i++){
+            ret.push_back(false);
+        }
+
+        return ret;
+    } else if(numeric_limits<double>::infinity() == value || numeric_limits<double>::infinity() * -1 == value){
+
+        if(value > 0){
+            ret.push_back(false);
+        } else {
+            ret.push_back(true);
+        }
+
+        for(int i = 0; i < exponent_len; i++){
+            ret.push_back(true);
+        }
+        for(int i = 0; i < mantissa_len; i++){
+            ret.push_back(false);
+        }
+        return ret;
+    }
+
+    auto integerPart = getIntegerPart((long long) value);
 
     int decimal_length = mantissa_len - (int) integerPart.size() + 1;
     vector<bool> decimalPart = getDecimalPart(value, decimal_length);
 
     int mantissa_shift = (int) integerPart.size() - 1;
+    cout << mantissa_shift << endl;
+    cout << value << endl;
     int mantissa_adjustment = ((int) pow (2, exponent_len)) / 2 - 1;
     int exponent_int = mantissa_shift + mantissa_adjustment;
 
