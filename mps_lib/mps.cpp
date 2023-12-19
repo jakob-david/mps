@@ -133,22 +133,6 @@ void mps::setNAN(){
 // helper methods
 void mps::setBitArray(double value) {
 
-    /*
-     * Small function to convert an integer to a bit string.
-     * The sign is not relevant. Always returns a "positive" value.
-     * */
-    auto getIntegerPart = [](int value)
-    {
-        vector<bool> ret;
-
-        value = abs(value);
-
-        for(int i = value; i > 0; i /= 2){
-            ret.insert(ret.begin(), i%2);
-        }
-
-        return ret;
-    };
 
     /*
      * Small function to convert the part after the decimal point to a bit string.
@@ -207,7 +191,12 @@ void mps::setBitArray(double value) {
     int mantissa_adjustment = ((int) pow (2, exponent_length)) / 2 -1;
     int exponent_int =  mantissa_shift + mantissa_adjustment;
 
-    vector<bool> exponent = getIntegerPart(exponent_int);
+    // Getting the exponent in binary format.
+    // The sign is not relevant. Always returns a "positive" value.
+    vector<bool> exponent;
+    for(int i = abs(exponent_int); i > 0; i /= 2){
+        exponent.insert(exponent.begin(), i%2);
+    }
 
     if(exponent.size() > exponent_length) {
         cout << "ERROR: exponent too large" << endl;
@@ -220,6 +209,7 @@ void mps::setBitArray(double value) {
 
     value = value / pow(2, mantissa_shift);
     auto tmp_mantissa = getDecimalPart(value, mantissa_length);
+
 
     if(value > 0){
         bit_vector.push_back(false);
