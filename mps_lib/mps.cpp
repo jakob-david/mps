@@ -81,6 +81,11 @@ vector<bool>* mps::getBitArrayReference() {
 
 // setter methods
 //-------------------------------
+/**
+ * Sets the floating point number to infinity.
+ *
+ * @param negative set to true for negative infinity. (default false)
+ */
 void mps::setInf(bool negative) {
 
     bit_vector.erase(bit_vector.begin(),bit_vector.end());
@@ -100,6 +105,9 @@ void mps::setInf(bool negative) {
     }
 }
 
+/**
+ * Sets the floating point number to zero.
+ */
 void mps::setZero(){
 
     bit_vector.erase(bit_vector.begin(),bit_vector.end());
@@ -109,7 +117,10 @@ void mps::setZero(){
     }
 }
 
-void mps::setNAN(){
+/**
+ * Sets the floating point number to NaN (not a number)
+ */
+void mps::setNaN(){
 
     bit_vector.erase(bit_vector.begin(),bit_vector.end());
 
@@ -131,36 +142,16 @@ void mps::setNAN(){
 
 
 // helper methods
+//-------------------------------
+
+/**
+ * Sets the bit vector of the mps object.
+ */
 void mps::setBitArray(double value) {
 
 
-    /*
-     * Small function to convert the part after the decimal point to a bit string.
-     * The sign is not relevant. Always returns a "positive" value.
-     * */
-    auto getDecimalPart = [](double value, int length)
-    {
-        vector<bool> ret;
-
-        value = abs(value);
-
-        double reminder = value - floor(value);
-
-        for(int i = 0; i < length; i++){
-
-            reminder *= 2;
-
-            if(reminder >= 1){
-                ret.push_back(true);
-                reminder -= 1;
-            } else{
-                ret.push_back(false);
-            }
-        }
-
-        return ret;
-    };
-
+    // Handle special values.
+    //-------------------------------
     if(0 == value){
         setZero(); return;
     } else if(numeric_limits<double>::infinity() == value) {
@@ -168,11 +159,21 @@ void mps::setBitArray(double value) {
     } else if (numeric_limits<double>::infinity() * -1 == value){
         setInf(true); return;
     } else if (isnan(value)){
-        setNAN(); return;
+        setNaN(); return;
     }
+    //-------------------------------
 
+
+    // prepare bit_vector
+    //-------------------------------
     bit_vector.erase(bit_vector.begin(),bit_vector.end());
+    //-------------------------------
 
+
+    // exponent
+    //-------------------------------
+
+    // calculate the exponent
     int mantissa_shift;
     if(abs(value) > numeric_limits<float>::max()){
         double tmp_value = abs(value);
@@ -187,7 +188,6 @@ void mps::setBitArray(double value) {
     } else {
         mantissa_shift = floor(log2(abs(value)));
     }
-
     int mantissa_adjustment = ((int) pow (2, exponent_length)) / 2 -1;
     int exponent_int =  mantissa_shift + mantissa_adjustment;
 
@@ -198,6 +198,7 @@ void mps::setBitArray(double value) {
         exponent.insert(exponent.begin(), i%2);
     }
 
+    // Fill not used but available bits with zero.
     if(exponent.size() > exponent_length) {
         cout << "ERROR: exponent too large" << endl;
         // TODO: add proper error handling.
@@ -206,11 +207,33 @@ void mps::setBitArray(double value) {
             exponent.insert(exponent.begin(), false);
         }
     }
+    //-------------------------------
 
+
+    // mantissa
+    //-------------------------------
+
+    // adjust the value so that everything is behind the decimal point.
     value = value / pow(2, mantissa_shift);
-    auto tmp_mantissa = getDecimalPart(value, mantissa_length);
+
+    // Convert the part after the decimal point to a bit string.
+    // The sign is not relevant. Always returns a "positive" value.
+    vector<bool> mantissa;
+    double reminder = abs(value) - floor(abs(value));
+    for(int i = 0; i < mantissa_length; i++){
+
+        reminder *= 2;
+        if(reminder >= 1){
+            mantissa.push_back(true); reminder -= 1;
+        } else{
+            mantissa.push_back(false);
+        }
+    }
+    //-------------------------------
 
 
+    // set everything together
+    //-------------------------------
     if(value > 0){
         bit_vector.push_back(false);
     } else {
@@ -218,6 +241,8 @@ void mps::setBitArray(double value) {
     }
 
     bit_vector.insert(bit_vector.end(), exponent.begin(), exponent.end());
-    bit_vector.insert(bit_vector.end(), tmp_mantissa.begin(), tmp_mantissa.end());
+    bit_vector.insert(bit_vector.end(), mantissa.begin(), mantissa.end());
+    //-------------------------------
+
 }
 //-------------------------------

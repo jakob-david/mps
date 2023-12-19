@@ -43,7 +43,7 @@ public:
     //-------------------------------
     void setInf(bool negative = false);
     void setZero();
-    void setNAN();
+    void setNaN();
     //-------------------------------
 
 private:

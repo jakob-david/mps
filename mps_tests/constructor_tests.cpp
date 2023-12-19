@@ -941,7 +941,7 @@ TEST(setter_tests, set_NAN_double) {
 
     auto MPS = new mps(52, 11, 345.234);
 
-    MPS->setNAN();
+    MPS->setNaN();
 
     auto binary = MPS->getBitArray();
 
@@ -970,7 +970,7 @@ TEST(setter_tests, set_NAN_float) {
 
     auto MPS = new mps(23, 8, 345.234);
 
-    MPS->setNAN();
+    MPS->setNaN();
 
     auto binary = MPS->getBitArray();
 
