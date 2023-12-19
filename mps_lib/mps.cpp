@@ -76,6 +76,11 @@ vector<bool>* mps::getBitArrayReference() {
     return &this->bit_vector;
 }
 
+/**
+ * Returns the value of the mps object as double.
+ *
+ * @return value as double.
+ */
 double mps::getValue() {
 
     double ret;
@@ -119,10 +124,20 @@ double mps::getValue() {
 
 }
 
+/**
+ * Returns true if the mps object is zero.
+ *
+ * @return true if zero.
+ */
 bool mps::isZero(){
     return all_of(bit_vector.begin(), bit_vector.end(), [](bool i){return !i;});
 }
 
+/**
+ * Returns true if the mps object is positive or negative infinity.
+ *
+ * @return true if pos. or neg. infinity.
+ */
 bool mps::isInfinity() {
 
     for(int i = 1; i < exponent_length+1; i++){
@@ -140,6 +155,11 @@ bool mps::isInfinity() {
     return true;
 }
 
+/**
+ * Returns true if the mps object is positive.
+ *
+ * @return true if positive.
+ */
 bool mps::isPositive(){
     if(bit_vector[0]){
         return false;
