@@ -248,15 +248,37 @@ mps& mps::operator=(const mps& other) {
 
     this->bit_vector.erase(bit_vector.begin(), bit_vector.end());
 
-    for(int i = 0; i < other.bit_vector.size(); i++){
-        this->bit_vector.push_back(other.bit_vector[i]);
+    for(auto i : other.bit_vector){
+        this->bit_vector.push_back(i);
     }
 
     this->mantissa_length = other.mantissa_length;
     this->exponent_length = other.exponent_length;
 
     return *this;
+}
 
+mps mps::operator+(mps other) {
+
+    mps ret;
+
+    if(this->exponent_length > other.exponent_length){
+        ret.exponent_length = this->exponent_length;
+    } else {
+        ret.exponent_length = other.exponent_length;
+    }
+
+    if(this->mantissa_length > other.mantissa_length){
+        ret.mantissa_length = this->mantissa_length;
+    } else {
+        ret.mantissa_length = other.mantissa_length;
+    }
+
+    if(this->isZero() || other.isZero()){
+        ret.setZero();
+    }
+
+    return ret;
 }
 //-------------------------------
 
