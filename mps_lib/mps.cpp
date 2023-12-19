@@ -16,7 +16,7 @@ mps::mps(int mantissa_length, int exponent_length, double value) {
     this->mantissa_length = mantissa_length;
     this->exponent_length = exponent_length;
 
-    this->bit_vector = getFloatingPointRepresentation(value, this->exponent_length,this->mantissa_length);
+    setBitArray(value, this->exponent_length, this->mantissa_length);
 }
 
 /**
@@ -107,8 +107,7 @@ void mps::setInf(bool negative) {
 
 
 // helper methods
-//-------------------------------
-vector<bool> mps::getFloatingPointRepresentation(double value, int exponent_len, int mantissa_len) {
+void mps::setBitArray(double value, int exponent_len, int mantissa_len) {
 
     /*
      * Small function to convert an integer to a bit string.
@@ -155,43 +154,40 @@ vector<bool> mps::getFloatingPointRepresentation(double value, int exponent_len,
     };
 
 
-    vector<bool> ret;
+    bit_vector.erase(bit_vector.begin(),bit_vector.end());
 
     if(0 == value){
         for(int i = 0; i < exponent_len + mantissa_len + 1; i++){
-            ret.push_back(false);
+            bit_vector.push_back(false);
         }
 
-        return ret;
+        return;
+
     } else if(numeric_limits<double>::infinity() == value || numeric_limits<double>::infinity() * -1 == value){
 
         if(value > 0){
-            ret.push_back(false);
+            setInf();
         } else {
-            ret.push_back(true);
+            setInf(true);
         }
 
-        for(int i = 0; i < exponent_len; i++){
-            ret.push_back(true);
-        }
-        for(int i = 0; i < mantissa_len; i++){
-            ret.push_back(false);
-        }
-        return ret;
+        return;
+
     } else if (isnan(value)){
 
-        ret.push_back(false);
+        bit_vector.push_back(false);
 
         for(int i = 0; i < exponent_len; i++){
-            ret.push_back(true);
+            bit_vector.push_back(true);
         }
 
-        ret.push_back(true);
+        bit_vector.push_back(true);
 
         for(int i = 1; i < mantissa_len; i++){
-            ret.push_back(false);
+            bit_vector.push_back(false);
         }
-        return ret;
+
+        return;
     }
 
     int mantissa_shift;
@@ -227,14 +223,12 @@ vector<bool> mps::getFloatingPointRepresentation(double value, int exponent_len,
     auto tmp_mantissa = getDecimalPart(value, mantissa_len);
 
     if(value > 0){
-        ret.push_back(false);
+        bit_vector.push_back(false);
     } else {
-        ret.push_back(true);
+        bit_vector.push_back(true);
     }
 
-    ret.insert(ret.end(), exponent.begin(), exponent.end());
-    ret.insert(ret.end(), tmp_mantissa.begin(), tmp_mantissa.end());
-
-    return ret;
+    bit_vector.insert(bit_vector.end(), exponent.begin(), exponent.end());
+    bit_vector.insert(bit_vector.end(), tmp_mantissa.begin(), tmp_mantissa.end());
 }
 //-------------------------------
