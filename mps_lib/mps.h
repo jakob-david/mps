@@ -27,6 +27,7 @@ public:
     // constructors and destructor
     //-------------------------------
     mps(int mantissa_length, int exponent_length, double value);
+    mps();
     ~mps();
     //-------------------------------
 
@@ -50,6 +51,10 @@ public:
     void setZero();
     void setNaN();
     //-------------------------------
+
+    // operators
+    //-------------------------------
+    mps& operator=(const mps& other);
 
 private:
 

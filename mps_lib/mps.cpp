@@ -19,6 +19,11 @@ mps::mps(int mantissa_length, int exponent_length, double value) {
     setBitArray(value);
 }
 
+mps::mps(){
+    this->mantissa_length = 0;
+    this->exponent_length = 0;
+}
+
 /**
  * Destructor for the multiprecision simulator.
  */
@@ -233,7 +238,27 @@ void mps::setNaN(){
 }
 //-------------------------------
 
+// operators
+//-------------------------------
+mps& mps::operator=(const mps& other) {
 
+    if (this == &other){
+        return *this;
+    }
+
+    this->bit_vector.erase(bit_vector.begin(), bit_vector.end());
+
+    for(int i = 0; i < other.bit_vector.size(); i++){
+        this->bit_vector.push_back(other.bit_vector[i]);
+    }
+
+    this->mantissa_length = other.mantissa_length;
+    this->exponent_length = other.exponent_length;
+
+    return *this;
+
+}
+//-------------------------------
 
 
 // helper methods
