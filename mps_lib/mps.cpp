@@ -79,6 +79,33 @@ vector<bool>* mps::getBitArrayReference() {
 //-------------------------------
 
 
+// setter methods
+//-------------------------------
+void mps::setInf(bool negative) {
+
+    bit_vector.erase(bit_vector.begin(),bit_vector.end());
+
+    if(negative){
+        bit_vector.push_back(true);
+    } else {
+        bit_vector.push_back(false);
+    }
+
+    for(int i = 0; i < exponent_length; i++){
+        bit_vector.push_back(true);
+    }
+
+    for(int i = 0; i < mantissa_length; i++){
+        bit_vector.push_back(false);
+    }
+}
+
+
+//-------------------------------
+
+
+
+
 // helper methods
 //-------------------------------
 vector<bool> mps::getFloatingPointRepresentation(double value, int exponent_len, int mantissa_len) {
@@ -151,10 +178,24 @@ vector<bool> mps::getFloatingPointRepresentation(double value, int exponent_len,
             ret.push_back(false);
         }
         return ret;
+    } else if (isnan(value)){
+
+        ret.push_back(false);
+
+        for(int i = 0; i < exponent_len; i++){
+            ret.push_back(true);
+        }
+
+        ret.push_back(true);
+
+        for(int i = 1; i < mantissa_len; i++){
+            ret.push_back(false);
+        }
+        return ret;
     }
 
-    int mantissa_shift = 0;
-    if(value > numeric_limits<float>::max()){
+    int mantissa_shift;
+    if(abs(value) > numeric_limits<float>::max()){
         double tmp_value = abs(value);
         int tmp_count = 0;
 

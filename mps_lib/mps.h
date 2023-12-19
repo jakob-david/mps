@@ -39,6 +39,11 @@ public:
     [[nodiscard]] vector<bool>* getBitArrayReference();
     //-------------------------------
 
+    // setter methods
+    //-------------------------------
+    void setInf(bool negative = false);
+    //-------------------------------
+
 private:
 
     // helper functions
