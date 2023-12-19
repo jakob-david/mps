@@ -42,6 +42,8 @@ public:
     // setter methods
     //-------------------------------
     void setInf(bool negative = false);
+    void setZero();
+    void setNAN();
     //-------------------------------
 
 private:

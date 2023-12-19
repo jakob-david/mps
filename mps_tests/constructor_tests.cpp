@@ -876,3 +876,119 @@ TEST(setter_tests, set_neg_inf_float) {
 
     EXPECT_EQ(compare_str, str);
 }
+
+TEST(setter_tests, set_zero_double) {
+
+    double test_value = 0;
+
+    auto MPS = new mps(52, 11, 345.234);
+
+    MPS->setZero();
+
+    auto binary = MPS->getBitArray();
+
+    string str;
+    for(bool bit : binary){
+        if(bit){
+            str.append("1");
+        } else {
+            str.append("0");
+        }
+    }
+
+    string compare_str;
+    char* bits = reinterpret_cast<char*>(&test_value);
+    for(std::size_t n = 0; n < sizeof test_value; ++n) {
+        string tmp = std::bitset<8>(bits[n]).to_string();
+        compare_str.insert (0, tmp);
+    }
+
+    EXPECT_EQ(compare_str, str);
+}
+
+TEST(setter_tests, set_zero_float) {
+
+    float test_value = 0;
+
+    auto MPS = new mps(23, 8, 345.234);
+
+    MPS->setZero();
+
+    auto binary = MPS->getBitArray();
+
+    string str;
+    for(bool bit : binary){
+        if(bit){
+            str.append("1");
+        } else {
+            str.append("0");
+        }
+    }
+
+    string compare_str;
+    char* bits = reinterpret_cast<char*>(&test_value);
+    for(std::size_t n = 0; n < sizeof test_value; ++n) {
+        string tmp = std::bitset<8>(bits[n]).to_string();
+        compare_str.insert (0, tmp);
+    }
+
+    EXPECT_EQ(compare_str, str);
+}
+
+TEST(setter_tests, set_NAN_double) {
+
+    double test_value = numeric_limits<double>::quiet_NaN();
+
+    auto MPS = new mps(52, 11, 345.234);
+
+    MPS->setNAN();
+
+    auto binary = MPS->getBitArray();
+
+    string str;
+    for(bool bit : binary){
+        if(bit){
+            str.append("1");
+        } else {
+            str.append("0");
+        }
+    }
+
+    string compare_str;
+    char* bits = reinterpret_cast<char*>(&test_value);
+    for(std::size_t n = 0; n < sizeof test_value; ++n) {
+        string tmp = std::bitset<8>(bits[n]).to_string();
+        compare_str.insert (0, tmp);
+    }
+
+    EXPECT_EQ(compare_str, str);
+}
+
+TEST(setter_tests, set_NAN_float) {
+
+    float test_value = numeric_limits<float>::quiet_NaN();
+
+    auto MPS = new mps(23, 8, 345.234);
+
+    MPS->setNAN();
+
+    auto binary = MPS->getBitArray();
+
+    string str;
+    for(bool bit : binary){
+        if(bit){
+            str.append("1");
+        } else {
+            str.append("0");
+        }
+    }
+
+    string compare_str;
+    char* bits = reinterpret_cast<char*>(&test_value);
+    for(std::size_t n = 0; n < sizeof test_value; ++n) {
+        string tmp = std::bitset<8>(bits[n]).to_string();
+        compare_str.insert (0, tmp);
+    }
+
+    EXPECT_EQ(compare_str, str);
+}

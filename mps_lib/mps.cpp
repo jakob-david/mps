@@ -100,7 +100,31 @@ void mps::setInf(bool negative) {
     }
 }
 
+void mps::setZero(){
 
+    bit_vector.erase(bit_vector.begin(),bit_vector.end());
+
+    for(int i = 0; i < exponent_length + mantissa_length + 1; i++){
+        bit_vector.push_back(false);
+    }
+}
+
+void mps::setNAN(){
+
+    bit_vector.erase(bit_vector.begin(),bit_vector.end());
+
+    bit_vector.push_back(false);
+
+    for(int i = 0; i < exponent_length; i++){
+        bit_vector.push_back(true);
+    }
+
+    bit_vector.push_back(true);
+
+    for(int i = 1; i < mantissa_length; i++){
+        bit_vector.push_back(false);
+    }
+}
 //-------------------------------
 
 
@@ -157,10 +181,8 @@ void mps::setBitArray(double value) {
     bit_vector.erase(bit_vector.begin(),bit_vector.end());
 
     if(0 == value){
-        for(int i = 0; i < exponent_length + mantissa_length + 1; i++){
-            bit_vector.push_back(false);
-        }
 
+        setZero();
         return;
 
     } else if(numeric_limits<double>::infinity() == value || numeric_limits<double>::infinity() * -1 == value){
@@ -175,18 +197,7 @@ void mps::setBitArray(double value) {
 
     } else if (isnan(value)){
 
-        bit_vector.push_back(false);
-
-        for(int i = 0; i < exponent_length; i++){
-            bit_vector.push_back(true);
-        }
-
-        bit_vector.push_back(true);
-
-        for(int i = 1; i < mantissa_length; i++){
-            bit_vector.push_back(false);
-        }
-
+        setNAN();
         return;
     }
 
