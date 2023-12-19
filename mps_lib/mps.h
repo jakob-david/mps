@@ -37,6 +37,9 @@ public:
     [[nodiscard]] int getBitArrayLength() const;
     [[nodiscard]] vector<bool> getBitArray();
     [[nodiscard]] vector<bool>* getBitArrayReference();
+    [[nodiscard]] double getValue();
+
+    [[nodiscard]] bool isZero();
     //-------------------------------
 
     // setter methods
@@ -51,6 +54,7 @@ private:
     // helper functions
     //-------------------------------
     void setBitArray(double value);
+    [[nodiscard]] int getBias() const;
     //-------------------------------
 
 };

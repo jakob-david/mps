@@ -76,6 +76,48 @@ vector<bool>* mps::getBitArrayReference() {
     return &this->bit_vector;
 }
 
+double mps::getValue() {
+
+    double ret;
+
+    if(isZero()){
+        return 0;
+    }
+
+    if(bit_vector[0]){
+        ret = -1;
+    } else {
+        ret = 1;
+    }
+
+    for(int i = exponent_length + 1; i < bit_vector.size(); i++){
+        if(bit_vector[i]){
+            if(ret >= 0){
+                ret += pow(0.5, i - exponent_length);
+            } else {
+                ret -= pow(0.5, i - exponent_length);
+            }
+        }
+    }
+
+    int exponent = 0;
+    for(int i = 1; i <= exponent_length; i++){
+        if(bit_vector[i]){
+            exponent += (int) pow(2, exponent_length-i);
+        }
+    }
+
+    exponent -= getBias();
+
+    ret *= pow(2, exponent);
+
+    return ret;
+
+}
+
+bool mps::isZero(){
+    return all_of(bit_vector.begin(), bit_vector.end(), [](bool i){return !i;});
+}
 //-------------------------------
 
 
@@ -190,8 +232,7 @@ void mps::setBitArray(double value) {
     } else {
         mantissa_shift = floor(log2(abs(value)));
     }
-    int mantissa_adjustment = ((int) pow (2, exponent_length)) / 2 -1;
-    int exponent_int =  mantissa_shift + mantissa_adjustment;
+    int exponent_int =  mantissa_shift + getBias();
 
     // Getting the exponent in binary format.
     // The sign is not relevant. Always returns a "positive" value.
@@ -246,5 +287,9 @@ void mps::setBitArray(double value) {
     bit_vector.insert(bit_vector.end(), mantissa.begin(), mantissa.end());
     //-------------------------------
 
+}
+
+int mps::getBias() const{
+    return ((int) pow (2, exponent_length)) / 2 -1;
 }
 //-------------------------------

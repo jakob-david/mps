@@ -992,3 +992,135 @@ TEST(setter_tests, set_NAN_float) {
 
     EXPECT_EQ(compare_str, str);
 }
+
+
+
+TEST(get_value_tests, get_one_double) {
+
+    double test_value = 1;
+
+    auto MPS = new mps(52, 11, test_value);
+
+    auto binary = MPS->getBitArray();
+
+    double get_value = MPS->getValue();
+
+    EXPECT_EQ(test_value, get_value);
+}
+
+TEST(get_value_tests, get_one_float) {
+
+    float test_value = 1;
+
+    auto MPS = new mps(23, 8, test_value);
+
+    auto binary = MPS->getBitArray();
+
+    double get_value = MPS->getValue();
+
+    EXPECT_EQ(test_value, get_value);
+}
+
+TEST(get_value_tests, get_double) {
+
+    double test_value = 3455763.3467457;
+
+    auto MPS = new mps(52, 11, test_value);
+
+    auto binary = MPS->getBitArray();
+
+    double get_value = MPS->getValue();
+
+    EXPECT_EQ(test_value, get_value);
+}
+
+TEST(get_value_tests, get_float) {
+
+    float test_value = 3455763.3467457;
+
+    auto MPS = new mps(23, 8, test_value);
+
+    auto binary = MPS->getBitArray();
+
+    double get_value = MPS->getValue();
+
+    EXPECT_EQ(test_value, get_value);
+}
+
+TEST(get_value_tests, get_neg_one_double) {
+
+    double test_value = -1;
+
+    auto MPS = new mps(52, 11, test_value);
+
+    auto binary = MPS->getBitArray();
+
+    double get_value = MPS->getValue();
+
+    EXPECT_EQ(test_value, get_value);
+}
+
+TEST(get_value_tests, get_neg_one_float) {
+
+    float test_value = -1;
+
+    auto MPS = new mps(23, 8, test_value);
+
+    auto binary = MPS->getBitArray();
+
+    double get_value = MPS->getValue();
+
+    EXPECT_EQ(test_value, get_value);
+}
+
+TEST(get_value_tests, get_neg_double) {
+
+    double test_value = -2356345.235643;
+
+    auto MPS = new mps(52, 11, test_value);
+
+    auto binary = MPS->getBitArray();
+
+    double get_value = MPS->getValue();
+
+    EXPECT_EQ(test_value, get_value);
+}
+
+TEST(get_value_tests, get_neg_float) {
+
+    float test_value = -2356345.235643;
+
+    auto MPS = new mps(23, 8, test_value);
+
+    auto binary = MPS->getBitArray();
+
+    double get_value = MPS->getValue();
+
+    EXPECT_EQ(test_value, get_value);
+}
+
+TEST(get_value_tests, get_zero_double) {
+
+    double test_value = 0;
+
+    auto MPS = new mps(52, 11, test_value);
+
+    auto binary = MPS->getBitArray();
+
+    double get_value = MPS->getValue();
+
+    EXPECT_EQ(test_value, get_value);
+}
+
+TEST(get_value_tests, get_zero_float) {
+
+    float test_value = 0;
+
+    auto MPS = new mps(23, 8, test_value);
+
+    auto binary = MPS->getBitArray();
+
+    double get_value = MPS->getValue();
+
+    EXPECT_EQ(test_value, get_value);
+}
