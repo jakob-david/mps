@@ -338,6 +338,11 @@ void mps::setBitArray(double value) {
 
 }
 
+/**
+ * Returns the bias of the exponent.
+ *
+ * @return bias of the exponent.
+ */
 int mps::getBias() const{
     return ((int) pow (2, exponent_length)) / 2 -1;
 }
