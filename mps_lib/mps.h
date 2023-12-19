@@ -40,6 +40,8 @@ public:
     [[nodiscard]] double getValue();
 
     [[nodiscard]] bool isZero();
+    [[nodiscard]] bool isInfinity();
+    [[nodiscard]] bool isPositive();
     //-------------------------------
 
     // setter methods

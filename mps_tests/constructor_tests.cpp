@@ -994,7 +994,6 @@ TEST(setter_tests, set_NAN_float) {
 }
 
 
-
 TEST(get_value_tests, get_one_double) {
 
     double test_value = 1;
@@ -1115,6 +1114,162 @@ TEST(get_value_tests, get_zero_double) {
 TEST(get_value_tests, get_zero_float) {
 
     float test_value = 0;
+
+    auto MPS = new mps(23, 8, test_value);
+
+    auto binary = MPS->getBitArray();
+
+    double get_value = MPS->getValue();
+
+    EXPECT_EQ(test_value, get_value);
+}
+
+TEST(get_value_tests, get_pos_inf_double) {
+
+    double test_value = numeric_limits<double>::infinity();
+
+    auto MPS = new mps(52, 11, test_value);
+
+    auto binary = MPS->getBitArray();
+
+    double get_value = MPS->getValue();
+
+    EXPECT_EQ(test_value, get_value);
+}
+
+TEST(get_value_tests, get_pos_inf_float) {
+
+    float test_value = numeric_limits<float>::infinity();
+
+    auto MPS = new mps(23, 8, test_value);
+
+    auto binary = MPS->getBitArray();
+
+    double get_value = MPS->getValue();
+
+    EXPECT_EQ(test_value, get_value);
+}
+
+TEST(get_value_tests, get_neg_inf_double) {
+
+    double test_value = numeric_limits<double>::infinity() * -1;
+
+    auto MPS = new mps(52, 11, test_value);
+
+    auto binary = MPS->getBitArray();
+
+    double get_value = MPS->getValue();
+
+    EXPECT_EQ(test_value, get_value);
+}
+
+TEST(get_value_tests, get_neg_inf_float) {
+
+    float test_value = numeric_limits<float>::infinity() * -1;
+
+    auto MPS = new mps(23, 8, test_value);
+
+    auto binary = MPS->getBitArray();
+
+    double get_value = MPS->getValue();
+
+    EXPECT_EQ(test_value, get_value);
+}
+
+TEST(get_value_tests, get_pos_max_double) {
+
+    double test_value = numeric_limits<double>::max();
+
+    auto MPS = new mps(52, 11, test_value);
+
+    auto binary = MPS->getBitArray();
+
+    double get_value = MPS->getValue();
+
+    EXPECT_EQ(test_value, get_value);
+}
+
+TEST(get_value_tests, get_pos_max_float) {
+
+    float test_value = numeric_limits<float>::max();
+
+    auto MPS = new mps(23, 8, test_value);
+
+    auto binary = MPS->getBitArray();
+
+    double get_value = MPS->getValue();
+
+    EXPECT_EQ(test_value, get_value);
+}
+
+TEST(get_value_tests, get_neg_max_double) {
+
+    double test_value = numeric_limits<double>::max() * -1;
+
+    auto MPS = new mps(52, 11, test_value);
+
+    auto binary = MPS->getBitArray();
+
+    double get_value = MPS->getValue();
+
+    EXPECT_EQ(test_value, get_value);
+}
+
+TEST(get_value_tests, get_neg_max_float) {
+
+    float test_value = numeric_limits<float>::max() * -1;
+
+    auto MPS = new mps(23, 8, test_value);
+
+    auto binary = MPS->getBitArray();
+
+    double get_value = MPS->getValue();
+
+    EXPECT_EQ(test_value, get_value);
+}
+
+TEST(get_value_tests, get_pos_min_double) {
+
+    double test_value = numeric_limits<double>::min();
+
+    auto MPS = new mps(52, 11, test_value);
+
+    auto binary = MPS->getBitArray();
+
+    double get_value = MPS->getValue();
+
+    EXPECT_EQ(test_value, get_value);
+}
+
+TEST(get_value_tests, get_pos_min_float) {
+
+    float test_value = numeric_limits<float>::min();
+
+    auto MPS = new mps(23, 8, test_value);
+
+    auto binary = MPS->getBitArray();
+
+    double get_value = MPS->getValue();
+
+    EXPECT_EQ(test_value, get_value);
+}
+
+TEST(get_value_tests, get_neg_min_double) {
+
+    double test_value = numeric_limits<double>::min() * -1;
+
+    auto MPS = new mps(52, 11, test_value);
+
+    auto binary = MPS->getBitArray();
+
+    double get_value = MPS->getValue();
+
+    EXPECT_EQ(test_value, get_value);
+}
+
+TEST(get_value_tests, get_neg_min_float) {
+
+    float test_value = numeric_limits<float>::min() * -1;
 
     auto MPS = new mps(23, 8, test_value);
 

@@ -82,6 +82,10 @@ double mps::getValue() {
 
     if(isZero()){
         return 0;
+    } else if (isInfinity() && isPositive()){
+        return numeric_limits<double>::infinity();
+    } else if (isInfinity()){
+        return numeric_limits<double>::infinity() * -1;
     }
 
     if(bit_vector[0]){
@@ -117,6 +121,31 @@ double mps::getValue() {
 
 bool mps::isZero(){
     return all_of(bit_vector.begin(), bit_vector.end(), [](bool i){return !i;});
+}
+
+bool mps::isInfinity() {
+
+    for(int i = 1; i < exponent_length+1; i++){
+        if(!bit_vector[i]){
+            return false;
+        }
+    }
+
+    for(int i = exponent_length+1; i < bit_vector.size(); i++){
+        if(bit_vector[i]){
+            return false;
+        }
+    }
+
+    return true;
+}
+
+bool mps::isPositive(){
+    if(bit_vector[0]){
+        return false;
+    } else {
+        return true;
+    }
 }
 //-------------------------------
 
