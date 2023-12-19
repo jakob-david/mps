@@ -261,6 +261,7 @@ mps& mps::operator=(const mps& other) {
 mps mps::operator+(mps other) {
 
     mps ret;
+    vector<bool> value;
 
     if(this->exponent_length > other.exponent_length){
         ret.exponent_length = this->exponent_length;
@@ -276,7 +277,16 @@ mps mps::operator+(mps other) {
 
     if(this->isZero() || other.isZero()){
         ret.setZero();
+        return ret;
     }
+
+    vector<bool> a_mantissa(this->bit_vector.begin()+exponent_length+1, this->bit_vector.end());
+    vector<bool> b_mantissa(other.bit_vector.begin()+exponent_length+1, other.bit_vector.end());
+    vector<bool> mantissa = binaryAddition(a_mantissa, b_mantissa);
+
+    //value.insert(value.begin(), mantissa.begin(), mantissa.end());
+
+    ret.setBitArray(mantissa);
 
     return ret;
 }
@@ -285,6 +295,15 @@ mps mps::operator+(mps other) {
 
 // helper methods
 //-------------------------------
+
+void mps::setBitArray(vector<bool> value) {
+
+    this->bit_vector.erase(this->bit_vector.begin(),this->bit_vector.end());
+
+    for(int i = 0; i < value.size(); i++){
+        this->bit_vector.push_back(value[i]);
+    }
+}
 
 /**
  * Sets the bit vector of the mps object.
@@ -396,5 +415,34 @@ void mps::setBitArray(double value) {
  */
 int mps::getBias() const{
     return ((int) pow (2, exponent_length)) / 2 -1;
+}
+
+vector<bool> mps::binaryAddition(vector<bool> a, vector<bool> b){
+
+    vector<bool> ret;
+    bool carrier = false;
+
+    if(a.size() < b.size()){
+
+        for(int i = (int) a.size(); i < b.size(); i++){
+            a.insert(a.begin(), false);
+        }
+    } else if (b.size() < a.size()) {
+        for(int i = (int) b.size(); i < a.size(); i++){
+            b.insert(b.begin(), false);
+        }
+    }
+
+    // full adder
+    for(int i = (int) a.size()-1; i >= 0; i--){
+        ret.insert(ret.begin(), (a[i] ^ b[i]) ^ carrier);
+        carrier = ((a[i] & b[i]) | (a[i] & carrier)) | (b[i] & carrier);
+    }
+
+    if(carrier){
+        ret.insert(ret.begin(), true);
+    }
+
+    return ret;
 }
 //-------------------------------

@@ -62,8 +62,12 @@ private:
 
     // helper functions
     //-------------------------------
+    void setBitArray(vector<bool> value);
     void setBitArray(double value);
     [[nodiscard]] int getBias() const;
+
+public:
+    [[nodiscard]] static vector<bool> binaryAddition(vector<bool> one, vector<bool> two);
     //-------------------------------
 
 };

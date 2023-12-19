@@ -91,3 +91,44 @@ TEST(addition_tests, conversion_empty_object_double){
     EXPECT_EQ(MPS.getMantisseLength(), result.getMantisseLength());
     EXPECT_EQ(MPS.getExponentLength(), result.getExponentLength());
 }
+
+TEST(addition_tests, conversion_empty_object_float){
+
+    float test_value = 234536.34634;
+
+    mps MPS(31, 8, test_value);
+    mps MPS_2(32, 8, test_value);
+
+    mps result = MPS + MPS_2;
+
+    EXPECT_EQ(MPS_2.getMantisseLength(), result.getMantisseLength());
+    EXPECT_EQ(MPS_2.getExponentLength(), result.getExponentLength());
+}
+
+TEST(coding, tets_test) {
+
+    mps MPS(5,2,1.05);
+    mps MPS_2(5,2,1.05);
+
+    auto test = MPS + MPS_2;
+
+    string str;
+    for(bool bit : test.getBitArray()){
+        if(bit){
+            str.append("1");
+        } else {
+            str.append("0");
+        }
+    }
+
+    string str2;
+    for(bool bit : MPS.getBitArray()){
+        if(bit){
+            str2.append("1");
+        } else {
+            str2.append("0");
+        }
+    }
+
+    EXPECT_EQ(str, str2);
+}
