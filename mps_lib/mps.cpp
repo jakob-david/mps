@@ -176,6 +176,8 @@ void mps::setBitArray(double value) {
     // calculate the exponent
     int mantissa_shift;
     if(abs(value) > numeric_limits<float>::max()){
+        // When the value is too large rounding problems occur using log2.
+        // (At least I think that is the problem)
         double tmp_value = abs(value);
         int tmp_count = 0;
 
