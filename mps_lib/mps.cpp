@@ -177,29 +177,17 @@ void mps::setBitArray(double value) {
         return ret;
     };
 
+    if(0 == value){
+        setZero(); return;
+    } else if(numeric_limits<double>::infinity() == value) {
+        setInf(); return;
+    } else if (numeric_limits<double>::infinity() * -1 == value){
+        setInf(true); return;
+    } else if (isnan(value)){
+        setNAN(); return;
+    }
 
     bit_vector.erase(bit_vector.begin(),bit_vector.end());
-
-    if(0 == value){
-
-        setZero();
-        return;
-
-    } else if(numeric_limits<double>::infinity() == value || numeric_limits<double>::infinity() * -1 == value){
-
-        if(value > 0){
-            setInf();
-        } else {
-            setInf(true);
-        }
-
-        return;
-
-    } else if (isnan(value)){
-
-        setNAN();
-        return;
-    }
 
     int mantissa_shift;
     if(abs(value) > numeric_limits<float>::max()){
