@@ -83,8 +83,7 @@ vector<bool>* mps::getBitArrayReference() {
  */
 double mps::getValue() {
 
-    double ret;
-
+    // handle special cases
     if(isZero()){
         return 0;
     } else if (isInfinity() && isPositive()){
@@ -93,12 +92,16 @@ double mps::getValue() {
         return numeric_limits<double>::infinity() * -1;
     }
 
+    double ret;
+
+    // positive or negative
     if(bit_vector[0]){
         ret = -1;
     } else {
         ret = 1;
     }
 
+    // handle mantissa
     for(int i = exponent_length + 1; i < bit_vector.size(); i++){
         if(bit_vector[i]){
             if(ret >= 0){
@@ -109,6 +112,7 @@ double mps::getValue() {
         }
     }
 
+    // get exponent
     int exponent = 0;
     for(int i = 1; i <= exponent_length; i++){
         if(bit_vector[i]){
@@ -116,8 +120,8 @@ double mps::getValue() {
         }
     }
 
+    // apply bias and apply exponent
     exponent -= getBias();
-
     ret *= pow(2, exponent);
 
     return ret;
