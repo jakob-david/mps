@@ -48,7 +48,7 @@ private:
 
     // helper functions
     //-------------------------------
-    void setBitArray(double value, int exponent_len, int mantissa_len);
+    void setBitArray(double value);
     //-------------------------------
 
 };

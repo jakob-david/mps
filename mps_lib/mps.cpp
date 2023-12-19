@@ -16,7 +16,7 @@ mps::mps(int mantissa_length, int exponent_length, double value) {
     this->mantissa_length = mantissa_length;
     this->exponent_length = exponent_length;
 
-    setBitArray(value, this->exponent_length, this->mantissa_length);
+    setBitArray(value);
 }
 
 /**
@@ -107,7 +107,7 @@ void mps::setInf(bool negative) {
 
 
 // helper methods
-void mps::setBitArray(double value, int exponent_len, int mantissa_len) {
+void mps::setBitArray(double value) {
 
     /*
      * Small function to convert an integer to a bit string.
@@ -157,7 +157,7 @@ void mps::setBitArray(double value, int exponent_len, int mantissa_len) {
     bit_vector.erase(bit_vector.begin(),bit_vector.end());
 
     if(0 == value){
-        for(int i = 0; i < exponent_len + mantissa_len + 1; i++){
+        for(int i = 0; i < exponent_length + mantissa_length + 1; i++){
             bit_vector.push_back(false);
         }
 
@@ -177,13 +177,13 @@ void mps::setBitArray(double value, int exponent_len, int mantissa_len) {
 
         bit_vector.push_back(false);
 
-        for(int i = 0; i < exponent_len; i++){
+        for(int i = 0; i < exponent_length; i++){
             bit_vector.push_back(true);
         }
 
         bit_vector.push_back(true);
 
-        for(int i = 1; i < mantissa_len; i++){
+        for(int i = 1; i < mantissa_length; i++){
             bit_vector.push_back(false);
         }
 
@@ -205,22 +205,22 @@ void mps::setBitArray(double value, int exponent_len, int mantissa_len) {
         mantissa_shift = floor(log2(abs(value)));
     }
 
-    int mantissa_adjustment = ((int) pow (2, exponent_len)) / 2 -1;
+    int mantissa_adjustment = ((int) pow (2, exponent_length)) / 2 -1;
     int exponent_int =  mantissa_shift + mantissa_adjustment;
 
     vector<bool> exponent = getIntegerPart(exponent_int);
 
-    if(exponent.size() > exponent_len) {
+    if(exponent.size() > exponent_length) {
         cout << "ERROR: exponent too large" << endl;
         // TODO: add proper error handling.
     } else {
-        for(int i = (int) exponent.size(); i < exponent_len; i++){
+        for(int i = (int) exponent.size(); i < exponent_length; i++){
             exponent.insert(exponent.begin(), false);
         }
     }
 
     value = value / pow(2, mantissa_shift);
-    auto tmp_mantissa = getDecimalPart(value, mantissa_len);
+    auto tmp_mantissa = getDecimalPart(value, mantissa_length);
 
     if(value > 0){
         bit_vector.push_back(false);
