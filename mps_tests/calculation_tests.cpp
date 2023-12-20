@@ -105,6 +105,18 @@ TEST(addition_tests, conversion_empty_object_float){
     EXPECT_EQ(MPS_2.getExponentLength(), result.getExponentLength());
 }
 
+TEST(addition_tests, simple_addition_same_float) {
+
+    float value_1 = 1.05;
+
+    mps MPS(23,8,value_1);
+    mps MPS_2(23,8,value_1);
+
+    auto test = MPS + MPS_2;
+
+    EXPECT_EQ(value_1+value_1, test.getValue());
+}
+
 TEST(addition_tests, simple_addition_float) {
 
     float value_1 = 1.05;
@@ -118,30 +130,4 @@ TEST(addition_tests, simple_addition_float) {
     EXPECT_EQ(value_2+value_1, test.getValue());
 }
 
-TEST(coding, tets_test) {
 
-    mps MPS(5,2,1.05);
-    mps MPS_2(5,2,2.1);
-
-    auto test = MPS + MPS_2;
-
-    string str;
-    for(bool bit : test.getBitArray()){
-        if(bit){
-            str.append("1");
-        } else {
-            str.append("0");
-        }
-    }
-
-    string str2;
-    for(bool bit : MPS_2.getBitArray()){
-        if(bit){
-            str2.append("1");
-        } else {
-            str2.append("0");
-        }
-    }
-
-    EXPECT_EQ(str, str2+"v");
-}

@@ -307,7 +307,8 @@ mps mps::operator+(mps& other) {
     ret_vector.insert(ret_vector.end(), exponent.begin(), exponent.end());
 
     // TODO: increase exponent if most significant bit of both matisses are 1
-    vector<bool> mantissa = binaryAddition(a_mantissa, b_mantissa);
+    bool carrier;
+    vector<bool> mantissa = binaryAddition(a_mantissa, b_mantissa, &carrier);
     ret_vector.insert(ret_vector.end(), mantissa.begin(), mantissa.end());
 
     return ret;
