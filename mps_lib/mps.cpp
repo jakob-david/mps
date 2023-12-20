@@ -288,20 +288,23 @@ mps mps::operator+(mps& other) {
 
     vector<bool> a_exponent(this->bit_vector.begin()+1, this->bit_vector.begin()+1+this->exponent_length);
     vector<bool> b_exponent(other.bit_vector.begin()+1, other.bit_vector.begin()+1+other.exponent_length);
-
+    vector<bool> exponent;
 
     int exponent_diff;
     if(1 == larger(a_exponent, b_exponent)){
         exponent_diff = binaryToInt(binarySubtractor(a_exponent, b_exponent)) - ret.getBias();
-        ret_vector.insert(ret_vector.end(), a_exponent.begin(), a_exponent.end());
+        exponent.insert(exponent.end(), a_exponent.begin(), a_exponent.end());
         moveMantissaRight(&b_mantissa, exponent_diff);
     } else if(-1 == larger(a_exponent, b_exponent)){
         exponent_diff = binaryToInt(binarySubtractor(b_exponent, a_exponent)) - ret.getBias();
-        ret_vector.insert(ret_vector.end(), b_exponent.begin(), b_exponent.end());
+        exponent.insert(exponent.end(), b_exponent.begin(), b_exponent.end());
         moveMantissaRight(&a_mantissa, exponent_diff);
     } else {
         ret_vector.insert(ret_vector.end(), a_exponent.begin(), a_exponent.end());
+        exponent.insert(exponent.end(), a_exponent.begin(), a_exponent.end());
     }
+
+    ret_vector.insert(ret_vector.end(), exponent.begin(), exponent.end());
 
     // TODO: increase exponent if most significant bit of both matisses are 1
     vector<bool> mantissa = binaryAddition(a_mantissa, b_mantissa);
