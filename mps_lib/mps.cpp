@@ -283,8 +283,15 @@ mps mps::operator+(mps& other) {
     }
 
 
-    vector<bool> a_mantissa(this->bit_vector.begin()+exponent_length+1, this->bit_vector.end());
-    vector<bool> b_mantissa(other.bit_vector.begin()+exponent_length+1, other.bit_vector.end());
+    vector<bool> a_mantissa;
+    a_mantissa.push_back(true);
+    a_mantissa.insert(a_mantissa.end(), this->bit_vector.begin()+exponent_length+1, this->bit_vector.end());
+    //a_mantissa.erase(a_mantissa.begin(), a_mantissa.begin()+1);
+
+    vector<bool> b_mantissa;
+    b_mantissa.push_back(true);
+    b_mantissa.insert(b_mantissa.end(), other.bit_vector.begin()+exponent_length+1, other.bit_vector.end());
+    //b_mantissa.erase(b_mantissa.begin(), b_mantissa.begin()+1);
 
     vector<bool> a_exponent(this->bit_vector.begin()+1, this->bit_vector.begin()+1+this->exponent_length);
     vector<bool> b_exponent(other.bit_vector.begin()+1, other.bit_vector.begin()+1+other.exponent_length);
@@ -300,15 +307,20 @@ mps mps::operator+(mps& other) {
         exponent.insert(exponent.end(), b_exponent.begin(), b_exponent.end());
         moveMantissaRight(&a_mantissa, exponent_diff);
     } else {
-        ret_vector.insert(ret_vector.end(), a_exponent.begin(), a_exponent.end());
         exponent.insert(exponent.end(), a_exponent.begin(), a_exponent.end());
     }
 
-    ret_vector.insert(ret_vector.end(), exponent.begin(), exponent.end());
 
-    // TODO: increase exponent if most significant bit of both matisses are 1
+    // TODO: increase exponent if most significant bit of both mantissa are 1
     bool carrier;
     vector<bool> mantissa = binaryAddition(a_mantissa, b_mantissa, &carrier);
+    mantissa.erase(mantissa.begin(), mantissa.begin()+1);
+
+    if(carrier){
+        addOneToBinary(&exponent);
+    }
+
+    ret_vector.insert(ret_vector.end(), exponent.begin(), exponent.end());
     ret_vector.insert(ret_vector.end(), mantissa.begin(), mantissa.end());
 
     return ret;
@@ -531,9 +543,8 @@ char mps::larger(vector<bool>& a, vector<bool>& b){
 }
 
 void mps::moveMantissaRight(vector<bool>* vector, int amount){
-    vector->insert(vector->begin(), true);
-    vector->pop_back();
-    for(int i = 0; i < amount-1; i++){
+
+    for(int i = 0; i < amount; i++){
         vector->insert(vector->begin(), false);
         vector->pop_back();
     }
@@ -541,7 +552,7 @@ void mps::moveMantissaRight(vector<bool>* vector, int amount){
 
 void mps::addOneToBinary(vector<bool>* vector){
     for(int i = (int) vector->size() - 1; i >= 0; i--){
-        (*vector)[i] = (*vector)[i];
+        (*vector)[i] = !(*vector)[i];
         if((*vector)[i]){
             break;
         }
