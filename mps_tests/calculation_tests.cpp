@@ -84,7 +84,7 @@ TEST(addition_tests, conversion_empty_object_double){
     double test_value = 234536.34634;
 
     mps MPS(52, 11, test_value);
-    mps MPS_2(51, 11, test_value);
+    mps MPS_2(52, 11, test_value);
 
     mps result = MPS + MPS_2;
 
@@ -96,8 +96,8 @@ TEST(addition_tests, conversion_empty_object_float){
 
     float test_value = 234536.34634;
 
-    mps MPS(31, 8, test_value);
-    mps MPS_2(32, 8, test_value);
+    mps MPS(23, 8, test_value);
+    mps MPS_2(23, 8, test_value);
 
     mps result = MPS + MPS_2;
 
@@ -105,10 +105,23 @@ TEST(addition_tests, conversion_empty_object_float){
     EXPECT_EQ(MPS_2.getExponentLength(), result.getExponentLength());
 }
 
+TEST(addition_tests, simple_addition_float) {
+
+    float value_1 = 1.05;
+    float value_2 = 2.1;
+
+    mps MPS(23,8,value_1);
+    mps MPS_2(23,8,value_2);
+
+    auto test = MPS + MPS_2;
+
+    EXPECT_EQ(value_2+value_1, test.getValue());
+}
+
 TEST(coding, tets_test) {
 
     mps MPS(5,2,1.05);
-    mps MPS_2(5,2,1.05);
+    mps MPS_2(5,2,2.1);
 
     auto test = MPS + MPS_2;
 
@@ -122,7 +135,7 @@ TEST(coding, tets_test) {
     }
 
     string str2;
-    for(bool bit : MPS.getBitArray()){
+    for(bool bit : MPS_2.getBitArray()){
         if(bit){
             str2.append("1");
         } else {
@@ -130,5 +143,5 @@ TEST(coding, tets_test) {
         }
     }
 
-    EXPECT_EQ(str, str2);
+    EXPECT_EQ(str, str2+"v");
 }

@@ -55,7 +55,7 @@ public:
     // operators
     //-------------------------------
     mps& operator=(const mps& other);
-    mps operator+(mps);
+    mps operator+(mps&);
     //-------------------------------
 
 private:
@@ -67,7 +67,9 @@ private:
     [[nodiscard]] int getBias() const;
 
 public:
-    [[nodiscard]] static vector<bool> binaryAddition(vector<bool> one, vector<bool> two);
+    [[nodiscard]] static vector<bool> binaryAddition(vector<bool>& one, vector<bool>& two);
+    [[nodiscard]] static vector<bool> binarySubtractor(vector<bool>& minuend, vector<bool> subtrahend);
+    [[nodiscard]] static int binaryToInt(vector<bool> bit_vector);
     //-------------------------------
 
 };

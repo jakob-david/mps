@@ -65,7 +65,7 @@ int main() {
         chrono::milliseconds t = t_2 - t_1;
 
         std::cout << t.count() << std::endl;
-    }*/
+    }
 
 
     float test = 1;
@@ -75,6 +75,28 @@ int main() {
     for(std::size_t n = 0; n < sizeof f; ++n)
         std::cout << std::bitset<8>(bits[n]);
     std::cout << '\n';
+
+    */
+for (int mant = 0; mant < 100; mant++) {
+    mps one(mant, 8, 34.45);
+
+    chrono::milliseconds t_1 = duration_cast<chrono::milliseconds>(
+            chrono::system_clock::now().time_since_epoch()
+    );
+
+    for (int i = 0; i < 10000; i++) {
+
+        one + one;
+    }
+
+    chrono::milliseconds t_2 = duration_cast<chrono::milliseconds>(
+            chrono::system_clock::now().time_since_epoch()
+    );
+
+    chrono::milliseconds t = t_2 - t_1;
+
+    std::cout << t.count() << std::endl;
+}
 
 }
 

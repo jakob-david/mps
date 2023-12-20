@@ -258,35 +258,74 @@ mps& mps::operator=(const mps& other) {
     return *this;
 }
 
-mps mps::operator+(mps other) {
+mps mps::operator+(mps& other) {
 
     mps ret;
+    vector<bool>& ret_vector = ret.bit_vector;
     vector<bool> value;
 
-    if(this->exponent_length > other.exponent_length){
-        ret.exponent_length = this->exponent_length;
-    } else {
-        ret.exponent_length = other.exponent_length;
+    if(this->mantissa_length != other.mantissa_length || this->exponent_length != other.exponent_length){
+        cout << "ERROR: addition, sizes do not match"  << endl;
+        //TODO: Remove when finished.
     }
 
-    if(this->mantissa_length > other.mantissa_length){
-        ret.mantissa_length = this->mantissa_length;
-    } else {
-        ret.mantissa_length = other.mantissa_length;
-    }
+    ret.exponent_length = this->exponent_length;
+    ret.mantissa_length = this->mantissa_length;
 
-    if(this->isZero() || other.isZero()){
-        ret.setZero();
+    if(this->isZero()){
+        ret = other;
+        //TODO: can maybe be avoided.
+        return ret;
+    } else if(other.isZero()){
+        ret = *this;
         return ret;
     }
 
+
     vector<bool> a_mantissa(this->bit_vector.begin()+exponent_length+1, this->bit_vector.end());
     vector<bool> b_mantissa(other.bit_vector.begin()+exponent_length+1, other.bit_vector.end());
+
+    vector<bool> a_exponent(this->bit_vector.begin()+1, this->bit_vector.begin()+1+this->exponent_length);
+    vector<bool> b_exponent(other.bit_vector.begin()+1, other.bit_vector.begin()+1+other.exponent_length);
+
+
+    ret.bit_vector.push_back(false);
+
+    // TODO: try to simplify with subtract.
+    int exponent_diff;
+    bool same = true;
+    for(int i = 0; i < a_exponent.size(); i++){
+        if(a_exponent[i] && !b_exponent[i]){
+            exponent_diff = binaryToInt(binarySubtractor(a_exponent, b_exponent)) - ret.getBias();
+            ret_vector.insert(ret_vector.end(), a_exponent.begin(), a_exponent.end());
+            b_mantissa.insert(b_mantissa.begin(), true);
+            b_mantissa.pop_back();
+            for(int j = 0; j < exponent_diff-1; j++){
+                b_mantissa.insert(b_mantissa.begin(), false);
+                b_mantissa.pop_back();
+            }
+            same = false;
+            break;
+        } else if(b_exponent[i] && !a_exponent[i]) {
+            exponent_diff = binaryToInt(binarySubtractor(b_exponent, a_exponent)) - ret.getBias();
+            ret_vector.insert(ret_vector.end(), b_exponent.begin(), b_exponent.end());
+            a_mantissa.insert(a_mantissa.begin(), true);
+            a_mantissa.pop_back();
+            for(int j = 0; j < exponent_diff-1; j++){
+                a_mantissa.insert(a_mantissa.begin(), false);
+                a_mantissa.pop_back();
+            }
+            same = false;
+            break;
+        }
+    }
+
+    if(same){
+        ret_vector.insert(ret_vector.end(), a_exponent.begin(), a_exponent.end());
+    }
+    // TODO: increase exponent if most significant bit of both matisses are 1
     vector<bool> mantissa = binaryAddition(a_mantissa, b_mantissa);
-
-    //value.insert(value.begin(), mantissa.begin(), mantissa.end());
-
-    ret.setBitArray(mantissa);
+    ret_vector.insert(ret_vector.end(), mantissa.begin(), mantissa.end());
 
     return ret;
 }
@@ -417,20 +456,15 @@ int mps::getBias() const{
     return ((int) pow (2, exponent_length)) / 2 -1;
 }
 
-vector<bool> mps::binaryAddition(vector<bool> a, vector<bool> b){
+vector<bool> mps::binaryAddition(vector<bool>& a, vector<bool>& b){
 
     vector<bool> ret;
     bool carrier = false;
 
-    if(a.size() < b.size()){
-
-        for(int i = (int) a.size(); i < b.size(); i++){
-            a.insert(a.begin(), false);
-        }
-    } else if (b.size() < a.size()) {
-        for(int i = (int) b.size(); i < a.size(); i++){
-            b.insert(b.begin(), false);
-        }
+    if(a.size() != b.size()){
+        //TODO: Remove when finished.
+        cout << "ERROR: binary addition vectors must have same length" << endl;
+        return ret;
     }
 
     // full adder
@@ -441,6 +475,39 @@ vector<bool> mps::binaryAddition(vector<bool> a, vector<bool> b){
 
     if(carrier){
         ret.insert(ret.begin(), true);
+        ret.pop_back();
+    }
+
+    return ret;
+}
+
+vector<bool> mps::binarySubtractor(vector<bool>& minuend, vector<bool> subtrahend){
+
+
+    // invert
+    for(int i = 0; i < subtrahend.size(); i++){
+        subtrahend[i] = !subtrahend[i];
+    }
+
+    // add one
+    for(int i = (int) subtrahend.size() - 1; i >= 0; i--){
+        subtrahend[i] = !subtrahend[i];
+        if(subtrahend[i]){
+            break;
+        }
+    }
+
+    return binaryAddition(minuend, subtrahend);
+}
+
+int mps::binaryToInt(vector<bool> vector){
+
+    int ret = 0;
+
+    for(int i = 0; i < vector.size(); i++){
+        if(vector[vector.size()-i-1]){
+            ret += (int) pow(2,i);
+        }
     }
 
     return ret;
