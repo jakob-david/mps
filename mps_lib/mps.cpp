@@ -470,12 +470,15 @@ vector<bool> mps::binarySubtractor(vector<bool>& minuend, vector<bool> subtrahen
     }
 
     // add one
+    addOneToBinary(&subtrahend);
+    // TODO: delete if sure.
+    /*
     for(int i = (int) subtrahend.size() - 1; i >= 0; i--){
         subtrahend[i] = !subtrahend[i];
         if(subtrahend[i]){
             break;
         }
-    }
+    }*/
 
     return binaryAddition(minuend, subtrahend);
 }
