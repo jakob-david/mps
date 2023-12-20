@@ -70,6 +70,9 @@ public:
     [[nodiscard]] static vector<bool> binaryAddition(vector<bool>& one, vector<bool>& two);
     [[nodiscard]] static vector<bool> binarySubtractor(vector<bool>& minuend, vector<bool> subtrahend);
     [[nodiscard]] static int binaryToInt(vector<bool> bit_vector);
+    [[nodiscard]] char larger(vector<bool>& a, vector<bool>& b);
+    void moveMantissaRight(vector<bool>* vector, int amount);
+    static void addOneToBinary(vector<bool>* vector);
     //-------------------------------
 
 };

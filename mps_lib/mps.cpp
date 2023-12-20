@@ -262,7 +262,8 @@ mps mps::operator+(mps& other) {
 
     mps ret;
     vector<bool>& ret_vector = ret.bit_vector;
-    vector<bool> value;
+
+    ret.bit_vector.push_back(false);
 
     if(this->mantissa_length != other.mantissa_length || this->exponent_length != other.exponent_length){
         cout << "ERROR: addition, sizes do not match"  << endl;
@@ -289,40 +290,19 @@ mps mps::operator+(mps& other) {
     vector<bool> b_exponent(other.bit_vector.begin()+1, other.bit_vector.begin()+1+other.exponent_length);
 
 
-    ret.bit_vector.push_back(false);
-
-    // TODO: try to simplify with subtract.
     int exponent_diff;
-    bool same = true;
-    for(int i = 0; i < a_exponent.size(); i++){
-        if(a_exponent[i] && !b_exponent[i]){
-            exponent_diff = binaryToInt(binarySubtractor(a_exponent, b_exponent)) - ret.getBias();
-            ret_vector.insert(ret_vector.end(), a_exponent.begin(), a_exponent.end());
-            b_mantissa.insert(b_mantissa.begin(), true);
-            b_mantissa.pop_back();
-            for(int j = 0; j < exponent_diff-1; j++){
-                b_mantissa.insert(b_mantissa.begin(), false);
-                b_mantissa.pop_back();
-            }
-            same = false;
-            break;
-        } else if(b_exponent[i] && !a_exponent[i]) {
-            exponent_diff = binaryToInt(binarySubtractor(b_exponent, a_exponent)) - ret.getBias();
-            ret_vector.insert(ret_vector.end(), b_exponent.begin(), b_exponent.end());
-            a_mantissa.insert(a_mantissa.begin(), true);
-            a_mantissa.pop_back();
-            for(int j = 0; j < exponent_diff-1; j++){
-                a_mantissa.insert(a_mantissa.begin(), false);
-                a_mantissa.pop_back();
-            }
-            same = false;
-            break;
-        }
-    }
-
-    if(same){
+    if(1 == larger(a_exponent, b_exponent)){
+        exponent_diff = binaryToInt(binarySubtractor(a_exponent, b_exponent)) - ret.getBias();
+        ret_vector.insert(ret_vector.end(), a_exponent.begin(), a_exponent.end());
+        moveMantissaRight(&b_mantissa, exponent_diff);
+    } else if(-1 == larger(a_exponent, b_exponent)){
+        exponent_diff = binaryToInt(binarySubtractor(b_exponent, a_exponent)) - ret.getBias();
+        ret_vector.insert(ret_vector.end(), b_exponent.begin(), b_exponent.end());
+        moveMantissaRight(&a_mantissa, exponent_diff);
+    } else {
         ret_vector.insert(ret_vector.end(), a_exponent.begin(), a_exponent.end());
     }
+
     // TODO: increase exponent if most significant bit of both matisses are 1
     vector<bool> mantissa = binaryAddition(a_mantissa, b_mantissa);
     ret_vector.insert(ret_vector.end(), mantissa.begin(), mantissa.end());
@@ -511,5 +491,49 @@ int mps::binaryToInt(vector<bool> vector){
     }
 
     return ret;
+}
+
+/**
+ * To be read: Is the bit value a represents larger than the one of b.
+ * 1 if a > b
+ * 0 if a == b
+ * -1 if a < b
+ *
+ * Only works for vectors of same sice.
+ *
+ * @param a first vector that represents a binary number.
+ * @param b first vector that represents a binary number.
+ * @return 1 if a > b, 0 if a == b, -1 if a < b
+ */
+char mps::larger(vector<bool>& a, vector<bool>& b){
+
+    // TODO: Remove at the end.
+    if(a.size() != b.size()){
+        cout << "ERROR: larger: not same sice" << endl;
+    }
+
+    for(int i = 0; i < a.size(); i++){
+        if(a[i] && !b[i]) { return 1;}
+        else if(b[i] && !a[i]) {return -1;}
+    }
+    return 0;
+}
+
+void mps::moveMantissaRight(vector<bool>* vector, int amount){
+    vector->insert(vector->begin(), true);
+    vector->pop_back();
+    for(int i = 0; i < amount-1; i++){
+        vector->insert(vector->begin(), false);
+        vector->pop_back();
+    }
+}
+
+void mps::addOneToBinary(vector<bool>* vector){
+    for(int i = (int) vector->size() - 1; i >= 0; i--){
+        (*vector)[i] = (*vector)[i];
+        if((*vector)[i]){
+            break;
+        }
+    }
 }
 //-------------------------------
