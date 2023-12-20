@@ -439,7 +439,7 @@ int mps::getBias() const{
     return ((int) pow (2, exponent_length)) / 2 -1;
 }
 
-vector<bool> mps::binaryAddition(vector<bool>& a, vector<bool>& b){
+vector<bool> mps::binaryAddition(vector<bool>& a, vector<bool>& b, bool* carrier_return){
 
     vector<bool> ret;
     bool carrier = false;
@@ -459,6 +459,10 @@ vector<bool> mps::binaryAddition(vector<bool>& a, vector<bool>& b){
     if(carrier){
         ret.insert(ret.begin(), true);
         ret.pop_back();
+    }
+
+    if(carrier_return != nullptr){
+        *carrier_return = carrier;
     }
 
     return ret;

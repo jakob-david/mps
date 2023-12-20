@@ -67,7 +67,7 @@ private:
     [[nodiscard]] int getBias() const;
 
 public:
-    [[nodiscard]] static vector<bool> binaryAddition(vector<bool>& one, vector<bool>& two);
+    [[nodiscard]] static vector<bool> binaryAddition(vector<bool>& one, vector<bool>& two, bool* carrier_return = nullptr);
     [[nodiscard]] static vector<bool> binarySubtractor(vector<bool>& minuend, vector<bool> subtrahend);
     [[nodiscard]] static int binaryToInt(vector<bool> bit_vector);
     [[nodiscard]] char larger(vector<bool>& a, vector<bool>& b);
