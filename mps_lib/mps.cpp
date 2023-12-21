@@ -299,20 +299,19 @@ mps mps::operator+(mps& other) {
 
     int exponent_diff = 0;
     if(1 == larger(a_exponent, b_exponent)){
-        exponent_diff = binaryToInt(binarySubtractor(a_exponent, b_exponent)) - ret.getBias();
+        exponent_diff = binaryToInt(binarySubtractor(a_exponent, b_exponent));
         exponent.insert(exponent.end(), a_exponent.begin(), a_exponent.end());
         matchMantissas(&b_mantissa, &a_mantissa, exponent_diff);
     } else if(-1 == larger(a_exponent, b_exponent)){
-        exponent_diff = binaryToInt(binarySubtractor(b_exponent, a_exponent)) - ret.getBias();
+        exponent_diff = binaryToInt(binarySubtractor(b_exponent, a_exponent));
         exponent.insert(exponent.end(), b_exponent.begin(), b_exponent.end());
         matchMantissas(&a_mantissa, &b_mantissa, exponent_diff);
     } else {
         exponent.insert(exponent.end(), a_exponent.begin(), a_exponent.end());
     }
 
-
     bool carrier;
-    vector<bool> mantissa = binaryAddition(a_mantissa, b_mantissa, &carrier);
+    vector<bool> mantissa = binaryAddition(a_mantissa, b_mantissa,true, &carrier);
     mantissa.erase(mantissa.begin(), mantissa.begin()+1);
     if(carrier){
         addOneToBinary(&exponent);
@@ -461,7 +460,7 @@ int mps::getBias() const{
     return ((int) pow (2, exponent_length)) / 2 -1;
 }
 
-vector<bool> mps::binaryAddition(vector<bool>& a, vector<bool>& b, bool* carrier_return){
+vector<bool> mps::binaryAddition(vector<bool>& a, vector<bool>& b, bool carry, bool* carrier_return){
 
     vector<bool> ret;
     bool carrier = false;
@@ -478,7 +477,7 @@ vector<bool> mps::binaryAddition(vector<bool>& a, vector<bool>& b, bool* carrier
         carrier = ((a[i] & b[i]) | (a[i] & carrier)) | (b[i] & carrier);
     }
 
-    if(carrier){
+    if(carry && carrier){
         ret.insert(ret.begin(), true);
         ret.pop_back();
     }
@@ -498,8 +497,11 @@ vector<bool> mps::binarySubtractor(vector<bool>& minuend, vector<bool> subtrahen
         subtrahend[i] = !subtrahend[i];
     }
 
+
     // add one
+    // TODO: account for carry bit;
     addOneToBinary(&subtrahend);
+
     // TODO: delete if sure.
     /*
     for(int i = (int) subtrahend.size() - 1; i >= 0; i--){
@@ -509,7 +511,8 @@ vector<bool> mps::binarySubtractor(vector<bool>& minuend, vector<bool> subtrahen
         }
     }*/
 
-    return binaryAddition(minuend, subtrahend);
+
+    return binaryAddition(minuend, subtrahend, false);
 }
 
 int mps::binaryToInt(vector<bool> vector){
