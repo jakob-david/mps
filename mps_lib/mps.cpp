@@ -312,7 +312,6 @@ mps mps::operator+(mps& other) {
 
 
     bool carrier;
-    bool round = false;
     vector<bool> mantissa = binaryAddition(a_mantissa, b_mantissa, &carrier);
     mantissa.erase(mantissa.begin(), mantissa.begin()+1);
     if(carrier){
@@ -321,13 +320,12 @@ mps mps::operator+(mps& other) {
 
     // rounding
     if(exponent_diff>0 && mantissa[mantissa.size()-exponent_diff]){
-        round = true;
-    }
-    mantissa.erase(mantissa.end()-exponent_diff, mantissa.end());
-    if(round){
+        mantissa.erase(mantissa.end()-exponent_diff, mantissa.end());
         if(addOneToBinary(&mantissa)){
             addOneToBinary(&exponent);
         }
+    } else {
+        mantissa.erase(mantissa.end()-exponent_diff, mantissa.end());
     }
 
 
