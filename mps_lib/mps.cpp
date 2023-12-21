@@ -297,28 +297,39 @@ mps mps::operator+(mps& other) {
     vector<bool> b_exponent(other.bit_vector.begin()+1, other.bit_vector.begin()+1+other.exponent_length);
     vector<bool> exponent;
 
-    int exponent_diff;
+    int exponent_diff = 0;
     if(1 == larger(a_exponent, b_exponent)){
         exponent_diff = binaryToInt(binarySubtractor(a_exponent, b_exponent)) - ret.getBias();
         exponent.insert(exponent.end(), a_exponent.begin(), a_exponent.end());
-        moveMantissaRight(&b_mantissa, exponent_diff);
+        matchMantissas(&b_mantissa, &a_mantissa, exponent_diff);
     } else if(-1 == larger(a_exponent, b_exponent)){
         exponent_diff = binaryToInt(binarySubtractor(b_exponent, a_exponent)) - ret.getBias();
         exponent.insert(exponent.end(), b_exponent.begin(), b_exponent.end());
-        moveMantissaRight(&a_mantissa, exponent_diff);
+        matchMantissas(&a_mantissa, &b_mantissa, exponent_diff);
     } else {
         exponent.insert(exponent.end(), a_exponent.begin(), a_exponent.end());
     }
 
 
-    // TODO: increase exponent if most significant bit of both mantissa are 1
     bool carrier;
+    bool round = false;
     vector<bool> mantissa = binaryAddition(a_mantissa, b_mantissa, &carrier);
     mantissa.erase(mantissa.begin(), mantissa.begin()+1);
-
     if(carrier){
         addOneToBinary(&exponent);
     }
+
+    // rounding
+    if(exponent_diff>0 && mantissa[mantissa.size()-exponent_diff]){
+        round = true;
+    }
+    mantissa.erase(mantissa.end()-exponent_diff, mantissa.end());
+    if(round){
+        if(addOneToBinary(&mantissa)){
+            addOneToBinary(&exponent);
+        }
+    }
+
 
     ret_vector.insert(ret_vector.end(), exponent.begin(), exponent.end());
     ret_vector.insert(ret_vector.end(), mantissa.begin(), mantissa.end());
@@ -542,20 +553,25 @@ char mps::larger(vector<bool>& a, vector<bool>& b){
     return 0;
 }
 
-void mps::moveMantissaRight(vector<bool>* vector, int amount){
+void mps::matchMantissas(vector<bool>* vector_right_shift, vector<bool>* vector_left_shift, int amount){
 
     for(int i = 0; i < amount; i++){
-        vector->insert(vector->begin(), false);
-        vector->pop_back();
+        vector_right_shift->insert(vector_right_shift->begin(), false);
+        vector_left_shift->insert(vector_left_shift->end(), false);
+        //vector_right_shift->pop_back();
     }
 }
 
-void mps::addOneToBinary(vector<bool>* vector){
+bool mps::addOneToBinary(vector<bool>* vector){
     for(int i = (int) vector->size() - 1; i >= 0; i--){
         (*vector)[i] = !(*vector)[i];
         if((*vector)[i]){
-            break;
+            return false;
         }
     }
+
+    vector->insert(vector->begin(), true);
+    vector->pop_back();
+    return true;
 }
 //-------------------------------
