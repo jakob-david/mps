@@ -499,16 +499,6 @@ mps mps::operator-(mps& other){
     exponent = binarySubtractor(exponent, exponent_shift_binary);
     //-------------------------------
 
-    string str;
-    for(bool bit : mantissa){
-        if(bit){
-            str.append("1");
-        } else {
-            str.append("0");
-        }
-    }
-    cout << "Mantissa: " << str << endl;
-
     // rounding
     //-------------------------------
     if(mantissa.size() > ret.mantissa_length){
