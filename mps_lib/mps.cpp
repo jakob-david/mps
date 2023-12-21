@@ -354,12 +354,28 @@ mps mps::operator+(mps& other) {
 
     // Rounding and further adjustment of the mantissa
     //-------------------------------
-    if(exponent_diff>0 && mantissa[mantissa.size()-exponent_diff]){
+    bool tmp = false;
+    for(int i = ((int) mantissa.size())-exponent_diff+1 ; i < mantissa.size(); i++){
+        if (mantissa[i]){
+            tmp = true;
+            break;
+        }
+    }
+    if(exponent_diff>0 && mantissa[mantissa.size()-exponent_diff] && tmp){
         mantissa.erase(mantissa.end()-exponent_diff, mantissa.end());
         if(addOneToBinary(&mantissa)){
             addOneToBinary(&exponent);
         }
-    } else {
+    } else if(exponent_diff>0 && mantissa[mantissa.size()-exponent_diff]){
+        if(mantissa[mantissa.size()-exponent_diff-1]){
+            mantissa.erase(mantissa.end()-exponent_diff, mantissa.end());
+            if(addOneToBinary(&mantissa)){
+                addOneToBinary(&exponent);
+            }
+        } else {
+            mantissa.erase(mantissa.end()-exponent_diff, mantissa.end());
+        }
+    }else {
         mantissa.erase(mantissa.end()-exponent_diff, mantissa.end());
     }
     //-------------------------------
@@ -448,9 +464,87 @@ mps mps::operator-(mps& other){
     }
     //-------------------------------
 
+
+    // Actual Subtraction
+    //-------------------------------
+    vector<bool> mantissa;
     larger_tmp = larger(a_mantissa, b_mantissa);
+    if(1 == larger_tmp){
+        mantissa = binarySubtractor(a_mantissa, b_mantissa);
+    } else if(-1 == larger_tmp){
+        mantissa = binarySubtractor(b_mantissa, a_mantissa);
+        ret_vector[0] = !ret_vector[0]; // flip sign
+    } else {
+        ret.setZero();
+        return ret;
+    }
+    //-------------------------------
 
 
+    // Adjust mantissa and exponent
+    //-------------------------------
+    int exponent_shift = 0;
+    for(int i = 0; i < mantissa.size(); i++){
+        if(mantissa[i]){
+            exponent_shift = i;
+            break;
+        }
+    }
+
+    mantissa.erase(mantissa.begin(), mantissa.begin()+exponent_shift+1);
+    vector<bool> exponent_shift_binary = intToBinary(exponent_shift);
+    for(int i = (int) exponent_shift_binary.size(); i < ret.exponent_length; i++){
+        exponent_shift_binary.insert(exponent_shift_binary.begin(), false);
+    }
+    exponent = binarySubtractor(exponent, exponent_shift_binary);
+    //-------------------------------
+
+    string str;
+    for(bool bit : mantissa){
+        if(bit){
+            str.append("1");
+        } else {
+            str.append("0");
+        }
+    }
+    cout << "Mantissa: " << str << endl;
+
+    // rounding
+    //-------------------------------
+    if(mantissa.size() > ret.mantissa_length){
+        bool tmp = false;
+        for(int i = ret.mantissa_length+1 ; i < mantissa.size(); i++){
+            if (mantissa[i]){
+                tmp = true;
+                break;
+            }
+        }
+        if(mantissa[ret.mantissa_length] && tmp){
+            mantissa.erase(mantissa.end()-((int) mantissa.size()-ret.mantissa_length), mantissa.end());
+            if(addOneToBinary(&mantissa)){
+                addOneToBinary(&exponent);
+            }
+        } else if(mantissa[ret.mantissa_length]){
+            if(mantissa[ret.mantissa_length-1]){
+                mantissa.erase(mantissa.end()-((int) mantissa.size()-ret.mantissa_length), mantissa.end());
+                if(addOneToBinary(&mantissa)){
+                    addOneToBinary(&exponent);
+                }
+            } else {
+                mantissa.erase(mantissa.end()-((int) mantissa.size()-ret.mantissa_length), mantissa.end());
+            }
+        }else {
+            mantissa.erase(mantissa.end()-((int) mantissa.size()-ret.mantissa_length), mantissa.end());
+        }
+    }
+    //-------------------------------
+
+
+    // set everything together.
+    //-------------------------------
+    ret_vector.insert(ret_vector.end(), exponent.begin(), exponent.end());
+    ret_vector.insert(ret_vector.end(), mantissa.begin(), mantissa.end());
+    //-------------------------------
 
     return ret;
 }
@@ -651,6 +745,25 @@ int mps::binaryToInt(vector<bool> vector){
         if(vector[vector.size()-i-1]){
             ret += (int) pow(2,i);
         }
+    }
+
+    return ret;
+}
+
+/**
+ * Converts an integer to a binary number.
+ * The binary number is stored in a vector of booleans.
+ *
+ * @param value the value of the integer.
+ * @return the value as binary number.
+ */
+vector<bool> mps::intToBinary(unsigned int value) {
+
+    vector<bool> ret;
+
+    while (value >= 1){
+        ret.insert(ret.begin(), value%2);
+        value /= 2;
     }
 
     return ret;

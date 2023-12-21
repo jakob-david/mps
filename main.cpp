@@ -79,6 +79,7 @@ int main() {
     */
 for (int mant = 0; mant < 100; mant++) {
     mps one(mant, 8, 34.45);
+    mps two(mant, 8, 12.14);
 
     chrono::milliseconds t_1 = duration_cast<chrono::milliseconds>(
             chrono::system_clock::now().time_since_epoch()
@@ -86,7 +87,7 @@ for (int mant = 0; mant < 100; mant++) {
 
     for (int i = 0; i < 10000; i++) {
 
-        one + one;
+        one - two;
     }
 
     chrono::milliseconds t_2 = duration_cast<chrono::milliseconds>(
