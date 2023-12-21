@@ -62,7 +62,6 @@ private:
 
     // helper functions
     //-------------------------------
-    void setBitArray(vector<bool> value);
     void setBitArray(double value);
     [[nodiscard]] int getBias() const;
 

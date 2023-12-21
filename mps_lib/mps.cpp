@@ -339,15 +339,6 @@ mps mps::operator+(mps& other) {
 // helper methods
 //-------------------------------
 
-void mps::setBitArray(vector<bool> value) {
-
-    this->bit_vector.erase(this->bit_vector.begin(),this->bit_vector.end());
-
-    for(int i = 0; i < value.size(); i++){
-        this->bit_vector.push_back(value[i]);
-    }
-}
-
 /**
  * Sets the bit vector of the mps object.
  */
@@ -489,14 +480,20 @@ vector<bool> mps::binaryAddition(vector<bool>& a, vector<bool>& b, bool carry, b
     return ret;
 }
 
+/**
+ * Performs a binary subtraction.
+ * The binary numbers are represented as vector containing booleans.
+ *
+ * @param minuend reference to the vector which should be reduced
+ * @param subtrahend reference to the vector which should be subtracted.
+ * @return the result as a binary number.
+ */
 vector<bool> mps::binarySubtractor(vector<bool>& minuend, vector<bool> subtrahend){
-
 
     // invert
     for(int i = 0; i < subtrahend.size(); i++){
         subtrahend[i] = !subtrahend[i];
     }
-
 
     // add one
     if(addOneToBinary(&subtrahend)){
@@ -506,6 +503,13 @@ vector<bool> mps::binarySubtractor(vector<bool>& minuend, vector<bool> subtrahen
     return binaryAddition(minuend, subtrahend, false);
 }
 
+/**
+ * Converts a binary number to an integer.
+ * The binary number is stored in a vector of booleans.
+ *
+ * @param vector vector containing the binary number
+ * @return the binary number as integer
+ */
 int mps::binaryToInt(vector<bool> vector){
 
     int ret = 0;
@@ -525,17 +529,17 @@ int mps::binaryToInt(vector<bool> vector){
  * 0 if a == b
  * -1 if a < b
  *
- * Only works for vectors of same sice.
+ * Only works for vectors of same size.
  *
- * @param a first vector that represents a binary number.
- * @param b first vector that represents a binary number.
+ * @param a reference to the vector containing the first binary number
+ * @param b reference to the vector containing the second binary number
  * @return 1 if a > b, 0 if a == b, -1 if a < b
  */
 char mps::larger(vector<bool>& a, vector<bool>& b){
 
     // TODO: Remove at the end.
     if(a.size() != b.size()){
-        cout << "ERROR: larger: not same sice" << endl;
+        cout << "ERROR: larger: not same size" << endl;
     }
 
     for(int i = 0; i < a.size(); i++){
@@ -545,16 +549,37 @@ char mps::larger(vector<bool>& a, vector<bool>& b){
     return 0;
 }
 
+/**
+ * Aligns two bit vectors about an amount.
+ * The amount is the number so that after the operation the two bit vectors align and have the same exponent.
+ *
+ * The vectors are not really shifted but zeros are added either to the left or the right.
+ * Therefore the size of both vectors is increased by the amount both are "shifted".
+ *
+ * @param vector_right_shift pointer to the vector which should be "shifted" to the right
+ * @param vector_left_shift pointer to the vector which should be "shifted" to the left
+ * @param amount amount the two vectors should be "shifted"
+ */
 void mps::matchMantissas(vector<bool>* vector_right_shift, vector<bool>* vector_left_shift, int amount){
 
     for(int i = 0; i < amount; i++){
         vector_right_shift->insert(vector_right_shift->begin(), false);
         vector_left_shift->insert(vector_left_shift->end(), false);
-        //vector_right_shift->pop_back();
     }
 }
 
+/**
+ * Adds one to a binary number saved inside a vector.
+ * The vector consists of booleans which represents a binary number.
+ *
+ * If a carrier bit is present in the last iteration a "one" is added at the beginning
+ * and the last element is erased.
+ *
+ * @param vector pointer to the vector containing the binary number where one should be added
+ * @return true if a carrier bit was present in the last iteration, false otherwise
+ */
 bool mps::addOneToBinary(vector<bool>* vector){
+
     for(int i = (int) vector->size() - 1; i >= 0; i--){
         (*vector)[i] = !(*vector)[i];
         if((*vector)[i]){
