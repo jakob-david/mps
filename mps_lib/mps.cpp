@@ -274,12 +274,12 @@ mps mps::operator+(mps& other) {
     ret.mantissa_length = this->mantissa_length;
 
     if(this->isZero()){
-        ret = other;
+        //ret = other;
         //TODO: can maybe be avoided.
-        return ret;
+        //return ret;
+        return other;
     } else if(other.isZero()){
-        ret = *this;
-        return ret;
+        return *this;
     }
 
 
