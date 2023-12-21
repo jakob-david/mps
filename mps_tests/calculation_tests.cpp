@@ -139,6 +139,32 @@ TEST(addition_tests, addition_double) {
 
     auto test = MPS + MPS_2;
 
+    EXPECT_EQ(value_1+value_2, test.getValue());
+}
+
+TEST(addition_tests, addition_float) {
+
+    float value_1 = 1.05;
+    float value_2 = 2.1;
+
+    mps MPS(23,8,value_1);
+    mps MPS_2(23,8,value_2);
+
+    auto test = MPS + MPS_2;
+
+    EXPECT_EQ(value_2+value_1, test.getValue());
+}
+
+TEST(addition_tests, addition2_double) {
+
+    double value_1 = 2453.45645;
+    double value_2 = 124779.3456;
+
+    mps MPS(53,11,value_1);
+    mps MPS_2(53,11,value_2);
+
+    auto test = MPS + MPS_2;
+
     string str1;
     for(bool bit : MPS.getBitArray()){
         if(bit){
@@ -147,7 +173,7 @@ TEST(addition_tests, addition_double) {
             str1.append("0");
         }
     }
-    cout << "MPS  : " << str1 << endl;
+    cout << "MPS   : " << str1 << endl;
 
     string str2;
     for(bool bit : MPS_2.getBitArray()){
@@ -157,7 +183,7 @@ TEST(addition_tests, addition_double) {
             str2.append("0");
         }
     }
-    cout << "MPS_2: " << str2 << endl;
+    cout << "MPS_2 : " << str2 << endl;
 
     string str;
     for(bool bit : test.getBitArray()){
@@ -179,10 +205,36 @@ TEST(addition_tests, addition_double) {
     EXPECT_EQ(compare_str, str);
 }
 
-TEST(addition_tests, addition_float) {
+TEST(addition_tests, addition2_float) {
 
-    float value_1 = 1.05;
-    float value_2 = 2.1;
+    float value_1 = 2453.45645;
+    float value_2 = 124779.3456;
+
+    mps MPS(23,8,value_1);
+    mps MPS_2(23,8,value_2);
+
+    auto test = MPS + MPS_2;
+
+    EXPECT_EQ(value_2+value_1, test.getValue());
+}
+
+TEST(addition_tests, addition3_double) {
+
+    double value_1 = 0.0345;
+    double value_2 = 0.000435345;
+
+    mps MPS(52,11,value_1);
+    mps MPS_2(52,11,value_2);
+
+    auto test = MPS + MPS_2;
+
+    EXPECT_EQ(value_1+value_2, test.getValue());
+}
+
+TEST(addition_tests, addition3_float) {
+
+    float value_1 = 0.0345;
+    float value_2 = 0.000435345;
 
     mps MPS(23,8,value_1);
     mps MPS_2(23,8,value_2);
