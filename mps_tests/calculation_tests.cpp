@@ -259,5 +259,31 @@ TEST(addition_tests, zero_right_float) {
     EXPECT_EQ(value_2+value_1, test.getValue());
 }
 
+TEST(addition_tests, additition_negative_double) {
+
+    double value_1 = -345.346;
+    double value_2 = -0.00456345;
+
+    mps MPS(52,11,value_1);
+    mps MPS_2(52,11,value_2);
+
+    auto test = MPS + MPS_2;
+
+    EXPECT_EQ(value_1+value_2, test.getValue());
+}
+
+TEST(addition_tests, addition_negative_float) {
+
+    float value_1 = -345.346;
+    float value_2 = -0.00456345;
+
+    mps MPS(23,8,value_1);
+    mps MPS_2(23,8,value_2);
+
+    auto test = MPS + MPS_2;
+
+    EXPECT_EQ(value_2+value_1, test.getValue());
+}
+
 
 
