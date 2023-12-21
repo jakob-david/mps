@@ -283,14 +283,12 @@ mps mps::operator+(mps& other) {
     }
 
 
-    vector<bool> a_mantissa;
-    a_mantissa.push_back(true);
-    a_mantissa.insert(a_mantissa.end(), this->bit_vector.begin()+exponent_length+1, this->bit_vector.end());
+    vector<bool> a_mantissa(this->bit_vector.begin()+exponent_length+1, this->bit_vector.end());
+    a_mantissa.insert(a_mantissa.begin(), true);
     //a_mantissa.erase(a_mantissa.begin(), a_mantissa.begin()+1);
 
-    vector<bool> b_mantissa;
-    b_mantissa.push_back(true);
-    b_mantissa.insert(b_mantissa.end(), other.bit_vector.begin()+exponent_length+1, other.bit_vector.end());
+    vector<bool> b_mantissa(other.bit_vector.begin()+exponent_length+1, other.bit_vector.end());
+    b_mantissa.insert(b_mantissa.begin(), true);
     //b_mantissa.erase(b_mantissa.begin(), b_mantissa.begin()+1);
 
     vector<bool> a_exponent(this->bit_vector.begin()+1, this->bit_vector.begin()+1+this->exponent_length);
