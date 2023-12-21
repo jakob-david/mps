@@ -499,18 +499,9 @@ vector<bool> mps::binarySubtractor(vector<bool>& minuend, vector<bool> subtrahen
 
 
     // add one
-    // TODO: account for carry bit;
-    addOneToBinary(&subtrahend);
-
-    // TODO: delete if sure.
-    /*
-    for(int i = (int) subtrahend.size() - 1; i >= 0; i--){
-        subtrahend[i] = !subtrahend[i];
-        if(subtrahend[i]){
-            break;
-        }
-    }*/
-
+    if(addOneToBinary(&subtrahend)){
+        return minuend; // if there is a carrier bit present at the end the subtrahend is zero.
+    }
 
     return binaryAddition(minuend, subtrahend, false);
 }
