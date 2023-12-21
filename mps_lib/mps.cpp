@@ -326,11 +326,12 @@ mps mps::operator+(mps& other) {
     // Match mantissas and set exponent
     //-------------------------------
     int exponent_diff = 0;
-    if(1 == larger(a_exponent, b_exponent)){
+    char larger_tmp = larger(a_exponent, b_exponent);
+    if(1 == larger_tmp){
         exponent_diff = binaryToInt(binarySubtractor(a_exponent, b_exponent));
         exponent.insert(exponent.end(), a_exponent.begin(), a_exponent.end());
         matchMantissas(&b_mantissa, &a_mantissa, exponent_diff);
-    } else if(-1 == larger(a_exponent, b_exponent)){
+    } else if(-1 == larger_tmp){
         exponent_diff = binaryToInt(binarySubtractor(b_exponent, a_exponent));
         exponent.insert(exponent.end(), b_exponent.begin(), b_exponent.end());
         matchMantissas(&a_mantissa, &b_mantissa, exponent_diff);
@@ -372,6 +373,87 @@ mps mps::operator+(mps& other) {
 
     return ret;
 }
+
+mps mps::operator-(mps& other){
+
+    //TODO: Remove when finished.
+    if(this->mantissa_length != other.mantissa_length || this->exponent_length != other.exponent_length){
+        cout << "ERROR: addition, sizes do not match"  << endl;
+    }
+
+
+    // If signs are different perform Subtraction.
+    //-------------------------------
+    // TODO: Implement.
+    //-------------------------------
+
+
+    // Set up the return object.
+    //-------------------------------
+    mps ret;
+    vector<bool>& ret_vector = ret.bit_vector;
+    ret.exponent_length = this->exponent_length;
+    ret.mantissa_length = this->mantissa_length;
+    //-------------------------------
+
+
+    // set sign
+    //-------------------------------
+    // TODO: Maybe simplify because of preceding if.
+    if(this->isPositive() && other.isPositive()){
+        ret.bit_vector.push_back(false);
+    } else if(!this->isPositive() && !other.isPositive()){
+        ret.bit_vector.push_back(true);
+    }
+    //-------------------------------
+
+
+    // Handle special values.
+    //-------------------------------
+    if(this->isZero()){
+        return other;
+    } else if(other.isZero()){
+        return *this;
+    }
+    //-------------------------------
+
+    // Extract exponents and mantissas
+    //-------------------------------
+    vector<bool> a_mantissa(this->bit_vector.begin()+exponent_length+1, this->bit_vector.end());
+    a_mantissa.insert(a_mantissa.begin(), true);
+
+    vector<bool> b_mantissa(other.bit_vector.begin()+exponent_length+1, other.bit_vector.end());
+    b_mantissa.insert(b_mantissa.begin(), true);
+
+    vector<bool> a_exponent(this->bit_vector.begin()+1, this->bit_vector.begin()+1+this->exponent_length);
+    vector<bool> b_exponent(other.bit_vector.begin()+1, other.bit_vector.begin()+1+other.exponent_length);
+    vector<bool> exponent;
+    //-------------------------------
+
+
+    // Match mantissas and set exponent
+    //-------------------------------
+    int exponent_diff = 0;
+    char larger_tmp = larger(a_exponent, b_exponent);
+    if(1 == larger_tmp){
+        exponent_diff = binaryToInt(binarySubtractor(a_exponent, b_exponent));
+        exponent.insert(exponent.end(), a_exponent.begin(), a_exponent.end());
+        matchMantissas(&b_mantissa, &a_mantissa, exponent_diff);
+    } else if(-1 == larger_tmp){
+        exponent_diff = binaryToInt(binarySubtractor(b_exponent, a_exponent));
+        exponent.insert(exponent.end(), b_exponent.begin(), b_exponent.end());
+        matchMantissas(&a_mantissa, &b_mantissa, exponent_diff);
+    } else {
+        exponent.insert(exponent.end(), a_exponent.begin(), a_exponent.end());
+    }
+    //-------------------------------
+
+    larger_tmp = larger(a_mantissa, b_mantissa);
+
+
+
+    return ret;
+}
 //-------------------------------
 
 
@@ -408,7 +490,6 @@ void mps::setBitArray(double value) {
 
     // exponent
     //-------------------------------
-
     // calculate the exponent
     int mantissa_shift;
     if(abs(value) > numeric_limits<float>::max()){
@@ -449,9 +530,7 @@ void mps::setBitArray(double value) {
 
     // mantissa
     //-------------------------------
-
-    // adjust the value so that everything is behind the decimal point.
-    value = value / pow(2, mantissa_shift);
+    value = value / pow(2, mantissa_shift); // adjust the value so that everything is behind the decimal point.
 
     // Convert the part after the decimal point to a bit string.
     // The sign is not relevant. Always returns a "positive" value.

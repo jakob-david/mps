@@ -286,4 +286,33 @@ TEST(addition_tests, addition_negative_float) {
 }
 
 
+TEST(subtraction_tests, simple_subtractiob_float) {
+
+    float value_1 = 2.1;
+    float value_2 = 1.05;
+
+    mps MPS(23,8,value_1);
+    mps MPS_2(23,8,value_2);
+
+    auto test = MPS - MPS_2;
+
+    string str;
+    for(bool bit : test.getBitArray()){
+        if(bit){
+            str.append("1");
+        } else {
+            str.append("0");
+        }
+    }
+
+    string compare_str;
+    float test_value = value_1 - value_2;
+    char* bits = reinterpret_cast<char*>(&test_value);
+    for(std::size_t n = 0; n < sizeof test_value; ++n) {
+        string tmp = std::bitset<8>(bits[n]).to_string();
+        compare_str.insert (0, tmp);
+    }
+
+    EXPECT_EQ(compare_str, str);
+}
 
