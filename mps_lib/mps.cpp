@@ -267,41 +267,64 @@ mps& mps::operator=(const mps& other) {
  */
 mps mps::operator+(mps& other) {
 
-    mps ret;
-    vector<bool>& ret_vector = ret.bit_vector;
-
-    ret.bit_vector.push_back(false);
-
+    //TODO: Remove when finished.
     if(this->mantissa_length != other.mantissa_length || this->exponent_length != other.exponent_length){
         cout << "ERROR: addition, sizes do not match"  << endl;
-        //TODO: Remove when finished.
     }
 
+
+    // If signs are different perform Subtraction.
+    //-------------------------------
+    // TODO: Implement.
+    //-------------------------------
+
+
+    // Set up the return object.
+    //-------------------------------
+    mps ret;
+    vector<bool>& ret_vector = ret.bit_vector;
     ret.exponent_length = this->exponent_length;
     ret.mantissa_length = this->mantissa_length;
+    //-------------------------------
 
+
+    // set sign
+    //-------------------------------
+    // TODO: Maybe simplify because of preceding if.
+    if(this->isPositive() && other.isPositive()){
+        ret.bit_vector.push_back(false);
+    } else if(!this->isPositive() && !other.isPositive()){
+        ret.bit_vector.push_back(true);
+    }
+    //-------------------------------
+
+
+    // Handle special values.
+    //-------------------------------
     if(this->isZero()){
-        //ret = other;
-        //TODO: can maybe be avoided.
-        //return ret;
         return other;
     } else if(other.isZero()){
         return *this;
     }
+    //-------------------------------
 
 
+    // Extract exponents and mantissas
+    //-------------------------------
     vector<bool> a_mantissa(this->bit_vector.begin()+exponent_length+1, this->bit_vector.end());
     a_mantissa.insert(a_mantissa.begin(), true);
-    //a_mantissa.erase(a_mantissa.begin(), a_mantissa.begin()+1);
 
     vector<bool> b_mantissa(other.bit_vector.begin()+exponent_length+1, other.bit_vector.end());
     b_mantissa.insert(b_mantissa.begin(), true);
-    //b_mantissa.erase(b_mantissa.begin(), b_mantissa.begin()+1);
 
     vector<bool> a_exponent(this->bit_vector.begin()+1, this->bit_vector.begin()+1+this->exponent_length);
     vector<bool> b_exponent(other.bit_vector.begin()+1, other.bit_vector.begin()+1+other.exponent_length);
     vector<bool> exponent;
+    //-------------------------------
 
+
+    // Match mantissas and set exponent
+    //-------------------------------
     int exponent_diff = 0;
     if(1 == larger(a_exponent, b_exponent)){
         exponent_diff = binaryToInt(binarySubtractor(a_exponent, b_exponent));
@@ -314,15 +337,22 @@ mps mps::operator+(mps& other) {
     } else {
         exponent.insert(exponent.end(), a_exponent.begin(), a_exponent.end());
     }
+    //-------------------------------
 
+
+    // Actual addition and adjusting mantissa
+    //-------------------------------
     bool carrier;
     vector<bool> mantissa = binaryAddition(a_mantissa, b_mantissa,true, &carrier);
     mantissa.erase(mantissa.begin(), mantissa.begin()+1);
     if(carrier){
         addOneToBinary(&exponent);
     }
+    //-------------------------------
 
-    // rounding
+
+    // Rounding and further adjustment of the mantissa
+    //-------------------------------
     if(exponent_diff>0 && mantissa[mantissa.size()-exponent_diff]){
         mantissa.erase(mantissa.end()-exponent_diff, mantissa.end());
         if(addOneToBinary(&mantissa)){
@@ -331,10 +361,14 @@ mps mps::operator+(mps& other) {
     } else {
         mantissa.erase(mantissa.end()-exponent_diff, mantissa.end());
     }
+    //-------------------------------
 
 
+    // set everything together.
+    //-------------------------------
     ret_vector.insert(ret_vector.end(), exponent.begin(), exponent.end());
     ret_vector.insert(ret_vector.end(), mantissa.begin(), mantissa.end());
+    //-------------------------------
 
     return ret;
 }
