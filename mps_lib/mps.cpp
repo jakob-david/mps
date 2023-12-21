@@ -240,6 +240,10 @@ void mps::setNaN(){
 
 // operators
 //-------------------------------
+
+/**
+ * Sets one mps object equal to an other mps object.
+ */
 mps& mps::operator=(const mps& other) {
 
     if (this == &other){
@@ -258,6 +262,9 @@ mps& mps::operator=(const mps& other) {
     return *this;
 }
 
+/**
+ * Performs am addition to two mps floating point values.
+ */
 mps mps::operator+(mps& other) {
 
     mps ret;
@@ -339,6 +346,8 @@ mps mps::operator+(mps& other) {
 
 /**
  * Sets the bit vector of the mps object.
+ *
+ * @param value the value to which the bit array should be set.
  */
 void mps::setBitArray(double value) {
 
@@ -443,19 +452,30 @@ void mps::setBitArray(double value) {
 /**
  * Returns the bias of the exponent.
  *
- * @return bias of the exponent.
+ * @return bias of the exponent
  */
 int mps::getBias() const{
     return ((int) pow (2, exponent_length)) / 2 -1;
 }
 
+
+/**
+ * Performs a binary addition using a full adder.
+ * The binary numbers are represented as vector containing booleans.
+ *
+ * @param a reference to the first addend
+ * @param b reference to the second addend
+ * @param carry set to true if an adjustment is wanted when the carrier bit of the last iteration is 1
+ * @param carrier_return pointer to a boolean where the last state of the carrier bit can be save
+ * @return the result as binary number.
+ */
 vector<bool> mps::binaryAddition(vector<bool>& a, vector<bool>& b, bool carry, bool* carrier_return){
 
     vector<bool> ret;
     bool carrier = false;
 
+    //TODO: Remove when finished.
     if(a.size() != b.size()){
-        //TODO: Remove when finished.
         cout << "ERROR: binary addition vectors must have same length" << endl;
         return ret;
     }
@@ -466,11 +486,13 @@ vector<bool> mps::binaryAddition(vector<bool>& a, vector<bool>& b, bool carry, b
         carrier = ((a[i] & b[i]) | (a[i] & carrier)) | (b[i] & carrier);
     }
 
+    // adjust if carrier bit is 1
     if(carry && carrier){
         ret.insert(ret.begin(), true);
         ret.pop_back();
     }
 
+    // save the state of the carrier bit in carrier_return.
     if(carrier_return != nullptr){
         *carrier_return = carrier;
     }
