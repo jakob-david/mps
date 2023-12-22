@@ -77,9 +77,11 @@ int main() {
     std::cout << '\n';
 
     */
+double a = 3432.334;
+double b = 3664.334;
 for (int mant = 0; mant < 100; mant++) {
     mps one(mant, 8, 34.45);
-    mps two(mant, 8, 12.14);
+    mps two(mant, 8, 14.3 );
 
     chrono::milliseconds t_1 = duration_cast<chrono::milliseconds>(
             chrono::system_clock::now().time_since_epoch()
@@ -87,7 +89,8 @@ for (int mant = 0; mant < 100; mant++) {
 
     for (int i = 0; i < 10000; i++) {
 
-        one - two;
+        one + two;
+        //a+b;
     }
 
     chrono::milliseconds t_2 = duration_cast<chrono::milliseconds>(
