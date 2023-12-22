@@ -87,7 +87,7 @@ for (int mant = 0; mant < 100; mant++) {
             chrono::system_clock::now().time_since_epoch()
     );
 
-    for (int i = 0; i < 10000; i++) {
+    for (int i = 0; i < 100000; i++) {
 
         one + two;
         //a+b;
