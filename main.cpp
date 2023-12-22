@@ -83,8 +83,8 @@ for (int mant = 0; mant < 100; mant++) {
     mps one(mant, 8, 34.45);
     mps two(mant, 8, 14.3 );
 
-    chrono::milliseconds t_1 = chrono::duration_cast<chrono::milliseconds>(
-            chrono::system_clock::now().time_since_epoch()
+    std::chrono::milliseconds t_1 = chrono::duration_cast<chrono::milliseconds>(
+            std::chrono::system_clock::now().time_since_epoch()
     );
 
     for (int i = 0; i < 100000; i++) {
@@ -93,11 +93,11 @@ for (int mant = 0; mant < 100; mant++) {
         //a+b;
     }
 
-    chrono::milliseconds t_2 = chrono::duration_cast<chrono::milliseconds>(
-            chrono::system_clock::now().time_since_epoch()
+    std::chrono::milliseconds t_2 = chrono::duration_cast<chrono::milliseconds>(
+            std::chrono::system_clock::now().time_since_epoch()
     );
 
-    chrono::milliseconds t = t_2 - t_1;
+    std::chrono::milliseconds t = t_2 - t_1;
 
     std::cout << t.count() << std::endl;
 }
