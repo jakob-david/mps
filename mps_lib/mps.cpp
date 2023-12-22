@@ -1,5 +1,6 @@
 #include "mps.h"
 #include <iostream>
+#include <algorithm>
 
 
 // constructors and destructor
