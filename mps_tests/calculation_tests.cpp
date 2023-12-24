@@ -285,6 +285,58 @@ TEST(addition_tests, addition_negative_float) {
     EXPECT_EQ(value_2+value_1, test.getValue());
 }
 
+TEST(addition_tests, negative_first_number_double) {
+
+    double value_1 = -345.346;
+    double value_2 = 238683.355;
+
+    mps MPS(52,11,value_1);
+    mps MPS_2(52,11,value_2);
+
+    auto test = MPS + MPS_2;
+
+    EXPECT_EQ(value_1+value_2, test.getValue());
+}
+
+TEST(addition_tests, negative_first_number_float) {
+
+    float value_1 = -345.346;
+    float value_2 = 238683.355;
+
+    mps MPS(23,8,value_1);
+    mps MPS_2(23,8,value_2);
+
+    auto test = MPS + MPS_2;
+
+    EXPECT_EQ(value_2+value_1, test.getValue());
+}
+
+TEST(addition_tests, negative_second_number_double) {
+
+    double value_1 = 345.346;
+    double value_2 = -238683.355;
+
+    mps MPS(52,11,value_1);
+    mps MPS_2(52,11,value_2);
+
+    auto test = MPS + MPS_2;
+
+    EXPECT_EQ(value_1+value_2, test.getValue());
+}
+
+TEST(addition_tests, negative_second_number_float) {
+
+    float value_1 = 345.346;
+    float value_2 = -238683.355;
+
+    mps MPS(23,8,value_1);
+    mps MPS_2(23,8,value_2);
+
+    auto test = MPS + MPS_2;
+
+    EXPECT_EQ(value_2+value_1, test.getValue());
+}
+
 
 TEST(subtraction_tests, coding) {
 
@@ -446,6 +498,56 @@ TEST(subtraction_tests, negative_zero_crossing_double) {
     EXPECT_EQ(value_1-value_2, test.getValue());
 }
 
+TEST(subtraction_tests, negatave_first_number_float) {
 
+    float value_1 = -46547.3456;
+    float value_2 = 3463.678;
+
+    mps MPS(23,8,value_1);
+    mps MPS_2(23,8,value_2);
+
+    auto test = MPS - MPS_2;
+
+    EXPECT_EQ(value_1-value_2, test.getValue());
+}
+
+TEST(subtraction_tests, negatave_first_number_double) {
+
+    double value_1 = -46547.3456;
+    double value_2 = 3463.678;
+
+    mps MPS(52,11,value_1);
+    mps MPS_2(52,11,value_2);
+
+    auto test = MPS - MPS_2;
+
+    EXPECT_EQ(value_1-value_2, test.getValue());
+}
+
+TEST(subtraction_tests, negatave_second_number_float) {
+
+    float value_1 = 46547.3456;
+    float value_2 = -3463.678;
+
+    mps MPS(23,8,value_1);
+    mps MPS_2(23,8,value_2);
+
+    auto test = MPS - MPS_2;
+
+    EXPECT_EQ(value_1-value_2, test.getValue());
+}
+
+TEST(subtraction_tests, negatave_second_number_double) {
+
+    double value_1 = 46547.3456;
+    double value_2 = -3463.678;
+
+    mps MPS(52,11,value_1);
+    mps MPS_2(52,11,value_2);
+
+    auto test = MPS - MPS_2;
+
+    EXPECT_EQ(value_1-value_2, test.getValue());
+}
 
 

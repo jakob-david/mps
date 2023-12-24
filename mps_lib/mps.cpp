@@ -276,7 +276,13 @@ mps mps::operator+(mps& other) {
 
     // If signs are different perform Subtraction.
     //-------------------------------
-    // TODO: Implement.
+    if(this->bit_vector[0] && !other.bit_vector[0]){
+        this->bit_vector[0] = false;
+        return other - *this;
+    } else if (other.bit_vector[0] && !this->bit_vector[0]) {
+        other.bit_vector[0] = false;
+        return *this - other;
+    }
     //-------------------------------
 
 
@@ -401,7 +407,13 @@ mps mps::operator-(mps& other){
 
     // If signs are different perform Subtraction.
     //-------------------------------
-    // TODO: Implement.
+    if(this->bit_vector[0] && !other.bit_vector[0]){
+        other.bit_vector[0] = true;
+        return other + *this;
+    } else if (other.bit_vector[0] && !this->bit_vector[0]) {
+        other.bit_vector[0] = false;
+        return *this + other;
+    }
     //-------------------------------
 
 
