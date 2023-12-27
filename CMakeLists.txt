@@ -4,7 +4,7 @@ project(mps)
 set(CMAKE_CXX_STANDARD 17)
 
 
-if(CMAKE_BUILD_TYPE)
+if(NOT CMAKE_BUILD_TYPE)
     set(CMAKE_BUILD_TYPE Release)
 endif()
 
