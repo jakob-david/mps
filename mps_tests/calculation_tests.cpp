@@ -553,11 +553,11 @@ TEST(subtraction_tests, negatave_second_number_double) {
 
 TEST(multiplication_tests, coding) {
 
-    float value_1 = 3;
-    float value_2 = 5;
+    float value_1 = 34;
+    float value_2 = 4.3;
 
-    mps MPS(3,8,value_1);
-    mps MPS_2(3,8,value_2);
+    mps MPS(23,8,value_1);
+    mps MPS_2(23,8,value_2);
 
     auto test = MPS * MPS_2;
 

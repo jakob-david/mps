@@ -88,10 +88,10 @@ for (int mant = 0; mant < 100; mant++) {
             std::chrono::system_clock::now().time_since_epoch()
     );
 
-    for (int i = 0; i < 100000000; i++) {
+    for (int i = 0; i < 100000; i++) {
 
-        //one + two;
-        c = a*b;
+        one * two;
+        //c = a*b;
     }
 
     std::chrono::milliseconds t_2 = chrono::duration_cast<chrono::milliseconds>(

@@ -554,9 +554,10 @@ mps mps::operator-(mps& other){
 
 mps mps::operator*(mps& other){
 
+    /*
     string mythis;
     vector<bool> th(this->bit_vector.begin()+exponent_length+1, this->bit_vector.end());
-    //th.insert(th.begin(), true);
+    th.insert(th.begin(), true);
     th.insert(th.begin(), false);
     for(bool bit : th){
         if(bit){
@@ -569,7 +570,7 @@ mps mps::operator*(mps& other){
 
     string myother;
     vector<bool> ot(other.bit_vector.begin()+exponent_length+1, other.bit_vector.end());
-    //ot.insert(ot.begin(), true);
+    ot.insert(ot.begin(), true);
     ot.insert(ot.begin(), false);
     for(bool bit : ot){
         if(bit){
@@ -580,41 +581,42 @@ mps mps::operator*(mps& other){
     }
     cout << "Second: " << myother << endl;
 
-
+*/
 
 
 
     vector<bool> A(this->bit_vector.begin()+exponent_length+1, this->bit_vector.end());
     vector<bool> S;
 
-    A.reserve((int) A.size() + other.bit_vector.size() + 1 +2);
-    //A.insert(A.begin(), true);
+    A.reserve((int) A.size() + other.bit_vector.size() + 1 +2 +2);
+    A.insert(A.begin(), true);
     A.insert(A.begin(), false);
-    S.reserve((int) A.size() + other.bit_vector.size() + 1 +2);
+    S.reserve((int) A.size() + other.bit_vector.size() + 1 +2 +2);
 
     for(int i = 0; i < (int) A.size(); i++){
         S.push_back(!A[i]);
     }
     addOneToBinary(&S);
 
-    for(int i = 0; i < other.mantissa_length + 1 +1; i++){
+    for(int i = 0; i < other.mantissa_length + 1 +1 +1; i++){
         A.push_back(false);
         S.push_back(false);
     }
 
     vector<bool> P;
-    P.reserve((int) A.size() + other.bit_vector.size() + 1 +2);
-    for(int i = 0; i < this->mantissa_length+1; i++){
+    P.reserve((int) A.size() + other.bit_vector.size() + 1 +2 +2);
+    for(int i = 0; i < this->mantissa_length+1+1; i++){
         P.push_back(false);
     }
     P.push_back(false);
+    P.push_back(true);
     for(int i = 0; i < other.mantissa_length; i++){
        P.push_back(other.bit_vector[i+1+other.exponent_length]);
     }
     P.push_back(false);
 
 
-
+/*
 
     string AS;
     for(bool bit : A){
@@ -647,11 +649,11 @@ mps mps::operator*(mps& other){
     cout << "P: " << PS << endl;
 
 
+*/
 
 
 
-
-    for(int i = 0; i < other.mantissa_length+1; i++){
+    for(int i = 0; i < other.mantissa_length+2; i++){
 
 
         if(!P.end()[-2] && P.back()){
@@ -662,7 +664,7 @@ mps mps::operator*(mps& other){
 
         P.pop_back();
         P.insert(P.begin(), P[0]);
-
+/*
         string str;
         for(bool bit : P){
             if(bit){
@@ -672,11 +674,21 @@ mps mps::operator*(mps& other){
             }
         }
         cout << str << endl;
+        */
     }
 
     P.pop_back();
     P.erase (P.begin());
 
+    for(int i = 0; i < (int) P.size(); i++){
+        if(P[0]){
+            P.erase(P.begin());
+            break;
+        }
+        P.erase(P.begin());
+    }
+
+    /*
     string str;
     for(bool bit : P){
         if(bit){
@@ -686,7 +698,7 @@ mps mps::operator*(mps& other){
         }
     }
     cout << str << endl;
-
+*/
     //std::reverse(P.begin(),P.end());
 
 
