@@ -553,8 +553,8 @@ TEST(subtraction_tests, negatave_second_number_double) {
 
 TEST(multiplication_tests, coding) {
 
-    float value_1 = 22;
-    float value_2 = -24;
+    float value_1 = 3;
+    float value_2 = 5;
 
     mps MPS(3,8,value_1);
     mps MPS_2(3,8,value_2);

@@ -557,7 +557,7 @@ mps mps::operator*(mps& other){
     string mythis;
     vector<bool> th(this->bit_vector.begin()+exponent_length+1, this->bit_vector.end());
     //th.insert(th.begin(), true);
-    th.insert(th.begin(), this->bit_vector[0]);
+    th.insert(th.begin(), false);
     for(bool bit : th){
         if(bit){
             mythis.append("1");
@@ -570,7 +570,7 @@ mps mps::operator*(mps& other){
     string myother;
     vector<bool> ot(other.bit_vector.begin()+exponent_length+1, other.bit_vector.end());
     //ot.insert(ot.begin(), true);
-    ot.insert(ot.begin(), other.bit_vector[0]);
+    ot.insert(ot.begin(), false);
     for(bool bit : ot){
         if(bit){
             myother.append("1");
@@ -589,7 +589,7 @@ mps mps::operator*(mps& other){
 
     A.reserve((int) A.size() + other.bit_vector.size() + 1 +2);
     //A.insert(A.begin(), true);
-    A.insert(A.begin(), this->bit_vector[0]);
+    A.insert(A.begin(), false);
     S.reserve((int) A.size() + other.bit_vector.size() + 1 +2);
 
     for(int i = 0; i < (int) A.size(); i++){
@@ -607,7 +607,7 @@ mps mps::operator*(mps& other){
     for(int i = 0; i < this->mantissa_length+1; i++){
         P.push_back(false);
     }
-    P.push_back(other.bit_vector[0]);
+    P.push_back(false);
     for(int i = 0; i < other.mantissa_length; i++){
        P.push_back(other.bit_vector[i+1+other.exponent_length]);
     }
@@ -675,6 +675,7 @@ mps mps::operator*(mps& other){
     }
 
     P.pop_back();
+    P.erase (P.begin());
 
     string str;
     for(bool bit : P){
