@@ -57,6 +57,7 @@ public:
     mps& operator=(const mps& other);
     mps operator+(mps& other);
     mps operator-(mps& other);
+    mps operator*(mps& other);
     //-------------------------------
 
 private:

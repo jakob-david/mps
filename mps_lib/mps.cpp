@@ -551,6 +551,146 @@ mps mps::operator-(mps& other){
 
     return ret;
 }
+
+mps mps::operator*(mps& other){
+
+    string mythis;
+    vector<bool> th(this->bit_vector.begin()+exponent_length+1, this->bit_vector.end());
+    //th.insert(th.begin(), true);
+    th.insert(th.begin(), this->bit_vector[0]);
+    for(bool bit : th){
+        if(bit){
+            mythis.append("1");
+        } else {
+            mythis.append("0");
+        }
+    }
+    cout << "First: " << mythis << endl;
+
+    string myother;
+    vector<bool> ot(other.bit_vector.begin()+exponent_length+1, other.bit_vector.end());
+    //ot.insert(ot.begin(), true);
+    ot.insert(ot.begin(), other.bit_vector[0]);
+    for(bool bit : ot){
+        if(bit){
+            myother.append("1");
+        } else {
+            myother.append("0");
+        }
+    }
+    cout << "Second: " << myother << endl;
+
+
+
+
+
+    vector<bool> A(this->bit_vector.begin()+exponent_length+1, this->bit_vector.end());
+    vector<bool> S;
+
+    A.reserve((int) A.size() + other.bit_vector.size() + 1 +2);
+    //A.insert(A.begin(), true);
+    A.insert(A.begin(), this->bit_vector[0]);
+    S.reserve((int) A.size() + other.bit_vector.size() + 1 +2);
+
+    for(int i = 0; i < (int) A.size(); i++){
+        S.push_back(!A[i]);
+    }
+    addOneToBinary(&S);
+
+    for(int i = 0; i < other.mantissa_length + 1 +1; i++){
+        A.push_back(false);
+        S.push_back(false);
+    }
+
+    vector<bool> P;
+    P.reserve((int) A.size() + other.bit_vector.size() + 1 +2);
+    for(int i = 0; i < this->mantissa_length+1; i++){
+        P.push_back(false);
+    }
+    P.push_back(other.bit_vector[0]);
+    for(int i = 0; i < other.mantissa_length; i++){
+       P.push_back(other.bit_vector[i+1+other.exponent_length]);
+    }
+    P.push_back(false);
+
+
+
+
+    string AS;
+    for(bool bit : A){
+        if(bit){
+            AS.append("1");
+        } else {
+            AS.append("0");
+        }
+    }
+    cout << "A: " << AS << endl;
+
+    string SS;
+    for(bool bit : S){
+        if(bit){
+            SS.append("1");
+        } else {
+            SS.append("0");
+        }
+    }
+    cout << "S: " << SS << endl;
+
+    string PS;
+    for(bool bit : P){
+        if(bit){
+            PS.append("1");
+        } else {
+            PS.append("0");
+        }
+    }
+    cout << "P: " << PS << endl;
+
+
+
+
+
+
+    for(int i = 0; i < other.mantissa_length+1; i++){
+
+
+        if(!P.end()[-2] && P.back()){
+            P = binaryAddition(P, A, false);
+        } else if(P.end()[-2] && !P.back()) {
+            P = binaryAddition(P, S, false);
+        }
+
+        P.pop_back();
+        P.insert(P.begin(), P[0]);
+
+        string str;
+        for(bool bit : P){
+            if(bit){
+                str.append("1");
+            } else {
+                str.append("0");
+            }
+        }
+        cout << str << endl;
+    }
+
+    P.pop_back();
+
+    string str;
+    for(bool bit : P){
+        if(bit){
+            str.append("1");
+        } else {
+            str.append("0");
+        }
+    }
+    cout << str << endl;
+
+    //std::reverse(P.begin(),P.end());
+
+
+    return other;
+}
 //-------------------------------
 
 
