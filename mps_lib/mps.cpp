@@ -335,11 +335,11 @@ mps mps::operator+(mps& other) {
     int exponent_diff = 0;
     char larger_tmp = larger(a_exponent, b_exponent);
     if(1 == larger_tmp){
-        exponent_diff = binaryToInt(binarySubtractor(a_exponent, b_exponent));
+        exponent_diff = binaryToInt(binarySubtraction(a_exponent, b_exponent));
         exponent.insert(exponent.end(), a_exponent.begin(), a_exponent.end());
         matchMantissas(&b_mantissa, &a_mantissa, exponent_diff);
     } else if(-1 == larger_tmp){
-        exponent_diff = binaryToInt(binarySubtractor(b_exponent, a_exponent));
+        exponent_diff = binaryToInt(binarySubtraction(b_exponent, a_exponent));
         exponent.insert(exponent.end(), b_exponent.begin(), b_exponent.end());
         matchMantissas(&a_mantissa, &b_mantissa, exponent_diff);
     } else {
@@ -467,11 +467,11 @@ mps mps::operator-(mps& other){
     int exponent_diff;
     char larger_tmp = larger(a_exponent, b_exponent);
     if(1 == larger_tmp){
-        exponent_diff = binaryToInt(binarySubtractor(a_exponent, b_exponent));
+        exponent_diff = binaryToInt(binarySubtraction(a_exponent, b_exponent));
         exponent.insert(exponent.end(), a_exponent.begin(), a_exponent.end());
         matchMantissas(&b_mantissa, &a_mantissa, exponent_diff);
     } else if(-1 == larger_tmp){
-        exponent_diff = binaryToInt(binarySubtractor(b_exponent, a_exponent));
+        exponent_diff = binaryToInt(binarySubtraction(b_exponent, a_exponent));
         exponent.insert(exponent.end(), b_exponent.begin(), b_exponent.end());
         matchMantissas(&a_mantissa, &b_mantissa, exponent_diff);
     } else {
@@ -485,9 +485,9 @@ mps mps::operator-(mps& other){
     vector<bool> mantissa;
     larger_tmp = larger(a_mantissa, b_mantissa);
     if(1 == larger_tmp){
-        mantissa = binarySubtractor(a_mantissa, b_mantissa);
+        mantissa = binarySubtraction(a_mantissa, b_mantissa);
     } else if(-1 == larger_tmp){
-        mantissa = binarySubtractor(b_mantissa, a_mantissa);
+        mantissa = binarySubtraction(b_mantissa, a_mantissa);
         ret_vector[0] = !ret_vector[0]; // flip sign
     } else {
         ret.setZero();
@@ -511,7 +511,7 @@ mps mps::operator-(mps& other){
     for(int i = (int) exponent_shift_binary.size(); i < ret.exponent_length; i++){
         exponent_shift_binary.insert(exponent_shift_binary.begin(), false);
     }
-    exponent = binarySubtractor(exponent, exponent_shift_binary);
+    exponent = binarySubtraction(exponent, exponent_shift_binary);
     //-------------------------------
 
 
@@ -864,7 +864,7 @@ vector<bool> mps::binaryAddition(vector<bool>& a, vector<bool>& b, bool carry, b
  * @param subtrahend reference to the vector which should be subtracted.
  * @return the result as a binary number.
  */
-vector<bool> mps::binarySubtractor(vector<bool>& minuend, vector<bool> subtrahend){
+vector<bool> mps::binarySubtraction(vector<bool>& minuend, vector<bool> subtrahend){
 
     // invert
     for(auto && i : subtrahend){

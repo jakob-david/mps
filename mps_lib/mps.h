@@ -69,7 +69,7 @@ private:
 
 public:
     [[nodiscard]] static vector<bool> binaryAddition(vector<bool>& one, vector<bool>& two, bool carry, bool* carrier_return = nullptr);
-    [[nodiscard]] static vector<bool> binarySubtractor(vector<bool>& minuend, vector<bool> subtrahend);
+    [[nodiscard]] static vector<bool> binarySubtraction(vector<bool>& minuend, vector<bool> subtrahend);
     static inline void round(vector<bool>* mantissa, int mantissa_len);
 
     [[nodiscard]] static int binaryToInt(vector<bool> bit_vector);
