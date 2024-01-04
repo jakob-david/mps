@@ -554,34 +554,24 @@ mps mps::operator-(mps& other){
 
 mps mps::operator*(mps& other){
 
-    /*
-    string mythis;
-    vector<bool> th(this->bit_vector.begin()+exponent_length+1, this->bit_vector.end());
-    th.insert(th.begin(), true);
-    th.insert(th.begin(), false);
-    for(bool bit : th){
-        if(bit){
-            mythis.append("1");
-        } else {
-            mythis.append("0");
-        }
-    }
-    cout << "First: " << mythis << endl;
+    // Set up the return object.
+    //-------------------------------
+    mps ret;
+    vector<bool>& ret_vector = ret.bit_vector;
+    ret.exponent_length = this->exponent_length;
+    ret.mantissa_length = this->mantissa_length;
+    //-------------------------------
 
-    string myother;
-    vector<bool> ot(other.bit_vector.begin()+exponent_length+1, other.bit_vector.end());
-    ot.insert(ot.begin(), true);
-    ot.insert(ot.begin(), false);
-    for(bool bit : ot){
-        if(bit){
-            myother.append("1");
-        } else {
-            myother.append("0");
-        }
-    }
-    cout << "Second: " << myother << endl;
 
-*/
+    // Set up sign.
+    //-------------------------------
+    if(this->bit_vector[0] == other.bit_vector[0]){
+        ret_vector.push_back(false);
+    } else {
+        ret_vector.push_back(true);
+    }
+    //-------------------------------
+
 
 
 
@@ -616,43 +606,6 @@ mps mps::operator*(mps& other){
     P.push_back(false);
 
 
-/*
-
-    string AS;
-    for(bool bit : A){
-        if(bit){
-            AS.append("1");
-        } else {
-            AS.append("0");
-        }
-    }
-    cout << "A: " << AS << endl;
-
-    string SS;
-    for(bool bit : S){
-        if(bit){
-            SS.append("1");
-        } else {
-            SS.append("0");
-        }
-    }
-    cout << "S: " << SS << endl;
-
-    string PS;
-    for(bool bit : P){
-        if(bit){
-            PS.append("1");
-        } else {
-            PS.append("0");
-        }
-    }
-    cout << "P: " << PS << endl;
-
-
-*/
-
-
-
     for(int i = 0; i < other.mantissa_length+2; i++){
 
 
@@ -664,45 +617,82 @@ mps mps::operator*(mps& other){
 
         P.pop_back();
         P.insert(P.begin(), P[0]);
-/*
-        string str;
-        for(bool bit : P){
-            if(bit){
-                str.append("1");
-            } else {
-                str.append("0");
-            }
-        }
-        cout << str << endl;
-        */
+
     }
 
     P.pop_back();
     P.erase (P.begin());
-
+    int count = 0;
     for(int i = 0; i < (int) P.size(); i++){
         if(P[0]){
             P.erase(P.begin());
             break;
         }
         P.erase(P.begin());
+        count++;
     }
 
-    /*
-    string str;
-    for(bool bit : P){
-        if(bit){
-            str.append("1");
-        } else {
-            str.append("0");
+
+    // rounding
+    //-------------------------------
+    if((int) P.size() > ret.mantissa_length){
+        bool tmp = false;
+        for(int i = ret.mantissa_length+1 ; i < (int) P.size(); i++){
+            if (P[i]){
+                tmp = true;
+                break;
+            }
+        }
+        if(P[ret.mantissa_length] && tmp){
+            P.erase(P.end()-((int) P.size()-ret.mantissa_length), P.end());
+            if(addOneToBinary(&P)){
+                addOneToBinary(&P);
+            }
+        } else if(P[ret.mantissa_length]){
+            if(P[ret.mantissa_length-1]){
+                P.erase(P.end()-((int) P.size()-ret.mantissa_length), P.end());
+                if(addOneToBinary(&P)){
+                    addOneToBinary(&P);
+                }
+            } else {
+                P.erase(P.end()-((int) P.size()-ret.mantissa_length), P.end());
+            }
+        }else {
+            P.erase(P.end()-((int) P.size()-ret.mantissa_length), P.end());
         }
     }
-    cout << str << endl;
-*/
-    //std::reverse(P.begin(),P.end());
+    //-------------------------------
 
 
-    return other;
+
+
+    vector<bool> a_exponent(this->bit_vector.begin()+1, this->bit_vector.begin()+1+this->exponent_length);
+    vector<bool> b_exponent(other.bit_vector.begin()+1, other.bit_vector.begin()+1+other.exponent_length);
+
+    // TODO: Check for carry
+    //vector<bool> bias = intToBinary(other.getBias());
+    //for(int i = (int) bias.size(); i < (int) b_exponent.size(); i++){
+    //bias.insert(bias.begin(), false);
+    //}
+
+    b_exponent[0] = !b_exponent[0];
+    addOneToBinary(&b_exponent);
+    if(count <= 1){
+        addOneToBinary(&b_exponent);
+    }
+    //vector<bool> tmp = binarySubtractor(b_exponent, bias);
+    vector<bool> exponent = binaryAddition(a_exponent, b_exponent, false);
+
+
+
+    // set everything together.
+    //-------------------------------
+    ret_vector.insert(ret_vector.end(), exponent.begin(), exponent.end());
+    ret_vector.insert(ret_vector.end(), P.begin(), P.end());
+    //-------------------------------
+
+
+    return ret;
 }
 //-------------------------------
 
