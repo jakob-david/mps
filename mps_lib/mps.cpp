@@ -359,6 +359,8 @@ mps mps::operator+(mps& other) {
     //-------------------------------
 
 
+    round(&mantissa, ret.mantissa_length);
+/*
     // Rounding and further adjustment of the mantissa
     //-------------------------------
     bool tmp = false;
@@ -386,7 +388,7 @@ mps mps::operator+(mps& other) {
         mantissa.erase(mantissa.end()-exponent_diff, mantissa.end());
     }
     //-------------------------------
-
+*/
 
     // set everything together.
     //-------------------------------
@@ -512,6 +514,9 @@ mps mps::operator-(mps& other){
     exponent = binarySubtractor(exponent, exponent_shift_binary);
     //-------------------------------
 
+
+    round(&mantissa, ret.mantissa_length);
+    /*
     // rounding
     //-------------------------------
     if((int) mantissa.size() > ret.mantissa_length){
@@ -540,8 +545,9 @@ mps mps::operator-(mps& other){
             mantissa.erase(mantissa.end()-((int) mantissa.size()-ret.mantissa_length), mantissa.end());
         }
     }
-    //-------------------------------
 
+    //-------------------------------
+*/
 
     // set everything together.
     //-------------------------------
@@ -633,6 +639,9 @@ mps mps::operator*(mps& other){
     }
 
 
+    round(&P, ret.mantissa_length);
+
+    /*
     // rounding
     //-------------------------------
     if((int) P.size() > ret.mantissa_length){
@@ -662,7 +671,7 @@ mps mps::operator*(mps& other){
         }
     }
     //-------------------------------
-
+*/
 
 
 
@@ -670,17 +679,11 @@ mps mps::operator*(mps& other){
     vector<bool> b_exponent(other.bit_vector.begin()+1, other.bit_vector.begin()+1+other.exponent_length);
 
     // TODO: Check for carry
-    //vector<bool> bias = intToBinary(other.getBias());
-    //for(int i = (int) bias.size(); i < (int) b_exponent.size(); i++){
-    //bias.insert(bias.begin(), false);
-    //}
-
     b_exponent[0] = !b_exponent[0];
     addOneToBinary(&b_exponent);
     if(count <= 1){
         addOneToBinary(&b_exponent);
     }
-    //vector<bool> tmp = binarySubtractor(b_exponent, bias);
     vector<bool> exponent = binaryAddition(a_exponent, b_exponent, false);
 
 
@@ -875,6 +878,43 @@ vector<bool> mps::binarySubtractor(vector<bool>& minuend, vector<bool> subtrahen
 
     return binaryAddition(minuend, subtrahend, false);
 }
+
+/**
+ * Performs the rounding of the mantissa according to IEEE754.
+ *
+ * @param mantissa Pointer to the mantissa which should be rounded.
+ * @param mantissa_len The length to which the mantissa should be rounded.
+ */
+void mps::round(vector<bool> *mantissa, int mantissa_len) {
+
+    if((int) mantissa->size() > mantissa_len){
+        bool tmp = false;
+        for(int i = mantissa_len+1 ; i < (int) mantissa->size(); i++){
+            if ((*mantissa)[i]){
+                tmp = true;
+                break;
+            }
+        }
+        if((*mantissa)[mantissa_len] && tmp){
+            mantissa->erase(mantissa->end()-((int) mantissa->size()-mantissa_len), mantissa->end());
+            if(addOneToBinary(mantissa)){
+                addOneToBinary(mantissa);
+            }
+        } else if((*mantissa)[mantissa_len]){
+            if((*mantissa)[mantissa_len-1]){
+                mantissa->erase(mantissa->end()-((int) mantissa->size()-mantissa_len), mantissa->end());
+                if(addOneToBinary(mantissa)){
+                    addOneToBinary( mantissa);
+                }
+            } else {
+                mantissa->erase(mantissa->end()-((int) mantissa->size()-mantissa_len), mantissa->end());
+            }
+        }else {
+            mantissa->erase(mantissa->end()-((int) mantissa->size()-mantissa_len), mantissa->end());
+        }
+    }
+}
+
 
 /**
  * Converts a binary number to an integer.
