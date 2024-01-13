@@ -891,19 +891,27 @@ vector<bool> mps::binaryAddition(vector<bool>& a, vector<bool>& b, bool carry, b
  * @param subtrahend reference to the vector which should be subtracted.
  * @return the result as a binary number.
  */
-vector<bool> mps::binarySubtraction(vector<bool>& minuend, vector<bool> subtrahend){
+vector<bool> mps::binarySubtraction(vector<bool>& minuend, const vector<bool>& subtrahend){
 
+    vector<bool> tmp_subtrahend;
+    tmp_subtrahend.reserve(subtrahend.size());
+
+    for(auto i : subtrahend){
+        tmp_subtrahend.push_back(!i);
+    }
+
+    /*
     // invert
     for(auto && i : subtrahend){
         i = !i;
     }
-
+*/
     // add one
-    if(addOneToBinary(&subtrahend)){
+    if(addOneToBinary(&tmp_subtrahend)){
         return minuend; // if there is a carrier bit present at the end the subtrahend is zero.
     }
 
-    return binaryAddition(minuend, subtrahend, false);
+    return binaryAddition(minuend, tmp_subtrahend, false);
 }
 
 /**
