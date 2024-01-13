@@ -56,8 +56,8 @@ public:
     //-------------------------------
     mps& operator=(const mps& other);
     mps operator+(mps& other);
-    mps operator-(mps& other);
-    mps operator*(mps& other);
+    mps operator-(mps& other);  // TODO: Make them const!
+    mps operator*(const mps& other) const;
     //-------------------------------
 
 private:

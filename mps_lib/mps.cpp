@@ -3,6 +3,14 @@
 #include <algorithm>
 
 
+/*
+ * NOTES
+ * Use all_of with lambda: https://youtu.be/nqfgOCU_Do4?t=774
+ * Use lambda instead of steps: https://youtu.be/nqfgOCU_Do4?t=983
+ *
+ *
+ * */
+
 // constructors and destructor
 //-------------------------------
 
@@ -281,11 +289,15 @@ mps mps::operator+(mps& other) {
     // If signs are different perform Subtraction.
     //-------------------------------
     if(this->bit_vector[0] && !other.bit_vector[0]){
+        this->bit_vector[0] = true;
+        auto ret = other - *this;
         this->bit_vector[0] = false;
         return other - *this;
-    } else if (other.bit_vector[0] && !this->bit_vector[0]) {
+    } else if (!this->bit_vector[0] && other.bit_vector[0]) {
         other.bit_vector[0] = false;
-        return *this - other;
+        auto ret = *this - other;
+        other.bit_vector[0] = true;
+        return ret;
     }
     //-------------------------------
 
@@ -403,7 +415,7 @@ mps mps::operator+(mps& other) {
     return ret;
 }
 
-mps mps::operator-(mps& other){
+mps mps::operator-(mps& other) {
 
     //TODO: Remove when finished.
     if(this->mantissa_length != other.mantissa_length || this->exponent_length != other.exponent_length){
@@ -413,12 +425,17 @@ mps mps::operator-(mps& other){
 
     // If signs are different perform Subtraction.
     //-------------------------------
+    // TODO: write tests to confirm that the input values are const.
     if(this->bit_vector[0] && !other.bit_vector[0]){
         other.bit_vector[0] = true;
-        return other + *this;
-    } else if (other.bit_vector[0] && !this->bit_vector[0]) {
+        auto ret = other + *this;
         other.bit_vector[0] = false;
-        return *this + other;
+        return ret;
+    } else if (!this->bit_vector[0] && other.bit_vector[0]) {
+        other.bit_vector[0] = false;
+        auto ret = *this + other;
+        other.bit_vector[0] = true;
+        return ret;
     }
     //-------------------------------
 
@@ -562,7 +579,7 @@ mps mps::operator-(mps& other){
     return ret;
 }
 
-mps mps::operator*(mps& other){
+mps mps::operator*(const mps& other) const {
 
     // Set up the return object.
     //-------------------------------

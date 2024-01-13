@@ -569,9 +569,9 @@ TEST(multiplication_tests, multiplication_float_1) {
     mps MPS(23,8,value_1);
     mps MPS_2(23,8,value_2);
 
-    auto test = MPS - MPS_2;
+    auto test = MPS * MPS_2;
 
-    EXPECT_EQ(value_1-value_2, test.getValue());
+    EXPECT_EQ(value_1*value_2, test.getValue());
 }
 
 TEST(multiplication_tests, multiplication_double_1) {
@@ -582,9 +582,9 @@ TEST(multiplication_tests, multiplication_double_1) {
     mps MPS(52,11,value_1);
     mps MPS_2(52,11,value_2);
 
-    auto test = MPS - MPS_2;
+    auto test = MPS * MPS_2;
 
-    EXPECT_EQ(value_1-value_2, test.getValue());
+    EXPECT_EQ(value_1*value_2, test.getValue());
 }
 
 TEST(multiplication_tests, multiplication_float_2) {
@@ -595,9 +595,9 @@ TEST(multiplication_tests, multiplication_float_2) {
     mps MPS(23,8,value_1);
     mps MPS_2(23,8,value_2);
 
-    auto test = MPS - MPS_2;
+    auto test = MPS * MPS_2;
 
-    EXPECT_EQ(value_1-value_2, test.getValue());
+    EXPECT_EQ(value_1*value_2, test.getValue());
 }
 
 TEST(multiplication_tests, multiplication_double_2) {
@@ -608,9 +608,9 @@ TEST(multiplication_tests, multiplication_double_2) {
     mps MPS(52,11,value_1);
     mps MPS_2(52,11,value_2);
 
-    auto test = MPS - MPS_2;
+    auto test = MPS * MPS_2;
 
-    EXPECT_EQ(value_1-value_2, test.getValue());
+    EXPECT_EQ(value_1*value_2, test.getValue());
 }
 
 TEST(multiplication_tests, multiplication_float_3) {
@@ -621,9 +621,9 @@ TEST(multiplication_tests, multiplication_float_3) {
     mps MPS(23,8,value_1);
     mps MPS_2(23,8,value_2);
 
-    auto test = MPS - MPS_2;
+    auto test = MPS * MPS_2;
 
-    EXPECT_EQ(value_1-value_2, test.getValue());
+    EXPECT_EQ(value_1*value_2, test.getValue());
 }
 
 TEST(multiplication_tests, multiplication_double_3) {
@@ -634,9 +634,9 @@ TEST(multiplication_tests, multiplication_double_3) {
     mps MPS(52,11,value_1);
     mps MPS_2(52,11,value_2);
 
-    auto test = MPS - MPS_2;
+    auto test = MPS * MPS_2;
 
-    EXPECT_EQ(value_1-value_2, test.getValue());
+    EXPECT_EQ(value_1*value_2, test.getValue());
 }
 
 TEST(multiplication_tests, multiplication_float_4) {
@@ -647,9 +647,9 @@ TEST(multiplication_tests, multiplication_float_4) {
     mps MPS(23,8,value_1);
     mps MPS_2(23,8,value_2);
 
-    auto test = MPS - MPS_2;
+    auto test = MPS * MPS_2;
 
-    EXPECT_EQ(value_1-value_2, test.getValue());
+    EXPECT_EQ(value_1*value_2, test.getValue());
 }
 
 TEST(multiplication_tests, multiplication_double_4) {
@@ -660,9 +660,9 @@ TEST(multiplication_tests, multiplication_double_4) {
     mps MPS(52,11,value_1);
     mps MPS_2(52,11,value_2);
 
-    auto test = MPS - MPS_2;
+    auto test = MPS * MPS_2;
 
-    EXPECT_EQ(value_1-value_2, test.getValue());
+    EXPECT_EQ(value_1*value_2, test.getValue());
 }
 
 TEST(multiplication_tests, multiplication_float_5) {
@@ -673,9 +673,9 @@ TEST(multiplication_tests, multiplication_float_5) {
     mps MPS(23,8,value_1);
     mps MPS_2(23,8,value_2);
 
-    auto test = MPS - MPS_2;
+    auto test = MPS * MPS_2;
 
-    EXPECT_EQ(value_1-value_2, test.getValue());
+    EXPECT_EQ(value_1*value_2, test.getValue());
 }
 
 TEST(multiplication_tests, multiplication_double_5) {
@@ -686,9 +686,9 @@ TEST(multiplication_tests, multiplication_double_5) {
     mps MPS(52,11,value_1);
     mps MPS_2(52,11,value_2);
 
-    auto test = MPS - MPS_2;
+    auto test = MPS * MPS_2;
 
-    EXPECT_EQ(value_1-value_2, test.getValue());
+    EXPECT_EQ(value_1*value_2, test.getValue());
 }
 
 TEST(multiplication_tests, multiplication_float_6) {
@@ -699,9 +699,9 @@ TEST(multiplication_tests, multiplication_float_6) {
     mps MPS(23,8,value_1);
     mps MPS_2(23,8,value_2);
 
-    auto test = MPS - MPS_2;
+    auto test = MPS * MPS_2;
 
-    EXPECT_EQ(value_1-value_2, test.getValue());
+    EXPECT_EQ(value_1*value_2, test.getValue());
 }
 
 TEST(multiplication_tests, multiplication_double_6) {
@@ -712,9 +712,9 @@ TEST(multiplication_tests, multiplication_double_6) {
     mps MPS(52,11,value_1);
     mps MPS_2(52,11,value_2);
 
-    auto test = MPS - MPS_2;
+    auto test = MPS * MPS_2;
 
-    EXPECT_EQ(value_1-value_2, test.getValue());
+    EXPECT_EQ(value_1*value_2, test.getValue());
 }
 
 TEST(multiplication_tests, multiplication_float_7) {
@@ -725,9 +725,9 @@ TEST(multiplication_tests, multiplication_float_7) {
     mps MPS(23,8,value_1);
     mps MPS_2(23,8,value_2);
 
-    auto test = MPS - MPS_2;
+    auto test = MPS * MPS_2;
 
-    EXPECT_EQ(value_1-value_2, test.getValue());
+    EXPECT_EQ(value_1*value_2, test.getValue());
 }
 
 TEST(multiplication_tests, multiplication_double_7) {
@@ -738,7 +738,7 @@ TEST(multiplication_tests, multiplication_double_7) {
     mps MPS(52,11,value_1);
     mps MPS_2(52,11,value_2);
 
-    auto test = MPS - MPS_2;
+    auto test = MPS * MPS_2;
 
-    EXPECT_EQ(value_1-value_2, test.getValue());
+    EXPECT_EQ(value_1*value_2, test.getValue());
 }
