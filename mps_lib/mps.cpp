@@ -13,7 +13,7 @@
  * @param exponent Exponent of the floating point representation.
  * @param value Value of the floating point number.
  */
-mps::mps(int mantissa_length, int exponent_length, double value) {
+mps::mps(unsigned long mantissa_length, unsigned long exponent_length, double value) {
     this->mantissa_length = mantissa_length;
     this->exponent_length = exponent_length;
 
@@ -41,7 +41,7 @@ mps::~mps() = default;
  *
  * @return length matisse
  */
-int mps::getMantisseLength() const {
+unsigned long mps::getMantisseLength() const {
     return this->mantissa_length;
 }
 
@@ -50,7 +50,7 @@ int mps::getMantisseLength() const {
  *
  * @return length exponent
  */
-int mps::getExponentLength() const {
+unsigned long mps::getExponentLength() const {
     return this->exponent_length;
 }
 
@@ -60,8 +60,8 @@ int mps::getExponentLength() const {
  *
  * @return length matisse
  */
-int mps::getBitArrayLength() const {
-    return (int) this->bit_vector.size();
+unsigned long mps::getBitArrayLength() const {
+    return this->bit_vector.size();
 }
 
 /**
@@ -108,7 +108,7 @@ double mps::getValue() {
     }
 
     // handle mantissa
-    for(int i = exponent_length + 1; i < (int) bit_vector.size(); i++){
+    for(auto i = exponent_length + 1; i < bit_vector.size(); i++){
         if(bit_vector[i]){
             if(ret >= 0){
                 ret += pow(0.5, i - exponent_length);
@@ -120,7 +120,7 @@ double mps::getValue() {
 
     // get exponent
     int exponent = 0;
-    for(int i = 1; i <= exponent_length; i++){
+    for(unsigned long i = 1; i <= exponent_length; i++){
         if(bit_vector[i]){
             exponent += (int) pow(2, exponent_length-i);
         }
@@ -150,13 +150,13 @@ bool mps::isZero(){
  */
 bool mps::isInfinity() {
 
-    for(int i = 1; i < exponent_length+1; i++){
+    for(unsigned long i = 1; i < exponent_length+1; i++){
         if(!bit_vector[i]){
             return false;
         }
     }
 
-    for(int i = exponent_length+1; i < (int) bit_vector.size(); i++){
+    for(unsigned long i = exponent_length+1; i < bit_vector.size(); i++){
         if(bit_vector[i]){
             return false;
         }
@@ -197,11 +197,11 @@ void mps::setInf(bool negative) {
         bit_vector.push_back(false);
     }
 
-    for(int i = 0; i < exponent_length; i++){
+    for(unsigned long i = 0; i < exponent_length; i++){
         bit_vector.push_back(true);
     }
 
-    for(int i = 0; i < mantissa_length; i++){
+    for(unsigned long i = 0; i < mantissa_length; i++){
         bit_vector.push_back(false);
     }
 }
@@ -213,7 +213,7 @@ void mps::setZero(){
 
     bit_vector.erase(bit_vector.begin(),bit_vector.end());
 
-    for(int i = 0; i < exponent_length + mantissa_length + 1; i++){
+    for(unsigned long i = 0; i < exponent_length + mantissa_length + 1; i++){
         bit_vector.push_back(false);
     }
 }
@@ -221,19 +221,23 @@ void mps::setZero(){
 /**
  * Sets the floating point number to NaN (not a number)
  */
-void mps::setNaN(){
+void mps::setNaN(bool negative){
 
     bit_vector.erase(bit_vector.begin(),bit_vector.end());
 
-    bit_vector.push_back(false);
+    if(negative){
+        bit_vector.push_back(true);
+    } else {
+        bit_vector.push_back(false);
+    }
 
-    for(int i = 0; i < exponent_length; i++){
+    for(unsigned long i = 0; i < exponent_length; i++){
         bit_vector.push_back(true);
     }
 
     bit_vector.push_back(true);
 
-    for(int i = 1; i < mantissa_length; i++){
+    for(unsigned long i = 1; i < mantissa_length; i++){
         bit_vector.push_back(false);
     }
 }
@@ -318,21 +322,21 @@ mps mps::operator+(mps& other) {
 
     // Extract exponents and mantissas
     //-------------------------------
-    vector<bool> a_mantissa(this->bit_vector.begin()+exponent_length+1, this->bit_vector.end());
+    vector<bool> a_mantissa(this->bit_vector.begin() + (long) exponent_length+1, this->bit_vector.end());
     a_mantissa.insert(a_mantissa.begin(), true);
 
-    vector<bool> b_mantissa(other.bit_vector.begin()+exponent_length+1, other.bit_vector.end());
+    vector<bool> b_mantissa(other.bit_vector.begin() + (long) exponent_length+1, other.bit_vector.end());
     b_mantissa.insert(b_mantissa.begin(), true);
 
-    vector<bool> a_exponent(this->bit_vector.begin()+1, this->bit_vector.begin()+1+this->exponent_length);
-    vector<bool> b_exponent(other.bit_vector.begin()+1, other.bit_vector.begin()+1+other.exponent_length);
+    vector<bool> a_exponent(this->bit_vector.begin()+1, this->bit_vector.begin()+1+ (long) this->exponent_length);
+    vector<bool> b_exponent(other.bit_vector.begin()+1, other.bit_vector.begin()+1+ (long) other.exponent_length);
     vector<bool> exponent;
     //-------------------------------
 
 
     // Match mantissas and set exponent
     //-------------------------------
-    int exponent_diff = 0;
+    unsigned long exponent_diff = 0;
     char larger_tmp = larger(a_exponent, b_exponent);
     if(1 == larger_tmp){
         exponent_diff = binaryToInt(binarySubtraction(a_exponent, b_exponent));
@@ -450,21 +454,21 @@ mps mps::operator-(mps& other){
 
     // Extract exponents and mantissas
     //-------------------------------
-    vector<bool> a_mantissa(this->bit_vector.begin()+exponent_length+1, this->bit_vector.end());
+    vector<bool> a_mantissa(this->bit_vector.begin()+ (long) exponent_length+1, this->bit_vector.end());
     a_mantissa.insert(a_mantissa.begin(), true);
 
-    vector<bool> b_mantissa(other.bit_vector.begin()+exponent_length+1, other.bit_vector.end());
+    vector<bool> b_mantissa(other.bit_vector.begin()+ (long) exponent_length+1, other.bit_vector.end());
     b_mantissa.insert(b_mantissa.begin(), true);
 
-    vector<bool> a_exponent(this->bit_vector.begin()+1, this->bit_vector.begin()+1+this->exponent_length);
-    vector<bool> b_exponent(other.bit_vector.begin()+1, other.bit_vector.begin()+1+other.exponent_length);
+    vector<bool> a_exponent(this->bit_vector.begin()+1, this->bit_vector.begin()+1+ (long) this->exponent_length);
+    vector<bool> b_exponent(other.bit_vector.begin()+1, other.bit_vector.begin()+1+ (long) other.exponent_length);
     vector<bool> exponent;
     //-------------------------------
 
 
     // Match mantissas and set exponent
     //-------------------------------
-    int exponent_diff;
+    unsigned long exponent_diff;
     char larger_tmp = larger(a_exponent, b_exponent);
     if(1 == larger_tmp){
         exponent_diff = binaryToInt(binarySubtraction(a_exponent, b_exponent));
@@ -498,17 +502,17 @@ mps mps::operator-(mps& other){
 
     // Adjust mantissa and exponent
     //-------------------------------
-    int exponent_shift = 0;
-    for(int i = 0; i < (int) mantissa.size(); i++){
+    unsigned long exponent_shift = 0;
+    for(unsigned long i = 0; i < mantissa.size(); i++){
         if(mantissa[i]){
             exponent_shift = i;
             break;
         }
     }
 
-    mantissa.erase(mantissa.begin(), mantissa.begin()+exponent_shift+1);
+    mantissa.erase(mantissa.begin(), mantissa.begin()+ (long) exponent_shift+1);
     vector<bool> exponent_shift_binary = intToBinary(exponent_shift);
-    for(int i = (int) exponent_shift_binary.size(); i < ret.exponent_length; i++){
+    for(unsigned long i = exponent_shift_binary.size(); i < ret.exponent_length; i++){
         exponent_shift_binary.insert(exponent_shift_binary.begin(), false);
     }
     exponent = binarySubtraction(exponent, exponent_shift_binary);
@@ -581,38 +585,38 @@ mps mps::operator*(mps& other){
 
 
 
-    vector<bool> A(this->bit_vector.begin()+exponent_length+1, this->bit_vector.end());
+    vector<bool> A(this->bit_vector.begin()+(long) exponent_length+1, this->bit_vector.end());
     vector<bool> S;
 
-    A.reserve((int) A.size() + other.bit_vector.size() + 1 +2 +2);
+    A.reserve(A.size() + other.bit_vector.size() + 1 +2 +2);
     A.insert(A.begin(), true);
     A.insert(A.begin(), false);
-    S.reserve((int) A.size() + other.bit_vector.size() + 1 +2 +2);
+    S.reserve(A.size() + other.bit_vector.size() + 1 +2 +2);
 
-    for(int i = 0; i < (int) A.size(); i++){
+    for(unsigned long i = 0; i < A.size(); i++){
         S.push_back(!A[i]);
     }
     addOneToBinary(&S);
 
-    for(int i = 0; i < other.mantissa_length + 1 +1 +1; i++){
+    for(unsigned long i = 0; i < other.mantissa_length + 1 +1 +1; i++){
         A.push_back(false);
         S.push_back(false);
     }
 
     vector<bool> P;
-    P.reserve((int) A.size() + other.bit_vector.size() + 1 +2 +2);
-    for(int i = 0; i < this->mantissa_length+1+1; i++){
+    P.reserve(A.size() + other.bit_vector.size() + 1 +2 +2);
+    for(unsigned long i = 0; i < this->mantissa_length+1+1; i++){
         P.push_back(false);
     }
     P.push_back(false);
     P.push_back(true);
-    for(int i = 0; i < other.mantissa_length; i++){
+    for(unsigned long i = 0; i < other.mantissa_length; i++){
        P.push_back(other.bit_vector[i+1+other.exponent_length]);
     }
     P.push_back(false);
 
 
-    for(int i = 0; i < other.mantissa_length+2; i++){
+    for(unsigned long i = 0; i < other.mantissa_length+2; i++){
 
 
         if(!P.end()[-2] && P.back()){
@@ -629,7 +633,7 @@ mps mps::operator*(mps& other){
     P.pop_back();
     P.erase (P.begin());
     int count = 0;
-    for(int i = 0; i < (int) P.size(); i++){
+    for(unsigned long i = 0; i < P.size(); i++){
         if(P[0]){
             P.erase(P.begin());
             break;
@@ -675,8 +679,8 @@ mps mps::operator*(mps& other){
 
 
 
-    vector<bool> a_exponent(this->bit_vector.begin()+1, this->bit_vector.begin()+1+this->exponent_length);
-    vector<bool> b_exponent(other.bit_vector.begin()+1, other.bit_vector.begin()+1+other.exponent_length);
+    vector<bool> a_exponent(this->bit_vector.begin()+1, this->bit_vector.begin()+1+ (long) this->exponent_length);
+    vector<bool> b_exponent(other.bit_vector.begin()+1, other.bit_vector.begin()+1+ (long) other.exponent_length);
 
     // TODO: Check for carry
     b_exponent[0] = !b_exponent[0];
@@ -720,7 +724,12 @@ void mps::setBitArray(double value) {
     } else if (numeric_limits<double>::infinity() * -1 == value){
         setInf(true); return;
     } else if (isnan(value)){
-        setNaN(); return;
+        if(signbit(value)){
+            setNaN(true);
+        } else {
+            setNaN();
+        }
+        return;
     }
     //-------------------------------
 
@@ -748,7 +757,7 @@ void mps::setBitArray(double value) {
 
         mantissa_shift = tmp_count-1;
     } else {
-        mantissa_shift = floor(log2(abs(value)));
+        mantissa_shift = (int) floor(log2(abs(value)));
     }
     int exponent_int =  mantissa_shift + getBias();
 
@@ -760,11 +769,11 @@ void mps::setBitArray(double value) {
     }
 
     // Fill not used but available bits with zero.
-    if((int) exponent.size() > exponent_length) {
+    if(exponent.size() > exponent_length) {
         cout << "ERROR: exponent too large" << endl;
         // TODO: add proper error handling.
     } else {
-        for(int i = (int) exponent.size(); i < exponent_length; i++){
+        for(unsigned long i = exponent.size(); i < exponent_length; i++){
             exponent.insert(exponent.begin(), false);
         }
     }
@@ -779,7 +788,7 @@ void mps::setBitArray(double value) {
     // The sign is not relevant. Always returns a "positive" value.
     vector<bool> mantissa;
     double reminder = abs(value) - floor(abs(value));
-    for(int i = 0; i < mantissa_length; i++){
+    for(unsigned long i = 0; i < mantissa_length; i++){
 
         reminder *= 2;
         if(reminder >= 1){
@@ -837,9 +846,10 @@ vector<bool> mps::binaryAddition(vector<bool>& a, vector<bool>& b, bool carry, b
     }
 
     // full adder
-    for(int i = (int) a.size()-1; i >= 0; i--){
-        ret.insert(ret.begin(), (a[i] ^ b[i]) ^ carrier);
-        carrier = ((a[i] && b[i]) || (a[i] && carrier)) || (b[i] && carrier);
+    // TODO: Use while loop
+    for(long i = (long) a.size()-1; i >= 0; i--){
+        ret.insert(ret.begin(), (a[(unsigned long)i] ^ b[(unsigned long)i]) ^ carrier);
+        carrier = ((a[(unsigned long) i] && b[(unsigned long)i]) || (a[(unsigned long)i] && carrier)) || (b[(unsigned long)i] && carrier);
     }
 
     // adjust if carrier bit is 1
@@ -885,32 +895,32 @@ vector<bool> mps::binarySubtraction(vector<bool>& minuend, vector<bool> subtrahe
  * @param mantissa Pointer to the mantissa which should be rounded.
  * @param mantissa_len The length to which the mantissa should be rounded.
  */
-void mps::round(vector<bool> *mantissa, int mantissa_len) {
+void mps::round(vector<bool> *mantissa, unsigned long mantissa_len) {
 
-    if((int) mantissa->size() > mantissa_len){
+    if(mantissa->size() > mantissa_len){
         bool tmp = false;
-        for(int i = mantissa_len+1 ; i < (int) mantissa->size(); i++){
+        for(auto i = mantissa_len+1 ; i < mantissa->size(); i++){
             if ((*mantissa)[i]){
                 tmp = true;
                 break;
             }
         }
         if((*mantissa)[mantissa_len] && tmp){
-            mantissa->erase(mantissa->end()-((int) mantissa->size()-mantissa_len), mantissa->end());
+            mantissa->erase(mantissa->end()- (long) (mantissa->size()- mantissa_len), mantissa->end());
             if(addOneToBinary(mantissa)){
                 addOneToBinary(mantissa);
             }
         } else if((*mantissa)[mantissa_len]){
             if((*mantissa)[mantissa_len-1]){
-                mantissa->erase(mantissa->end()-((int) mantissa->size()-mantissa_len), mantissa->end());
+                mantissa->erase(mantissa->end()- (long) (mantissa->size()-mantissa_len), mantissa->end());
                 if(addOneToBinary(mantissa)){
                     addOneToBinary( mantissa);
                 }
             } else {
-                mantissa->erase(mantissa->end()-((int) mantissa->size()-mantissa_len), mantissa->end());
+                mantissa->erase(mantissa->end()- (long) (mantissa->size()-mantissa_len), mantissa->end());
             }
         }else {
-            mantissa->erase(mantissa->end()-((int) mantissa->size()-mantissa_len), mantissa->end());
+            mantissa->erase(mantissa->end()- (long) (mantissa->size()-mantissa_len), mantissa->end());
         }
     }
 }
@@ -923,13 +933,13 @@ void mps::round(vector<bool> *mantissa, int mantissa_len) {
  * @param vector vector containing the binary number
  * @return the binary number as integer
  */
-int mps::binaryToInt(vector<bool> vector){
+unsigned long mps::binaryToInt(vector<bool> vector){
 
-    int ret = 0;
+    unsigned long ret = 0;
 
-    for(int i = 0; i < (int) vector.size(); i++){
+    for(unsigned long i = 0; i < vector.size(); i++){
         if(vector[vector.size()-i-1]){
-            ret += (int) pow(2,i);
+            ret += (unsigned long) pow(2,i);
         }
     }
 
@@ -943,7 +953,7 @@ int mps::binaryToInt(vector<bool> vector){
  * @param value the value of the integer.
  * @return the value as binary number.
  */
-vector<bool> mps::intToBinary(unsigned int value) {
+vector<bool> mps::intToBinary(unsigned long value) {
 
     vector<bool> ret;
 
@@ -974,7 +984,7 @@ char mps::larger(vector<bool>& a, vector<bool>& b){
         cout << "ERROR: larger: not same size" << endl;
     }
 
-    for(int i = 0; i < (int) a.size(); i++){
+    for(unsigned long i = 0; i < a.size(); i++){
         if(a[i] && !b[i]) { return 1;}
         else if(b[i] && !a[i]) {return -1;}
     }
@@ -992,9 +1002,9 @@ char mps::larger(vector<bool>& a, vector<bool>& b){
  * @param vector_left_shift pointer to the vector which should be "shifted" to the left
  * @param amount amount the two vectors should be "shifted"
  */
-void mps::matchMantissas(vector<bool>* vector_right_shift, vector<bool>* vector_left_shift, int amount){
+void mps::matchMantissas(vector<bool>* vector_right_shift, vector<bool>* vector_left_shift, unsigned long amount){
 
-    for(int i = 0; i < amount; i++){
+    for(unsigned long i = 0; i < amount; i++){
         vector_right_shift->insert(vector_right_shift->begin(), false);
         vector_left_shift->insert(vector_left_shift->end(), false);
     }
@@ -1012,9 +1022,10 @@ void mps::matchMantissas(vector<bool>* vector_right_shift, vector<bool>* vector_
  */
 bool mps::addOneToBinary(vector<bool>* vector){
 
-    for(int i = (int) vector->size() - 1; i >= 0; i--){
-        (*vector)[i] = !(*vector)[i];
-        if((*vector)[i]){
+    // TODO: Make while loop
+    for(long i = (long) vector->size() - 1; i >= 0; i--){
+        (*vector)[(unsigned long) i] = !(*vector)[(unsigned long) i];
+        if((*vector)[(unsigned long) i]){
             return false;
         }
     }

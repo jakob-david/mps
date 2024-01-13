@@ -8,9 +8,9 @@ TEST(constructor_tests, constructor_sets_values_coorectly){
 
     mps MPS(5, 6, 3.14);
 
-    int mantissa_actual = MPS.getMantisseLength();
-    int exponent_actual = MPS.getExponentLength();
-    int length_actual = MPS.getBitArrayLength();
+    unsigned long mantissa_actual = MPS.getMantisseLength();
+    unsigned long exponent_actual = MPS.getExponentLength();
+    unsigned long length_actual = MPS.getBitArrayLength();
 
     EXPECT_EQ(5, mantissa_actual);
     EXPECT_EQ(6, exponent_actual);
@@ -21,7 +21,7 @@ TEST(constructor_tests, constructor_initializes_bit_array_correctly){
 
     mps MPS(20, 12, 3.14);
 
-    int size = MPS.getBitArrayLength();
+    unsigned long size = MPS.getBitArrayLength();
 
     EXPECT_EQ(33, size);
 }
@@ -46,8 +46,8 @@ TEST(converter_tests, test_positive_double) {
 
     string compare_str;
     char* bits = reinterpret_cast<char*>(&test_value);
-    for(std::size_t n = 0; n < sizeof test_value; ++n) {
-        string tmp = std::bitset<8>(bits[n]).to_string();
+    for(unsigned long n = 0; n < sizeof test_value; ++n) {
+        string tmp = std::bitset<8>((unsigned long long) bits[n]).to_string();
         compare_str.insert (0, tmp);
     }
 
@@ -74,7 +74,7 @@ TEST(converter_tests, test_positive_double_using_getBitArrayReference) {
     string compare_str;
     char* bits = reinterpret_cast<char*>(&test_value);
     for(std::size_t n = 0; n < sizeof test_value; ++n) {
-        string tmp = std::bitset<8>(bits[n]).to_string();
+        string tmp = std::bitset<8>((unsigned long long) bits[n]).to_string();
         compare_str.insert (0, tmp);
     }
 
@@ -101,7 +101,7 @@ TEST(converter_tests, test_negative_double) {
     string compare_str;
     char* bits = reinterpret_cast<char*>(&test_value);
     for(std::size_t n = 0; n < sizeof test_value; ++n) {
-        string tmp = std::bitset<8>(bits[n]).to_string();
+        string tmp = std::bitset<8>((unsigned long long)bits[n]).to_string();
         compare_str.insert (0, tmp);
     }
 
@@ -110,7 +110,7 @@ TEST(converter_tests, test_negative_double) {
 
 TEST(converter_tests, test_positive_float) {
 
-    float test_value = 345.3456;
+    float test_value = 345.3456f;
 
     mps MPS(23, 8, test_value);
 
@@ -128,7 +128,7 @@ TEST(converter_tests, test_positive_float) {
     string compare_str;
     char* bits = reinterpret_cast<char*>(&test_value);
     for(std::size_t n = 0; n < sizeof test_value; ++n) {
-        string tmp = std::bitset<8>(bits[n]).to_string();
+        string tmp = std::bitset<8>((unsigned long long) bits[n]).to_string();
         compare_str.insert (0, tmp);
     }
 
@@ -137,7 +137,7 @@ TEST(converter_tests, test_positive_float) {
 
 TEST(converter_tests, test_negative_float) {
 
-    float test_value = -2354.3456;
+    float test_value = -2354.3456f;
 
     mps MPS(23, 8, test_value);
 
@@ -155,7 +155,7 @@ TEST(converter_tests, test_negative_float) {
     string compare_str;
     char* bits = reinterpret_cast<char*>(&test_value);
     for(std::size_t n = 0; n < sizeof test_value; ++n) {
-        string tmp = std::bitset<8>(bits[n]).to_string();
+        string tmp = std::bitset<8>((unsigned long long) bits[n]).to_string();
         compare_str.insert (0, tmp);
     }
 
@@ -182,7 +182,7 @@ TEST(converter_tests, test_zero_double) {
     string compare_str;
     char* bits = reinterpret_cast<char*>(&test_value);
     for(std::size_t n = 0; n < sizeof test_value; ++n) {
-        string tmp = std::bitset<8>(bits[n]).to_string();
+        string tmp = std::bitset<8>((unsigned long long) bits[n]).to_string();
         compare_str.insert (0, tmp);
     }
 
@@ -209,7 +209,7 @@ TEST(converter_tests, test_zero_float) {
     string compare_str;
     char* bits = reinterpret_cast<char*>(&test_value);
     for(std::size_t n = 0; n < sizeof test_value; ++n) {
-        string tmp = std::bitset<8>(bits[n]).to_string();
+        string tmp = std::bitset<8>((unsigned long long)bits[n]).to_string();
         compare_str.insert (0, tmp);
     }
 
@@ -236,7 +236,7 @@ TEST(converter_tests, test_pos_infinity_double) {
     string compare_str;
     char* bits = reinterpret_cast<char*>(&test_value);
     for(std::size_t n = 0; n < sizeof test_value; ++n) {
-        string tmp = std::bitset<8>(bits[n]).to_string();
+        string tmp = std::bitset<8>((unsigned long long) bits[n]).to_string();
         compare_str.insert (0, tmp);
     }
 
@@ -263,7 +263,7 @@ TEST(converter_tests, test_pos_infinity_float) {
     string compare_str;
     char* bits = reinterpret_cast<char*>(&test_value);
     for(std::size_t n = 0; n < sizeof test_value; ++n) {
-        string tmp = std::bitset<8>(bits[n]).to_string();
+        string tmp = std::bitset<8>((unsigned long long) bits[n]).to_string();
         compare_str.insert (0, tmp);
     }
 
@@ -290,7 +290,7 @@ TEST(converter_tests, test_neg_infinity_double) {
     string compare_str;
     char* bits = reinterpret_cast<char*>(&test_value);
     for(std::size_t n = 0; n < sizeof test_value; ++n) {
-        string tmp = std::bitset<8>(bits[n]).to_string();
+        string tmp = std::bitset<8>((unsigned long long) bits[n]).to_string();
         compare_str.insert (0, tmp);
     }
 
@@ -317,7 +317,7 @@ TEST(converter_tests, test_neg_infinity_float) {
     string compare_str;
     char* bits = reinterpret_cast<char*>(&test_value);
     for(std::size_t n = 0; n < sizeof test_value; ++n) {
-        string tmp = std::bitset<8>(bits[n]).to_string();
+        string tmp = std::bitset<8>((unsigned long long) bits[n]).to_string();
         compare_str.insert (0, tmp);
     }
 
@@ -344,7 +344,7 @@ TEST(converter_tests, test_pos_max_double) {
     string compare_str;
     char* bits = reinterpret_cast<char*>(&test_value);
     for(std::size_t n = 0; n < sizeof test_value; ++n) {
-        string tmp = std::bitset<8>(bits[n]).to_string();
+        string tmp = std::bitset<8>((unsigned long long) bits[n]).to_string();
         compare_str.insert (0, tmp);
     }
 
@@ -371,7 +371,7 @@ TEST(converter_tests, test_pos_max_float) {
     string compare_str;
     char* bits = reinterpret_cast<char*>(&test_value);
     for(std::size_t n = 0; n < sizeof test_value; ++n) {
-        string tmp = std::bitset<8>(bits[n]).to_string();
+        string tmp = std::bitset<8>((unsigned long long) bits[n]).to_string();
         compare_str.insert (0, tmp);
     }
 
@@ -399,7 +399,7 @@ TEST(converter_tests, test_max_float_in_double) {
     string compare_str;
     char* bits = reinterpret_cast<char*>(&test_value);
     for(std::size_t n = 0; n < sizeof test_value; ++n) {
-        string tmp = std::bitset<8>(bits[n]).to_string();
+        string tmp = std::bitset<8>((unsigned long long) bits[n]).to_string();
         compare_str.insert (0, tmp);
     }
 
@@ -426,7 +426,7 @@ TEST(converter_tests, test_pos_min_double) {
     string compare_str;
     char* bits = reinterpret_cast<char*>(&test_value);
     for(std::size_t n = 0; n < sizeof test_value; ++n) {
-        string tmp = std::bitset<8>(bits[n]).to_string();
+        string tmp = std::bitset<8>((unsigned long long) bits[n]).to_string();
         compare_str.insert (0, tmp);
     }
 
@@ -453,7 +453,7 @@ TEST(converter_tests, test_pos_min_float) {
     string compare_str;
     char* bits = reinterpret_cast<char*>(&test_value);
     for(std::size_t n = 0; n < sizeof test_value; ++n) {
-        string tmp = std::bitset<8>(bits[n]).to_string();
+        string tmp = std::bitset<8>((unsigned long long) bits[n]).to_string();
         compare_str.insert (0, tmp);
     }
 
@@ -481,7 +481,7 @@ TEST(converter_tests, test_small_difference) {
     string compare_str;
     char* bits = reinterpret_cast<char*>(&test_value);
     for(std::size_t n = 0; n < sizeof test_value; ++n) {
-        string tmp = std::bitset<8>(bits[n]).to_string();
+        string tmp = std::bitset<8>((unsigned long long) bits[n]).to_string();
         compare_str.insert (0, tmp);
     }
 
@@ -508,7 +508,7 @@ TEST(converter_tests, test_neg_max_double) {
     string compare_str;
     char* bits = reinterpret_cast<char*>(&test_value);
     for(std::size_t n = 0; n < sizeof test_value; ++n) {
-        string tmp = std::bitset<8>(bits[n]).to_string();
+        string tmp = std::bitset<8>((unsigned long long) bits[n]).to_string();
         compare_str.insert (0, tmp);
     }
 
@@ -535,7 +535,7 @@ TEST(converter_tests, test_neg_max_float) {
     string compare_str;
     char* bits = reinterpret_cast<char*>(&test_value);
     for(std::size_t n = 0; n < sizeof test_value; ++n) {
-        string tmp = std::bitset<8>(bits[n]).to_string();
+        string tmp = std::bitset<8>((unsigned long long) bits[n]).to_string();
         compare_str.insert (0, tmp);
     }
 
@@ -563,7 +563,7 @@ TEST(converter_tests, test_neg_min_double) {
     string compare_str;
     char* bits = reinterpret_cast<char*>(&test_value);
     for(std::size_t n = 0; n < sizeof test_value; ++n) {
-        string tmp = std::bitset<8>(bits[n]).to_string();
+        string tmp = std::bitset<8>((unsigned long long) bits[n]).to_string();
         compare_str.insert (0, tmp);
     }
 
@@ -590,7 +590,7 @@ TEST(converter_tests, test_neg_min_float) {
     string compare_str;
     char* bits = reinterpret_cast<char*>(&test_value);
     for(std::size_t n = 0; n < sizeof test_value; ++n) {
-        string tmp = std::bitset<8>(bits[n]).to_string();
+        string tmp = std::bitset<8>((unsigned long long) bits[n]).to_string();
         compare_str.insert (0, tmp);
     }
 
@@ -618,7 +618,7 @@ TEST(converter_tests, test_NAN_double) {
     string compare_str;
     char* bits = reinterpret_cast<char*>(&test_value);
     for(std::size_t n = 0; n < sizeof test_value; ++n) {
-        string tmp = std::bitset<8>(bits[n]).to_string();
+        string tmp = std::bitset<8>((unsigned long long) bits[n]).to_string();
         compare_str.insert (0, tmp);
     }
 
@@ -645,7 +645,7 @@ TEST(converter_tests, test_NAN_float) {
     string compare_str;
     char* bits = reinterpret_cast<char*>(&test_value);
     for(std::size_t n = 0; n < sizeof test_value; ++n) {
-        string tmp = std::bitset<8>(bits[n]).to_string();
+        string tmp = std::bitset<8>((unsigned long long) bits[n]).to_string();
         compare_str.insert (0, tmp);
     }
 
@@ -672,7 +672,7 @@ TEST(converter_tests, test_neg_NAN_double) {
     string compare_str;
     char* bits = reinterpret_cast<char*>(&test_value);
     for(std::size_t n = 0; n < sizeof test_value; ++n) {
-        string tmp = std::bitset<8>(bits[n]).to_string();
+        string tmp = std::bitset<8>((unsigned long long) bits[n]).to_string();
         compare_str.insert (0, tmp);
     }
 
@@ -699,7 +699,7 @@ TEST(converter_tests, test_neg_NAN_float) {
     string compare_str;
     char* bits = reinterpret_cast<char*>(&test_value);
     for(std::size_t n = 0; n < sizeof test_value; ++n) {
-        string tmp = std::bitset<8>(bits[n]).to_string();
+        string tmp = std::bitset<8>((unsigned long long) bits[n]).to_string();
         compare_str.insert (0, tmp);
     }
 
@@ -726,7 +726,7 @@ TEST(converter_tests, test_null_double) {
     string compare_str;
     char* bits = reinterpret_cast<char*>(&test_value);
     for(std::size_t n = 0; n < sizeof test_value; ++n) {
-        string tmp = std::bitset<8>(bits[n]).to_string();
+        string tmp = std::bitset<8>((unsigned long long) bits[n]).to_string();
         compare_str.insert (0, tmp);
     }
 
@@ -753,7 +753,7 @@ TEST(converter_tests, test_null_float) {
     string compare_str;
     char* bits = reinterpret_cast<char*>(&test_value);
     for(std::size_t n = 0; n < sizeof test_value; ++n) {
-        string tmp = std::bitset<8>(bits[n]).to_string();
+        string tmp = std::bitset<8>((unsigned long long) bits[n]).to_string();
         compare_str.insert (0, tmp);
     }
 
@@ -783,7 +783,7 @@ TEST(setter_tests, set_pos_inf_double) {
     string compare_str;
     char* bits = reinterpret_cast<char*>(&test_value);
     for(std::size_t n = 0; n < sizeof test_value; ++n) {
-        string tmp = std::bitset<8>(bits[n]).to_string();
+        string tmp = std::bitset<8>((unsigned long long) bits[n]).to_string();
         compare_str.insert (0, tmp);
     }
 
@@ -812,7 +812,7 @@ TEST(setter_tests, set_pos_inf_float) {
     string compare_str;
     char* bits = reinterpret_cast<char*>(&test_value);
     for(std::size_t n = 0; n < sizeof test_value; ++n) {
-        string tmp = std::bitset<8>(bits[n]).to_string();
+        string tmp = std::bitset<8>((unsigned long long) bits[n]).to_string();
         compare_str.insert (0, tmp);
     }
 
@@ -841,7 +841,7 @@ TEST(setter_tests, set_neg_inf_double) {
     string compare_str;
     char* bits = reinterpret_cast<char*>(&test_value);
     for(std::size_t n = 0; n < sizeof test_value; ++n) {
-        string tmp = std::bitset<8>(bits[n]).to_string();
+        string tmp = std::bitset<8>((unsigned long long) bits[n]).to_string();
         compare_str.insert (0, tmp);
     }
 
@@ -870,7 +870,7 @@ TEST(setter_tests, set_neg_inf_float) {
     string compare_str;
     char* bits = reinterpret_cast<char*>(&test_value);
     for(std::size_t n = 0; n < sizeof test_value; ++n) {
-        string tmp = std::bitset<8>(bits[n]).to_string();
+        string tmp = std::bitset<8>((unsigned long long) bits[n]).to_string();
         compare_str.insert (0, tmp);
     }
 
@@ -899,7 +899,7 @@ TEST(setter_tests, set_zero_double) {
     string compare_str;
     char* bits = reinterpret_cast<char*>(&test_value);
     for(std::size_t n = 0; n < sizeof test_value; ++n) {
-        string tmp = std::bitset<8>(bits[n]).to_string();
+        string tmp = std::bitset<8>((unsigned long long) bits[n]).to_string();
         compare_str.insert (0, tmp);
     }
 
@@ -928,7 +928,7 @@ TEST(setter_tests, set_zero_float) {
     string compare_str;
     char* bits = reinterpret_cast<char*>(&test_value);
     for(std::size_t n = 0; n < sizeof test_value; ++n) {
-        string tmp = std::bitset<8>(bits[n]).to_string();
+        string tmp = std::bitset<8>((unsigned long long) bits[n]).to_string();
         compare_str.insert (0, tmp);
     }
 
@@ -957,7 +957,7 @@ TEST(setter_tests, set_NAN_double) {
     string compare_str;
     char* bits = reinterpret_cast<char*>(&test_value);
     for(std::size_t n = 0; n < sizeof test_value; ++n) {
-        string tmp = std::bitset<8>(bits[n]).to_string();
+        string tmp = std::bitset<8>((unsigned long long) bits[n]).to_string();
         compare_str.insert (0, tmp);
     }
 
@@ -986,7 +986,7 @@ TEST(setter_tests, set_NAN_float) {
     string compare_str;
     char* bits = reinterpret_cast<char*>(&test_value);
     for(std::size_t n = 0; n < sizeof test_value; ++n) {
-        string tmp = std::bitset<8>(bits[n]).to_string();
+        string tmp = std::bitset<8>((unsigned long long) bits[n]).to_string();
         compare_str.insert (0, tmp);
     }
 
@@ -1035,7 +1035,7 @@ TEST(get_value_tests, get_double) {
 
 TEST(get_value_tests, get_float) {
 
-    float test_value = 3455763.3467457;
+    float test_value = 3455763.3467457f;
 
     mps MPS(23, 8, test_value);
 
@@ -1087,7 +1087,7 @@ TEST(get_value_tests, get_neg_double) {
 
 TEST(get_value_tests, get_neg_float) {
 
-    float test_value = -2356345.235643;
+    float test_value = -2356345.235643f;
 
     mps MPS(23, 8, test_value);
 

@@ -1,6 +1,7 @@
 #include <iostream>
 #include "mps_lib/mps.h"
 #include <chrono>
+#include <random>
 
 using namespace std;
 
@@ -8,7 +9,7 @@ using namespace std;
 #include <iostream>
 
 
-void func(bool* test_1, bool* test_2, bool* test_3, int size){
+void func(const bool* test_1, const bool* test_2, bool* test_3, int size){
     for (int i = 0; i < 10000000; i++) {
 
         for (int j = 0; j < size; j++) {
@@ -18,9 +19,9 @@ void func(bool* test_1, bool* test_2, bool* test_3, int size){
     }
 }
 
-void func(vector<bool> test_1, vector<bool> test_2, vector<bool> test_3, int size){
-    for (int i = 0; i < 1000000; i++) {
-        for (int j = 0; j < size; j++) {
+void func(vector<bool> test_1, vector<bool> test_2, vector<bool> test_3, unsigned long size){
+    for (unsigned long i = 0; i < 1000000; i++) {
+        for (unsigned long j = 0; j < size; j++) {
             test_3[j] = test_1[j] * test_2[j];
         }
     }
@@ -77,10 +78,18 @@ int main() {
     std::cout << '\n';
 
     */
-double a = 3432.334;
-double b = 3664.334;
-double c;
-for (int mant = 0; mant < 100; mant++) {
+//double a = 3432.334;
+//double b = 3664.334;
+//double d = 456.34;
+//double e = 345.4;
+//double f = 8657.456;
+//double g = 128.34;
+//double c;
+
+    //double lower_bound = 0;
+    //double upper_bound = 100;
+
+for (unsigned long mant = 0; mant < 50; mant++) {
     mps one(mant, 8, 34.45);
     mps two(mant, 8, 14.3 );
 
@@ -88,10 +97,21 @@ for (int mant = 0; mant < 100; mant++) {
             std::chrono::system_clock::now().time_since_epoch()
     );
 
-    for (int i = 0; i < 100000; i++) {
+    for (long int i = 0; i < 100000; i++) {
+
+/*
+        std::uniform_real_distribution<double> unif(lower_bound,upper_bound);
+        std::default_random_engine re;
+        a = unif(re);
+        b = unif(re);
+        d = unif(re);
+        e = unif(re);
+        f = unif(re);
+        g = unif(re);
+*/
 
         one * two;
-        //c = a*b;
+        //c = b*a;
     }
 
     std::chrono::milliseconds t_2 = chrono::duration_cast<chrono::milliseconds>(
@@ -105,7 +125,7 @@ for (int mant = 0; mant < 100; mant++) {
     std::cout << t.count() << std::endl;
 }
 
-    std::cout << c << std::endl;
+    // std::cout << c << std::endl;
 }
 
 

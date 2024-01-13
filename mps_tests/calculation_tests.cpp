@@ -19,7 +19,7 @@ TEST(equality_tests, equality_pos_double){
 
 TEST(equality_tests, equality_pos_float){
 
-    float test_value = 234536.34634;
+    float test_value = 234536.34634f;
 
     mps* MPS = new mps(23, 8, test_value);
 
@@ -45,7 +45,7 @@ TEST(equality_tests, equality_neg_double){
 
 TEST(equality_tests, equality_neg_float){
 
-    float test_value = -234536.34634;
+    float test_value = -234536.34634f;
 
     mps* MPS = new mps(23, 8, test_value);
 
@@ -56,27 +56,7 @@ TEST(equality_tests, equality_neg_float){
     EXPECT_EQ(test_value, MPS_copy->getValue());
 }
 
-TEST(equality_tests, equality_same_object_double){
 
-    double test_value = 234536.34634;
-
-    mps* MPS = new mps(52, 11, test_value);
-
-    MPS = MPS;
-
-    EXPECT_EQ(&MPS, &MPS);
-}
-
-TEST(equality_tests, equality_same_object_float){
-
-    double test_value = 234536.34634;
-
-    mps* MPS = new mps(23, 8, test_value);
-
-    MPS = MPS;
-
-    EXPECT_EQ(&MPS, &MPS);
-}
 
 
 TEST(addition_tests, conversion_empty_object_double){
@@ -94,7 +74,7 @@ TEST(addition_tests, conversion_empty_object_double){
 
 TEST(addition_tests, conversion_empty_object_float){
 
-    float test_value = 234536.34634;
+    float test_value = 234536.34634f;
 
     mps MPS(23, 8, test_value);
     mps MPS_2(23, 8, test_value);
@@ -119,7 +99,7 @@ TEST(addition_tests, addition_same_double) {
 
 TEST(addition_tests, addition_same_float) {
 
-    float value_1 = 1.05;
+    float value_1 = 1.05f;
 
     mps MPS(23,8,value_1);
     mps MPS_2(23,8,value_1);
@@ -144,8 +124,8 @@ TEST(addition_tests, addition_double) {
 
 TEST(addition_tests, addition_float) {
 
-    float value_1 = 1.05;
-    float value_2 = 2.1;
+    float value_1 = 1.05f;
+    float value_2 = 2.1f;
 
     mps MPS(23,8,value_1);
     mps MPS_2(23,8,value_2);
@@ -170,8 +150,8 @@ TEST(addition_tests, addition2_double) {
 
 TEST(addition_tests, addition2_float) {
 
-    float value_1 = 2453.45645;
-    float value_2 = 124779.3456;
+    float value_1 = 2453.45645f;
+    float value_2 = 124779.3456f;
 
     mps MPS(23,8,value_1);
     mps MPS_2(23,8,value_2);
@@ -196,8 +176,8 @@ TEST(addition_tests, addition3_double) {
 
 TEST(addition_tests, addition3_float) {
 
-    float value_1 = 0.0345;
-    float value_2 = 0.000435345;
+    float value_1 = 0.0345f;
+    float value_2 = 0.000435345f;
 
     mps MPS(23,8,value_1);
     mps MPS_2(23,8,value_2);
@@ -223,7 +203,7 @@ TEST(addition_tests, zero_left_double) {
 TEST(addition_tests, zero_left_float) {
 
     float value_1 = 0;
-    float value_2 = 346.4367;
+    float value_2 = 346.4367f;
 
     mps MPS(23,8,value_1);
     mps MPS_2(23,8,value_2);
@@ -248,7 +228,7 @@ TEST(addition_tests, zero_right_double) {
 
 TEST(addition_tests, zero_right_float) {
 
-    float value_1 = 23456.356;
+    float value_1 = 23456.356f;
     float value_2 = 0;
 
     mps MPS(52,11,value_1);
@@ -274,8 +254,8 @@ TEST(addition_tests, additition_negative_double) {
 
 TEST(addition_tests, addition_negative_float) {
 
-    float value_1 = -345.346;
-    float value_2 = -0.00456345;
+    float value_1 = -345.346f;
+    float value_2 = -0.00456345f;
 
     mps MPS(23,8,value_1);
     mps MPS_2(23,8,value_2);
@@ -300,8 +280,8 @@ TEST(addition_tests, negative_first_number_double) {
 
 TEST(addition_tests, negative_first_number_float) {
 
-    float value_1 = -345.346;
-    float value_2 = 238683.355;
+    float value_1 = -345.346f;
+    float value_2 = 238683.355f;
 
     mps MPS(23,8,value_1);
     mps MPS_2(23,8,value_2);
@@ -326,8 +306,8 @@ TEST(addition_tests, negative_second_number_double) {
 
 TEST(addition_tests, negative_second_number_float) {
 
-    float value_1 = 345.346;
-    float value_2 = -238683.355;
+    float value_1 = 345.346f;
+    float value_2 = -238683.355f;
 
     mps MPS(23,8,value_1);
     mps MPS_2(23,8,value_2);
@@ -340,8 +320,8 @@ TEST(addition_tests, negative_second_number_float) {
 
 TEST(subtraction_tests, coding) {
 
-    float value_1 = -3453.3456;
-    float value_2 = -45456.456;
+    float value_1 = -3453.3456f;
+    float value_2 = -45456.456f;
 
     mps MPS(23,8,value_1);
     mps MPS_2(23,8,value_2);
@@ -361,7 +341,7 @@ TEST(subtraction_tests, coding) {
     float test_value = value_1 - value_2;
     char* bits = reinterpret_cast<char*>(&test_value);
     for(std::size_t n = 0; n < sizeof test_value; ++n) {
-        string tmp = std::bitset<8>(bits[n]).to_string();
+        string tmp = std::bitset<8>((unsigned long long )bits[n]).to_string();
         compare_str.insert (0, tmp);
     }
 
@@ -370,8 +350,8 @@ TEST(subtraction_tests, coding) {
 
 TEST(subtraction_tests, simple_subtractiob_float) {
 
-    float value_1 = 2.1;
-    float value_2 = 1.05;
+    float value_1 = 2.1f;
+    float value_2 = 1.05f;
 
     mps MPS(23,8,value_1);
     mps MPS_2(23,8,value_2);
@@ -396,8 +376,8 @@ TEST(subtraction_tests, simple_subtractiob_double) {
 
 TEST(subtraction_tests, subtractiob_float) {
 
-    float value_1 = 34466.45346;
-    float value_2 = 3453.35;
+    float value_1 = 34466.45346f;
+    float value_2 = 3453.35f;
 
     mps MPS(23,8,value_1);
     mps MPS_2(23,8,value_2);
@@ -422,8 +402,8 @@ TEST(subtraction_tests, subtractiob_double) {
 
 TEST(subtraction_tests, negative_subtractiob_float) {
 
-    float value_1 = -8567.78;
-    float value_2 = -675.67;
+    float value_1 = -8567.78f;
+    float value_2 = -675.67f;
 
     mps MPS(23,8,value_1);
     mps MPS_2(23,8,value_2);
@@ -448,8 +428,8 @@ TEST(subtraction_tests, negative_subtractiob2_double) {
 
 TEST(subtraction_tests, positive_zero_crossing_float) {
 
-    float value_1 = 2345.3345;
-    float value_2 = 356456346.45;
+    float value_1 = 2345.3345f;
+    float value_2 = 356456346.45f;
 
     mps MPS(23,8,value_1);
     mps MPS_2(23,8,value_2);
@@ -474,8 +454,8 @@ TEST(subtraction_tests, npositive_zero_crossing_double) {
 
 TEST(subtraction_tests, negative_zero_crossing_float) {
 
-    float value_1 = -3453.3456;
-    float value_2 = -45456.456;
+    float value_1 = -3453.3456f;
+    float value_2 = -45456.456f;
 
     mps MPS(23,8,value_1);
     mps MPS_2(23,8,value_2);
@@ -500,8 +480,8 @@ TEST(subtraction_tests, negative_zero_crossing_double) {
 
 TEST(subtraction_tests, negatave_first_number_float) {
 
-    float value_1 = -46547.3456;
-    float value_2 = 3463.678;
+    float value_1 = -46547.3456f;
+    float value_2 = 3463.678f;
 
     mps MPS(23,8,value_1);
     mps MPS_2(23,8,value_2);
@@ -526,8 +506,8 @@ TEST(subtraction_tests, negatave_first_number_double) {
 
 TEST(subtraction_tests, negatave_second_number_float) {
 
-    float value_1 = 46547.3456;
-    float value_2 = -3463.678;
+    float value_1 = 46547.3456f;
+    float value_2 = -3463.678f;
 
     mps MPS(23,8,value_1);
     mps MPS_2(23,8,value_2);
@@ -553,8 +533,8 @@ TEST(subtraction_tests, negatave_second_number_double) {
 
 TEST(multiplication_tests, coding) {
 
-    float value_1 = -0.0000045;
-    float value_2 = 0.000000000000000001;
+    float value_1 = -0.0000045f;
+    float value_2 = 0.000000000000000001f;
 
     mps MPS(23,8,value_1);
     mps MPS_2(23,8,value_2);
@@ -574,7 +554,7 @@ TEST(multiplication_tests, coding) {
     float test_value = value_1 * value_2;
     char* bits = reinterpret_cast<char*>(&test_value);
     for(std::size_t n = 0; n < sizeof test_value; ++n) {
-        string tmp = std::bitset<8>(bits[n]).to_string();
+        string tmp = std::bitset<8>((unsigned long long) bits[n]).to_string();
         compare_str.insert (0, tmp);
     }
 
@@ -583,8 +563,8 @@ TEST(multiplication_tests, coding) {
 
 TEST(multiplication_tests, multiplication_float_1) {
 
-    float value_1 = 46547.3456;
-    float value_2 = 3463.678;
+    float value_1 = 46547.3456f;
+    float value_2 = 3463.678f;
 
     mps MPS(23,8,value_1);
     mps MPS_2(23,8,value_2);
@@ -609,8 +589,8 @@ TEST(multiplication_tests, multiplication_double_1) {
 
 TEST(multiplication_tests, multiplication_float_2) {
 
-    float value_1 = 345.3453;
-    float value_2 = 0.0034534;
+    float value_1 = 345.3453f;
+    float value_2 = 0.0034534f;
 
     mps MPS(23,8,value_1);
     mps MPS_2(23,8,value_2);
@@ -635,8 +615,8 @@ TEST(multiplication_tests, multiplication_double_2) {
 
 TEST(multiplication_tests, multiplication_float_3) {
 
-    float value_1 = 0.000643;
-    float value_2 = 234.2352;
+    float value_1 = 0.000643f;
+    float value_2 = 234.2352f;
 
     mps MPS(23,8,value_1);
     mps MPS_2(23,8,value_2);
@@ -661,8 +641,8 @@ TEST(multiplication_tests, multiplication_double_3) {
 
 TEST(multiplication_tests, multiplication_float_4) {
 
-    float value_1 = 0.00342;
-    float value_2 = 0.0000456;
+    float value_1 = 0.00342f;
+    float value_2 = 0.0000456f;
 
     mps MPS(23,8,value_1);
     mps MPS_2(23,8,value_2);
@@ -687,8 +667,8 @@ TEST(multiplication_tests, multiplication_double_4) {
 
 TEST(multiplication_tests, multiplication_float_5) {
 
-    float value_1 = -3563.346;
-    float value_2 = 0.0046646;
+    float value_1 = -3563.346f;
+    float value_2 = 0.0046646f;
 
     mps MPS(23,8,value_1);
     mps MPS_2(23,8,value_2);
@@ -713,8 +693,8 @@ TEST(multiplication_tests, multiplication_double_5) {
 
 TEST(multiplication_tests, multiplication_float_6) {
 
-    float value_1 = 3563.346;
-    float value_2 = -0.0046646;
+    float value_1 = 3563.346f;
+    float value_2 = -0.0046646f;
 
     mps MPS(23,8,value_1);
     mps MPS_2(23,8,value_2);
@@ -740,7 +720,7 @@ TEST(multiplication_tests, multiplication_double_6) {
 TEST(multiplication_tests, multiplication_float_7) {
 
     float value_1 = -3454;
-    float value_2 = -0.00463;
+    float value_2 = -0.00463f;
 
     mps MPS(23,8,value_1);
     mps MPS_2(23,8,value_2);
