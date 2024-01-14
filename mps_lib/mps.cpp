@@ -26,7 +26,7 @@ mps::mps(unsigned long mantissa_length, unsigned long exponent_length, double va
     this->exponent_length = exponent_length;
 
     this->exponent.resize(this->exponent_length);
-    this->my_mantissa.resize(this->mantissa_length);
+    this->mantissa.resize(this->mantissa_length);
 
     this->sign = false;
     this->exponent_as_int = 0;
@@ -78,7 +78,7 @@ unsigned long mps::getExponentLength() const {
  * @return length matisse
  */
 unsigned long mps::getBitArrayLength() const {
-    return this->exponent.size() + this->my_mantissa.size() + 1;
+    return this->exponent.size() + this->mantissa.size() + 1;
 }
 
 /**
@@ -93,7 +93,7 @@ vector<bool> mps::getBitArray() {
 
     ret.push_back(this->sign);
     ret.insert(ret.end(), this->exponent.begin(), this->exponent.end());
-    ret.insert(ret.end(), this->my_mantissa.begin(), this->my_mantissa.end());
+    ret.insert(ret.end(), this->mantissa.begin(), this->mantissa.end());
 
     return ret;
 }
@@ -129,7 +129,7 @@ double mps::getValue() {
 
     // handle mantissa
     for(unsigned long i = 0; i < mantissa_length; i++){
-        if(my_mantissa[i]){
+        if(mantissa[i]){
             if(ret >= 0){
                 ret += pow(0.5, i + 1);
             } else {
@@ -160,7 +160,7 @@ bool mps::isZero(){
     }
 
     for(unsigned long i = 0; i < this->mantissa_length; i++){
-        if(this->my_mantissa[i]){
+        if(this->mantissa[i]){
             return false;
         }
     }
@@ -183,7 +183,7 @@ bool mps::isInfinity() {
     }
 
     for(unsigned long i = 0; i < this->mantissa_length; i++){
-        if(this->my_mantissa[i]){
+        if(this->mantissa[i]){
             return false;
         }
     }
@@ -227,7 +227,7 @@ void mps::setInf(bool negative) {
     }
 
     for(unsigned long i = 0; i < mantissa_length; i++){
-        my_mantissa[i] = false;
+        mantissa[i] = false;
     }
 }
 
@@ -241,7 +241,7 @@ void mps::setZero(){
         exponent[i] = false;
     }
     for(unsigned long i = 0; i < mantissa_length; i++){
-        my_mantissa[i] = false;
+        mantissa[i] = false;
     }
 }
 
@@ -260,9 +260,9 @@ void mps::setNaN(bool negative){
         exponent[i] = true;
     }
 
-    my_mantissa[0] = true;
+    mantissa[0] = true;
     for(unsigned long i = 1; i < mantissa_length; i++){
-        my_mantissa[i] = false;
+        mantissa[i] = false;
     }
 }
 //-------------------------------
@@ -299,7 +299,7 @@ void mps::setBitArray(const double value) {
     // prepare vectors
     //-------------------------------
     exponent.clear();
-    my_mantissa.clear();
+    mantissa.clear();
     //-------------------------------
 
 
@@ -365,9 +365,9 @@ void mps::setBitArray(const double value) {
 
         reminder *= 2;
         if(reminder >= 1){
-            my_mantissa.push_back(true); reminder -= 1;
+            mantissa.push_back(true); reminder -= 1;
         } else{
-            my_mantissa.push_back(false);
+            mantissa.push_back(false);
         }
     }
     //-------------------------------
@@ -402,7 +402,7 @@ mps& mps::operator=(const mps& other) {
         this->mantissa_length = other.mantissa_length;
 
         this->exponent.resize(this->exponent_length);
-        this->my_mantissa.resize(this->mantissa_length);
+        this->mantissa.resize(this->mantissa_length);
     } else {
         if (this->exponent_length != other.exponent_length) {
             cout << "ERROR: in = : Exponents do not match" << endl;
@@ -414,7 +414,7 @@ mps& mps::operator=(const mps& other) {
 
     this->sign = other.sign;
     for(unsigned long i = 0; i < this->mantissa_length; i++){
-        this->my_mantissa[i] = other.my_mantissa[i];
+        this->mantissa[i] = other.mantissa[i];
     }
     for(unsigned long i = 0; i < this->exponent_length; i++){
         this->exponent[i] = other.exponent[i];
@@ -441,10 +441,10 @@ mps mps::addition(const mps &one, const mps &two, const bool set_sign) const {
 
     // Extract exponents and mantissas
     //-------------------------------
-    vector<bool> a_mantissa = one.my_mantissa;
+    vector<bool> a_mantissa = one.mantissa;
     a_mantissa.insert(a_mantissa.begin(), true);
 
-    vector<bool> b_mantissa = two.my_mantissa;
+    vector<bool> b_mantissa = two.mantissa;
     b_mantissa.insert(b_mantissa.begin(), true);
     //-------------------------------
 
@@ -472,23 +472,22 @@ mps mps::addition(const mps &one, const mps &two, const bool set_sign) const {
     // Actual addition and adjusting mantissa
     //-------------------------------
     bool carrier;
-    vector<bool> mantissa = binaryAddition(a_mantissa, b_mantissa,true, &carrier);
-    mantissa.erase(mantissa.begin(), mantissa.begin()+1);
+    ret.mantissa = binaryAddition(a_mantissa, b_mantissa,true, &carrier);
+    ret.mantissa.erase(ret.mantissa.begin(), ret.mantissa.begin()+1);
     if(carrier){
         addOneToBinary(&ret.exponent);
         ret.exponent_as_int++;
     }
     //-------------------------------
 
-    round(&mantissa, ret.mantissa_length);
-    ret.my_mantissa = mantissa;
+    round(&ret.mantissa, ret.mantissa_length);
 
     return ret;
 }
 /**
  * Performs am addition to two mps floating point values.
  */
-mps mps::operator+(mps& other) const {
+mps mps::operator+(const mps& other) const {
 
     if (this->exponent_length != other.exponent_length) {
         cout << "ERROR: in + : Exponents do not match" << endl;
@@ -523,10 +522,10 @@ mps mps::subtraction(const mps &minued, const mps &subtrahend, bool set_sign) co
 
     // Extract exponents and mantissas
     //-------------------------------
-    vector<bool> a_mantissa = minued.my_mantissa;
+    vector<bool> a_mantissa = minued.mantissa;
     a_mantissa.insert(a_mantissa.begin(), true);
 
-    vector<bool> b_mantissa = subtrahend.my_mantissa;
+    vector<bool> b_mantissa = subtrahend.mantissa;
     b_mantissa.insert(b_mantissa.begin(), true);
     //-------------------------------
 
@@ -555,9 +554,9 @@ mps mps::subtraction(const mps &minued, const mps &subtrahend, bool set_sign) co
     //-------------------------------
     larger_tmp = larger(a_mantissa, b_mantissa);
     if(1 == larger_tmp){
-        ret.my_mantissa = binarySubtraction(a_mantissa, b_mantissa);
+        ret.mantissa = binarySubtraction(a_mantissa, b_mantissa);
     } else if(-1 == larger_tmp){
-        ret.my_mantissa = binarySubtraction(b_mantissa, a_mantissa);
+        ret.mantissa = binarySubtraction(b_mantissa, a_mantissa);
         ret.sign = !ret.sign; // flip sign
     } else {
         ret.setZero();
@@ -569,14 +568,14 @@ mps mps::subtraction(const mps &minued, const mps &subtrahend, bool set_sign) co
     // Adjust mantissa and exponent
     //-------------------------------
     unsigned long exponent_shift = 0;
-    for(unsigned long i = 0; i < ret.my_mantissa.size(); i++){
-        if(ret.my_mantissa[i]){
+    for(unsigned long i = 0; i < ret.mantissa.size(); i++){
+        if(ret.mantissa[i]){
             exponent_shift = i;
             break;
         }
     }
 
-    ret.my_mantissa.erase(ret.my_mantissa.begin(), ret.my_mantissa.begin()+ (long) exponent_shift+1);
+    ret.mantissa.erase(ret.mantissa.begin(), ret.mantissa.begin() + (long) exponent_shift + 1);
     ret.exponent_as_int -= (long) exponent_shift;
 
     // TODO: Place for improvement
@@ -589,13 +588,13 @@ mps mps::subtraction(const mps &minued, const mps &subtrahend, bool set_sign) co
     //-------------------------------
 
 
-    round(&ret.my_mantissa, ret.mantissa_length);
+    round(&ret.mantissa, ret.mantissa_length);
 
 
     return ret;
 }
 
-mps mps::operator-(mps& other) const {
+mps mps::operator-(const mps& other) const {
 
     if (this->exponent_length != other.exponent_length) {
         cout << "ERROR: in - : Exponents do not match" << endl;
@@ -631,7 +630,7 @@ mps mps::operator*(const mps& other) const {
 
 
 
-    vector<bool> A(this->my_mantissa.begin(), this->my_mantissa.end());
+    vector<bool> A(this->mantissa.begin(), this->mantissa.end());
     vector<bool> S;
 
     A.reserve(A.size() + (other.mantissa_length + other.exponent_length + 1) + 1 +2 +2);
@@ -657,7 +656,7 @@ mps mps::operator*(const mps& other) const {
     P.push_back(false);
     P.push_back(true);
     for(unsigned long i = 0; i < other.mantissa_length; i++){
-       P.push_back(other.my_mantissa[i]);
+       P.push_back(other.mantissa[i]);
     }
     P.push_back(false);
 
@@ -737,7 +736,7 @@ mps mps::operator*(const mps& other) const {
 
     ret.exponent = binaryAddition(a_exponent, b_exponent, false);
     ret.exponent_as_int = (long) binaryToInt(ret.exponent) - ret.getBias();
-    ret.my_mantissa = P;
+    ret.mantissa = P;
 
 
 

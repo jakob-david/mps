@@ -19,10 +19,9 @@ private:
 
     // the actual bit array
     //-------------------------------
-    // TODO: Remove the "my"
     bool sign;
     vector<bool> exponent;
-    vector<bool> my_mantissa;
+    vector<bool> mantissa;
 
     long exponent_as_int;      // The exponent saved as integer (used for internal optimization)
     //-------------------------------
@@ -60,8 +59,8 @@ public:
     // operators
     //-------------------------------
     mps& operator=(const mps& other);
-    mps operator+(mps& other) const;
-    mps operator-(mps& other) const;  // TODO: Make them const!
+    mps operator+(const mps& other) const;
+    mps operator-(const mps& other) const;
     mps operator*(const mps& other) const;
 
     // helper
