@@ -110,7 +110,7 @@ for (unsigned long mant = 0; mant < 100; mant++) {
         g = unif(re);
 */
 
-        one + two;
+        one - two;
         //c = b*a;
     }
 

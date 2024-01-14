@@ -43,10 +43,7 @@ public:
     [[nodiscard]] unsigned long getMantisseLength() const;
     [[nodiscard]] unsigned long getExponentLength() const;
     [[nodiscard]] unsigned long getBitArrayLength() const;
-    [[nodiscard]] unsigned long my_getBitArrayLength() const;
     [[nodiscard]] vector<bool> getBitArray();
-    [[nodiscard]] vector<bool> my_getBitArray();
-    [[nodiscard]] vector<bool>* getBitArrayReference();
     [[nodiscard]] double getValue();
     [[nodiscard]] double my_getValue();
     [[nodiscard]] long getExponentAsInt();

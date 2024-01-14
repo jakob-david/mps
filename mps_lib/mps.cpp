@@ -72,10 +72,6 @@ unsigned long mps::getExponentLength() const {
  * @return length matisse
  */
 unsigned long mps::getBitArrayLength() const {
-    return this->bit_vector.size();
-}
-
-unsigned long mps::my_getBitArrayLength() const {
     return this->my_exponent.size() + this->my_mantissa.size() + 1;
 }
 
@@ -85,10 +81,6 @@ unsigned long mps::my_getBitArrayLength() const {
  * @return bit vector
  */
 vector<bool> mps::getBitArray() {
-    return this->bit_vector;
-}
-
-vector<bool> mps::my_getBitArray() {
 
     vector<bool> ret;
     ret.reserve(1 + this->exponent_length + this->mantissa_length);
@@ -100,14 +92,6 @@ vector<bool> mps::my_getBitArray() {
     return ret;
 }
 
-/**
- * Returns a pointer to the bit vector.
- *
- * @return pointer to bit vector
- */
-vector<bool>* mps::getBitArrayReference() {
-    return &this->bit_vector;
-}
 
 /**
  * Returns the value of the mps object as double.
@@ -198,6 +182,12 @@ bool mps::isInfinity() {
  * @return true if positive.
  */
 bool mps::isPositive(){
+
+    if(this->my_sign){
+        cout << "yes" << endl;
+    } else {
+        cout << "no" << endl;
+    }
 
     if(bit_vector[0]){
         return false;

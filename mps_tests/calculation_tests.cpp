@@ -375,25 +375,7 @@ TEST(subtraction_tests, coding) {
 
     auto test = MPS - MPS_2;
 
-    string str;
-    for(bool bit : test.getBitArray()){
-        if(bit){
-            str.append("1");
-        } else {
-            str.append("0");
-        }
-    }
-
-    string compare_str;
-    float test_value = value_1 - value_2;
-    char* bits = reinterpret_cast<char*>(&test_value);
-    for(std::size_t n = 0; n < sizeof test_value; ++n) {
-        string tmp = std::bitset<8>((unsigned long long )bits[n]).to_string();
-        compare_str.insert (0, tmp);
-    }
-
-    EXPECT_EQ(compare_str, str);
-    EXPECT_EQ(should_value2(value_1 - value_2), is_mps2(test.my_getBitArray()));
+    EXPECT_EQ(should_value2(value_1 - value_2), is_mps2(test.getBitArray()));
 }
 
 TEST(subtraction_tests, simple_subtractiob_float) {
@@ -603,25 +585,7 @@ TEST(multiplication_tests, coding) {
 
     auto test = MPS * MPS_2;
 
-    string str;
-    for(bool bit : test.getBitArray()){
-        if(bit){
-            str.append("1");
-        } else {
-            str.append("0");
-        }
-    }
-
-    string compare_str;
-    float test_value = value_1 * value_2;
-    char* bits = reinterpret_cast<char*>(&test_value);
-    for(std::size_t n = 0; n < sizeof test_value; ++n) {
-        string tmp = std::bitset<8>((unsigned long long) bits[n]).to_string();
-        compare_str.insert (0, tmp);
-    }
-
-    EXPECT_EQ(compare_str, str);
-    EXPECT_EQ(should_value2(value_1 * value_2), is_mps2(test.my_getBitArray()));
+    EXPECT_EQ(should_value2(value_1 * value_2), is_mps2(test.getBitArray()));
 }
 
 TEST(multiplication_tests, multiplication_float_1) {
