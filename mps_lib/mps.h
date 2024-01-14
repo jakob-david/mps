@@ -71,7 +71,8 @@ public:
     mps operator*(const mps& other) const;
 
     // helper
-    mps addition(const mps& one, const mps& two, const bool sign) const;
+    [[nodiscard]] mps addition(const mps& one, const mps& two, bool sign) const;
+    [[nodiscard]] mps subtraction(const mps& minued, const mps& subtrahend, bool sign) const;
     //-------------------------------
 
 private:

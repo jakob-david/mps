@@ -89,15 +89,15 @@ int main() {
     //double lower_bound = 0;
     //double upper_bound = 100;
 
-for (unsigned long mant = 0; mant < 50; mant++) {
-    mps one(mant, 8, 34.45);
-    mps two(mant, 8, 14.3 );
+for (unsigned long mant = 0; mant < 100; mant++) {
+    mps one(mant, 8, 3432.45);
+    mps two(mant, 8, 143.3 );
 
     std::chrono::milliseconds t_1 = chrono::duration_cast<chrono::milliseconds>(
             std::chrono::system_clock::now().time_since_epoch()
     );
 
-    for (long int i = 0; i < 100000; i++) {
+    for (long int i = 0; i < 200000; i++) {
 
 /*
         std::uniform_real_distribution<double> unif(lower_bound,upper_bound);
@@ -110,7 +110,7 @@ for (unsigned long mant = 0; mant < 50; mant++) {
         g = unif(re);
 */
 
-        one * two;
+        one + two;
         //c = b*a;
     }
 
