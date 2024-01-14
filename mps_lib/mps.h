@@ -20,11 +20,11 @@ private:
     // the actual bit array
     //-------------------------------
     // TODO: Remove the "my"
-    bool my_sign;
+    bool sign;
     vector<bool> my_exponent;
     vector<bool> my_mantissa;
 
-    long my_exponent_as_int;      // The exponent saved as integer (used for internal optimization)
+    long exponent_as_int;      // The exponent saved as integer (used for internal optimization)
     //-------------------------------
 
 public:
