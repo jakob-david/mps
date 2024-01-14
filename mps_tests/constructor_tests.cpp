@@ -3,6 +3,33 @@
 #include "mps.h"
 #include <bitset>
 
+std::string is_mps(vector<bool> vec){
+
+    string str;
+    for(bool bit : vec){
+        if(bit){
+            str.append("1");
+        } else {
+            str.append("0");
+        }
+    }
+
+    return str;
+}
+
+template <typename T>
+std::string should_value(T fp_number){
+
+    string compare_str;
+    char* bits = reinterpret_cast<char*>(&fp_number);
+    for(unsigned long n = 0; n < sizeof fp_number; ++n) {
+        string tmp = std::bitset<8>((unsigned long long) bits[n]).to_string();
+        compare_str.insert (0, tmp);
+    }
+
+    return  compare_str;
+}
+
 
 TEST(constructor_tests, constructor_sets_values_coorectly){
 
@@ -10,11 +37,10 @@ TEST(constructor_tests, constructor_sets_values_coorectly){
 
     unsigned long mantissa_actual = MPS.getMantisseLength();
     unsigned long exponent_actual = MPS.getExponentLength();
-    unsigned long length_actual = MPS.getBitArrayLength();
 
     EXPECT_EQ(5, mantissa_actual);
     EXPECT_EQ(6, exponent_actual);
-    EXPECT_EQ(12, length_actual);
+
 }
 
 TEST(constructor_tests, constructor_initializes_bit_array_correctly){
@@ -22,8 +48,10 @@ TEST(constructor_tests, constructor_initializes_bit_array_correctly){
     mps MPS(20, 12, 3.14);
 
     unsigned long size = MPS.getBitArrayLength();
+    unsigned long my_size = MPS.my_getBitArrayLength();
 
     EXPECT_EQ(33, size);
+    EXPECT_EQ(33, my_size);
 }
 
 
@@ -52,6 +80,7 @@ TEST(converter_tests, test_positive_double) {
     }
 
     EXPECT_EQ(compare_str, str);
+    EXPECT_EQ(should_value(test_value), is_mps(MPS.my_getBitArray()));
 }
 
 TEST(converter_tests, test_positive_double_using_getBitArrayReference) {
@@ -79,6 +108,7 @@ TEST(converter_tests, test_positive_double_using_getBitArrayReference) {
     }
 
     EXPECT_EQ(compare_str, str);
+    EXPECT_EQ(should_value(test_value), is_mps(MPS.my_getBitArray()));
 }
 
 TEST(converter_tests, test_negative_double) {
@@ -106,6 +136,7 @@ TEST(converter_tests, test_negative_double) {
     }
 
     EXPECT_EQ(compare_str, str);
+    EXPECT_EQ(should_value(test_value), is_mps(MPS.my_getBitArray()));
 }
 
 TEST(converter_tests, test_positive_float) {
@@ -133,6 +164,7 @@ TEST(converter_tests, test_positive_float) {
     }
 
     EXPECT_EQ(compare_str, str);
+    EXPECT_EQ(should_value(test_value), is_mps(MPS.my_getBitArray()));
 }
 
 TEST(converter_tests, test_negative_float) {
@@ -160,6 +192,7 @@ TEST(converter_tests, test_negative_float) {
     }
 
     EXPECT_EQ(compare_str, str);
+    EXPECT_EQ(should_value(test_value), is_mps(MPS.my_getBitArray()));
 }
 
 TEST(converter_tests, test_zero_double) {
@@ -187,6 +220,7 @@ TEST(converter_tests, test_zero_double) {
     }
 
     EXPECT_EQ(compare_str, str);
+    EXPECT_EQ(should_value(test_value), is_mps(MPS.my_getBitArray()));
 }
 
 TEST(converter_tests, test_zero_float) {
@@ -214,6 +248,7 @@ TEST(converter_tests, test_zero_float) {
     }
 
     EXPECT_EQ(compare_str, str);
+    EXPECT_EQ(should_value(test_value), is_mps(MPS.my_getBitArray()));
 }
 
 TEST(converter_tests, test_pos_infinity_double) {
@@ -241,6 +276,7 @@ TEST(converter_tests, test_pos_infinity_double) {
     }
 
     EXPECT_EQ(compare_str, str);
+    EXPECT_EQ(should_value(test_value), is_mps(MPS.my_getBitArray()));
 }
 
 TEST(converter_tests, test_pos_infinity_float) {
@@ -268,6 +304,7 @@ TEST(converter_tests, test_pos_infinity_float) {
     }
 
     EXPECT_EQ(compare_str, str);
+    EXPECT_EQ(should_value(test_value), is_mps(MPS.my_getBitArray()));
 }
 
 TEST(converter_tests, test_neg_infinity_double) {
@@ -295,6 +332,7 @@ TEST(converter_tests, test_neg_infinity_double) {
     }
 
     EXPECT_EQ(compare_str, str);
+    EXPECT_EQ(should_value(test_value), is_mps(MPS.my_getBitArray()));
 }
 
 TEST(converter_tests, test_neg_infinity_float) {
@@ -322,6 +360,7 @@ TEST(converter_tests, test_neg_infinity_float) {
     }
 
     EXPECT_EQ(compare_str, str);
+    EXPECT_EQ(should_value(test_value), is_mps(MPS.my_getBitArray()));
 }
 
 TEST(converter_tests, test_pos_max_double) {
@@ -349,6 +388,7 @@ TEST(converter_tests, test_pos_max_double) {
     }
 
     EXPECT_EQ(compare_str, str);
+    EXPECT_EQ(should_value(test_value), is_mps(MPS.my_getBitArray()));
 }
 
 TEST(converter_tests, test_pos_max_float) {
@@ -377,6 +417,7 @@ TEST(converter_tests, test_pos_max_float) {
 
 
     EXPECT_EQ(compare_str, str);
+    EXPECT_EQ(should_value(test_value), is_mps(MPS.my_getBitArray()));
 }
 
 TEST(converter_tests, test_max_float_in_double) {
@@ -404,6 +445,7 @@ TEST(converter_tests, test_max_float_in_double) {
     }
 
     EXPECT_EQ(compare_str, str);
+    EXPECT_EQ(should_value(test_value), is_mps(MPS.my_getBitArray()));
 }
 
 TEST(converter_tests, test_pos_min_double) {
@@ -431,6 +473,7 @@ TEST(converter_tests, test_pos_min_double) {
     }
 
     EXPECT_EQ(compare_str, str);
+    EXPECT_EQ(should_value(test_value), is_mps(MPS.my_getBitArray()));
 }
 
 TEST(converter_tests, test_pos_min_float) {
@@ -459,6 +502,7 @@ TEST(converter_tests, test_pos_min_float) {
 
 
     EXPECT_EQ(compare_str, str);
+    EXPECT_EQ(should_value(test_value), is_mps(MPS.my_getBitArray()));
 }
 
 TEST(converter_tests, test_small_difference) {
@@ -486,6 +530,7 @@ TEST(converter_tests, test_small_difference) {
     }
 
     EXPECT_EQ(compare_str, str);
+    EXPECT_EQ(should_value(test_value), is_mps(MPS.my_getBitArray()));
 }
 
 TEST(converter_tests, test_neg_max_double) {
@@ -513,6 +558,7 @@ TEST(converter_tests, test_neg_max_double) {
     }
 
     EXPECT_EQ(compare_str, str);
+    EXPECT_EQ(should_value(test_value), is_mps(MPS.my_getBitArray()));
 }
 
 TEST(converter_tests, test_neg_max_float) {
@@ -541,6 +587,7 @@ TEST(converter_tests, test_neg_max_float) {
 
 
     EXPECT_EQ(compare_str, str);
+    EXPECT_EQ(should_value(test_value), is_mps(MPS.my_getBitArray()));
 }
 
 TEST(converter_tests, test_neg_min_double) {
@@ -568,6 +615,7 @@ TEST(converter_tests, test_neg_min_double) {
     }
 
     EXPECT_EQ(compare_str, str);
+    EXPECT_EQ(should_value(test_value), is_mps(MPS.my_getBitArray()));
 }
 
 TEST(converter_tests, test_neg_min_float) {
@@ -596,6 +644,7 @@ TEST(converter_tests, test_neg_min_float) {
 
 
     EXPECT_EQ(compare_str, str);
+    EXPECT_EQ(should_value(test_value), is_mps(MPS.my_getBitArray()));
 }
 
 TEST(converter_tests, test_NAN_double) {
@@ -623,6 +672,7 @@ TEST(converter_tests, test_NAN_double) {
     }
 
     EXPECT_EQ(compare_str, str);
+    EXPECT_EQ(should_value(test_value), is_mps(MPS.my_getBitArray()));
 }
 
 TEST(converter_tests, test_NAN_float) {
@@ -650,6 +700,7 @@ TEST(converter_tests, test_NAN_float) {
     }
 
     EXPECT_EQ(compare_str, str);
+    EXPECT_EQ(should_value(test_value), is_mps(MPS.my_getBitArray()));
 }
 
 TEST(converter_tests, test_neg_NAN_double) {
@@ -677,6 +728,7 @@ TEST(converter_tests, test_neg_NAN_double) {
     }
 
     EXPECT_EQ(compare_str, str);
+    EXPECT_EQ(should_value(test_value), is_mps(MPS.my_getBitArray()));
 }
 
 TEST(converter_tests, test_neg_NAN_float) {
@@ -704,6 +756,7 @@ TEST(converter_tests, test_neg_NAN_float) {
     }
 
     EXPECT_EQ(compare_str, str);
+    EXPECT_EQ(should_value(test_value), is_mps(MPS.my_getBitArray()));
 }
 
 TEST(converter_tests, test_null_double) {
@@ -731,6 +784,7 @@ TEST(converter_tests, test_null_double) {
     }
 
     EXPECT_EQ(compare_str, str);
+    EXPECT_EQ(should_value(test_value), is_mps(MPS.my_getBitArray()));
 }
 
 TEST(converter_tests, test_null_float) {
@@ -758,6 +812,7 @@ TEST(converter_tests, test_null_float) {
     }
 
     EXPECT_EQ(compare_str, str);
+    EXPECT_EQ(should_value(test_value), is_mps(MPS.my_getBitArray()));
 }
 
 
@@ -788,6 +843,7 @@ TEST(setter_tests, set_pos_inf_double) {
     }
 
     EXPECT_EQ(compare_str, str);
+    EXPECT_EQ(should_value(test_value), is_mps(MPS.my_getBitArray()));
 }
 
 TEST(setter_tests, set_pos_inf_float) {
@@ -817,6 +873,7 @@ TEST(setter_tests, set_pos_inf_float) {
     }
 
     EXPECT_EQ(compare_str, str);
+    EXPECT_EQ(should_value(test_value), is_mps(MPS.my_getBitArray()));
 }
 
 TEST(setter_tests, set_neg_inf_double) {
@@ -846,6 +903,7 @@ TEST(setter_tests, set_neg_inf_double) {
     }
 
     EXPECT_EQ(compare_str, str);
+    EXPECT_EQ(should_value(test_value), is_mps(MPS.my_getBitArray()));
 }
 
 TEST(setter_tests, set_neg_inf_float) {
@@ -875,6 +933,7 @@ TEST(setter_tests, set_neg_inf_float) {
     }
 
     EXPECT_EQ(compare_str, str);
+    EXPECT_EQ(should_value(test_value), is_mps(MPS.my_getBitArray()));
 }
 
 TEST(setter_tests, set_zero_double) {
@@ -904,6 +963,7 @@ TEST(setter_tests, set_zero_double) {
     }
 
     EXPECT_EQ(compare_str, str);
+    EXPECT_EQ(should_value(test_value), is_mps(MPS.my_getBitArray()));
 }
 
 TEST(setter_tests, set_zero_float) {
@@ -933,6 +993,7 @@ TEST(setter_tests, set_zero_float) {
     }
 
     EXPECT_EQ(compare_str, str);
+    EXPECT_EQ(should_value(test_value), is_mps(MPS.my_getBitArray()));
 }
 
 TEST(setter_tests, set_NAN_double) {
@@ -962,6 +1023,7 @@ TEST(setter_tests, set_NAN_double) {
     }
 
     EXPECT_EQ(compare_str, str);
+    EXPECT_EQ(should_value(test_value), is_mps(MPS.my_getBitArray()));
 }
 
 TEST(setter_tests, set_NAN_float) {
@@ -991,6 +1053,7 @@ TEST(setter_tests, set_NAN_float) {
     }
 
     EXPECT_EQ(compare_str, str);
+    EXPECT_EQ(should_value(test_value), is_mps(MPS.my_getBitArray()));
 }
 
 
@@ -1005,6 +1068,7 @@ TEST(get_value_tests, get_one_double) {
     double get_value = MPS.getValue();
 
     EXPECT_EQ(test_value, get_value);
+    EXPECT_EQ(test_value, MPS.my_getValue());
 }
 
 TEST(get_value_tests, get_one_float) {
@@ -1018,6 +1082,7 @@ TEST(get_value_tests, get_one_float) {
     double get_value = MPS.getValue();
 
     EXPECT_EQ(test_value, get_value);
+    EXPECT_EQ(test_value, MPS.my_getValue());
 }
 
 TEST(get_value_tests, get_double) {
@@ -1031,6 +1096,7 @@ TEST(get_value_tests, get_double) {
     double get_value = MPS.getValue();
 
     EXPECT_EQ(test_value, get_value);
+    EXPECT_EQ(test_value, MPS.my_getValue());
 }
 
 TEST(get_value_tests, get_float) {
@@ -1044,6 +1110,7 @@ TEST(get_value_tests, get_float) {
     double get_value = MPS.getValue();
 
     EXPECT_EQ(test_value, get_value);
+    EXPECT_EQ(test_value, MPS.my_getValue());
 }
 
 TEST(get_value_tests, get_neg_one_double) {
@@ -1057,6 +1124,7 @@ TEST(get_value_tests, get_neg_one_double) {
     double get_value = MPS.getValue();
 
     EXPECT_EQ(test_value, get_value);
+    EXPECT_EQ(test_value, MPS.my_getValue());
 }
 
 TEST(get_value_tests, get_neg_one_float) {
@@ -1070,6 +1138,7 @@ TEST(get_value_tests, get_neg_one_float) {
     double get_value = MPS.getValue();
 
     EXPECT_EQ(test_value, get_value);
+    EXPECT_EQ(test_value, MPS.my_getValue());
 }
 
 TEST(get_value_tests, get_neg_double) {
@@ -1083,6 +1152,7 @@ TEST(get_value_tests, get_neg_double) {
     double get_value = MPS.getValue();
 
     EXPECT_EQ(test_value, get_value);
+    EXPECT_EQ(test_value, MPS.my_getValue());
 }
 
 TEST(get_value_tests, get_neg_float) {
@@ -1096,6 +1166,7 @@ TEST(get_value_tests, get_neg_float) {
     double get_value = MPS.getValue();
 
     EXPECT_EQ(test_value, get_value);
+    EXPECT_EQ(test_value, MPS.my_getValue());
 }
 
 TEST(get_value_tests, get_zero_double) {
@@ -1109,6 +1180,7 @@ TEST(get_value_tests, get_zero_double) {
     double get_value = MPS.getValue();
 
     EXPECT_EQ(test_value, get_value);
+    EXPECT_EQ(test_value, MPS.my_getValue());
 }
 
 TEST(get_value_tests, get_zero_float) {
@@ -1122,6 +1194,7 @@ TEST(get_value_tests, get_zero_float) {
     double get_value = MPS.getValue();
 
     EXPECT_EQ(test_value, get_value);
+    EXPECT_EQ(test_value, MPS.my_getValue());
 }
 
 TEST(get_value_tests, get_pos_inf_double) {
@@ -1135,6 +1208,7 @@ TEST(get_value_tests, get_pos_inf_double) {
     double get_value = MPS.getValue();
 
     EXPECT_EQ(test_value, get_value);
+    EXPECT_EQ(test_value, MPS.my_getValue());
 }
 
 TEST(get_value_tests, get_pos_inf_float) {
@@ -1148,6 +1222,7 @@ TEST(get_value_tests, get_pos_inf_float) {
     double get_value = MPS.getValue();
 
     EXPECT_EQ(test_value, get_value);
+    EXPECT_EQ(test_value, MPS.my_getValue());
 }
 
 TEST(get_value_tests, get_neg_inf_double) {
@@ -1161,6 +1236,7 @@ TEST(get_value_tests, get_neg_inf_double) {
     double get_value = MPS.getValue();
 
     EXPECT_EQ(test_value, get_value);
+    EXPECT_EQ(test_value, MPS.my_getValue());
 }
 
 TEST(get_value_tests, get_neg_inf_float) {
@@ -1174,6 +1250,7 @@ TEST(get_value_tests, get_neg_inf_float) {
     double get_value = MPS.getValue();
 
     EXPECT_EQ(test_value, get_value);
+    EXPECT_EQ(test_value, MPS.my_getValue());
 }
 
 TEST(get_value_tests, get_pos_max_double) {
@@ -1187,6 +1264,7 @@ TEST(get_value_tests, get_pos_max_double) {
     double get_value = MPS.getValue();
 
     EXPECT_EQ(test_value, get_value);
+    EXPECT_EQ(test_value, MPS.my_getValue());
 }
 
 TEST(get_value_tests, get_pos_max_float) {
@@ -1200,6 +1278,7 @@ TEST(get_value_tests, get_pos_max_float) {
     double get_value = MPS.getValue();
 
     EXPECT_EQ(test_value, get_value);
+    EXPECT_EQ(test_value, MPS.my_getValue());
 }
 
 TEST(get_value_tests, get_neg_max_double) {
@@ -1213,6 +1292,7 @@ TEST(get_value_tests, get_neg_max_double) {
     double get_value = MPS.getValue();
 
     EXPECT_EQ(test_value, get_value);
+    EXPECT_EQ(test_value, MPS.my_getValue());
 }
 
 TEST(get_value_tests, get_neg_max_float) {
@@ -1226,6 +1306,7 @@ TEST(get_value_tests, get_neg_max_float) {
     double get_value = MPS.getValue();
 
     EXPECT_EQ(test_value, get_value);
+    EXPECT_EQ(test_value, MPS.my_getValue());
 }
 
 TEST(get_value_tests, get_pos_min_double) {
@@ -1239,6 +1320,7 @@ TEST(get_value_tests, get_pos_min_double) {
     double get_value = MPS.getValue();
 
     EXPECT_EQ(test_value, get_value);
+    EXPECT_EQ(test_value, MPS.my_getValue());
 }
 
 TEST(get_value_tests, get_pos_min_float) {
@@ -1252,6 +1334,7 @@ TEST(get_value_tests, get_pos_min_float) {
     double get_value = MPS.getValue();
 
     EXPECT_EQ(test_value, get_value);
+    EXPECT_EQ(test_value, MPS.my_getValue());
 }
 
 TEST(get_value_tests, get_neg_min_double) {
@@ -1265,6 +1348,7 @@ TEST(get_value_tests, get_neg_min_double) {
     double get_value = MPS.getValue();
 
     EXPECT_EQ(test_value, get_value);
+    EXPECT_EQ(test_value, MPS.my_getValue());
 }
 
 TEST(get_value_tests, get_neg_min_float) {
@@ -1278,4 +1362,5 @@ TEST(get_value_tests, get_neg_min_float) {
     double get_value = MPS.getValue();
 
     EXPECT_EQ(test_value, get_value);
+    EXPECT_EQ(test_value, MPS.my_getValue());
 }

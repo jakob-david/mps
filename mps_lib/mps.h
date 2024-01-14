@@ -19,7 +19,14 @@ private:
 
     // the actual bit array
     //-------------------------------
-    vector<bool> bit_vector;
+    // TODO: Remove the "my"
+    bool my_sign;
+    vector<bool> my_exponent;
+    vector<bool> my_mantissa;
+
+    long my_exponent_as_int;      // The exponent saved as integer (used for internal optimization)
+
+    vector<bool> bit_vector; // TODO: Remove !!!!!!!!!!!!
     //-------------------------------
 
 public:
@@ -36,9 +43,12 @@ public:
     [[nodiscard]] unsigned long getMantisseLength() const;
     [[nodiscard]] unsigned long getExponentLength() const;
     [[nodiscard]] unsigned long getBitArrayLength() const;
+    [[nodiscard]] unsigned long my_getBitArrayLength() const;
     [[nodiscard]] vector<bool> getBitArray();
+    [[nodiscard]] vector<bool> my_getBitArray();
     [[nodiscard]] vector<bool>* getBitArrayReference();
     [[nodiscard]] double getValue();
+    [[nodiscard]] double my_getValue();
 
     [[nodiscard]] bool isZero();
     [[nodiscard]] bool isInfinity();

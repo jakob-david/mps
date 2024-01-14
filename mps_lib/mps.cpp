@@ -25,6 +25,9 @@ mps::mps(unsigned long mantissa_length, unsigned long exponent_length, double va
     this->mantissa_length = mantissa_length;
     this->exponent_length = exponent_length;
 
+    this->my_exponent.resize(this->exponent_length);
+    this->my_mantissa.resize(this->mantissa_length);
+
     setBitArray(value);
 }
 
@@ -72,6 +75,10 @@ unsigned long mps::getBitArrayLength() const {
     return this->bit_vector.size();
 }
 
+unsigned long mps::my_getBitArrayLength() const {
+    return this->my_exponent.size() + this->my_mantissa.size() + 1;
+}
+
 /**
  * Returns the bit vector.
  *
@@ -79,6 +86,18 @@ unsigned long mps::getBitArrayLength() const {
  */
 vector<bool> mps::getBitArray() {
     return this->bit_vector;
+}
+
+vector<bool> mps::my_getBitArray() {
+
+    vector<bool> ret;
+    ret.reserve(1 + this->exponent_length + this->mantissa_length);
+
+    ret.push_back(this->my_sign);
+    ret.insert(ret.end(), this->my_exponent.begin(), this->my_exponent.end());
+    ret.insert(ret.end(), this->my_mantissa.begin(), this->my_mantissa.end());
+
+    return ret;
 }
 
 /**
@@ -179,6 +198,7 @@ bool mps::isInfinity() {
  * @return true if positive.
  */
 bool mps::isPositive(){
+
     if(bit_vector[0]){
         return false;
     } else {
@@ -197,6 +217,21 @@ bool mps::isPositive(){
  */
 void mps::setInf(bool negative) {
 
+    if(negative){
+        my_sign = true;
+    } else {
+        my_sign = false;
+    }
+
+    for(unsigned long i = 0; i < exponent_length; i++){
+        my_exponent[i] = true;
+    }
+
+    for(unsigned long i = 0; i < mantissa_length; i++){
+        my_mantissa[i] = false;
+    }
+
+    // TODO: Update Remove
     bit_vector.erase(bit_vector.begin(),bit_vector.end());
 
     if(negative){
@@ -219,6 +254,16 @@ void mps::setInf(bool negative) {
  */
 void mps::setZero(){
 
+    my_sign = false;
+    for(unsigned long i = 0; i < exponent_length; i++){
+        my_exponent[i] = false;
+    }
+    for(unsigned long i = 0; i < mantissa_length; i++){
+        my_mantissa[i] = false;
+    }
+
+
+    // TODO: Update Remove
     bit_vector.erase(bit_vector.begin(),bit_vector.end());
 
     for(unsigned long i = 0; i < exponent_length + mantissa_length + 1; i++){
@@ -231,6 +276,22 @@ void mps::setZero(){
  */
 void mps::setNaN(bool negative){
 
+    if(negative){
+        my_sign = true;
+    } else {
+        my_sign = false;
+    }
+
+    for(unsigned long i = 0; i < exponent_length; i++){
+        my_exponent[i] = true;
+    }
+
+    my_mantissa[0] = true;
+    for(unsigned long i = 1; i < mantissa_length; i++){
+        my_mantissa[i] = false;
+    }
+
+    // TODO: Update Remove
     bit_vector.erase(bit_vector.begin(),bit_vector.end());
 
     if(negative){
@@ -250,6 +311,245 @@ void mps::setNaN(bool negative){
     }
 }
 //-------------------------------
+
+
+// Converters
+//-------------------------------
+
+/**
+ * Sets the bit vector of the mps object.
+ *
+ * @param value the value to which the bit array should be set.
+ */
+void mps::setBitArray(double value) {
+// TODO: make value const
+
+    // Handle special values.
+    //-------------------------------
+    if(0 == value){
+        setZero(); return;
+    } else if(numeric_limits<double>::infinity() == value) {
+        setInf(); return;
+    } else if (numeric_limits<double>::infinity() * -1 == value){
+        setInf(true); return;
+    } else if (isnan(value)){
+        if(signbit(value)){
+            setNaN(true);
+        } else {
+            setNaN();
+        }
+        return;
+    }
+    //-------------------------------
+
+    // prepare vectors
+    //-------------------------------
+    my_exponent.clear();
+    my_mantissa.clear();
+    //-------------------------------
+
+
+    // sign
+    //-------------------------------
+    if(value > 0){
+        this->my_sign = false;
+    } else {
+        this->my_sign = true;
+    }
+    //-------------------------------
+
+
+    // exponent
+    //-------------------------------
+    // calculate the exponent
+    int mantissa_shift;
+    if(abs(value) > numeric_limits<float>::max()){
+        // When the value is too large rounding problems occur using log2.
+        // (At least I think that is the problem)
+        double tmp_value = abs(value);
+        int tmp_count = 0;
+
+        while(tmp_value > 1){
+            tmp_value /= 2;
+            tmp_count++;
+        }
+
+        mantissa_shift = tmp_count-1;
+    } else {
+        mantissa_shift = (int) floor(log2(abs(value)));
+    }
+    my_exponent_as_int =  (long) mantissa_shift; // TODO: remove casts and do better
+
+    // Getting the exponent in binary format.
+    // The sign is not relevant. Always returns a "positive" value.
+    // TODO: Maybe prevent insert.
+    for(auto i = my_exponent_as_int + getBias(); i > 0; i /= 2){
+        my_exponent.insert(my_exponent.begin(), i%2);
+    }
+
+    // Fill not used but available bits with zero.
+    if(my_exponent.size() > exponent_length) {
+        cout << "ERROR: exponent too large" << endl;
+        // TODO: add proper error handling.
+    } else {
+        for(unsigned long i = my_exponent.size(); i < exponent_length; i++){
+            my_exponent.insert(my_exponent.begin(), false);
+        }
+    }
+
+    //-------------------------------
+
+
+    // mantissa
+    //-------------------------------
+    // TODO: replace tmpp_value
+    auto tmpp_value = value / pow(2, mantissa_shift); // adjust the value so that everything is behind the decimal point.
+
+    // Convert the part after the decimal point to a bit string.
+    // The sign is not relevant. Always returns a "positive" value.
+    double reminder = abs(tmpp_value) - floor(abs(tmpp_value));
+    for(unsigned long i = 0; i < mantissa_length; i++){
+
+        reminder *= 2;
+        if(reminder >= 1){
+            my_mantissa.push_back(true); reminder -= 1;
+        } else{
+            my_mantissa.push_back(false);
+        }
+    }
+    //-------------------------------
+
+
+
+
+
+    // TODO: Update Remove
+
+    // prepare bit_vector
+    //-------------------------------
+    bit_vector.erase(bit_vector.begin(),bit_vector.end());
+    //-------------------------------
+
+
+    // exponent
+    //-------------------------------
+    // calculate the exponent
+    mantissa_shift = 0;
+    if(abs(value) > numeric_limits<float>::max()){
+        // When the value is too large rounding problems occur using log2.
+        // (At least I think that is the problem)
+        double tmp_value = abs(value);
+        int tmp_count = 0;
+
+        while(tmp_value > 1){
+            tmp_value /= 2;
+            tmp_count++;
+        }
+
+        mantissa_shift = tmp_count-1;
+    } else {
+        mantissa_shift = (int) floor(log2(abs(value)));
+    }
+    int exponent_int =  mantissa_shift + getBias();
+
+    // Getting the exponent in binary format.
+    // The sign is not relevant. Always returns a "positive" value.
+    vector<bool> exponent;
+    for(int i = abs(exponent_int); i > 0; i /= 2){
+        exponent.insert(exponent.begin(), i%2);
+    }
+
+    // Fill not used but available bits with zero.
+    if(exponent.size() > exponent_length) {
+        cout << "ERROR: exponent too large" << endl;
+        // TODO: add proper error handling.
+    } else {
+        for(unsigned long i = exponent.size(); i < exponent_length; i++){
+            exponent.insert(exponent.begin(), false);
+        }
+    }
+    //-------------------------------
+
+
+    // mantissa
+    //-------------------------------
+    value = value / pow(2, mantissa_shift); // adjust the value so that everything is behind the decimal point.
+
+    // Convert the part after the decimal point to a bit string.
+    // The sign is not relevant. Always returns a "positive" value.
+    vector<bool> mantissa;
+    reminder = (abs(value) - floor(abs(value)));
+    for(unsigned long i = 0; i < mantissa_length; i++){
+
+        reminder *= 2;
+        if(reminder >= 1){
+            mantissa.push_back(true); reminder -= 1;
+        } else{
+            mantissa.push_back(false);
+        }
+    }
+    //-------------------------------
+
+
+    // set everything together
+    //-------------------------------
+    if(value > 0){
+        bit_vector.push_back(false);
+    } else {
+        bit_vector.push_back(true);
+    }
+
+    bit_vector.insert(bit_vector.end(), exponent.begin(), exponent.end());
+    bit_vector.insert(bit_vector.end(), mantissa.begin(), mantissa.end());
+    //-------------------------------
+
+}
+//-------------------------------
+
+double mps::my_getValue() {
+
+    // handle special cases
+    if(isZero()){
+        return 0;
+    } else if (isInfinity() && isPositive()){
+        return numeric_limits<double>::infinity();
+    } else if (isInfinity()){
+        return numeric_limits<double>::infinity() * -1;
+    }
+
+    //TODO: add NANs
+
+    double ret;
+
+    // positive or negative
+    if(this->my_sign){
+        ret = -1;
+    } else {
+        ret = 1;
+    }
+
+    // handle mantissa
+    for(unsigned long i = 0; i < mantissa_length; i++){
+        if(my_mantissa[i]){
+            if(ret >= 0){
+                ret += pow(0.5, i + 1);
+            } else {
+                ret -= pow(0.5, i + 1);
+            }
+        }
+    }
+
+    return ret * pow(2, my_exponent_as_int);
+}
+
+
+
+
+
+
+
+
+
 
 // operators
 //-------------------------------
@@ -724,112 +1024,7 @@ mps mps::operator*(const mps& other) const {
 // helper methods
 //-------------------------------
 
-/**
- * Sets the bit vector of the mps object.
- *
- * @param value the value to which the bit array should be set.
- */
-void mps::setBitArray(double value) {
 
-
-    // Handle special values.
-    //-------------------------------
-    if(0 == value){
-        setZero(); return;
-    } else if(numeric_limits<double>::infinity() == value) {
-        setInf(); return;
-    } else if (numeric_limits<double>::infinity() * -1 == value){
-        setInf(true); return;
-    } else if (isnan(value)){
-        if(signbit(value)){
-            setNaN(true);
-        } else {
-            setNaN();
-        }
-        return;
-    }
-    //-------------------------------
-
-
-    // prepare bit_vector
-    //-------------------------------
-    bit_vector.erase(bit_vector.begin(),bit_vector.end());
-    //-------------------------------
-
-
-    // exponent
-    //-------------------------------
-    // calculate the exponent
-    int mantissa_shift;
-    if(abs(value) > numeric_limits<float>::max()){
-        // When the value is too large rounding problems occur using log2.
-        // (At least I think that is the problem)
-        double tmp_value = abs(value);
-        int tmp_count = 0;
-
-        while(tmp_value > 1){
-            tmp_value /= 2;
-            tmp_count++;
-        }
-
-        mantissa_shift = tmp_count-1;
-    } else {
-        mantissa_shift = (int) floor(log2(abs(value)));
-    }
-    int exponent_int =  mantissa_shift + getBias();
-
-    // Getting the exponent in binary format.
-    // The sign is not relevant. Always returns a "positive" value.
-    vector<bool> exponent;
-    for(int i = abs(exponent_int); i > 0; i /= 2){
-        exponent.insert(exponent.begin(), i%2);
-    }
-
-    // Fill not used but available bits with zero.
-    if(exponent.size() > exponent_length) {
-        cout << "ERROR: exponent too large" << endl;
-        // TODO: add proper error handling.
-    } else {
-        for(unsigned long i = exponent.size(); i < exponent_length; i++){
-            exponent.insert(exponent.begin(), false);
-        }
-    }
-    //-------------------------------
-
-
-    // mantissa
-    //-------------------------------
-    value = value / pow(2, mantissa_shift); // adjust the value so that everything is behind the decimal point.
-
-    // Convert the part after the decimal point to a bit string.
-    // The sign is not relevant. Always returns a "positive" value.
-    vector<bool> mantissa;
-    double reminder = abs(value) - floor(abs(value));
-    for(unsigned long i = 0; i < mantissa_length; i++){
-
-        reminder *= 2;
-        if(reminder >= 1){
-            mantissa.push_back(true); reminder -= 1;
-        } else{
-            mantissa.push_back(false);
-        }
-    }
-    //-------------------------------
-
-
-    // set everything together
-    //-------------------------------
-    if(value > 0){
-        bit_vector.push_back(false);
-    } else {
-        bit_vector.push_back(true);
-    }
-
-    bit_vector.insert(bit_vector.end(), exponent.begin(), exponent.end());
-    bit_vector.insert(bit_vector.end(), mantissa.begin(), mantissa.end());
-    //-------------------------------
-
-}
 
 /**
  * Returns the bias of the exponent.
