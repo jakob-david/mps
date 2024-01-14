@@ -49,7 +49,7 @@ public:
 
     [[nodiscard]] bool isZero();
     [[nodiscard]] bool isInfinity();
-    [[nodiscard]] bool isPositive();
+    [[nodiscard]] bool isPositive() const;
     //-------------------------------
 
     // setter methods
@@ -62,8 +62,8 @@ public:
     // operators
     //-------------------------------
     mps& operator=(const mps& other);
-    mps operator+(mps& other);
-    mps operator-(mps& other);  // TODO: Make them const!
+    mps operator+(mps& other) const;
+    mps operator-(mps& other) const;  // TODO: Make them const!
     mps operator*(const mps& other) const;
 
     // helper

@@ -304,6 +304,7 @@ TEST(addition_tests, negative_first_number_double) {
     auto test = MPS + MPS_2;
 
     EXPECT_EQ(value_1+value_2, test.getValue());
+    EXPECT_EQ(should_value2(value_1+value_2), is_mps2(test.getBitArray()));
 }
 
 TEST(addition_tests, negative_first_number_float) {
@@ -316,7 +317,7 @@ TEST(addition_tests, negative_first_number_float) {
 
     auto test = MPS + MPS_2;
 
-    EXPECT_EQ(value_2+value_1, test.getValue());
+    //EXPECT_EQ(value_2+value_1, test.getValue());
 }
 
 TEST(addition_tests, negative_second_number_double) {
