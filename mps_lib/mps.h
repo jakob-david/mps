@@ -49,6 +49,7 @@ public:
     [[nodiscard]] vector<bool>* getBitArrayReference();
     [[nodiscard]] double getValue();
     [[nodiscard]] double my_getValue();
+    [[nodiscard]] long getExponentAsInt();
 
     [[nodiscard]] bool isZero();
     [[nodiscard]] bool isInfinity();
@@ -68,6 +69,9 @@ public:
     mps operator+(mps& other);
     mps operator-(mps& other);  // TODO: Make them const!
     mps operator*(const mps& other) const;
+
+    // helper
+    mps addition(const mps& one, const mps& two, const bool sign) const;
     //-------------------------------
 
 private:
@@ -78,13 +82,13 @@ private:
     [[nodiscard]] int getBias() const;
 
 public:
-    [[nodiscard]] static vector<bool> binaryAddition(vector<bool>& one, vector<bool>& two, bool carry, bool* carrier_return = nullptr);
-    [[nodiscard]] static vector<bool> binarySubtraction(vector<bool>& minuend, const vector<bool>& subtrahend);
+    [[nodiscard]] static vector<bool> binaryAddition(const vector<bool>& one, const vector<bool>& two, bool carry, bool* carrier_return = nullptr);
+    [[nodiscard]] static vector<bool> binarySubtraction(const vector<bool>& minuend, const vector<bool>& subtrahend);
     static inline void round(vector<bool>* mantissa, unsigned long mantissa_len);
 
     [[nodiscard]] static unsigned long binaryToInt(vector<bool> bit_vector);
     [[nodiscard]] static vector<bool> intToBinary(unsigned long value);
-    [[nodiscard]] static char larger(vector<bool>& a, vector<bool>& b);
+    [[nodiscard]] static char larger(const vector<bool>& a, const vector<bool>& b);
     static void matchMantissas(vector<bool>* vector_right_shift, vector<bool>* vector_left_shift, unsigned long amount);
     static bool addOneToBinary(vector<bool>* vector);
     //-------------------------------

@@ -519,6 +519,7 @@ double mps::my_getValue() {
 
     //TODO: add NANs
 
+
     double ret;
 
     // positive or negative
@@ -563,6 +564,33 @@ mps& mps::operator=(const mps& other) {
         return *this;
     }
 
+    if(0 == this->exponent_length && 0 == this->mantissa_length){
+        this->exponent_length = other.exponent_length;
+        this->mantissa_length = other.mantissa_length;
+
+        this->my_exponent.resize(this->exponent_length);
+        this->my_mantissa.resize(this->mantissa_length);
+    } else {
+        if (this->exponent_length != other.exponent_length) {
+            cout << "ERROR: in = : Exponents do not match" << endl;
+        }
+        if (this->mantissa_length != other.mantissa_length) {
+            cout << "ERROR: in = : Mantissas do not match" << endl;
+        }
+    }
+
+    this->my_sign = other.my_sign;
+    for(unsigned long i = 0; i < this->mantissa_length; i++){
+        this->my_mantissa[i] = other.my_mantissa[i];
+    }
+    for(unsigned long i = 0; i < this->exponent_length; i++){
+        this->my_exponent[i] = other.my_exponent[i];
+    }
+    this->my_exponent_as_int = other.my_exponent_as_int;
+
+
+    // TODO: uplate delete
+
     this->bit_vector.erase(bit_vector.begin(), bit_vector.end());
 
     for(auto i : other.bit_vector){
@@ -575,36 +603,108 @@ mps& mps::operator=(const mps& other) {
     return *this;
 }
 
+
+mps mps::addition(const mps &one, const mps &two, const bool sign) const {
+
+    // Set up the return object.
+    //-------------------------------
+    mps ret;
+    ret.exponent_length = this->exponent_length;
+    ret.mantissa_length = this->mantissa_length;
+    ret.my_sign = sign;
+    //-------------------------------
+
+    // Extract exponents and mantissas
+    //-------------------------------
+    vector<bool> a_mantissa = one.my_mantissa;
+    a_mantissa.insert(a_mantissa.begin(), true);
+
+    vector<bool> b_mantissa = two.my_mantissa;
+    b_mantissa.insert(b_mantissa.begin(), true);
+    //-------------------------------
+
+
+    // Match mantissas and set exponent
+    //-------------------------------
+    unsigned long exponent_diff = 0;
+    char larger_tmp = larger(one.my_exponent, two.my_exponent);
+    if(1 == larger_tmp){
+        exponent_diff = binaryToInt(binarySubtraction(one.my_exponent, two.my_exponent));
+        ret.my_exponent = one.my_exponent;
+        ret.my_exponent_as_int = one.my_exponent_as_int;
+        matchMantissas(&b_mantissa, &a_mantissa, exponent_diff);
+    } else if(-1 == larger_tmp){
+        exponent_diff = binaryToInt(binarySubtraction(two.my_exponent, one.my_exponent));
+        ret.my_exponent = two.my_exponent;
+        ret.my_exponent_as_int = two.my_exponent_as_int;
+        matchMantissas(&a_mantissa, &b_mantissa, exponent_diff);
+    } else {
+        ret.my_exponent = one.my_exponent;
+        ret.my_exponent_as_int = one.my_exponent_as_int;
+    }
+    //-------------------------------
+
+    // Actual addition and adjusting mantissa
+    //-------------------------------
+    bool carrier;
+    vector<bool> mantissa = binaryAddition(a_mantissa, b_mantissa,true, &carrier);
+    mantissa.erase(mantissa.begin(), mantissa.begin()+1);
+    if(carrier){
+        addOneToBinary(&ret.my_exponent);
+        ret.my_exponent_as_int++;
+    }
+    //-------------------------------
+
+    round(&mantissa, ret.mantissa_length);
+    ret.my_mantissa = mantissa;
+
+    return ret;
+}
 /**
  * Performs am addition to two mps floating point values.
  */
 mps mps::operator+(mps& other) {
 
-    //TODO: Remove when finished.
-    if(this->mantissa_length != other.mantissa_length || this->exponent_length != other.exponent_length){
-        cout << "ERROR: addition, sizes do not match"  << endl;
+    if (this->exponent_length != other.exponent_length) {
+        cout << "ERROR: in + : Exponents do not match" << endl;
     }
+    if (this->mantissa_length != other.mantissa_length) {
+        cout << "ERROR: in + : Mantissas do not match" << endl;
+    }
+
+
+    mps ret;
+    if(this->isPositive() && other.isPositive()){
+        ret = addition(*this, other, false);
+    } else if(!this->isPositive() && !other.isPositive()){
+        ret = addition(*this, other, true);
+    }
+
+
+
+
+
+
+    // TODO: update delete
 
 
     // If signs are different perform Subtraction.
     //-------------------------------
     if(this->bit_vector[0] && !other.bit_vector[0]){
-        this->bit_vector[0] = true;
-        auto ret = other - *this;
         this->bit_vector[0] = false;
-        return other - *this;
+        auto rett = other - *this;
+        this->bit_vector[0] = true;
+        return rett;
     } else if (!this->bit_vector[0] && other.bit_vector[0]) {
         other.bit_vector[0] = false;
-        auto ret = *this - other;
+        auto rett = *this - other;
         other.bit_vector[0] = true;
-        return ret;
+        return rett;
     }
     //-------------------------------
 
-
     // Set up the return object.
     //-------------------------------
-    mps ret;
     vector<bool>& ret_vector = ret.bit_vector;
     ret.exponent_length = this->exponent_length;
     ret.mantissa_length = this->mantissa_length;
@@ -1046,7 +1146,7 @@ int mps::getBias() const{
  * @param carrier_return pointer to a boolean where the last state of the carrier bit can be save
  * @return the result as binary number.
  */
-vector<bool> mps::binaryAddition(vector<bool>& a, vector<bool>& b, bool carry, bool* carrier_return){
+vector<bool> mps::binaryAddition(const vector<bool>& a, const vector<bool>& b, bool carry, bool* carrier_return){
 
     vector<bool> ret;
     bool carrier = false;
@@ -1086,7 +1186,7 @@ vector<bool> mps::binaryAddition(vector<bool>& a, vector<bool>& b, bool carry, b
  * @param subtrahend reference to the vector which should be subtracted.
  * @return the result as a binary number.
  */
-vector<bool> mps::binarySubtraction(vector<bool>& minuend, const vector<bool>& subtrahend){
+vector<bool> mps::binarySubtraction(const vector<bool>& minuend, const vector<bool>& subtrahend){
 
     vector<bool> tmp_subtrahend;
     tmp_subtrahend.reserve(subtrahend.size());
@@ -1197,7 +1297,7 @@ vector<bool> mps::intToBinary(unsigned long value) {
  * @param b reference to the vector containing the second binary number
  * @return 1 if a > b, 0 if a == b, -1 if a < b
  */
-char mps::larger(vector<bool>& a, vector<bool>& b){
+char mps::larger(const vector<bool>& a, const vector<bool>& b){
 
     // TODO: Remove at the end.
     if(a.size() != b.size()){
@@ -1253,5 +1353,9 @@ bool mps::addOneToBinary(vector<bool>* vector){
     vector->insert(vector->begin(), true);
     vector->pop_back();
     return true;
+}
+
+[[nodiscard]] long mps::getExponentAsInt(){
+    return my_exponent_as_int;
 }
 //-------------------------------
