@@ -25,8 +25,6 @@ private:
     vector<bool> my_mantissa;
 
     long my_exponent_as_int;      // The exponent saved as integer (used for internal optimization)
-
-    vector<bool> bit_vector; // TODO: Remove !!!!!!!!!!!!
     //-------------------------------
 
 public:
@@ -45,7 +43,7 @@ public:
     [[nodiscard]] unsigned long getBitArrayLength() const;
     [[nodiscard]] vector<bool> getBitArray();
     [[nodiscard]] double getValue();
-    [[nodiscard]] long getExponentAsInt();
+    [[nodiscard]] long getExponentAsInt() const;
 
     [[nodiscard]] bool isZero();
     [[nodiscard]] bool isInfinity();
@@ -75,7 +73,7 @@ private:
 
     // helper functions
     //-------------------------------
-    void setBitArray(double value);
+    void setBitArray(const double value);
     [[nodiscard]] int getBias() const;
 
 public:
