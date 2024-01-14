@@ -346,307 +346,175 @@ TEST(setter_tests, set_NAN_float) {
 TEST(get_value_tests, get_one_double) {
 
     double test_value = 1;
-
     mps MPS(52, 11, test_value);
 
-    auto binary = MPS.getBitArray();
-
-    double get_value = MPS.getValue();
-
-    EXPECT_EQ(test_value, get_value);
-    EXPECT_EQ(test_value, MPS.my_getValue());
+    EXPECT_EQ(test_value, MPS.getValue());
 }
 
 TEST(get_value_tests, get_one_float) {
 
     float test_value = 1;
-
     mps MPS(23, 8, test_value);
 
-    auto binary = MPS.getBitArray();
-
-    double get_value = MPS.getValue();
-
-    EXPECT_EQ(test_value, get_value);
-    EXPECT_EQ(test_value, MPS.my_getValue());
+    EXPECT_EQ(test_value, MPS.getValue());
 }
 
 TEST(get_value_tests, get_double) {
 
     double test_value = 3455763.3467457;
-
     mps MPS(52, 11, test_value);
 
-    auto binary = MPS.getBitArray();
-
-    double get_value = MPS.getValue();
-
-    EXPECT_EQ(test_value, get_value);
-    EXPECT_EQ(test_value, MPS.my_getValue());
+    EXPECT_EQ(test_value, MPS.getValue());
 }
 
 TEST(get_value_tests, get_float) {
 
     float test_value = 3455763.3467457f;
-
     mps MPS(23, 8, test_value);
 
-    auto binary = MPS.getBitArray();
-
-    double get_value = MPS.getValue();
-
-    EXPECT_EQ(test_value, get_value);
-    EXPECT_EQ(test_value, MPS.my_getValue());
+    EXPECT_EQ(test_value, MPS.getValue());
 }
 
 TEST(get_value_tests, get_neg_one_double) {
 
     double test_value = -1;
-
     mps MPS(52, 11, test_value);
 
-    auto binary = MPS.getBitArray();
-
-    double get_value = MPS.getValue();
-
-    EXPECT_EQ(test_value, get_value);
-    EXPECT_EQ(test_value, MPS.my_getValue());
+    EXPECT_EQ(test_value, MPS.getValue());
 }
 
 TEST(get_value_tests, get_neg_one_float) {
 
     float test_value = -1;
-
     mps MPS(23, 8, test_value);
 
-    auto binary = MPS.getBitArray();
-
-    double get_value = MPS.getValue();
-
-    EXPECT_EQ(test_value, get_value);
-    EXPECT_EQ(test_value, MPS.my_getValue());
+    EXPECT_EQ(test_value, MPS.getValue());
 }
 
 TEST(get_value_tests, get_neg_double) {
 
     double test_value = -2356345.235643;
-
     mps MPS(52, 11, test_value);
 
-    auto binary = MPS.getBitArray();
-
-    double get_value = MPS.getValue();
-
-    EXPECT_EQ(test_value, get_value);
-    EXPECT_EQ(test_value, MPS.my_getValue());
+    EXPECT_EQ(test_value, MPS.getValue());
 }
 
 TEST(get_value_tests, get_neg_float) {
 
     float test_value = -2356345.235643f;
-
     mps MPS(23, 8, test_value);
 
-    auto binary = MPS.getBitArray();
-
-    double get_value = MPS.getValue();
-
-    EXPECT_EQ(test_value, get_value);
-    EXPECT_EQ(test_value, MPS.my_getValue());
+    EXPECT_EQ(test_value, MPS.getValue());
 }
 
 TEST(get_value_tests, get_zero_double) {
 
     double test_value = 0;
-
     mps MPS(52, 11, test_value);
 
-    auto binary = MPS.getBitArray();
-
-    double get_value = MPS.getValue();
-
-    EXPECT_EQ(test_value, get_value);
-    EXPECT_EQ(test_value, MPS.my_getValue());
+    EXPECT_EQ(test_value, MPS.getValue());
 }
 
 TEST(get_value_tests, get_zero_float) {
 
     float test_value = 0;
-
     mps MPS(23, 8, test_value);
 
-    auto binary = MPS.getBitArray();
-
-    double get_value = MPS.getValue();
-
-    EXPECT_EQ(test_value, get_value);
-    EXPECT_EQ(test_value, MPS.my_getValue());
+    EXPECT_EQ(test_value, MPS.getValue());
 }
 
 TEST(get_value_tests, get_pos_inf_double) {
 
     double test_value = numeric_limits<double>::infinity();
-
     mps MPS(52, 11, test_value);
 
-    auto binary = MPS.getBitArray();
-
-    double get_value = MPS.getValue();
-
-    EXPECT_EQ(test_value, get_value);
-    EXPECT_EQ(test_value, MPS.my_getValue());
+    EXPECT_EQ(test_value, MPS.getValue());
 }
 
 TEST(get_value_tests, get_pos_inf_float) {
 
     float test_value = numeric_limits<float>::infinity();
-
     mps MPS(23, 8, test_value);
 
-    auto binary = MPS.getBitArray();
-
-    double get_value = MPS.getValue();
-
-    EXPECT_EQ(test_value, get_value);
-    EXPECT_EQ(test_value, MPS.my_getValue());
+    EXPECT_EQ(test_value, MPS.getValue());
 }
 
 TEST(get_value_tests, get_neg_inf_double) {
 
     double test_value = numeric_limits<double>::infinity() * -1;
-
     mps MPS(52, 11, test_value);
 
-    auto binary = MPS.getBitArray();
-
-    double get_value = MPS.getValue();
-
-    EXPECT_EQ(test_value, get_value);
-    EXPECT_EQ(test_value, MPS.my_getValue());
+    EXPECT_EQ(test_value, MPS.getValue());
 }
 
 TEST(get_value_tests, get_neg_inf_float) {
 
     float test_value = numeric_limits<float>::infinity() * -1;
-
     mps MPS(23, 8, test_value);
 
-    auto binary = MPS.getBitArray();
-
-    double get_value = MPS.getValue();
-
-    EXPECT_EQ(test_value, get_value);
-    EXPECT_EQ(test_value, MPS.my_getValue());
+    EXPECT_EQ(test_value, MPS.getValue());
 }
 
 TEST(get_value_tests, get_pos_max_double) {
 
     double test_value = numeric_limits<double>::max();
-
     mps MPS(52, 11, test_value);
 
-    auto binary = MPS.getBitArray();
-
-    double get_value = MPS.getValue();
-
-    EXPECT_EQ(test_value, get_value);
-    EXPECT_EQ(test_value, MPS.my_getValue());
+    EXPECT_EQ(test_value, MPS.getValue());
 }
 
 TEST(get_value_tests, get_pos_max_float) {
 
     float test_value = numeric_limits<float>::max();
-
     mps MPS(23, 8, test_value);
 
-    auto binary = MPS.getBitArray();
-
-    double get_value = MPS.getValue();
-
-    EXPECT_EQ(test_value, get_value);
-    EXPECT_EQ(test_value, MPS.my_getValue());
+    EXPECT_EQ(test_value, MPS.getValue());
 }
 
 TEST(get_value_tests, get_neg_max_double) {
 
     double test_value = numeric_limits<double>::max() * -1;
-
     mps MPS(52, 11, test_value);
 
-    auto binary = MPS.getBitArray();
-
-    double get_value = MPS.getValue();
-
-    EXPECT_EQ(test_value, get_value);
-    EXPECT_EQ(test_value, MPS.my_getValue());
+    EXPECT_EQ(test_value, MPS.getValue());
 }
 
 TEST(get_value_tests, get_neg_max_float) {
 
     float test_value = numeric_limits<float>::max() * -1;
-
     mps MPS(23, 8, test_value);
 
-    auto binary = MPS.getBitArray();
-
-    double get_value = MPS.getValue();
-
-    EXPECT_EQ(test_value, get_value);
-    EXPECT_EQ(test_value, MPS.my_getValue());
+    EXPECT_EQ(test_value, MPS.getValue());
 }
 
 TEST(get_value_tests, get_pos_min_double) {
 
     double test_value = numeric_limits<double>::min();
-
     mps MPS(52, 11, test_value);
 
-    auto binary = MPS.getBitArray();
-
-    double get_value = MPS.getValue();
-
-    EXPECT_EQ(test_value, get_value);
-    EXPECT_EQ(test_value, MPS.my_getValue());
+    EXPECT_EQ(test_value, MPS.getValue());
 }
 
 TEST(get_value_tests, get_pos_min_float) {
 
     float test_value = numeric_limits<float>::min();
-
     mps MPS(23, 8, test_value);
 
-    auto binary = MPS.getBitArray();
-
-    double get_value = MPS.getValue();
-
-    EXPECT_EQ(test_value, get_value);
-    EXPECT_EQ(test_value, MPS.my_getValue());
+    EXPECT_EQ(test_value, MPS.getValue());
 }
 
 TEST(get_value_tests, get_neg_min_double) {
 
     double test_value = numeric_limits<double>::min() * -1;
-
     mps MPS(52, 11, test_value);
 
-    auto binary = MPS.getBitArray();
-
-    double get_value = MPS.getValue();
-
-    EXPECT_EQ(test_value, get_value);
-    EXPECT_EQ(test_value, MPS.my_getValue());
+    EXPECT_EQ(test_value, MPS.getValue());
 }
 
 TEST(get_value_tests, get_neg_min_float) {
 
     float test_value = numeric_limits<float>::min() * -1;
-
     mps MPS(23, 8, test_value);
 
-    auto binary = MPS.getBitArray();
-
-    double get_value = MPS.getValue();
-
-    EXPECT_EQ(test_value, get_value);
-    EXPECT_EQ(test_value, MPS.my_getValue());
+    EXPECT_EQ(test_value, MPS.getValue());
 }

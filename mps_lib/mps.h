@@ -45,7 +45,6 @@ public:
     [[nodiscard]] unsigned long getBitArrayLength() const;
     [[nodiscard]] vector<bool> getBitArray();
     [[nodiscard]] double getValue();
-    [[nodiscard]] double my_getValue();
     [[nodiscard]] long getExponentAsInt();
 
     [[nodiscard]] bool isZero();

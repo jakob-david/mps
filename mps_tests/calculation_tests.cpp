@@ -3,7 +3,7 @@
 #include "mps.h"
 #include <bitset>
 
-std::string is_mps2(vector<bool> vec){
+std::string is_mps2(const vector<bool>& vec){
 
     string str;
     for(bool bit : vec){
@@ -123,7 +123,6 @@ TEST(addition_tests, addition_same_double) {
     auto test = MPS + MPS_2;
 
     EXPECT_EQ(value_1+value_1, test.getValue());
-    EXPECT_EQ(value_1+value_1, test.my_getValue());
 }
 
 TEST(addition_tests, addition_same_float) {
@@ -136,7 +135,6 @@ TEST(addition_tests, addition_same_float) {
     auto test = MPS + MPS_2;
 
     EXPECT_EQ(value_1+value_1, test.getValue());
-    EXPECT_EQ(value_1+value_1, test.my_getValue());
 }
 
 TEST(addition_tests, addition_double) {
@@ -150,7 +148,6 @@ TEST(addition_tests, addition_double) {
     auto test = MPS + MPS_2;
 
     EXPECT_EQ(value_1+value_2, test.getValue());
-    EXPECT_EQ(value_1+value_2, test.my_getValue());
 }
 
 TEST(addition_tests, addition_float) {
@@ -164,7 +161,6 @@ TEST(addition_tests, addition_float) {
     auto test = MPS + MPS_2;
 
     EXPECT_EQ(value_2+value_1, test.getValue());
-    EXPECT_EQ(value_1+value_2, test.my_getValue());
 }
 
 TEST(addition_tests, addition2_double) {
@@ -178,7 +174,6 @@ TEST(addition_tests, addition2_double) {
     auto test = MPS + MPS_2;
 
     EXPECT_EQ(value_1+value_2, test.getValue());
-    EXPECT_EQ(value_1+value_2, test.my_getValue());
 }
 
 TEST(addition_tests, addition2_float) {
@@ -192,7 +187,6 @@ TEST(addition_tests, addition2_float) {
     auto test = MPS + MPS_2;
 
     EXPECT_EQ(value_2+value_1, test.getValue());
-    EXPECT_EQ(value_1+value_2, test.my_getValue());
 }
 
 TEST(addition_tests, addition3_double) {
@@ -206,7 +200,6 @@ TEST(addition_tests, addition3_double) {
     auto test = MPS + MPS_2;
 
     EXPECT_EQ(value_1+value_2, test.getValue());
-    EXPECT_EQ(value_1+value_2, test.my_getValue());
 }
 
 TEST(addition_tests, addition3_float) {
@@ -220,7 +213,6 @@ TEST(addition_tests, addition3_float) {
     auto test = MPS + MPS_2;
 
     EXPECT_EQ(value_2+value_1, test.getValue());
-    EXPECT_EQ(value_1+value_2, test.my_getValue());
 }
 
 TEST(addition_tests, zero_left_double) {
@@ -234,7 +226,6 @@ TEST(addition_tests, zero_left_double) {
     auto test = MPS + MPS_2;
 
     EXPECT_EQ(value_2+value_1, test.getValue());
-    EXPECT_EQ(value_1+value_2, test.my_getValue());
 }
 
 TEST(addition_tests, zero_left_float) {
@@ -248,7 +239,6 @@ TEST(addition_tests, zero_left_float) {
     auto test = MPS + MPS_2;
 
     EXPECT_EQ(value_2+value_1, test.getValue());
-    EXPECT_EQ(value_1+value_2, test.my_getValue());
 }
 
 TEST(addition_tests, zero_right_double) {
@@ -262,7 +252,6 @@ TEST(addition_tests, zero_right_double) {
     auto test = MPS + MPS_2;
 
     EXPECT_EQ(value_2+value_1, test.getValue());
-    EXPECT_EQ(value_1+value_2, test.my_getValue());
 }
 
 TEST(addition_tests, zero_right_float) {
@@ -276,7 +265,6 @@ TEST(addition_tests, zero_right_float) {
     auto test = MPS + MPS_2;
 
     EXPECT_EQ(value_2+value_1, test.getValue());
-    EXPECT_EQ(value_1+value_2, test.my_getValue());
 }
 
 TEST(addition_tests, additition_negative_double) {
@@ -290,7 +278,6 @@ TEST(addition_tests, additition_negative_double) {
     auto test = MPS + MPS_2;
 
     EXPECT_EQ(value_1+value_2, test.getValue());
-    EXPECT_EQ(value_1+value_2, test.my_getValue());
 }
 
 TEST(addition_tests, addition_negative_float) {
@@ -304,7 +291,6 @@ TEST(addition_tests, addition_negative_float) {
     auto test = MPS + MPS_2;
 
     EXPECT_EQ(value_2+value_1, test.getValue());
-    EXPECT_EQ(value_2+value_1, test.my_getValue());
 }
 
 TEST(addition_tests, negative_first_number_double) {
@@ -318,7 +304,6 @@ TEST(addition_tests, negative_first_number_double) {
     auto test = MPS + MPS_2;
 
     EXPECT_EQ(value_1+value_2, test.getValue());
-    EXPECT_EQ(value_1+value_2, test.my_getValue());
 }
 
 TEST(addition_tests, negative_first_number_float) {
@@ -332,7 +317,6 @@ TEST(addition_tests, negative_first_number_float) {
     auto test = MPS + MPS_2;
 
     EXPECT_EQ(value_2+value_1, test.getValue());
-    EXPECT_EQ(value_1+value_2, test.my_getValue());
 }
 
 TEST(addition_tests, negative_second_number_double) {
@@ -346,7 +330,6 @@ TEST(addition_tests, negative_second_number_double) {
     auto test = MPS + MPS_2;
 
     EXPECT_EQ(value_1+value_2, test.getValue());
-    EXPECT_EQ(value_1+value_2, test.my_getValue());
 }
 
 TEST(addition_tests, negative_second_number_float) {
@@ -360,7 +343,6 @@ TEST(addition_tests, negative_second_number_float) {
     auto test = MPS + MPS_2;
 
     EXPECT_EQ(value_2+value_1, test.getValue());
-    EXPECT_EQ(value_1+value_2, test.my_getValue());
 }
 
 
@@ -389,7 +371,6 @@ TEST(subtraction_tests, simple_subtractiob_float) {
     auto test = MPS - MPS_2;
 
     EXPECT_EQ(value_1-value_2, test.getValue());
-    EXPECT_EQ(value_1-value_2, test.my_getValue());
 }
 
 TEST(subtraction_tests, simple_subtractiob_double) {
@@ -403,7 +384,6 @@ TEST(subtraction_tests, simple_subtractiob_double) {
     auto test = MPS - MPS_2;
 
     EXPECT_EQ(value_1-value_2, test.getValue());
-    EXPECT_EQ(value_1-value_2, test.my_getValue());
 }
 
 TEST(subtraction_tests, subtractiob_float) {
@@ -417,7 +397,6 @@ TEST(subtraction_tests, subtractiob_float) {
     auto test = MPS - MPS_2;
 
     EXPECT_EQ(value_1-value_2, test.getValue());
-    EXPECT_EQ(value_1-value_2, test.my_getValue());
 }
 
 TEST(subtraction_tests, subtractiob_double) {
@@ -431,7 +410,6 @@ TEST(subtraction_tests, subtractiob_double) {
     auto test = MPS - MPS_2;
 
     EXPECT_EQ(value_1-value_2, test.getValue());
-    EXPECT_EQ(value_1-value_2, test.my_getValue());
 }
 
 TEST(subtraction_tests, negative_subtractiob_float) {
@@ -445,7 +423,6 @@ TEST(subtraction_tests, negative_subtractiob_float) {
     auto test = MPS - MPS_2;
 
     EXPECT_EQ(value_1-value_2, test.getValue());
-    EXPECT_EQ(value_1-value_2, test.my_getValue());
 }
 
 TEST(subtraction_tests, negative_subtractiob2_double) {
@@ -459,7 +436,6 @@ TEST(subtraction_tests, negative_subtractiob2_double) {
     auto test = MPS - MPS_2;
 
     EXPECT_EQ(value_1-value_2, test.getValue());
-    EXPECT_EQ(value_1-value_2, test.my_getValue());
 }
 
 TEST(subtraction_tests, positive_zero_crossing_float) {
@@ -473,7 +449,6 @@ TEST(subtraction_tests, positive_zero_crossing_float) {
     auto test = MPS - MPS_2;
 
     EXPECT_EQ(value_1-value_2, test.getValue());
-    EXPECT_EQ(value_1-value_2, test.my_getValue());
 }
 
 TEST(subtraction_tests, npositive_zero_crossing_double) {
@@ -487,7 +462,6 @@ TEST(subtraction_tests, npositive_zero_crossing_double) {
     auto test = MPS - MPS_2;
 
     EXPECT_EQ(value_1-value_2, test.getValue());
-    EXPECT_EQ(value_1-value_2, test.my_getValue());
 }
 
 TEST(subtraction_tests, negative_zero_crossing_float) {
@@ -501,7 +475,6 @@ TEST(subtraction_tests, negative_zero_crossing_float) {
     auto test = MPS - MPS_2;
 
     EXPECT_EQ(value_1-value_2, test.getValue());
-    EXPECT_EQ(value_1-value_2, test.my_getValue());
 }
 
 TEST(subtraction_tests, negative_zero_crossing_double) {
@@ -515,7 +488,6 @@ TEST(subtraction_tests, negative_zero_crossing_double) {
     auto test = MPS - MPS_2;
 
     EXPECT_EQ(value_1-value_2, test.getValue());
-    EXPECT_EQ(value_1-value_2, test.my_getValue());
 }
 
 TEST(subtraction_tests, negatave_first_number_float) {
@@ -529,7 +501,6 @@ TEST(subtraction_tests, negatave_first_number_float) {
     auto test = MPS - MPS_2;
 
     EXPECT_EQ(value_1-value_2, test.getValue());
-    EXPECT_EQ(value_1-value_2, test.my_getValue());
 }
 
 TEST(subtraction_tests, negatave_first_number_double) {
@@ -543,7 +514,6 @@ TEST(subtraction_tests, negatave_first_number_double) {
     auto test = MPS - MPS_2;
 
     EXPECT_EQ(value_1-value_2, test.getValue());
-    EXPECT_EQ(value_1-value_2, test.my_getValue());
 }
 
 TEST(subtraction_tests, negatave_second_number_float) {
@@ -557,7 +527,6 @@ TEST(subtraction_tests, negatave_second_number_float) {
     auto test = MPS - MPS_2;
 
     EXPECT_EQ(value_1-value_2, test.getValue());
-    EXPECT_EQ(value_1-value_2, test.my_getValue());
 }
 
 TEST(subtraction_tests, negatave_second_number_double) {
@@ -571,7 +540,6 @@ TEST(subtraction_tests, negatave_second_number_double) {
     auto test = MPS - MPS_2;
 
     EXPECT_EQ(value_1-value_2, test.getValue());
-    EXPECT_EQ(value_1-value_2, test.my_getValue());
 }
 
 
@@ -599,7 +567,6 @@ TEST(multiplication_tests, multiplication_float_1) {
     auto test = MPS * MPS_2;
 
     EXPECT_EQ(value_1*value_2, test.getValue());
-    EXPECT_EQ(value_1*value_2, test.my_getValue());
 }
 
 TEST(multiplication_tests, multiplication_double_1) {
@@ -613,7 +580,6 @@ TEST(multiplication_tests, multiplication_double_1) {
     auto test = MPS * MPS_2;
 
     EXPECT_EQ(value_1*value_2, test.getValue());
-    EXPECT_EQ(value_1*value_2, test.my_getValue());
 }
 
 TEST(multiplication_tests, multiplication_float_2) {
@@ -627,7 +593,6 @@ TEST(multiplication_tests, multiplication_float_2) {
     auto test = MPS * MPS_2;
 
     EXPECT_EQ(value_1*value_2, test.getValue());
-    EXPECT_EQ(value_1*value_2, test.my_getValue());
 }
 
 TEST(multiplication_tests, multiplication_double_2) {
@@ -641,7 +606,6 @@ TEST(multiplication_tests, multiplication_double_2) {
     auto test = MPS * MPS_2;
 
     EXPECT_EQ(value_1*value_2, test.getValue());
-    EXPECT_EQ(value_1*value_2, test.my_getValue());
 }
 
 TEST(multiplication_tests, multiplication_float_3) {
@@ -655,7 +619,6 @@ TEST(multiplication_tests, multiplication_float_3) {
     auto test = MPS * MPS_2;
 
     EXPECT_EQ(value_1*value_2, test.getValue());
-    EXPECT_EQ(value_1*value_2, test.my_getValue());
 }
 
 TEST(multiplication_tests, multiplication_double_3) {
@@ -669,7 +632,6 @@ TEST(multiplication_tests, multiplication_double_3) {
     auto test = MPS * MPS_2;
 
     EXPECT_EQ(value_1*value_2, test.getValue());
-    EXPECT_EQ(value_1*value_2, test.my_getValue());
 }
 
 TEST(multiplication_tests, multiplication_float_4) {
@@ -683,7 +645,6 @@ TEST(multiplication_tests, multiplication_float_4) {
     auto test = MPS * MPS_2;
 
     EXPECT_EQ(value_1*value_2, test.getValue());
-    EXPECT_EQ(value_1*value_2, test.my_getValue());
 }
 
 TEST(multiplication_tests, multiplication_double_4) {
@@ -697,7 +658,6 @@ TEST(multiplication_tests, multiplication_double_4) {
     auto test = MPS * MPS_2;
 
     EXPECT_EQ(value_1*value_2, test.getValue());
-    EXPECT_EQ(value_1*value_2, test.my_getValue());
 }
 
 TEST(multiplication_tests, multiplication_float_5) {
@@ -711,7 +671,6 @@ TEST(multiplication_tests, multiplication_float_5) {
     auto test = MPS * MPS_2;
 
     EXPECT_EQ(value_1*value_2, test.getValue());
-    EXPECT_EQ(value_1*value_2, test.my_getValue());
 }
 
 TEST(multiplication_tests, multiplication_double_5) {
@@ -725,7 +684,6 @@ TEST(multiplication_tests, multiplication_double_5) {
     auto test = MPS * MPS_2;
 
     EXPECT_EQ(value_1*value_2, test.getValue());
-    EXPECT_EQ(value_1*value_2, test.my_getValue());
 }
 
 TEST(multiplication_tests, multiplication_float_6) {
@@ -739,7 +697,6 @@ TEST(multiplication_tests, multiplication_float_6) {
     auto test = MPS * MPS_2;
 
     EXPECT_EQ(value_1*value_2, test.getValue());
-    EXPECT_EQ(value_1*value_2, test.my_getValue());
 }
 
 TEST(multiplication_tests, multiplication_double_6) {
@@ -753,7 +710,6 @@ TEST(multiplication_tests, multiplication_double_6) {
     auto test = MPS * MPS_2;
 
     EXPECT_EQ(value_1*value_2, test.getValue());
-    EXPECT_EQ(value_1*value_2, test.my_getValue());
 }
 
 TEST(multiplication_tests, multiplication_float_7) {
@@ -767,7 +723,6 @@ TEST(multiplication_tests, multiplication_float_7) {
     auto test = MPS * MPS_2;
 
     EXPECT_EQ(value_1*value_2, test.getValue());
-    EXPECT_EQ(value_1*value_2, test.my_getValue());
 }
 
 TEST(multiplication_tests, multiplication_double_7) {
@@ -781,5 +736,4 @@ TEST(multiplication_tests, multiplication_double_7) {
     auto test = MPS * MPS_2;
 
     EXPECT_EQ(value_1*value_2, test.getValue());
-    EXPECT_EQ(value_1*value_2, test.my_getValue());
 }

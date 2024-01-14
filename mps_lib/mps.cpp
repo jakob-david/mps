@@ -109,41 +109,32 @@ double mps::getValue() {
         return numeric_limits<double>::infinity() * -1;
     }
 
+    //TODO: add NANs
+
+
     double ret;
 
     // positive or negative
-    if(bit_vector[0]){
+    if(this->my_sign){
         ret = -1;
     } else {
         ret = 1;
     }
 
     // handle mantissa
-    for(auto i = exponent_length + 1; i < bit_vector.size(); i++){
-        if(bit_vector[i]){
+    for(unsigned long i = 0; i < mantissa_length; i++){
+        if(my_mantissa[i]){
             if(ret >= 0){
-                ret += pow(0.5, i - exponent_length);
+                ret += pow(0.5, i + 1);
             } else {
-                ret -= pow(0.5, i - exponent_length);
+                ret -= pow(0.5, i + 1);
             }
         }
     }
 
-    // get exponent
-    int exponent = 0;
-    for(unsigned long i = 1; i <= exponent_length; i++){
-        if(bit_vector[i]){
-            exponent += (int) pow(2, exponent_length-i);
-        }
-    }
-
-    // apply bias and apply exponent
-    exponent -= getBias();
-    ret *= pow(2, exponent);
-
-    return ret;
-
+    return ret * pow(2, my_exponent_as_int);
 }
+
 
 /**
  * Returns true if the mps object is zero.
@@ -183,13 +174,7 @@ bool mps::isInfinity() {
  */
 bool mps::isPositive(){
 
-    if(this->my_sign){
-        cout << "yes" << endl;
-    } else {
-        cout << "no" << endl;
-    }
-
-    if(bit_vector[0]){
+    if(this->bit_vector[0]){
         return false;
     } else {
         return true;
@@ -496,42 +481,6 @@ void mps::setBitArray(double value) {
 }
 //-------------------------------
 
-double mps::my_getValue() {
-
-    // handle special cases
-    if(isZero()){
-        return 0;
-    } else if (isInfinity() && isPositive()){
-        return numeric_limits<double>::infinity();
-    } else if (isInfinity()){
-        return numeric_limits<double>::infinity() * -1;
-    }
-
-    //TODO: add NANs
-
-
-    double ret;
-
-    // positive or negative
-    if(this->my_sign){
-        ret = -1;
-    } else {
-        ret = 1;
-    }
-
-    // handle mantissa
-    for(unsigned long i = 0; i < mantissa_length; i++){
-        if(my_mantissa[i]){
-            if(ret >= 0){
-                ret += pow(0.5, i + 1);
-            } else {
-                ret -= pow(0.5, i + 1);
-            }
-        }
-    }
-
-    return ret * pow(2, my_exponent_as_int);
-}
 
 
 
