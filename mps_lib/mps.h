@@ -21,7 +21,7 @@ private:
     //-------------------------------
     // TODO: Remove the "my"
     bool sign;
-    vector<bool> my_exponent;
+    vector<bool> exponent;
     vector<bool> my_mantissa;
 
     long exponent_as_int;      // The exponent saved as integer (used for internal optimization)
