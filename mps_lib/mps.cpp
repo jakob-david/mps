@@ -954,18 +954,13 @@ int mps::getBias() const{
  * 0 if a == b
  * -1 if a < b
  *
- * Only works for vectors of same size.
+ * Only works for vectors of same size. ATTENTION: Does not check for same length!
  *
  * @param a reference to the vector containing the first binary number
  * @param b reference to the vector containing the second binary number
  * @return 1 if a > b, 0 if a == b, -1 if a < b
  */
 char mps::larger(const vector<bool>& a, const vector<bool>& b){
-
-    // TODO: Remove at the end.
-    if(a.size() != b.size()){
-        cout << "ERROR: larger: not same size" << endl;
-    }
 
     for(unsigned long i = 0; i < a.size(); i++){
         if(a[i] && !b[i]) { return 1;}
@@ -1005,10 +1000,10 @@ void mps::matchMantissas(vector<bool>* vector_right_shift, vector<bool>* vector_
  */
 bool mps::addOneToBinary(vector<bool>* vector){
 
-    // TODO: Make while loop
-    for(long i = (long) vector->size() - 1; i >= 0; i--){
-        (*vector)[(unsigned long) i] = !(*vector)[(unsigned long) i];
-        if((*vector)[(unsigned long) i]){
+    for(auto i = vector->size(); i > 0;){
+        i--;
+        (*vector)[i] = !(*vector)[i];
+        if((*vector)[i]){
             return false;
         }
     }
