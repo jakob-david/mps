@@ -90,7 +90,7 @@ unsigned long mps::getBitArrayLength() const {
  *
  * @return vector representing the floating point number.
  */
-vector<bool> mps::getBitArray() {
+vector<bool> mps::getBitArray() const {
 
     vector<bool> ret;
     ret.reserve(1 + this->exponent_length + this->mantissa_length);
@@ -107,7 +107,7 @@ vector<bool> mps::getBitArray() {
  *
  * @return value as double.
  */
-double mps::getValue() {
+double mps::getValue() const {
 
     // handle special cases
     if(isZero()){
@@ -149,7 +149,7 @@ double mps::getValue() {
  *
  * @return true if zero.
  */
-bool mps::isZero(){
+bool mps::isZero() const{
 
     if(this->sign){
         return false;
@@ -175,7 +175,7 @@ bool mps::isZero(){
  *
  * @return true if pos. or neg. infinity.
  */
-bool mps::isInfinity() {
+bool mps::isInfinity() const{
 
 
     for(unsigned long i = 0; i < this->exponent_length; i++){
@@ -205,6 +205,35 @@ bool mps::isPositive() const{
     } else {
         return true;
     }
+}
+
+/**
+ * Returns true if the mps object is representing a NaN value.
+ * The sign bit is irrelevant since some implementations differ between -NaN and +NaN.
+ *
+ * @return true if NaN.
+ */
+bool mps::isNaN() const{
+
+    for(unsigned long i = 0; i < exponent_length; i++){
+
+        if(!exponent[i]){
+            return false;
+        }
+    }
+
+    if(!mantissa[0]){
+        return false;
+    }
+
+    for(unsigned long i = 1; i < mantissa_length; i++){
+
+        if(mantissa[i]){
+            return false;
+        }
+    }
+
+    return true ;
 }
 //-------------------------------
 

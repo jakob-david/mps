@@ -40,12 +40,13 @@ public:
     [[nodiscard]] unsigned long getMantisseLength() const;
     [[nodiscard]] unsigned long getExponentLength() const;
     [[nodiscard]] unsigned long getBitArrayLength() const;
-    [[nodiscard]] vector<bool> getBitArray();
-    [[nodiscard]] double getValue();
+    [[nodiscard]] vector<bool> getBitArray() const;
+    [[nodiscard]] double getValue() const;
 
-    [[nodiscard]] bool isZero();
-    [[nodiscard]] bool isInfinity();
+    [[nodiscard]] bool isZero() const;
+    [[nodiscard]] bool isInfinity() const;
     [[nodiscard]] bool isPositive() const;
+    [[nodiscard]] bool isNaN() const;
 
     // setter methods
     //-------------------------------

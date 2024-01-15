@@ -4,7 +4,9 @@
 #include "mps.h"
 
 
-
+// ######################
+// Constructor Tests
+// ######################
 TEST(constructor_tests, constructor_sets_values_coorectly){
 
     mps MPS(5, 6, 3.14);
@@ -27,6 +29,9 @@ TEST(constructor_tests, constructor_initializes_bit_array_correctly){
 }
 
 
+// ######################
+// converter Tests
+// ######################
 TEST(converter_tests, test_positive_double) {
 
     double test_value = 342.45636;
@@ -244,79 +249,9 @@ TEST(converter_tests, test_null_float) {
 }
 
 
-TEST(setter_tests, set_pos_inf_double) {
-
-    double test_value = numeric_limits<double>::infinity();
-    mps MPS(52, 11, 345.234);
-    MPS.setInf();
-
-    EXPECT_EQ(should_value(test_value), is_mps(MPS.getBitArray()));
-}
-
-TEST(setter_tests, set_pos_inf_float) {
-
-    float test_value = numeric_limits<float>::infinity();
-    mps MPS(23, 8, 345.234);
-    MPS.setInf();
-
-    EXPECT_EQ(should_value(test_value), is_mps(MPS.getBitArray()));
-}
-
-TEST(setter_tests, set_neg_inf_double) {
-
-    double test_value = numeric_limits<double>::infinity() * -1;
-    mps MPS(52, 11, 345.234);
-    MPS.setInf(true);
-
-    EXPECT_EQ(should_value(test_value), is_mps(MPS.getBitArray()));
-}
-
-TEST(setter_tests, set_neg_inf_float) {
-
-    float test_value = numeric_limits<float>::infinity() * -1;
-    mps MPS(23, 8, 345.234);
-    MPS.setInf(true);
-
-    EXPECT_EQ(should_value(test_value), is_mps(MPS.getBitArray()));
-}
-
-TEST(setter_tests, set_zero_double) {
-
-    double test_value = 0;
-    mps MPS(52, 11, 345.234);
-    MPS.setZero();
-
-    EXPECT_EQ(should_value(test_value), is_mps(MPS.getBitArray()));
-}
-
-TEST(setter_tests, set_zero_float) {
-
-    float test_value = 0;
-    mps MPS(23, 8, 345.234);
-    MPS.setZero();
-
-    EXPECT_EQ(should_value(test_value), is_mps(MPS.getBitArray()));
-}
-
-TEST(setter_tests, set_NAN_double) {
-
-    double test_value = numeric_limits<double>::quiet_NaN();
-    mps MPS(52, 11, 345.234);
-    MPS.setNaN();
-
-    EXPECT_EQ(should_value(test_value), is_mps(MPS.getBitArray()));
-}
-
-TEST(setter_tests, set_NAN_float) {
-
-    float test_value = numeric_limits<float>::quiet_NaN();
-    mps MPS(23, 8, 345.234);
-    MPS.setNaN();
-
-    EXPECT_EQ(should_value(test_value), is_mps(MPS.getBitArray()));
-}
-
-
+// ######################
+// Get Value Tests
+// ######################
 TEST(get_value_tests, get_one_double) {
 
     double test_value = 1;
@@ -491,4 +426,100 @@ TEST(get_value_tests, get_neg_min_float) {
     mps MPS(23, 8, test_value);
 
     EXPECT_EQ(test_value, MPS.getValue());
+}
+
+
+// ######################
+// Setter Tests
+// ######################
+TEST(setter_tests, set_pos_inf_double) {
+
+    double test_value = numeric_limits<double>::infinity();
+    mps MPS(52, 11, 345.234);
+    MPS.setInf();
+
+    EXPECT_EQ(should_value(test_value), is_mps(MPS.getBitArray()));
+}
+
+TEST(setter_tests, set_pos_inf_float) {
+
+    float test_value = numeric_limits<float>::infinity();
+    mps MPS(23, 8, 345.234);
+    MPS.setInf();
+
+    EXPECT_EQ(should_value(test_value), is_mps(MPS.getBitArray()));
+}
+
+TEST(setter_tests, set_neg_inf_double) {
+
+    double test_value = numeric_limits<double>::infinity() * -1;
+    mps MPS(52, 11, 345.234);
+    MPS.setInf(true);
+
+    EXPECT_EQ(should_value(test_value), is_mps(MPS.getBitArray()));
+}
+
+TEST(setter_tests, set_neg_inf_float) {
+
+    float test_value = numeric_limits<float>::infinity() * -1;
+    mps MPS(23, 8, 345.234);
+    MPS.setInf(true);
+
+    EXPECT_EQ(should_value(test_value), is_mps(MPS.getBitArray()));
+}
+
+TEST(setter_tests, set_zero_double) {
+
+    double test_value = 0;
+    mps MPS(52, 11, 345.234);
+    MPS.setZero();
+
+    EXPECT_EQ(should_value(test_value), is_mps(MPS.getBitArray()));
+}
+
+TEST(setter_tests, set_zero_float) {
+
+    float test_value = 0;
+    mps MPS(23, 8, 345.234);
+    MPS.setZero();
+
+    EXPECT_EQ(should_value(test_value), is_mps(MPS.getBitArray()));
+}
+
+TEST(setter_tests, set_NAN_double) {
+
+    double test_value = numeric_limits<double>::quiet_NaN();
+    mps MPS(52, 11, 345.234);
+    MPS.setNaN();
+
+    EXPECT_EQ(should_value(test_value), is_mps(MPS.getBitArray()));
+}
+
+TEST(setter_tests, set_NAN_float) {
+
+    float test_value = numeric_limits<float>::quiet_NaN();
+    mps MPS(23, 8, 345.234);
+    MPS.setNaN();
+
+    EXPECT_EQ(should_value(test_value), is_mps(MPS.getBitArray()));
+}
+
+
+// ######################
+// Getter Tests
+// ######################
+TEST(getter_test, get_NAN_float) {
+
+    float test_value = numeric_limits<float>::quiet_NaN();
+    mps MPS(23, 8, test_value);
+
+    EXPECT_EQ(true, MPS.isNaN());
+}
+
+TEST(getter_test, get_NAN_double) {
+
+    double test_value = numeric_limits<double>::quiet_NaN();
+    mps MPS(52, 11, test_value);
+
+    EXPECT_EQ(true, MPS.isNaN());
 }
