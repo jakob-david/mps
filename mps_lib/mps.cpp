@@ -381,7 +381,7 @@ mps mps::operator+(const mps& other) const {
 }
 
 /**
- * Performs am subtraction to two mps floating point values.
+ * Performs a subtraction to two mps floating point values.
  *
  * It is responsible for error handling, special values and choosing with "calculation" to use.
  */
@@ -407,101 +407,20 @@ mps mps::operator-(const mps& other) const {
 }
 
 /**
- * Performs one full multiplication.
+ * Performs a multiplication to two mps floating point values.
+ *
+ * It is responsible for error handling, special values and choosing with "calculation" to use.
  */
 mps mps::operator*(const mps& other) const {
 
-    // Set up the return object.
-    //-------------------------------
-    mps ret;
-    ret.exponent_length = this->exponent_length;
-    ret.mantissa_length = this->mantissa_length;
-    //-------------------------------
-
-
-    // Set up sign.
-    ret.sign = this->sign != other.sign;
-
-
-
-    vector<bool> A(this->mantissa.begin(), this->mantissa.end());
-    vector<bool> S;
-
-    A.reserve(A.size() + (other.mantissa_length + other.exponent_length + 1) + 1 +2 +2);
-    A.insert(A.begin(), true);
-    A.insert(A.begin(), false);
-    S.reserve(A.size() + (other.mantissa_length + other.exponent_length + 1) + 1 +2 +2);
-
-    for(unsigned long i = 0; i < A.size(); i++){
-        S.push_back(!A[i]);
+    if (this->exponent_length != other.exponent_length) {
+        cout << "ERROR: in - : Exponents do not match" << endl;
     }
-    addOneToBinary(&S);
-
-    for(unsigned long i = 0; i < other.mantissa_length + 1 +1 +1; i++){
-        A.push_back(false);
-        S.push_back(false);
+    if (this->mantissa_length != other.mantissa_length) {
+        cout << "ERROR: in - : Mantissas do not match" << endl;
     }
 
-    vector<bool> P;
-    P.reserve(A.size() + (other.mantissa_length + other.exponent_length + 1) + 1 +2 +2);
-    for(unsigned long i = 0; i < this->mantissa_length+1+1; i++){
-        P.push_back(false);
-    }
-    P.push_back(false);
-    P.push_back(true);
-    for(unsigned long i = 0; i < other.mantissa_length; i++){
-        P.push_back(other.mantissa[i]);
-    }
-    P.push_back(false);
-
-
-    for(unsigned long i = 0; i < other.mantissa_length+2; i++){
-
-
-        if(!P.end()[-2] && P.back()){
-            P = binaryAddition(P, A, false);
-        } else if(P.end()[-2] && !P.back()) {
-            P = binaryAddition(P, S, false);
-        }
-
-        P.pop_back();
-        P.insert(P.begin(), P[0]);
-
-    }
-
-    P.pop_back();
-    P.erase (P.begin());
-    int count = 0;
-    for(unsigned long i = 0; i < P.size(); i++){
-        if(P[0]){
-            P.erase(P.begin());
-            break;
-        }
-        P.erase(P.begin());
-        count++;
-    }
-
-
-    round(&P, ret.mantissa_length);
-
-
-    vector<bool> a_exponent(this->exponent.begin(), this->exponent.end());
-    vector<bool> b_exponent(other.exponent.begin(), other.exponent.end());
-
-    // TODO: Check for carry
-    b_exponent[0] = !b_exponent[0];
-    addOneToBinary(&b_exponent);
-    if(count <= 1){
-        addOneToBinary(&b_exponent);
-    }
-
-    ret.exponent = binaryAddition(a_exponent, b_exponent, false);
-    ret.exponent_as_int = (long) binaryToInt(ret.exponent) - ret.getBias();
-    ret.mantissa = P;
-
-
-
-    return ret;
+    return multiplication(*this, other, this->sign != other.sign);
 }
 
 
@@ -758,6 +677,110 @@ mps mps::subtraction(const mps &minued, const mps &subtrahend, bool set_sign) co
 
 
     return ret;
+}
+
+/**
+ * Performs a multiplication on two mps objects which have the same sign.
+ *
+ * @param one reference to the first multiplicand.
+ * @param two reference to the second multiplicand.
+ * @param set_sign the sign to which the final result should be set.
+ * @return the resulting mps object.
+ */
+mps mps::multiplication(const mps& one, const mps& two, bool set_sign) const {
+
+    // Set up the return object.
+    //-------------------------------
+    mps ret;
+    ret.exponent_length = one.exponent_length;
+    ret.mantissa_length = one.mantissa_length;
+    //-------------------------------
+
+
+    // Set up sign.
+    ret.sign = set_sign;
+
+
+
+    vector<bool> A(one.mantissa.begin(), one.mantissa.end());
+    vector<bool> S;
+
+    A.reserve(A.size() + (two.mantissa_length + two.exponent_length + 1) + 1 +2 +2);
+    A.insert(A.begin(), true);
+    A.insert(A.begin(), false);
+    S.reserve(A.size() + (two.mantissa_length + two.exponent_length + 1) + 1 +2 +2);
+
+    for(unsigned long i = 0; i < A.size(); i++){
+        S.push_back(!A[i]);
+    }
+    addOneToBinary(&S);
+
+    for(unsigned long i = 0; i < two.mantissa_length + 1 +1 +1; i++){
+        A.push_back(false);
+        S.push_back(false);
+    }
+
+    vector<bool> P;
+    P.reserve(A.size() + (two.mantissa_length + two.exponent_length + 1) + 1 +2 +2);
+    for(unsigned long i = 0; i < one.mantissa_length+1+1; i++){
+        P.push_back(false);
+    }
+    P.push_back(false);
+    P.push_back(true);
+    for(unsigned long i = 0; i < two.mantissa_length; i++){
+        P.push_back(two.mantissa[i]);
+    }
+    P.push_back(false);
+
+
+    for(unsigned long i = 0; i < two.mantissa_length+2; i++){
+
+
+        if(!P.end()[-2] && P.back()){
+            P = binaryAddition(P, A, false);
+        } else if(P.end()[-2] && !P.back()) {
+            P = binaryAddition(P, S, false);
+        }
+
+        P.pop_back();
+        P.insert(P.begin(), P[0]);
+
+    }
+
+    P.pop_back();
+    P.erase (P.begin());
+    int count = 0;
+    for(unsigned long i = 0; i < P.size(); i++){
+        if(P[0]){
+            P.erase(P.begin());
+            break;
+        }
+        P.erase(P.begin());
+        count++;
+    }
+
+
+    round(&P, ret.mantissa_length);
+
+
+    vector<bool> a_exponent(one.exponent.begin(), one.exponent.end());
+    vector<bool> b_exponent(two.exponent.begin(), two.exponent.end());
+
+    // TODO: Check for carry
+    b_exponent[0] = !b_exponent[0];
+    addOneToBinary(&b_exponent);
+    if(count <= 1){
+        addOneToBinary(&b_exponent);
+    }
+
+    ret.exponent = binaryAddition(a_exponent, b_exponent, false);
+    ret.exponent_as_int = (long) binaryToInt(ret.exponent) - ret.getBias();
+    ret.mantissa = P;
+
+
+
+    return ret;
+
 }
 //-------------------------------
 

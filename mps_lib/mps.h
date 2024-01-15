@@ -70,6 +70,7 @@ private:
     void setValue(double value);
     [[nodiscard]] mps addition(const mps& one, const mps& two, bool sign) const;
     [[nodiscard]] mps subtraction(const mps& minued, const mps& subtrahend, bool sign) const;
+    [[nodiscard]] mps multiplication(const mps& minued, const mps& subtrahend, bool sign) const;
 
 
 private:
