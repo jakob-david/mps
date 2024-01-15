@@ -1,7 +1,7 @@
 #include "gtest/gtest.h"
 
 #include "mps.h"
-#include "functions/functions.h"
+#include "../functions/functions.h"
 
 
 TEST(equality_tests, equality_pos_double){
