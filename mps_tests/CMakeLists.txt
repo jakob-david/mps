@@ -5,8 +5,8 @@ project(Google_tests)
 add_subdirectory(lib)
 include_directories(./lib/googletest/include ./lib/googletest)
 
-add_executable(mps_tests tests/constructor_tests.cpp
-        tests/calculation_tests.cpp
+add_executable(mps_tests tests/constructor.cpp
+        tests/calculation.cpp
         functions/functions.h)
 
 target_link_libraries(mps_tests mps_lib)
