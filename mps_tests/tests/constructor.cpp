@@ -428,6 +428,58 @@ TEST(get_value_tests, get_neg_min_float) {
     EXPECT_EQ(test_value, MPS.getValue());
 }
 
+TEST(get_value_tests, get_NAN_float) {
+
+    float test_value = numeric_limits<float>::quiet_NaN();
+    mps MPS(23, 8, test_value);
+
+    EXPECT_EQ(isnan(test_value), isnan(MPS.getValue()));
+}
+
+TEST(get_value_tests, get_NAN_double) {
+
+    double test_value = numeric_limits<double>::quiet_NaN();
+    mps MPS(52, 11, test_value);
+
+    EXPECT_EQ(isnan(test_value), isnan(MPS.getValue()));
+}
+
+TEST(get_value_tests, exponent_too_large_positive_float) {
+
+    float test_value = numeric_limits<float>::max();
+    mps MPS(23, 4, test_value);
+
+    EXPECT_EQ(true, MPS.isInfinity());
+    EXPECT_EQ(true, MPS.isPositive());
+}
+
+TEST(get_value_tests, exponent_too_large_double) {
+
+    double test_value = numeric_limits<double>::max();
+    mps MPS(52, 10, test_value);
+
+    EXPECT_EQ(true, MPS.isInfinity());
+    EXPECT_EQ(true, MPS.isPositive());
+}
+
+TEST(get_value_tests, exponent_too_large_negative_float) {
+
+    float test_value = numeric_limits<float>::max() * -1;
+    mps MPS(23, 4, test_value);
+
+    EXPECT_EQ(true, MPS.isInfinity());
+    EXPECT_EQ(false, MPS.isPositive());
+}
+
+TEST(get_value_tests, exponent_too_negative_double) {
+
+    double test_value = numeric_limits<double>::max() * -1;
+    mps MPS(52, 10, test_value);
+
+    EXPECT_EQ(true, MPS.isInfinity());
+    EXPECT_EQ(false, MPS.isPositive());
+}
+
 
 // ######################
 // Setter Tests
@@ -505,21 +557,3 @@ TEST(setter_tests, set_NAN_float) {
 }
 
 
-// ######################
-// Getter Tests
-// ######################
-TEST(getter_test, get_NAN_float) {
-
-    float test_value = numeric_limits<float>::quiet_NaN();
-    mps MPS(23, 8, test_value);
-
-    EXPECT_EQ(true, MPS.isNaN());
-}
-
-TEST(getter_test, get_NAN_double) {
-
-    double test_value = numeric_limits<double>::quiet_NaN();
-    mps MPS(52, 11, test_value);
-
-    EXPECT_EQ(true, MPS.isNaN());
-}

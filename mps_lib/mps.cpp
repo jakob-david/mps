@@ -116,9 +116,9 @@ double mps::getValue() const {
         return numeric_limits<double>::infinity();
     } else if (isInfinity()){
         return numeric_limits<double>::infinity() * -1;
+    } else if (isNaN()){
+        return numeric_limits<double>::quiet_NaN();
     }
-
-    //TODO: add NANs
 
 
     double ret;
@@ -492,8 +492,15 @@ void mps::setValue(const double value) {
 
     // Fill not used but available bits with zero.
     if(exponent.size() > exponent_length) {
-        cout << "ERROR: exponent too large" << endl;
-        // TODO: add proper error handling.
+
+        if(value > 0){
+            this->setInf();
+        } else {
+            this->setInf(true);
+        }
+
+        return;
+
     } else {
         for(unsigned long i = exponent.size(); i < exponent_length; i++){
             exponent.insert(exponent.begin(), false);
