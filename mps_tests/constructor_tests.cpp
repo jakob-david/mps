@@ -1,34 +1,8 @@
 #include "gtest/gtest.h"
 
+#include "functions/functions.h"
 #include "mps.h"
-#include <bitset>
 
-std::string is_mps(vector<bool> vec){
-
-    string str;
-    for(bool bit : vec){
-        if(bit){
-            str.append("1");
-        } else {
-            str.append("0");
-        }
-    }
-
-    return str;
-}
-
-template <typename T>
-std::string should_value(T fp_number){
-
-    string compare_str;
-    char* bits = reinterpret_cast<char*>(&fp_number);
-    for(unsigned long n = 0; n < sizeof fp_number; ++n) {
-        string tmp = std::bitset<8>((unsigned long long) bits[n]).to_string();
-        compare_str.insert (0, tmp);
-    }
-
-    return  compare_str;
-}
 
 
 TEST(constructor_tests, constructor_sets_values_coorectly){

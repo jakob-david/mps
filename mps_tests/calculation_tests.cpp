@@ -1,35 +1,7 @@
 #include "gtest/gtest.h"
 
 #include "mps.h"
-#include <bitset>
-
-std::string is_mps2(const vector<bool>& vec){
-
-    string str;
-    for(bool bit : vec){
-        if(bit){
-            str.append("1");
-        } else {
-            str.append("0");
-        }
-    }
-
-    return str;
-}
-
-template <typename T>
-std::string should_value2(T fp_number){
-
-    string compare_str;
-    char* bits = reinterpret_cast<char*>(&fp_number);
-    for(unsigned long n = 0; n < sizeof fp_number; ++n) {
-        string tmp = std::bitset<8>((unsigned long long) bits[n]).to_string();
-        compare_str.insert (0, tmp);
-    }
-
-    return  compare_str;
-}
-
+#include "functions/functions.h"
 
 
 TEST(equality_tests, equality_pos_double){
@@ -303,7 +275,7 @@ TEST(addition_tests, negative_first_number_double) {
     auto test = MPS + MPS_2;
 
     EXPECT_EQ(value_1+value_2, test.getValue());
-    EXPECT_EQ(should_value2(value_1+value_2), is_mps2(test.getBitArray()));
+    EXPECT_EQ(should_value(value_1+value_2), is_mps(test.getBitArray()));
 }
 
 TEST(addition_tests, negative_first_number_float) {
@@ -357,7 +329,7 @@ TEST(subtraction_tests, coding) {
 
     auto test = MPS - MPS_2;
 
-    EXPECT_EQ(should_value2(value_1 - value_2), is_mps2(test.getBitArray()));
+    EXPECT_EQ(should_value(value_1 - value_2), is_mps(test.getBitArray()));
 }
 
 TEST(subtraction_tests, simple_subtractiob_float) {
@@ -553,7 +525,7 @@ TEST(multiplication_tests, coding) {
 
     auto test = MPS * MPS_2;
 
-    EXPECT_EQ(should_value2(value_1 * value_2), is_mps2(test.getBitArray()));
+    EXPECT_EQ(should_value(value_1 * value_2), is_mps(test.getBitArray()));
 }
 
 TEST(multiplication_tests, multiplication_float_1) {
