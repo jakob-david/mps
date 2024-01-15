@@ -811,10 +811,10 @@ vector<bool> mps::binaryAddition(const vector<bool>& a, const vector<bool>& b, b
     bool carrier = false;
 
     // full adder
-    // TODO: Use while loop
-    for(long i = (long) a.size()-1; i >= 0; i--){
-        ret.insert(ret.begin(), (a[(unsigned long)i] ^ b[(unsigned long)i]) ^ carrier);
-        carrier = ((a[(unsigned long) i] && b[(unsigned long)i]) || (a[(unsigned long)i] && carrier)) || (b[(unsigned long)i] && carrier);
+    for(auto i = a.size(); i > 0;){
+        i--;
+        ret.insert(ret.begin(), (a[i] ^ b[i]) ^ carrier);
+        carrier = ((a[i] && b[i]) || (a[i] && carrier)) || (b[i] && carrier);
     }
 
     // adjust if carrier bit is 1
