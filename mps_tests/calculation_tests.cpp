@@ -35,14 +35,13 @@ std::string should_value2(T fp_number){
 TEST(equality_tests, equality_pos_double){
 
     double test_value = 234536.34634;
+    mps MPS(52, 11, test_value);
 
-    mps* MPS = new mps(52, 11, test_value);
+    mps MPS_copy = MPS;
 
-    mps* MPS_copy = MPS;
-
-    EXPECT_EQ(MPS->getMantisseLength(), MPS_copy->getMantisseLength());
-    EXPECT_EQ(MPS->getExponentLength(), MPS_copy->getExponentLength());
-    EXPECT_EQ(test_value, MPS_copy->getValue());
+    EXPECT_EQ(MPS.getMantisseLength(), MPS_copy.getMantisseLength());
+    EXPECT_EQ(MPS.getExponentLength(), MPS_copy.getExponentLength());
+    EXPECT_EQ(test_value, MPS_copy.getValue());
 }
 
 TEST(equality_tests, equality_pos_float){

@@ -59,6 +59,7 @@ public:
     // operators
     //-------------------------------
     mps& operator=(const mps& other);
+    mps& operator=(double value);
     mps operator+(const mps& other) const;
     mps operator-(const mps& other) const;
     mps operator*(const mps& other) const;
@@ -72,7 +73,7 @@ private:
 
     // helper functions
     //-------------------------------
-    void setBitArray(const double value);
+public: void setBitArray(const double value);
     [[nodiscard]] int getBias() const;
 
 public:

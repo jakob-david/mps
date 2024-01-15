@@ -89,7 +89,7 @@ int main() {
     //double lower_bound = 0;
     //double upper_bound = 100;
 
-for (unsigned long mant = 0; mant < 100; mant++) {
+for (unsigned long mant = 0; mant < 70; mant++) {
     mps one(mant, 8, 3432.45);
     mps two(mant, 8, 143.3 );
 
@@ -97,7 +97,7 @@ for (unsigned long mant = 0; mant < 100; mant++) {
             std::chrono::system_clock::now().time_since_epoch()
     );
 
-    for (long int i = 0; i < 200000; i++) {
+    for (long int i = 0; i < 1000000; i++) {
 
 /*
         std::uniform_real_distribution<double> unif(lower_bound,upper_bound);
@@ -110,7 +110,9 @@ for (unsigned long mant = 0; mant < 100; mant++) {
         g = unif(re);
 */
 
-        one - two;
+        //one.setBitArray(4);
+        one = 4;
+        //one * two;
         //c = b*a;
     }
 

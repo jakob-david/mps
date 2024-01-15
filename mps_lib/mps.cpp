@@ -31,7 +31,7 @@ mps::mps(unsigned long mantissa_length, unsigned long exponent_length, double va
     this->sign = false;
     this->exponent_as_int = 0;
 
-    setBitArray(value);
+    this->setBitArray(value);
 }
 
 mps::mps(){
@@ -388,6 +388,12 @@ void mps::setBitArray(const double value) {
 // operators
 //-------------------------------
 
+mps& mps::operator=(double value){
+
+    this->setBitArray(value);
+    return *this;
+}
+
 /**
  * Sets one mps object equal to an other mps object.
  */
@@ -484,6 +490,7 @@ mps mps::addition(const mps &one, const mps &two, const bool set_sign) const {
 
     return ret;
 }
+
 /**
  * Performs am addition to two mps floating point values.
  */
