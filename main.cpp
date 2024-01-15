@@ -110,7 +110,7 @@ for (unsigned long mant = 0; mant < 70; mant++) {
         g = unif(re);
 */
 
-        //one.setBitArray(4);
+        //one.setValue(4);
         one = 4;
         //one * two;
         //c = b*a;

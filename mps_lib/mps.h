@@ -26,14 +26,14 @@ private:
     long exponent_as_int;      // The exponent saved as integer (used for internal optimization)
     //-------------------------------
 
-public:
 
+
+public:
     // constructors and destructor
     //-------------------------------
     mps(unsigned long mantissa_length, unsigned long exponent_length, double value);
     mps();
     ~mps();
-    //-------------------------------
 
     // getter methods
     //-------------------------------
@@ -42,20 +42,19 @@ public:
     [[nodiscard]] unsigned long getBitArrayLength() const;
     [[nodiscard]] vector<bool> getBitArray();
     [[nodiscard]] double getValue();
-    [[nodiscard]] long getExponentAsInt() const;
 
     [[nodiscard]] bool isZero();
     [[nodiscard]] bool isInfinity();
     [[nodiscard]] bool isPositive() const;
-    //-------------------------------
 
     // setter methods
     //-------------------------------
     void setInf(bool negative = false);
     void setZero();
     void setNaN(bool negative = false);
-    //-------------------------------
 
+
+public:
     // operators
     //-------------------------------
     mps& operator=(const mps& other);
@@ -64,29 +63,28 @@ public:
     mps operator-(const mps& other) const;
     mps operator*(const mps& other) const;
 
-    // helper
+private:
+    // helper for operators
+    //-------------------------------
+    void setValue(double value);
     [[nodiscard]] mps addition(const mps& one, const mps& two, bool sign) const;
     [[nodiscard]] mps subtraction(const mps& minued, const mps& subtrahend, bool sign) const;
-    //-------------------------------
+
 
 private:
-
-    // helper functions
+    // general helper functions
     //-------------------------------
-public: void setBitArray(const double value);
-    [[nodiscard]] int getBias() const;
-
-public:
     [[nodiscard]] static vector<bool> binaryAddition(const vector<bool>& one, const vector<bool>& two, bool carry, bool* carrier_return = nullptr);
     [[nodiscard]] static vector<bool> binarySubtraction(const vector<bool>& minuend, const vector<bool>& subtrahend);
     static inline void round(vector<bool>* mantissa, unsigned long mantissa_len);
 
     [[nodiscard]] static unsigned long binaryToInt(vector<bool> bit_vector);
     [[nodiscard]] static vector<bool> intToBinary(unsigned long value);
+
+    [[nodiscard]] int getBias() const;
     [[nodiscard]] static char larger(const vector<bool>& a, const vector<bool>& b);
     static void matchMantissas(vector<bool>* vector_right_shift, vector<bool>* vector_left_shift, unsigned long amount);
     static bool addOneToBinary(vector<bool>* vector);
-    //-------------------------------
 
 };
 

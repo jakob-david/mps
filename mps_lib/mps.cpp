@@ -15,7 +15,7 @@
 //-------------------------------
 
 /**
- * Constructor for the multiprecision simulator.
+ * Constructor for a multiprecision simulator object using values.
  *
  * @param mantisse Mantisse of the floating point representation.
  * @param exponent Exponent of the floating point representation.
@@ -31,9 +31,12 @@ mps::mps(unsigned long mantissa_length, unsigned long exponent_length, double va
     this->sign = false;
     this->exponent_as_int = 0;
 
-    this->setBitArray(value);
+    this->setValue(value);
 }
 
+/**
+ * Constructor for an empty multiprecision simulator object.
+ */
 mps::mps(){
     this->mantissa_length = 0;
     this->exponent_length = 0;
@@ -43,7 +46,7 @@ mps::mps(){
 }
 
 /**
- * Destructor for the multiprecision simulator.
+ * Destructor for a multiprecision simulator object.
  */
 mps::~mps() = default;
 
@@ -82,9 +85,10 @@ unsigned long mps::getBitArrayLength() const {
 }
 
 /**
- * Returns the bit vector.
+ * Concatenates the sign bit with the exponent vector and the mantissa vector.
+ * The resulting vector is representing the floating point number in memory.
  *
- * @return bit vector
+ * @return vector representing the floating point number.
  */
 vector<bool> mps::getBitArray() {
 
@@ -98,9 +102,8 @@ vector<bool> mps::getBitArray() {
     return ret;
 }
 
-
 /**
- * Returns the value of the mps object as double.
+ * Calculates the value of the floating point object as double.
  *
  * @return value as double.
  */
@@ -140,7 +143,6 @@ double mps::getValue() {
 
     return ret * pow(2, exponent_as_int);
 }
-
 
 /**
  * Returns true if the mps object is zero.
@@ -209,6 +211,7 @@ bool mps::isPositive() const{
 
 // setter methods
 //-------------------------------
+
 /**
  * Sets the floating point number to infinity.
  *
@@ -268,129 +271,16 @@ void mps::setNaN(bool negative){
 //-------------------------------
 
 
-// Converters
-//-------------------------------
-
-/**
- * Sets the bit vector of the mps object.
- *
- * @param value the value to which the bit array should be set.
- */
-void mps::setBitArray(const double value) {
-
-    // Handle special values.
-    //-------------------------------
-    if(0 == value){
-        setZero(); return;
-    } else if(numeric_limits<double>::infinity() == value) {
-        setInf(); return;
-    } else if (numeric_limits<double>::infinity() * -1 == value){
-        setInf(true); return;
-    } else if (isnan(value)){
-        if(signbit(value)){
-            setNaN(true);
-        } else {
-            setNaN();
-        }
-        return;
-    }
-    //-------------------------------
-
-    // prepare vectors
-    //-------------------------------
-    exponent.clear();
-    mantissa.clear();
-    //-------------------------------
-
-
-    // sign
-    //-------------------------------
-    if(value > 0){
-        this->sign = false;
-    } else {
-        this->sign = true;
-    }
-    //-------------------------------
-
-
-    // exponent
-    //-------------------------------
-    // calculate the exponent
-    long mantissa_shift;
-    if(abs(value) > numeric_limits<float>::max()){
-        // When the value is too large rounding problems occur using log2.
-        // (At least I think that is the problem)
-        double tmp_value = abs(value);
-        long tmp_count = 0;
-
-        while(tmp_value > 1){
-            tmp_value /= 2;
-            tmp_count++;
-        }
-
-        mantissa_shift = tmp_count-1;
-    } else {
-        mantissa_shift = (long) floor(log2(abs(value)));
-    }
-    exponent_as_int =  mantissa_shift;
-
-    // Getting the exponent in binary format.
-    // The sign is not relevant. Always returns a "positive" value.
-    // TODO: Maybe prevent insert.
-    for(auto i = exponent_as_int + getBias(); i > 0; i /= 2){
-        exponent.insert(exponent.begin(), i % 2);
-    }
-
-    // Fill not used but available bits with zero.
-    if(exponent.size() > exponent_length) {
-        cout << "ERROR: exponent too large" << endl;
-        // TODO: add proper error handling.
-    } else {
-        for(unsigned long i = exponent.size(); i < exponent_length; i++){
-            exponent.insert(exponent.begin(), false);
-        }
-    }
-
-    //-------------------------------
-
-
-    // mantissa
-    //-------------------------------
-    auto tmp_value = value / pow(2, mantissa_shift); // adjust the value so that everything is behind the decimal point.
-
-    // Convert the part after the decimal point to a bit string.
-    // The sign is not relevant. Always returns a "positive" value.
-    double reminder = abs(tmp_value) - floor(abs(tmp_value));
-    for(unsigned long i = 0; i < mantissa_length; i++){
-
-        reminder *= 2;
-        if(reminder >= 1){
-            mantissa.push_back(true); reminder -= 1;
-        } else{
-            mantissa.push_back(false);
-        }
-    }
-    //-------------------------------
-
-}
-//-------------------------------
-
-
-
-
-
-
-
-
-
-
 
 // operators
 //-------------------------------
 
+/**
+ * Sets the value of the mps object.
+ */
 mps& mps::operator=(double value){
 
-    this->setBitArray(value);
+    this->setValue(value);
     return *this;
 }
 
@@ -434,7 +324,264 @@ mps& mps::operator=(const mps& other) {
     return *this;
 }
 
+/**
+ * Performs am addition to two mps floating point values.
+ *
+ * It is responsible for error handling, special values and choosing with "calculation" to use.
+ */
+mps mps::operator+(const mps& other) const {
 
+    if (this->exponent_length != other.exponent_length) {
+        cout << "ERROR: in + : Exponents do not match" << endl;
+    }
+    if (this->mantissa_length != other.mantissa_length) {
+        cout << "ERROR: in + : Mantissas do not match" << endl;
+    }
+
+
+    if(this->isPositive() && other.isPositive()){
+        return addition(*this, other, false);
+    } else if(!this->isPositive() && !other.isPositive()){
+        return addition(*this, other, true);
+    } else if(!this->isPositive()){
+        return subtraction(other, *this, false);
+    } else{
+        return subtraction(*this, other, false);
+    }
+
+}
+
+/**
+ * Performs am subtraction to two mps floating point values.
+ *
+ * It is responsible for error handling, special values and choosing with "calculation" to use.
+ */
+mps mps::operator-(const mps& other) const {
+
+    if (this->exponent_length != other.exponent_length) {
+        cout << "ERROR: in - : Exponents do not match" << endl;
+    }
+    if (this->mantissa_length != other.mantissa_length) {
+        cout << "ERROR: in - : Mantissas do not match" << endl;
+    }
+
+
+    if(this->isPositive() && other.isPositive()){
+        return subtraction(*this, other, false);
+    } else if(!this->isPositive() && !other.isPositive()){
+        return subtraction(*this, other, true);
+    } else if(this->isPositive()) {
+        return addition(*this, other, false);
+    } else {
+        return addition(*this, other, true);
+    }
+}
+
+/**
+ * Performs one full multiplication.
+ */
+mps mps::operator*(const mps& other) const {
+
+    // Set up the return object.
+    //-------------------------------
+    mps ret;
+    ret.exponent_length = this->exponent_length;
+    ret.mantissa_length = this->mantissa_length;
+    //-------------------------------
+
+
+    // Set up sign.
+    ret.sign = this->sign != other.sign;
+
+
+
+    vector<bool> A(this->mantissa.begin(), this->mantissa.end());
+    vector<bool> S;
+
+    A.reserve(A.size() + (other.mantissa_length + other.exponent_length + 1) + 1 +2 +2);
+    A.insert(A.begin(), true);
+    A.insert(A.begin(), false);
+    S.reserve(A.size() + (other.mantissa_length + other.exponent_length + 1) + 1 +2 +2);
+
+    for(unsigned long i = 0; i < A.size(); i++){
+        S.push_back(!A[i]);
+    }
+    addOneToBinary(&S);
+
+    for(unsigned long i = 0; i < other.mantissa_length + 1 +1 +1; i++){
+        A.push_back(false);
+        S.push_back(false);
+    }
+
+    vector<bool> P;
+    P.reserve(A.size() + (other.mantissa_length + other.exponent_length + 1) + 1 +2 +2);
+    for(unsigned long i = 0; i < this->mantissa_length+1+1; i++){
+        P.push_back(false);
+    }
+    P.push_back(false);
+    P.push_back(true);
+    for(unsigned long i = 0; i < other.mantissa_length; i++){
+        P.push_back(other.mantissa[i]);
+    }
+    P.push_back(false);
+
+
+    for(unsigned long i = 0; i < other.mantissa_length+2; i++){
+
+
+        if(!P.end()[-2] && P.back()){
+            P = binaryAddition(P, A, false);
+        } else if(P.end()[-2] && !P.back()) {
+            P = binaryAddition(P, S, false);
+        }
+
+        P.pop_back();
+        P.insert(P.begin(), P[0]);
+
+    }
+
+    P.pop_back();
+    P.erase (P.begin());
+    int count = 0;
+    for(unsigned long i = 0; i < P.size(); i++){
+        if(P[0]){
+            P.erase(P.begin());
+            break;
+        }
+        P.erase(P.begin());
+        count++;
+    }
+
+
+    round(&P, ret.mantissa_length);
+
+
+    vector<bool> a_exponent(this->exponent.begin(), this->exponent.end());
+    vector<bool> b_exponent(other.exponent.begin(), other.exponent.end());
+
+    // TODO: Check for carry
+    b_exponent[0] = !b_exponent[0];
+    addOneToBinary(&b_exponent);
+    if(count <= 1){
+        addOneToBinary(&b_exponent);
+    }
+
+    ret.exponent = binaryAddition(a_exponent, b_exponent, false);
+    ret.exponent_as_int = (long) binaryToInt(ret.exponent) - ret.getBias();
+    ret.mantissa = P;
+
+
+
+    return ret;
+}
+
+
+/**
+ * Calculates the binary floating point representation of the given value and saves it inside the mps object.
+ *
+ * @param value the value to which the bit array should be set.
+ */
+void mps::setValue(const double value) {
+
+    // Handle special values.
+    //-------------------------------
+    if(0 == value){
+        setZero(); return;
+    } else if(numeric_limits<double>::infinity() == value) {
+        setInf(); return;
+    } else if (numeric_limits<double>::infinity() * -1 == value){
+        setInf(true); return;
+    } else if (isnan(value)){
+        if(signbit(value)){
+            setNaN(true);
+        } else {
+            setNaN();
+        }
+        return;
+    }
+    //-------------------------------
+
+    // prepare vectors
+    //-------------------------------
+    exponent.clear();
+    mantissa.clear();
+    //-------------------------------
+
+
+    // set sign
+    //-------------------------------
+    this->sign = value <= 0;
+    //-------------------------------
+
+
+    // exponent
+    //-------------------------------
+    // calculate the exponent
+    long mantissa_shift;
+    if(abs(value) > numeric_limits<float>::max()){
+        // When the value is too large rounding problems occur using log2.
+        // (At least I think that is the problem)
+        double tmp_value = abs(value);
+        long tmp_count = 0;
+
+        while(tmp_value > 1){
+            tmp_value /= 2;
+            tmp_count++;
+        }
+
+        mantissa_shift = tmp_count-1;
+    } else {
+        mantissa_shift = (long) floor(log2(abs(value)));
+    }
+    exponent_as_int =  mantissa_shift;
+
+    // Getting the exponent in binary format.
+    // The sign is not relevant. Always returns a "positive" value.
+    // TODO: Maybe prevent insert.
+    for(auto i = exponent_as_int + getBias(); i > 0; i /= 2){
+        exponent.insert(exponent.begin(), i % 2);
+    }
+
+    // Fill not used but available bits with zero.
+    if(exponent.size() > exponent_length) {
+        cout << "ERROR: exponent too large" << endl;
+        // TODO: add proper error handling.
+    } else {
+        for(unsigned long i = exponent.size(); i < exponent_length; i++){
+            exponent.insert(exponent.begin(), false);
+        }
+    }
+    //-------------------------------
+
+
+    // mantissa
+    //-------------------------------
+    auto tmp_value = value / pow(2, mantissa_shift); // adjust the value so that everything is behind the decimal point.
+
+    // Convert the part after the decimal point to a bit string.
+    // The sign is not relevant. Always returns a "positive" value.
+    double reminder = abs(tmp_value) - floor(abs(tmp_value));
+    for(unsigned long i = 0; i < mantissa_length; i++){
+
+        reminder *= 2;
+        if(reminder >= 1){
+            mantissa.push_back(true); reminder -= 1;
+        } else{
+            mantissa.push_back(false);
+        }
+    }
+    //-------------------------------
+
+}
+
+/**
+ * Performs an addition on two mps objects which have the same sign.
+ *
+ * @param one reference to the first addend
+ * @param two reference to the second addend
+ * @param set_sign the sign to which the final result should be set.
+ * @return the resulting mps object.
+ */
 mps mps::addition(const mps &one, const mps &two, const bool set_sign) const {
 
     // Set up the return object.
@@ -492,30 +639,13 @@ mps mps::addition(const mps &one, const mps &two, const bool set_sign) const {
 }
 
 /**
- * Performs am addition to two mps floating point values.
+ * Performs a subtraction on two mps objects which have the same sign.
+ *
+ * @param minued reference to the minued number.
+ * @param subtrahend reference to the subtracted number
+ * @param set_sign the sign to which the final result should be set.
+ * @return the resulting mps object.
  */
-mps mps::operator+(const mps& other) const {
-
-    if (this->exponent_length != other.exponent_length) {
-        cout << "ERROR: in + : Exponents do not match" << endl;
-    }
-    if (this->mantissa_length != other.mantissa_length) {
-        cout << "ERROR: in + : Mantissas do not match" << endl;
-    }
-
-
-    if(this->isPositive() && other.isPositive()){
-        return addition(*this, other, false);
-    } else if(!this->isPositive() && !other.isPositive()){
-        return addition(*this, other, true);
-    } else if(!this->isPositive()){
-        return subtraction(other, *this, false);
-    } else{
-        return subtraction(*this, other, false);
-    }
-
-}
-
 mps mps::subtraction(const mps &minued, const mps &subtrahend, bool set_sign) const {
 
     // Set up the return object.
@@ -600,172 +730,11 @@ mps mps::subtraction(const mps &minued, const mps &subtrahend, bool set_sign) co
 
     return ret;
 }
-
-mps mps::operator-(const mps& other) const {
-
-    if (this->exponent_length != other.exponent_length) {
-        cout << "ERROR: in - : Exponents do not match" << endl;
-    }
-    if (this->mantissa_length != other.mantissa_length) {
-        cout << "ERROR: in - : Mantissas do not match" << endl;
-    }
-
-
-    if(this->isPositive() && other.isPositive()){
-        return subtraction(*this, other, false);
-    } else if(!this->isPositive() && !other.isPositive()){
-        return subtraction(*this, other, true);
-    } else if(this->isPositive()) {
-        return addition(*this, other, false);
-    } else {
-        return addition(*this, other, true);
-    }
-}
-
-mps mps::operator*(const mps& other) const {
-
-    // Set up the return object.
-    //-------------------------------
-    mps ret;
-    ret.exponent_length = this->exponent_length;
-    ret.mantissa_length = this->mantissa_length;
-    //-------------------------------
-
-
-    // Set up sign.
-    ret.sign = this->sign != other.sign;
-
-
-
-    vector<bool> A(this->mantissa.begin(), this->mantissa.end());
-    vector<bool> S;
-
-    A.reserve(A.size() + (other.mantissa_length + other.exponent_length + 1) + 1 +2 +2);
-    A.insert(A.begin(), true);
-    A.insert(A.begin(), false);
-    S.reserve(A.size() + (other.mantissa_length + other.exponent_length + 1) + 1 +2 +2);
-
-    for(unsigned long i = 0; i < A.size(); i++){
-        S.push_back(!A[i]);
-    }
-    addOneToBinary(&S);
-
-    for(unsigned long i = 0; i < other.mantissa_length + 1 +1 +1; i++){
-        A.push_back(false);
-        S.push_back(false);
-    }
-
-    vector<bool> P;
-    P.reserve(A.size() + (other.mantissa_length + other.exponent_length + 1) + 1 +2 +2);
-    for(unsigned long i = 0; i < this->mantissa_length+1+1; i++){
-        P.push_back(false);
-    }
-    P.push_back(false);
-    P.push_back(true);
-    for(unsigned long i = 0; i < other.mantissa_length; i++){
-       P.push_back(other.mantissa[i]);
-    }
-    P.push_back(false);
-
-
-    for(unsigned long i = 0; i < other.mantissa_length+2; i++){
-
-
-        if(!P.end()[-2] && P.back()){
-            P = binaryAddition(P, A, false);
-        } else if(P.end()[-2] && !P.back()) {
-            P = binaryAddition(P, S, false);
-        }
-
-        P.pop_back();
-        P.insert(P.begin(), P[0]);
-
-    }
-
-    P.pop_back();
-    P.erase (P.begin());
-    int count = 0;
-    for(unsigned long i = 0; i < P.size(); i++){
-        if(P[0]){
-            P.erase(P.begin());
-            break;
-        }
-        P.erase(P.begin());
-        count++;
-    }
-
-
-    round(&P, ret.mantissa_length);
-
-    /*
-    // rounding
-    //-------------------------------
-    if((int) P.size() > ret.mantissa_length){
-        bool tmp = false;
-        for(int i = ret.mantissa_length+1 ; i < (int) P.size(); i++){
-            if (P[i]){
-                tmp = true;
-                break;
-            }
-        }
-        if(P[ret.mantissa_length] && tmp){
-            P.erase(P.end()-((int) P.size()-ret.mantissa_length), P.end());
-            if(addOneToBinary(&P)){
-                addOneToBinary(&P);
-            }
-        } else if(P[ret.mantissa_length]){
-            if(P[ret.mantissa_length-1]){
-                P.erase(P.end()-((int) P.size()-ret.mantissa_length), P.end());
-                if(addOneToBinary(&P)){
-                    addOneToBinary(&P);
-                }
-            } else {
-                P.erase(P.end()-((int) P.size()-ret.mantissa_length), P.end());
-            }
-        }else {
-            P.erase(P.end()-((int) P.size()-ret.mantissa_length), P.end());
-        }
-    }
-    //-------------------------------
-*/
-
-
-
-    vector<bool> a_exponent(this->exponent.begin(), this->exponent.end());
-    vector<bool> b_exponent(other.exponent.begin(), other.exponent.end());
-
-    // TODO: Check for carry
-    b_exponent[0] = !b_exponent[0];
-    addOneToBinary(&b_exponent);
-    if(count <= 1){
-        addOneToBinary(&b_exponent);
-    }
-
-    ret.exponent = binaryAddition(a_exponent, b_exponent, false);
-    ret.exponent_as_int = (long) binaryToInt(ret.exponent) - ret.getBias();
-    ret.mantissa = P;
-
-
-
-    return ret;
-}
 //-------------------------------
 
 
 // helper methods
 //-------------------------------
-
-
-
-/**
- * Returns the bias of the exponent.
- *
- * @return bias of the exponent
- */
-int mps::getBias() const{
-    return ((int) pow (2, exponent_length)) / 2 -1;
-}
-
 
 /**
  * Performs a binary addition using a full adder.
@@ -910,6 +879,16 @@ vector<bool> mps::intToBinary(unsigned long value) {
     return ret;
 }
 
+
+/**
+ * Returns the bias of the exponent.
+ *
+ * @return bias of the exponent
+ */
+int mps::getBias() const{
+    return ((int) pow (2, exponent_length)) / 2 -1;
+}
+
 /**
  * To be read: Is the bit value a represents larger than the one of b.
  * 1 if a > b
@@ -978,9 +957,5 @@ bool mps::addOneToBinary(vector<bool>* vector){
     vector->insert(vector->begin(), true);
     vector->pop_back();
     return true;
-}
-
-[[nodiscard]] long mps::getExponentAsInt() const{
-    return exponent_as_int;
 }
 //-------------------------------
