@@ -396,6 +396,15 @@ TEST(get_value_tests, get_neg_max_float) {
     EXPECT_EQ(test_value, MPS.getValue());
 }
 
+TEST(get_value_tests, mantissa_all_zero) {
+
+    double test_value = pow(2, 128);
+    mps MPS2(52, 11, test_value);
+
+    EXPECT_EQ(test_value, MPS2.getValue());
+    EXPECT_EQ(should_value(test_value), is_mps(MPS2.getBitArray()));
+}
+
 TEST(get_value_tests, get_pos_min_double) {
 
     double test_value = numeric_limits<double>::min();
@@ -471,13 +480,36 @@ TEST(get_value_tests, exponent_too_large_negative_float) {
     EXPECT_EQ(false, MPS.isPositive());
 }
 
-TEST(get_value_tests, exponent_too_negative_double) {
+TEST(get_value_tests, exponent_too_large_negative_double) {
 
     double test_value = numeric_limits<double>::max() * -1;
     mps MPS(52, 10, test_value);
 
     EXPECT_EQ(true, MPS.isInfinity());
     EXPECT_EQ(false, MPS.isPositive());
+}
+
+TEST(get_value_tests, value_too_large_positive) {
+
+    double test_value = pow(2, 128);
+    mps MPS(23, 8, test_value);
+    mps MPS2(52, 11, test_value);
+
+    EXPECT_EQ((float) test_value, MPS.getValue());
+    EXPECT_EQ(should_value((float) test_value), is_mps(MPS.getBitArray()));
+    EXPECT_EQ(test_value, MPS2.getValue());
+    EXPECT_EQ(should_value(test_value), is_mps(MPS2.getBitArray()));
+}
+
+TEST(get_value_tests, value_too_large_negative) {
+
+    double test_value = pow(2, 127) * -1;
+    mps MPS(23, 8, test_value);
+    mps MPS2(52, 11, test_value);
+
+    EXPECT_EQ(test_value, MPS.getValue());
+    EXPECT_EQ(should_value((float) test_value), is_mps(MPS.getBitArray()));
+    EXPECT_EQ(should_value(test_value), is_mps(MPS2.getBitArray()));
 }
 
 

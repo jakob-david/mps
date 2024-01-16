@@ -29,6 +29,12 @@ void func(vector<bool> test_1, vector<bool> test_2, vector<bool> test_3, unsigne
 
 
 int main() {
+
+
+    vector<bool> b;
+    b.resize(10);
+    b.insert(b.begin(), false);
+    cout << b.size() << endl;
 /*
     for (int i = 0; i < 50; i++) {
 

@@ -472,17 +472,15 @@ void mps::setValue(const double value) {
         double tmp_value = abs(value);
         long tmp_count = 0;
 
-        while(tmp_value > 1){
+        while(tmp_value >= 1){
             tmp_value /= 2;
             tmp_count++;
         }
-
         mantissa_shift = tmp_count-1;
     } else {
         mantissa_shift = (long) floor(log2(abs(value)));
     }
     exponent_as_int =  mantissa_shift;
-
     // Getting the exponent in binary format.
     // The sign is not relevant. Always returns a "positive" value.
     // TODO: Maybe prevent insert.
@@ -490,8 +488,17 @@ void mps::setValue(const double value) {
         exponent.insert(exponent.begin(), i % 2);
     }
 
+    bool value_too_large = false;
+    if(exponent.size() > exponent_length){
+        value_too_large = true;
+    } else if(exponent.size() == exponent_length){
+        value_too_large = std::all_of(exponent.begin(), exponent.end(), [](bool i){return i;});
+    }
     // Fill not used but available bits with zero.
-    if(exponent.size() > exponent_length) {
+    if  (value_too_large){
+
+        exponent.resize(exponent_length);
+        mantissa.resize(mantissa_length);
 
         if(value > 0){
             this->setInf();
