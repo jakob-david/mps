@@ -317,6 +317,113 @@ TEST(addition_tests, negative_second_number_float) {
     EXPECT_EQ(value_2+value_1, test.getValue());
 }
 
+TEST(addition_tests, over_max_double) {
+
+    double value_1 = numeric_limits<double>::max();
+    double value_2 = pow(2, 1000);
+
+    mps MPS(52,11,value_1);
+    mps MPS_2(52,11,value_2);
+
+    auto test = MPS + MPS_2;
+
+    EXPECT_EQ(value_1+value_2, test.getValue());
+    EXPECT_EQ(true, test.isInfinity());
+}
+
+TEST(addition_tests, over_max_float) {
+
+    float value_1 = numeric_limits<float>::max();
+    float value_2 = (float) pow(2, 110);
+
+    mps MPS(23,8,value_1);
+    mps MPS_2(23,8,value_2);
+
+    auto test = MPS + MPS_2;
+
+    EXPECT_EQ(value_2+value_1, test.getValue());
+    EXPECT_EQ(true, test.isInfinity());
+}
+
+TEST(addition_tests, over_max_negative_double) {
+
+    double value_1 = numeric_limits<double>::max() * -1;
+    double value_2 = pow(2, 1000) * -1;
+
+    mps MPS(52,11,value_1);
+    mps MPS_2(52,11,value_2);
+
+    auto test = MPS + MPS_2;
+
+    EXPECT_EQ(value_1+value_2, test.getValue());
+    EXPECT_EQ(true, test.isInfinity());
+}
+
+TEST(addition_tests, over_max_negative_float) {
+
+    float value_1 = numeric_limits<float>::max() * -1;
+    float value_2 = (float) pow(2, 110) * -1;
+
+    mps MPS(23,8,value_1);
+    mps MPS_2(23,8,value_2);
+
+    auto test = MPS + MPS_2;
+
+    EXPECT_EQ(value_2+value_1, test.getValue());
+    EXPECT_EQ(true, test.isInfinity());
+}
+
+TEST(addition_tests, NAN_left_double) {
+
+    double value_1 = NAN;
+    double value_2 = -238683.355;
+
+    mps MPS(52,11,value_1);
+    mps MPS_2(52,11,value_2);
+
+    auto test = MPS + MPS_2;
+
+    EXPECT_EQ(isnan(value_1+value_2), isnan(test.getValue()));
+}
+
+TEST(addition_tests, NAN_left_float) {
+
+    float value_1 = NAN;
+    float value_2 = -238683.355f;
+
+    mps MPS(23,8,value_1);
+    mps MPS_2(23,8,value_2);
+
+    auto test = MPS + MPS_2;
+
+    EXPECT_EQ(isnan(value_2+value_1), isnan(test.getValue()));
+}
+
+TEST(addition_tests, NAN_right_double) {
+
+    double value_1 = 345.346;
+    double value_2 = NAN;
+
+    mps MPS(52,11,value_1);
+    mps MPS_2(52,11,value_2);
+
+    auto test = MPS + MPS_2;
+
+    EXPECT_EQ(isnan(value_1+value_2), isnan(test.getValue()));
+}
+
+TEST(addition_tests, NAN_right_float) {
+
+    float value_1 = 345.346f;
+    float value_2 = NAN;
+
+    mps MPS(23,8,value_1);
+    mps MPS_2(23,8,value_2);
+
+    auto test = MPS + MPS_2;
+
+    EXPECT_EQ(isnan(value_2+value_1), isnan(test.getValue()));
+}
 
 
 TEST(subtraction_tests, coding) {

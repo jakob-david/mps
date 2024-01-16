@@ -32,6 +32,7 @@ public:
     // constructors and destructor
     //-------------------------------
     mps(unsigned long mantissa_length, unsigned long exponent_length, double value);
+    mps(unsigned long mantissa_length, unsigned long exponent_length);
     mps();
     ~mps();
 
@@ -68,9 +69,9 @@ private:
     // helper for operators
     //-------------------------------
     void setValue(double value);
-    [[nodiscard]] mps addition(const mps& one, const mps& two, bool sign) const;
-    [[nodiscard]] mps subtraction(const mps& minued, const mps& subtrahend, bool sign) const;
-    [[nodiscard]] mps multiplication(const mps& minued, const mps& subtrahend, bool sign) const;
+    [[nodiscard]] static mps addition(const mps& one, const mps& two, bool sign) ;
+    [[nodiscard]] static mps subtraction(const mps& minued, const mps& subtrahend, bool sign) ;
+    [[nodiscard]] static mps multiplication(const mps& minued, const mps& subtrahend, bool sign) ;
 
 
 private:
@@ -87,7 +88,7 @@ private:
     [[nodiscard]] static char larger(const vector<bool>& a, const vector<bool>& b);
     static void matchMantissas(vector<bool>* vector_right_shift, vector<bool>* vector_left_shift, unsigned long amount);
     static bool addOneToBinary(vector<bool>* vector);
-
+    [[nodiscard]] static bool allTrue(const vector<bool>& vector);
 };
 
 

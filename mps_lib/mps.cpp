@@ -35,6 +35,26 @@ mps::mps(unsigned long mantissa_length, unsigned long exponent_length, double va
 }
 
 /**
+ * Constructor for a multiprecision simulator object. The value is set to NAN.
+ * Info: That the value is set to NAN is probably not necessary but it maybe prevents errors because of false use.
+ *
+ * @param mantisse Mantisse of the floating point representation.
+ * @param exponent Exponent of the floating point representation.
+ */
+mps::mps(unsigned long mantissa_length, unsigned long exponent_length) {
+    this->mantissa_length = mantissa_length;
+    this->exponent_length = exponent_length;
+
+    this->exponent.resize(this->exponent_length);
+    this->mantissa.resize(this->mantissa_length);
+
+    this->sign = false;
+    this->exponent_as_int = 0;
+
+    this->setNaN();     // Set it to be safe.
+}
+
+/**
  * Constructor for an empty multiprecision simulator object.
  */
 mps::mps(){
@@ -368,6 +388,13 @@ mps mps::operator+(const mps& other) const {
     }
 
 
+    if(this->isNaN() || other.isNaN()){
+        mps ret(this->mantissa_length, this->exponent_length);
+        ret.setNaN();
+        return ret;
+    }
+
+
     if(this->isPositive() && other.isPositive()){
         return addition(*this, other, false);
     } else if(!this->isPositive() && !other.isPositive()){
@@ -492,7 +519,7 @@ void mps::setValue(const double value) {
     if(exponent.size() > exponent_length){
         value_too_large = true;
     } else if(exponent.size() == exponent_length){
-        value_too_large = std::all_of(exponent.begin(), exponent.end(), [](bool i){return i;});
+        value_too_large = allTrue(this->exponent);
     }
     // Fill not used but available bits with zero.
     if  (value_too_large){
@@ -544,13 +571,13 @@ void mps::setValue(const double value) {
  * @param set_sign the sign to which the final result should be set.
  * @return the resulting mps object.
  */
-mps mps::addition(const mps &one, const mps &two, const bool set_sign) const {
+mps mps::addition(const mps &one, const mps &two, const bool set_sign) {
 
     // Set up the return object.
     //-------------------------------
     mps ret;
-    ret.exponent_length = this->exponent_length;
-    ret.mantissa_length = this->mantissa_length;
+    ret.exponent_length = one.exponent_length;
+    ret.mantissa_length = one.mantissa_length;
     ret.sign = set_sign;
     //-------------------------------
 
@@ -591,6 +618,10 @@ mps mps::addition(const mps &one, const mps &two, const bool set_sign) const {
     ret.mantissa.erase(ret.mantissa.begin(), ret.mantissa.begin()+1);
     if(carrier){
         addOneToBinary(&ret.exponent);
+        if(allTrue(ret.exponent)){
+            ret.setInf(set_sign);
+            return ret;
+        }
         ret.exponent_as_int++;
     }
     //-------------------------------
@@ -608,13 +639,13 @@ mps mps::addition(const mps &one, const mps &two, const bool set_sign) const {
  * @param set_sign the sign to which the final result should be set.
  * @return the resulting mps object.
  */
-mps mps::subtraction(const mps &minued, const mps &subtrahend, bool set_sign) const {
+mps mps::subtraction(const mps &minued, const mps &subtrahend, bool set_sign) {
 
     // Set up the return object.
     //-------------------------------
     mps ret;
-    ret.exponent_length = this->exponent_length;
-    ret.mantissa_length = this->mantissa_length;
+    ret.exponent_length = minued.exponent_length;
+    ret.mantissa_length = minued.mantissa_length;
     ret.sign = set_sign;
     //-------------------------------
 
@@ -701,7 +732,7 @@ mps mps::subtraction(const mps &minued, const mps &subtrahend, bool set_sign) co
  * @param set_sign the sign to which the final result should be set.
  * @return the resulting mps object.
  */
-mps mps::multiplication(const mps& one, const mps& two, bool set_sign) const {
+mps mps::multiplication(const mps& one, const mps& two, bool set_sign) {
 
     // Set up the return object.
     //-------------------------------
@@ -1018,5 +1049,15 @@ bool mps::addOneToBinary(vector<bool>* vector){
     vector->insert(vector->begin(), true);
     vector->pop_back();
     return true;
+}
+
+/**
+ * Checks if a vector consisting of only true booleans.
+ *
+ * @param vector reference to the vector which should be checked.
+ * @return true is all entries of the vector are true.
+ */
+[[nodiscard]] bool mps::allTrue(const vector<bool>& vector) {
+    return std::all_of(vector.begin(), vector.end(), [](bool i){return i;});
 }
 //-------------------------------
