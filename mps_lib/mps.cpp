@@ -389,9 +389,37 @@ mps mps::operator+(const mps& other) const {
 
 
     if(this->isNaN() || other.isNaN()){
+
         mps ret(this->mantissa_length, this->exponent_length);
         ret.setNaN();
         return ret;
+
+    } else if(this->isInfinity() && other.isInfinity()){
+        mps ret(this->mantissa_length, this->exponent_length);
+
+        if(this->isPositive() == other.isPositive()){
+            ret.setInf(!this->isPositive());
+        } else {
+            ret.setNaN();
+        }
+
+        return ret;
+    } else if(this->isInfinity()){
+
+        mps ret(this->mantissa_length, this->exponent_length);
+        ret.setInf(!this->isPositive());
+        return ret;
+
+    } else if(other.isInfinity()){
+
+        mps ret(other.mantissa_length, other.exponent_length);
+        ret.setInf(!other.isPositive());
+        return ret;
+
+    } else if(this->isZero()){
+        return other;
+    } else if(other.isZero()){
+        return *this;
     }
 
 
@@ -421,6 +449,14 @@ mps mps::operator-(const mps& other) const {
         cout << "ERROR: in - : Mantissas do not match" << endl;
     }
 
+
+    if(this->isNaN() || other.isNaN()){
+
+        mps ret(this->mantissa_length, this->exponent_length);
+        ret.setNaN();
+        return ret;
+
+    }
 
     if(this->isPositive() && other.isPositive()){
         return subtraction(*this, other, false);
