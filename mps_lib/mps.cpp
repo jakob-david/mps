@@ -456,7 +456,36 @@ mps mps::operator-(const mps& other) const {
         ret.setNaN();
         return ret;
 
+    } else if(this->isInfinity() && other.isInfinity()){
+        mps ret(this->mantissa_length, this->exponent_length);
+
+        if(this->isPositive() == other.isPositive()){
+            ret.setNaN();
+        } else {
+            ret.setInf(!this->isPositive());
+        }
+
+        return ret;
+    } else if(this->isInfinity()){
+
+        mps ret(this->mantissa_length, this->exponent_length);
+        ret.setInf(!this->isPositive());
+        return ret;
+
+    } else if(other.isInfinity()){
+
+        mps ret(other.mantissa_length, other.exponent_length);
+        ret.setInf(other.isPositive());
+        return ret;
+
+    } else if(this->isZero()){
+        auto ret = other;
+        ret.sign = !ret.sign;
+        return ret;
+    } else if(other.isZero()){
+        return *this;
     }
+
 
     if(this->isPositive() && other.isPositive()){
         return subtraction(*this, other, false);

@@ -953,6 +953,286 @@ TEST(subtraction_tests, NAN_right_float) {
     EXPECT_EQ(isnan(value_2+value_1), isnan(test.getValue()));
 }
 
+TEST(subtraction_tests, inf_left_double) {
+
+    double value_1 = numeric_limits<double>::infinity();
+    double value_2 = 238683.355;
+
+    mps MPS(52,11,value_1);
+    mps MPS_2(52,11,value_2);
+
+    auto test = MPS - MPS_2;
+
+    EXPECT_EQ(value_1-value_2, test.getValue());
+}
+
+TEST(subtraction_tests, inf_left_float) {
+
+    float value_1 = numeric_limits<float>::infinity();
+    float value_2 = 238683.355f;
+
+    mps MPS(23,8,value_1);
+    mps MPS_2(23,8,value_2);
+
+    auto test = MPS - MPS_2;
+
+    EXPECT_EQ(value_1-value_2, test.getValue());
+}
+
+TEST(subtraction_tests, inf_right_double) {
+
+    double value_1 = 345.346;
+    double value_2 = numeric_limits<double>::infinity();
+
+    mps MPS(52,11,value_1);
+    mps MPS_2(52,11,value_2);
+
+    auto test = MPS - MPS_2;
+
+    EXPECT_EQ(value_1-value_2, test.getValue());
+}
+
+TEST(subtraction_tests, inf_right_float) {
+
+    float value_1 = 345.346f;
+    float value_2 = numeric_limits<float>::infinity();
+
+    mps MPS(23,8,value_1);
+    mps MPS_2(23,8,value_2);
+
+    auto test = MPS - MPS_2;
+
+    EXPECT_EQ(value_1-value_2, test.getValue());
+}
+
+TEST(subtraction_tests, neg_inf_left_double) {
+
+    double value_1 = numeric_limits<double>::infinity() * -1;
+    double value_2 = 238683.355;
+
+    mps MPS(52,11,value_1);
+    mps MPS_2(52,11,value_2);
+
+    auto test = MPS - MPS_2;
+
+    EXPECT_EQ(value_1-value_2, test.getValue());
+}
+
+TEST(subtraction_tests, neg_inf_left_float) {
+
+    float value_1 = numeric_limits<float>::infinity() * -1;
+    float value_2 = 238683.355f;
+
+    mps MPS(23,8,value_1);
+    mps MPS_2(23,8,value_2);
+
+    auto test = MPS - MPS_2;
+
+    EXPECT_EQ(value_1-value_2, test.getValue());
+}
+
+TEST(subtraction_tests, neg_inf_right_double) {
+
+    double value_1 = 345.346;
+    double value_2 = numeric_limits<double>::infinity() * -1;
+
+    mps MPS(52,11,value_1);
+    mps MPS_2(52,11,value_2);
+
+    auto test = MPS - MPS_2;
+
+    EXPECT_EQ(value_1-value_2, test.getValue());
+}
+
+TEST(subtraction_tests, neg_inf_right_float) {
+
+    float value_1 = 345.346f;
+    float value_2 = numeric_limits<float>::infinity() * -1;
+
+    mps MPS(23,8,value_1);
+    mps MPS_2(23,8,value_2);
+
+    auto test = MPS - MPS_2;
+
+    EXPECT_EQ(value_1-value_2, test.getValue());
+}
+
+TEST(subtraction_tests, pos_pos_inf_double) {
+
+    double value_1 = numeric_limits<double>::infinity();
+    double value_2 = numeric_limits<double>::infinity();
+
+    mps MPS(52,11,value_1);
+    mps MPS_2(52,11,value_2);
+
+    auto test = MPS - MPS_2;
+
+    EXPECT_EQ(isnan(value_1-value_2), isnan(test.getValue()));
+    EXPECT_EQ(true, isnan(test.getValue()));
+}
+
+TEST(subtraction_tests, pos_pos_inf_right_float) {
+
+    float value_1 = numeric_limits<float>::infinity();
+    float value_2 = numeric_limits<float>::infinity();
+
+    mps MPS(23,8,value_1);
+    mps MPS_2(23,8,value_2);
+
+    auto test = MPS - MPS_2;
+
+    EXPECT_EQ(isnan(value_1-value_2), isnan(test.getValue()));
+    EXPECT_EQ(true, isnan(test.getValue()));
+}
+
+TEST(subtraction_tests, neg_neg_inf_double) {
+
+    double value_1 = numeric_limits<double>::infinity() * -1;
+    double value_2 = numeric_limits<double>::infinity() * -1;
+
+    mps MPS(52,11,value_1);
+    mps MPS_2(52,11,value_2);
+
+    auto test = MPS - MPS_2;
+
+    EXPECT_EQ(isnan(value_1-value_2), isnan(test.getValue()));
+    EXPECT_EQ(true, isnan(test.getValue()));
+}
+
+TEST(subtraction_tests, neg_neg_inf_right_float) {
+
+    float value_1 = numeric_limits<float>::infinity() * -1;
+    float value_2 = numeric_limits<float>::infinity() * -1;
+
+    mps MPS(23,8,value_1);
+    mps MPS_2(23,8,value_2);
+
+    auto test = MPS - MPS_2;
+
+    EXPECT_EQ(isnan(value_1-value_2), isnan(test.getValue()));
+    EXPECT_EQ(true, isnan(test.getValue()));
+}
+
+TEST(subtraction_tests, neg_pos_inf_double) {
+
+    double value_1 = numeric_limits<double>::infinity() * -1;
+    double value_2 = numeric_limits<double>::infinity();
+
+    mps MPS(52,11,value_1);
+    mps MPS_2(52,11,value_2);
+
+    auto test = MPS - MPS_2;
+
+    EXPECT_EQ(value_1-value_2, test.getValue());
+    EXPECT_EQ(isnan(value_1-value_2), isnan(test.getValue()));
+}
+
+TEST(subtraction_tests, neg_pos_inf_float) {
+
+    float value_1 = numeric_limits<float>::infinity() * -1;
+    float value_2 = numeric_limits<float>::infinity();
+
+    mps MPS(23,8,value_1);
+    mps MPS_2(23,8,value_2);
+
+    auto test = MPS - MPS_2;
+
+    EXPECT_EQ(value_1-value_2, test.getValue());
+    EXPECT_EQ(isnan(value_1-value_2), isnan(test.getValue()));
+}
+
+TEST(subtraction_tests, pos_neg_inf_double) {
+
+    double value_1 = numeric_limits<double>::infinity();
+    double value_2 = numeric_limits<double>::infinity() * -1;
+
+    mps MPS(52,11,value_1);
+    mps MPS_2(52,11,value_2);
+
+    auto test = MPS - MPS_2;
+
+    EXPECT_EQ(value_1-value_2, test.getValue());
+    EXPECT_EQ(isnan(value_1-value_2), isnan(test.getValue()));
+}
+
+TEST(subtraction_tests, pos_neg_inf_right_float) {
+
+    float value_1 = numeric_limits<float>::infinity();
+    float value_2 = numeric_limits<float>::infinity() * -1;
+
+    mps MPS(23,8,value_1);
+    mps MPS_2(23,8,value_2);
+
+    auto test = MPS - MPS_2;
+
+    EXPECT_EQ(value_1-value_2, test.getValue());
+    EXPECT_EQ(isnan(value_1-value_2), isnan(test.getValue()));
+}
+
+TEST(subtraction_tests, zero_left_double) {
+
+    double value_1 = 0;
+    double value_2 = 234534523;
+
+    mps MPS(52,11,value_1);
+    mps MPS_2(52,11,value_2);
+
+    auto test = MPS - MPS_2;
+
+    MPS = 435.35;
+    MPS_2 = 435.35;
+
+    EXPECT_EQ(value_1-value_2, test.getValue());
+}
+
+TEST(subtraction_tests, zero_left_float) {
+
+    float value_1 = 0;
+    float value_2 = 3456345.06f;
+
+    mps MPS(23,8,value_1);
+    mps MPS_2(23,8,value_2);
+
+    auto test = MPS - MPS_2;
+
+    MPS = 435.35;
+    MPS_2 = 435.35;
+
+    EXPECT_EQ(value_1-value_2, test.getValue());
+}
+
+TEST(subtraction_tests, zero_right_double) {
+
+    double value_1 = 234534523;
+    double value_2 = 0;
+
+    mps MPS(52,11,value_1);
+    mps MPS_2(52,11,value_2);
+
+    auto test = MPS - MPS_2;
+
+    MPS = 435.35;
+    MPS_2 = 435.35;
+
+    EXPECT_EQ(value_1-value_2, test.getValue());
+}
+
+TEST(subtraction_tests, zero_right_float) {
+
+    float value_1 = 3456345.06f;
+    float value_2 = 0;
+
+    mps MPS(23,8,value_1);
+    mps MPS_2(23,8,value_2);
+
+    auto test = MPS - MPS_2;
+
+    MPS = 435.35;
+    MPS_2 = 435.35;
+
+    EXPECT_EQ(value_1-value_2, test.getValue());
+}
+
 
 TEST(multiplication_tests, coding) {
 
