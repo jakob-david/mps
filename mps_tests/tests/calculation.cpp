@@ -2017,3 +2017,18 @@ TEST(multiplication_tests, coding_2) {
     EXPECT_EQ(value_1, MPS.getValue());
     EXPECT_EQ(value_2, MPS_2.getValue());
 }
+
+TEST(multiplication_tests, coding_3) {
+
+    float value_1 = 1.0f;
+    float value_2 = 1.0f;
+
+    mps MPS(23,8,value_1);
+    mps MPS_2(23,8,value_2);
+
+    auto test = MPS * MPS_2;
+
+    EXPECT_EQ(should_value(value_1 * value_2), is_mps(test.getBitArray()));
+    EXPECT_EQ(value_1, MPS.getValue());
+    EXPECT_EQ(value_2, MPS_2.getValue());
+}

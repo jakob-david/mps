@@ -802,14 +802,70 @@ mps mps::multiplication(const mps& one, const mps& two, bool set_sign) {
     // Set up the return object.
     //-------------------------------
     mps ret(one.mantissa_length, one.exponent_length);
-    //ret.exponent_length = one.exponent_length;
-    //ret.mantissa_length = one.mantissa_length;
+    ret.sign = set_sign;
     //-------------------------------
 
 
-    // Set up sign.
-    ret.sign = set_sign;
+    // Calculate the exponent
+    //-------------------------------
+    vector<bool> a_exponent(one.exponent.begin(), one.exponent.end());
+    vector<bool> b_exponent(two.exponent.begin(), two.exponent.end());
 
+    if(a_exponent[0] && b_exponent[0]){ // Both exponents are positive.
+
+        // TODO: Check for carry
+        b_exponent[0] = !b_exponent[0];
+        addOneToBinary(&b_exponent);
+
+        bool tmp_carry;
+        ret.exponent = binaryAddition(a_exponent, b_exponent, false, &tmp_carry);
+
+        // Check if the number will be more than the maximal allowed value.
+        if(tmp_carry && a_exponent[0] && !b_exponent[0]){
+            ret.setInf(ret.sign);
+            return ret;
+        }
+
+    } else if(!a_exponent[0] && !b_exponent[0]){ // Both exponents are negative.
+
+        vector<bool> tmp_vector;
+        tmp_vector.reserve(b_exponent.size());
+        tmp_vector.push_back(false);
+        for(unsigned long i = 1; i < b_exponent.size(); i++){
+            tmp_vector.push_back(true);
+        }
+        tmp_vector = binarySubtraction(tmp_vector, b_exponent);
+
+        if(1 == larger(tmp_vector, a_exponent)){
+            ret.setZero();
+            return ret;
+        }
+
+        ret.exponent = binarySubtraction(a_exponent, tmp_vector);
+
+    } else if(a_exponent[0] && !b_exponent[0]) { // Second exponent negative.
+
+        vector<bool> tmp_vector;
+        tmp_vector.reserve(b_exponent.size());
+        tmp_vector.push_back(false);
+        for(unsigned long i = 1; i < b_exponent.size(); i++){
+            tmp_vector.push_back(true);
+        }
+        tmp_vector = binarySubtraction(tmp_vector, b_exponent);
+
+        ret.exponent = binarySubtraction(a_exponent, tmp_vector);
+    } else { // First exponent negative.
+        vector<bool> tmp_vector;
+        tmp_vector.reserve(a_exponent.size());
+        tmp_vector.push_back(false);
+        for(unsigned long i = 1; i < a_exponent.size(); i++){
+            tmp_vector.push_back(true);
+        }
+        tmp_vector = binarySubtraction(tmp_vector, a_exponent);
+
+        ret.exponent = binarySubtraction(b_exponent, tmp_vector);
+    }
+    //-------------------------------
 
 
     vector<bool> A(one.mantissa.begin(), one.mantissa.end());
@@ -872,44 +928,6 @@ mps mps::multiplication(const mps& one, const mps& two, bool set_sign) {
 
     round(&P, ret.mantissa_length);
 
-
-    vector<bool> a_exponent(one.exponent.begin(), one.exponent.end());
-    vector<bool> b_exponent(two.exponent.begin(), two.exponent.end());
-
-    // TODO: Check for carry
-    b_exponent[0] = !b_exponent[0];
-    addOneToBinary(&b_exponent);
-
-    bool tmp_carry;
-    ret.exponent = binaryAddition(a_exponent, b_exponent, false, &tmp_carry);
-
-    // Check if the number will be more than the maximal allowed value.
-    if(tmp_carry && a_exponent[0] && !b_exponent[0]){
-        ret.setInf(ret.sign);
-        return ret;
-    }
-
-    std::string str;
-    for(bool bit : a_exponent){
-        if(bit){
-            str.append("1");
-        } else {
-            str.append("0");
-        }
-    }
-
-    cout << str << endl;
-
-    str = "";
-    for(bool bit : b_exponent){
-        if(bit){
-            str.append("1");
-        } else {
-            str.append("0");
-        }
-    }
-
-    cout << str << endl;
 
     if(count <= 1){
         addOneToBinary(&ret.exponent);
