@@ -801,9 +801,9 @@ mps mps::multiplication(const mps& one, const mps& two, bool set_sign) {
 
     // Set up the return object.
     //-------------------------------
-    mps ret;
-    ret.exponent_length = one.exponent_length;
-    ret.mantissa_length = one.mantissa_length;
+    mps ret(one.mantissa_length, one.exponent_length);
+    //ret.exponent_length = one.exponent_length;
+    //ret.mantissa_length = one.mantissa_length;
     //-------------------------------
 
 
@@ -879,15 +879,45 @@ mps mps::multiplication(const mps& one, const mps& two, bool set_sign) {
     // TODO: Check for carry
     b_exponent[0] = !b_exponent[0];
     addOneToBinary(&b_exponent);
-    if(count <= 1){
-        addOneToBinary(&b_exponent);
+
+    bool tmp_carry;
+    ret.exponent = binaryAddition(a_exponent, b_exponent, false, &tmp_carry);
+
+    // Check if the number will be more than the maximal allowed value.
+    if(tmp_carry && a_exponent[0] && !b_exponent[0]){
+        ret.setInf(ret.sign);
+        return ret;
     }
 
-    ret.exponent = binaryAddition(a_exponent, b_exponent, false);
+    std::string str;
+    for(bool bit : a_exponent){
+        if(bit){
+            str.append("1");
+        } else {
+            str.append("0");
+        }
+    }
+
+    cout << str << endl;
+
+    str = "";
+    for(bool bit : b_exponent){
+        if(bit){
+            str.append("1");
+        } else {
+            str.append("0");
+        }
+    }
+
+    cout << str << endl;
+
+    if(count <= 1){
+        addOneToBinary(&ret.exponent);
+    }
+
+
     ret.exponent_as_int = (long) binaryToInt(ret.exponent) - ret.getBias();
     ret.mantissa = P;
-
-
 
     return ret;
 
