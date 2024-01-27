@@ -167,7 +167,7 @@ double mps::getValue() const {
     }
 
     // apply bias and apply exponent
-    exp -= (long) getBias();
+    exp -= getBias();
 
     return ret * pow(2, exp);
 }
@@ -1077,8 +1077,8 @@ vector<bool> mps::intToBinary(unsigned long value) {
  *
  * @return bias of the exponent
  */
-int mps::getBias() const{
-    return ((int) pow (2, exponent_length)) / 2 -1;
+long mps::getBias() const{
+    return ((long) pow (2, exponent_length)) / 2 -1;
 }
 
 /**

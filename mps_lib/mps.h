@@ -82,7 +82,7 @@ private:
     [[nodiscard]] static unsigned long binaryToInt(vector<bool> bit_vector);
     [[nodiscard]] static vector<bool> intToBinary(unsigned long value);
 
-    [[nodiscard]] int getBias() const;
+    [[nodiscard]] long getBias() const;
     [[nodiscard]] static char larger(const vector<bool>& a, const vector<bool>& b);
     static void matchMantissas(vector<bool>* vector_right_shift, vector<bool>* vector_left_shift, unsigned long amount);
     static bool addOneToBinary(vector<bool>* vector);
