@@ -870,7 +870,9 @@ mps mps::multiplication(const mps& one, const mps& two, bool set_sign) {
         S.push_back(false);
     }
 
-    vector<bool> P;
+
+    vector<bool> &P = ret.mantissa;     // Use reference P in order to keep the naming.
+    P.clear();
     P.reserve(A.size() + (two.mantissa_length + two.exponent_length + 1) + 1 +2 +2);
     for(unsigned long i = 0; i < one.mantissa_length+1+1; i++){
         P.push_back(false);
@@ -922,7 +924,6 @@ mps mps::multiplication(const mps& one, const mps& two, bool set_sign) {
 
 
     ret.exponent_as_int = (long) binaryToInt(ret.exponent) - ret.getBias();
-    ret.mantissa = P;
 
     return ret;
 
