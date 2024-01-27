@@ -850,6 +850,8 @@ mps mps::multiplication(const mps& one, const mps& two, bool set_sign) {
     //-------------------------------
 
 
+    // Calculate the mantissa
+    //-------------------------------
     vector<bool> A(one.mantissa.begin(), one.mantissa.end());
     vector<bool> S;
 
@@ -906,14 +908,17 @@ mps mps::multiplication(const mps& one, const mps& two, bool set_sign) {
         P.erase(P.begin());
         count++;
     }
+    //-------------------------------
 
 
+    // rounding
+    //-------------------------------
     round(&P, ret.mantissa_length);
-
 
     if(count <= 1){
         addOneToBinary(&ret.exponent);
     }
+    //-------------------------------
 
 
     ret.exponent_as_int = (long) binaryToInt(ret.exponent) - ret.getBias();
