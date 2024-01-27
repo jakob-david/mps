@@ -22,8 +22,6 @@ private:
     bool sign;
     vector<bool> exponent;
     vector<bool> mantissa;
-
-    long exponent_as_int;      // The exponent saved as integer (used for internal optimization)
     //-------------------------------
 
 

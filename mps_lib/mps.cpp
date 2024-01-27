@@ -29,7 +29,6 @@ mps::mps(unsigned long mantissa_length, unsigned long exponent_length, double va
     this->mantissa.resize(this->mantissa_length);
 
     this->sign = false;
-    this->exponent_as_int = 0;
 
     this->setValue(value);
 }
@@ -49,7 +48,6 @@ mps::mps(unsigned long mantissa_length, unsigned long exponent_length) {
     this->mantissa.resize(this->mantissa_length);
 
     this->sign = false;
-    this->exponent_as_int = 0;
 
     this->setNaN();     // Set it to be safe.
 }
@@ -62,7 +60,6 @@ mps::mps(){
     this->exponent_length = 0;
 
     this->sign = false;
-    this->exponent_as_int = 0;
 }
 
 /**
@@ -161,7 +158,18 @@ double mps::getValue() const {
         }
     }
 
-    return ret * pow(2, exponent_as_int);
+    // get exponent
+    long exp = 0;
+    for(unsigned long i = 0; i < exponent_length; i++){
+        if(this->exponent[i]){
+            exp += (long) pow(2, exponent_length-i-1);
+        }
+    }
+
+    // apply bias and apply exponent
+    exp -= (long) getBias();
+
+    return ret * pow(2, exp);
 }
 
 /**
@@ -364,8 +372,6 @@ mps& mps::operator=(const mps& other) {
     for(unsigned long i = 0; i < this->exponent_length; i++){
         this->exponent[i] = other.exponent[i];
     }
-    this->exponent_as_int = other.exponent_as_int;
-
 
     this->mantissa_length = other.mantissa_length;
     this->exponent_length = other.exponent_length;
@@ -572,11 +578,11 @@ void mps::setValue(const double value) {
     } else {
         mantissa_shift = (long) floor(log2(abs(value)));
     }
-    exponent_as_int =  mantissa_shift;
+
     // Getting the exponent in binary format.
     // The sign is not relevant. Always returns a "positive" value.
     // TODO: Maybe prevent insert.
-    for(auto i = exponent_as_int + getBias(); i > 0; i /= 2){
+    for(auto i = mantissa_shift + getBias(); i > 0; i /= 2){
         exponent.insert(exponent.begin(), i % 2);
     }
 
@@ -663,16 +669,13 @@ mps mps::addition(const mps &one, const mps &two, const bool set_sign) {
     if(1 == larger_tmp){
         exponent_diff = binaryToInt(binarySubtraction(one.exponent, two.exponent));
         ret.exponent = one.exponent;
-        ret.exponent_as_int = one.exponent_as_int;
         matchMantissas(&b_mantissa, &a_mantissa, exponent_diff);
     } else if(-1 == larger_tmp){
         exponent_diff = binaryToInt(binarySubtraction(two.exponent, one.exponent));
         ret.exponent = two.exponent;
-        ret.exponent_as_int = two.exponent_as_int;
         matchMantissas(&a_mantissa, &b_mantissa, exponent_diff);
     } else {
         ret.exponent = one.exponent;
-        ret.exponent_as_int = one.exponent_as_int;
     }
     //-------------------------------
 
@@ -687,7 +690,6 @@ mps mps::addition(const mps &one, const mps &two, const bool set_sign) {
             ret.setInf(set_sign);
             return ret;
         }
-        ret.exponent_as_int++;
     }
     //-------------------------------
 
@@ -731,16 +733,13 @@ mps mps::subtraction(const mps &minued, const mps &subtrahend, bool set_sign) {
     if(1 == larger_tmp){
         unsigned long exponent_diff = binaryToInt(binarySubtraction(minued.exponent, subtrahend.exponent));
         ret.exponent = minued.exponent;
-        ret.exponent_as_int = minued.exponent_as_int;
         matchMantissas(&b_mantissa, &a_mantissa, exponent_diff);
     } else if(-1 == larger_tmp){
         unsigned long exponent_diff = binaryToInt(binarySubtraction(subtrahend.exponent, minued.exponent));
         ret.exponent = subtrahend.exponent;
-        ret.exponent_as_int = subtrahend.exponent_as_int;
         matchMantissas(&a_mantissa, &b_mantissa, exponent_diff);
     } else {
         ret.exponent = minued.exponent;
-        ret.exponent_as_int = minued.exponent_as_int;
     }
     //-------------------------------
 
@@ -771,7 +770,6 @@ mps mps::subtraction(const mps &minued, const mps &subtrahend, bool set_sign) {
     }
 
     ret.mantissa.erase(ret.mantissa.begin(), ret.mantissa.begin() + (long) exponent_shift + 1);
-    ret.exponent_as_int -= (long) exponent_shift;
 
     // TODO: Place for improvement
     vector<bool> exponent_shift_binary = intToBinary(exponent_shift);
@@ -922,11 +920,7 @@ mps mps::multiplication(const mps& one, const mps& two, bool set_sign) {
     }
     //-------------------------------
 
-
-    ret.exponent_as_int = (long) binaryToInt(ret.exponent) - ret.getBias();
-
     return ret;
-
 }
 //-------------------------------
 
