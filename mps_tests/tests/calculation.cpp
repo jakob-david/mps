@@ -1326,7 +1326,7 @@ TEST(subtraction_tests, pos_neg_inf_double) {
     EXPECT_EQ(value_1-value_2, test.getValue());
     EXPECT_EQ(isnan(value_1-value_2), isnan(test.getValue()));
     EXPECT_EQ(value_1, MPS.getValue());
-    EXPECT_EQ(value_2, MPS_2.getValue());;
+    EXPECT_EQ(value_2, MPS_2.getValue());
 }
 
 TEST(subtraction_tests, pos_neg_inf_right_float) {
@@ -2003,7 +2003,7 @@ TEST(multiplication_tests, max_max_double) {
     EXPECT_EQ(value_2, MPS_2.getValue());
 }
 
-TEST(multiplication_tests, coding_2) {
+TEST(multiplication_tests, very_small_float) {
 
     float value_1 = 0.000000000000000000000000000000000006f;
     float value_2 = 0.00000000000000000000000000000000000004f;
@@ -2013,12 +2013,27 @@ TEST(multiplication_tests, coding_2) {
 
     auto test = MPS * MPS_2;
 
-    EXPECT_EQ(should_value(value_1 * value_2), is_mps(test.getBitArray()));
+    EXPECT_EQ(value_1*value_2, test.getValue());
     EXPECT_EQ(value_1, MPS.getValue());
     EXPECT_EQ(value_2, MPS_2.getValue());
 }
 
-TEST(multiplication_tests, coding_3) {
+TEST(multiplication_tests, very_small_double) {
+
+    double value_1 = 0.0000000000000000000000000000000000000000000000000000006;
+    double value_2 = 0.00000000000000000000000000000000000000000000000000004;
+
+    mps MPS(52,11,value_1);
+    mps MPS_2(52,11,value_2);
+
+    auto test = MPS * MPS_2;
+
+    EXPECT_EQ(value_1*value_2, test.getValue());
+    EXPECT_EQ(value_1, MPS.getValue());
+    EXPECT_EQ(value_2, MPS_2.getValue());
+}
+
+TEST(multiplication_tests, one_one_float) {
 
     float value_1 = 1.0f;
     float value_2 = 1.0f;
@@ -2028,7 +2043,22 @@ TEST(multiplication_tests, coding_3) {
 
     auto test = MPS * MPS_2;
 
-    EXPECT_EQ(should_value(value_1 * value_2), is_mps(test.getBitArray()));
+    EXPECT_EQ(value_1*value_2, test.getValue());
+    EXPECT_EQ(value_1, MPS.getValue());
+    EXPECT_EQ(value_2, MPS_2.getValue());
+}
+
+TEST(multiplication_tests, one_one_double) {
+
+    double value_1 = 1.0;
+    double value_2 = 1.0;
+
+    mps MPS(52,11,value_1);
+    mps MPS_2(52,11,value_2);
+
+    auto test = MPS * MPS_2;
+
+    EXPECT_EQ(value_1*value_2, test.getValue());
     EXPECT_EQ(value_1, MPS.getValue());
     EXPECT_EQ(value_2, MPS_2.getValue());
 }
