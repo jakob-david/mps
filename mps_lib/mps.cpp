@@ -826,25 +826,25 @@ mps mps::multiplication(const mps& one, const mps& two, bool set_sign) {
 
     } else {
 
-        vector<bool> tmp_vector;
-        tmp_vector.reserve(two.exponent.size());
-        tmp_vector.push_back(false);
+        vector<bool> subtrahend;
+        subtrahend.reserve(two.exponent.size());
+        subtrahend.push_back(false);
         for(unsigned long i = 1; i < two.exponent.size(); i++){
-            tmp_vector.push_back(true);
+            subtrahend.push_back(true);
         }
 
         if(one.exponent[0] && !two.exponent[0]){
-            tmp_vector = binarySubtraction(tmp_vector, one.exponent);
-            ret.exponent = binarySubtraction(two.exponent, tmp_vector);
+            subtrahend = binarySubtraction(subtrahend, one.exponent);
+            ret.exponent = binarySubtraction(two.exponent, subtrahend);
         } else {
-            tmp_vector = binarySubtraction(tmp_vector, two.exponent);
+            subtrahend = binarySubtraction(subtrahend, two.exponent);
 
-            if(!one.exponent[0] && !two.exponent[0] && 1 == larger(tmp_vector, one.exponent)){
+            if(!one.exponent[0] && !two.exponent[0] && 1 == larger(subtrahend, one.exponent)){
                 ret.setZero();
                 return ret;
             }
 
-            ret.exponent = binarySubtraction(one.exponent, tmp_vector);
+            ret.exponent = binarySubtraction(one.exponent, subtrahend);
         }
     }
     //-------------------------------
