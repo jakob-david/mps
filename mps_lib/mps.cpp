@@ -518,6 +518,42 @@ mps mps::operator*(const mps& other) const {
         cout << "ERROR: in - : Mantissas do not match" << endl;
     }
 
+
+    if(this->isNaN() || other.isNaN()){
+
+        mps ret(this->mantissa_length, this->exponent_length);
+        ret.setNaN();
+        return ret;
+
+    } else if(this->isInfinity() && other.isInfinity()){
+        mps ret(this->mantissa_length, this->exponent_length);
+
+        if(this->isPositive() == other.isPositive()){
+            ret.setNaN();
+        } else {
+            ret.setInf(!this->isPositive());
+        }
+
+        return ret;
+    } else if(this->isInfinity()){
+
+        mps ret(this->mantissa_length, this->exponent_length);
+        ret.setInf(!this->isPositive());
+        return ret;
+
+    } else if(other.isInfinity()){
+
+        mps ret(other.mantissa_length, other.exponent_length);
+        ret.setInf(!other.isPositive());
+        return ret;
+
+    } else if(this->isZero() || other.isZero()){
+        mps ret(other.mantissa_length, other.exponent_length);
+        ret.setZero();
+        return ret;
+    }
+
+
     return multiplication(*this, other, this->sign != other.sign);
 }
 

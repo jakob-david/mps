@@ -2062,3 +2062,257 @@ TEST(multiplication_tests, one_one_double) {
     EXPECT_EQ(value_1, MPS.getValue());
     EXPECT_EQ(value_2, MPS_2.getValue());
 }
+
+TEST(multiplication_tests, NAN_left_float) {
+
+    float value_1 = NAN;
+    float value_2 = 346346.34f;
+
+    mps MPS(23,8,value_1);
+    mps MPS_2(23,8,value_2);
+
+    auto test = MPS * MPS_2;
+
+    EXPECT_EQ(isnan(value_1*value_2), isnan(test.getValue()));
+    EXPECT_EQ(true, isnan(value_1*value_2));
+    EXPECT_EQ(true, isnan(value_1));
+    EXPECT_EQ(value_2, MPS_2.getValue());
+}
+
+TEST(multiplication_tests, NAN_left_double) {
+
+    double value_1 = NAN;
+    double value_2 = 346346.34;
+
+    mps MPS(52,11,value_1);
+    mps MPS_2(52,11,value_2);
+
+    auto test = MPS * MPS_2;
+
+    EXPECT_EQ(isnan(value_1*value_2), isnan(test.getValue()));
+    EXPECT_EQ(true, isnan(value_1*value_2));
+    EXPECT_EQ(true, isnan(value_1));
+    EXPECT_EQ(value_2, MPS_2.getValue());
+}
+
+TEST(multiplication_tests, NAN_right_float) {
+
+    float value_1 = 346346.34f;
+    float value_2 = NAN;
+
+    mps MPS(23,8,value_1);
+    mps MPS_2(23,8,value_2);
+
+    auto test = MPS * MPS_2;
+
+    EXPECT_EQ(isnan(value_1*value_2), isnan(test.getValue()));
+    EXPECT_EQ(true, isnan(value_1*value_2));
+    EXPECT_EQ(true, isnan(value_2));
+    EXPECT_EQ(value_1, MPS.getValue());
+}
+
+TEST(multiplication_tests, NAN_right_double) {
+
+    double value_1 = 346346.34;
+    double value_2 = NAN;
+
+    mps MPS(52,11,value_1);
+    mps MPS_2(52,11,value_2);
+
+    auto test = MPS * MPS_2;
+
+    EXPECT_EQ(isnan(value_1*value_2), isnan(test.getValue()));
+    EXPECT_EQ(true, isnan(value_1*value_2));
+    EXPECT_EQ(true, isnan(value_2));
+    EXPECT_EQ(value_1, MPS.getValue());
+}
+
+TEST(multiplication_tests, pos_inf_left_float) {
+
+    float value_1 = numeric_limits<float>::infinity();
+    float value_2 = 346346.34f;
+
+    mps MPS(23,8,value_1);
+    mps MPS_2(23,8,value_2);
+
+    auto test = MPS * MPS_2;
+
+    EXPECT_EQ(value_1*value_2, test.getValue());
+    EXPECT_EQ(isnan(value_1*value_2), isnan(test.getValue()));
+    EXPECT_EQ(value_1, MPS.getValue());
+    EXPECT_EQ(value_2, MPS_2.getValue());
+}
+
+TEST(multiplication_tests, pos_inf_left_double) {
+
+    double value_1 = numeric_limits<double>::infinity();
+    double value_2 = 346346.34;
+
+    mps MPS(52,11,value_1);
+    mps MPS_2(52,11,value_2);
+
+    auto test = MPS * MPS_2;
+
+    EXPECT_EQ(value_1*value_2, test.getValue());
+    EXPECT_EQ(isnan(value_1*value_2), isnan(test.getValue()));
+    EXPECT_EQ(value_1, MPS.getValue());
+    EXPECT_EQ(value_2, MPS_2.getValue());
+}
+
+TEST(multiplication_tests, pos_inf_right_float) {
+
+    float value_1 = 346346.34f;
+    float value_2 = numeric_limits<float>::infinity();
+
+    mps MPS(23,8,value_1);
+    mps MPS_2(23,8,value_2);
+
+    auto test = MPS * MPS_2;
+
+    EXPECT_EQ(value_1*value_2, test.getValue());
+    EXPECT_EQ(isnan(value_1*value_2), isnan(test.getValue()));
+    EXPECT_EQ(value_1, MPS.getValue());
+    EXPECT_EQ(value_2, MPS_2.getValue());
+}
+
+TEST(multiplication_tests, pos_inf_right_double) {
+
+    double value_1 = 346346.34;
+    double value_2 = numeric_limits<double>::infinity();
+
+    mps MPS(52,11,value_1);
+    mps MPS_2(52,11,value_2);
+
+    auto test = MPS * MPS_2;
+
+    EXPECT_EQ(value_1*value_2, test.getValue());
+    EXPECT_EQ(isnan(value_1*value_2), isnan(test.getValue()));
+    EXPECT_EQ(value_1, MPS.getValue());
+    EXPECT_EQ(value_2, MPS_2.getValue());
+}
+
+TEST(multiplication_tests, neg_inf_left_float) {
+
+    float value_1 = numeric_limits<float>::infinity() * -1;
+    float value_2 = 346346.34f;
+
+    mps MPS(23,8,value_1);
+    mps MPS_2(23,8,value_2);
+
+    auto test = MPS * MPS_2;
+
+    EXPECT_EQ(value_1*value_2, test.getValue());
+    EXPECT_EQ(isnan(value_1*value_2), isnan(test.getValue()));
+    EXPECT_EQ(value_1, MPS.getValue());
+    EXPECT_EQ(value_2, MPS_2.getValue());
+}
+
+TEST(multiplication_tests, neg_inf_left_double) {
+
+    double value_1 = numeric_limits<double>::infinity() * -1;
+    double value_2 = 346346.34;
+
+    mps MPS(52,11,value_1);
+    mps MPS_2(52,11,value_2);
+
+    auto test = MPS * MPS_2;
+
+    EXPECT_EQ(value_1*value_2, test.getValue());
+    EXPECT_EQ(isnan(value_1*value_2), isnan(test.getValue()));
+    EXPECT_EQ(value_1, MPS.getValue());
+    EXPECT_EQ(value_2, MPS_2.getValue());
+}
+
+TEST(multiplication_tests, neg_inf_right_float) {
+
+    float value_1 = 346346.34f;
+    float value_2 = numeric_limits<float>::infinity() * -1;
+
+    mps MPS(23,8,value_1);
+    mps MPS_2(23,8,value_2);
+
+    auto test = MPS * MPS_2;
+
+    EXPECT_EQ(value_1*value_2, test.getValue());
+    EXPECT_EQ(isnan(value_1*value_2), isnan(test.getValue()));
+    EXPECT_EQ(value_1, MPS.getValue());
+    EXPECT_EQ(value_2, MPS_2.getValue());
+}
+
+TEST(multiplication_tests, neg_inf_right_double) {
+
+    double value_1 = 346346.34;
+    double value_2 = numeric_limits<double>::infinity() * -1;
+
+    mps MPS(52,11,value_1);
+    mps MPS_2(52,11,value_2);
+
+    auto test = MPS * MPS_2;
+
+    EXPECT_EQ(value_1*value_2, test.getValue());
+    EXPECT_EQ(isnan(value_1*value_2), isnan(test.getValue()));
+    EXPECT_EQ(value_1, MPS.getValue());
+    EXPECT_EQ(value_2, MPS_2.getValue());
+}
+
+TEST(multiplication_tests, zero_left_float) {
+
+    float value_1 = 0;
+    float value_2 = 346346.34f;
+
+    mps MPS(23,8,value_1);
+    mps MPS_2(23,8,value_2);
+
+    auto test = MPS * MPS_2;
+
+    EXPECT_EQ(value_1*value_2, test.getValue());
+    EXPECT_EQ(value_1, MPS.getValue());
+    EXPECT_EQ(value_2, MPS_2.getValue());
+}
+
+TEST(multiplication_tests, zero_left_double) {
+
+    double value_1 = 0;
+    double value_2 = 346346.34;
+
+    mps MPS(52,11,value_1);
+    mps MPS_2(52,11,value_2);
+
+    auto test = MPS * MPS_2;
+
+    EXPECT_EQ(value_1*value_2, test.getValue());
+    EXPECT_EQ(value_1, MPS.getValue());
+    EXPECT_EQ(value_2, MPS_2.getValue());
+}
+
+TEST(multiplication_tests, zero_right_float) {
+
+    float value_1 = 346346.34f;
+    float value_2 = 0;
+
+    mps MPS(23,8,value_1);
+    mps MPS_2(23,8,value_2);
+
+    auto test = MPS * MPS_2;
+
+    EXPECT_EQ(value_1*value_2, test.getValue());
+    EXPECT_EQ(value_1, MPS.getValue());
+    EXPECT_EQ(value_2, MPS_2.getValue());
+}
+
+TEST(multiplication_tests, zero_right_double) {
+
+    double value_1 = 346346.34;
+    double value_2 = 0;
+
+    mps MPS(52,11,value_1);
+    mps MPS_2(52,11,value_2);
+
+    auto test = MPS * MPS_2;
+
+    EXPECT_EQ(value_1*value_2, test.getValue());
+    EXPECT_EQ(value_1, MPS.getValue());
+    EXPECT_EQ(value_2, MPS_2.getValue());
+}
+
+
