@@ -512,10 +512,10 @@ mps mps::operator-(const mps& other) const {
 mps mps::operator*(const mps& other) const {
 
     if (this->exponent_length != other.exponent_length) {
-        cout << "ERROR: in - : Exponents do not match" << endl;
+        cout << "ERROR: in * : Exponents do not match" << endl;
     }
     if (this->mantissa_length != other.mantissa_length) {
-        cout << "ERROR: in - : Mantissas do not match" << endl;
+        cout << "ERROR: in * : Mantissas do not match" << endl;
     }
 
 
@@ -556,6 +556,63 @@ mps mps::operator*(const mps& other) const {
 
     return multiplication(*this, other, this->sign != other.sign);
 }
+
+/**
+ * Performs a division to two mps floating point values.
+ *
+ * It is responsible for error handling, special values and choosing with "calculation" to use.
+ */
+mps mps::operator/(const mps& other) const {
+
+    if (this->exponent_length != other.exponent_length) {
+        cout << "ERROR: in / : Exponents do not match" << endl;
+    }
+    if (this->mantissa_length != other.mantissa_length) {
+        cout << "ERROR: in / : Mantissas do not match" << endl;
+    }
+
+
+    if(this->isNaN() || other.isNaN()){
+
+        mps ret(this->mantissa_length, this->exponent_length);
+        ret.setNaN();
+        return ret;
+
+    } else if(this->isInfinity() && other.isInfinity()){
+        mps ret(this->mantissa_length, this->exponent_length);
+
+        if(this->isPositive() == other.isPositive()){
+            ret.setNaN();
+        } else {
+            ret.setInf(!this->isPositive());
+        }
+
+        return ret;
+    } else if(this->isInfinity()){
+
+        mps ret(this->mantissa_length, this->exponent_length);
+        ret.setInf(!this->isPositive());
+        return ret;
+
+    } else if(other.isInfinity()){
+
+        mps ret(other.mantissa_length, other.exponent_length);
+        ret.setZero();
+        return ret;
+
+    } else if(this->isZero()){
+        mps ret(other.mantissa_length, other.exponent_length);
+        ret.setZero();
+        return ret;
+    } else if(other.isZero()){
+        mps ret(other.mantissa_length, other.exponent_length);
+        ret.setInf(!this->isPositive());
+        return ret;
+    }
+
+    return division(*this, other, this->sign != other.sign);
+}
+
 
 
 /**
@@ -958,6 +1015,14 @@ mps mps::multiplication(const mps& one, const mps& two, bool set_sign) {
 
     return ret;
 }
+
+mps mps::division(const mps& dividend, const mps& quotient, bool set_sign) {
+
+    mps ret(dividend.mantissa_length,quotient.exponent_length, 33.53);
+    ret.sign = set_sign;
+    return ret; // TODO: change
+}
+
 //-------------------------------
 
 

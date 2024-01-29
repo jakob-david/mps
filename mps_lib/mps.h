@@ -62,14 +62,16 @@ public:
     mps operator+(const mps& other) const;
     mps operator-(const mps& other) const;
     mps operator*(const mps& other) const;
+    mps operator/(const mps& other) const;
 
 private:
     // helper for operators
     //-------------------------------
     void setValue(double value);
-    [[nodiscard]] static mps addition(const mps& one, const mps& two, bool sign) ;
-    [[nodiscard]] static mps subtraction(const mps& minued, const mps& subtrahend, bool sign) ;
-    [[nodiscard]] static mps multiplication(const mps& minued, const mps& subtrahend, bool sign) ;
+    [[nodiscard]] static mps addition(const mps& one, const mps& two, bool set_sign) ;
+    [[nodiscard]] static mps subtraction(const mps& minued, const mps& subtrahend, bool set_sign) ;
+    [[nodiscard]] static mps multiplication(const mps& minued, const mps& subtrahend, bool set_sign) ;
+    [[nodiscard]] static mps division(const mps& dividend, const mps& quotient, bool set_sign) ;
 
 
 private:
