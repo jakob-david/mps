@@ -1030,7 +1030,6 @@ mps mps::division(const mps& dividend, const mps& divisor, bool set_sign) {
     // Set up the return object.
     //-------------------------------
     mps ret(dividend.mantissa_length, divisor.exponent_length);
-    ret.setValue(1.35236); // TODO: remove
     ret.sign = set_sign;
     //-------------------------------
 
@@ -1072,22 +1071,26 @@ mps mps::division(const mps& dividend, const mps& divisor, bool set_sign) {
     //-------------------------------
     vector<bool> D = divisor.mantissa;
     D.insert(D.begin(), true);
+    D.insert(D.begin(), false);
+
     vector<bool> N = dividend.mantissa;
     N.insert(N.begin(), true);
+    N.insert(N.begin(), false);
 
-    vector<bool> tmpp(D.size(), false);
-    D.insert(D.begin(), tmpp.begin(), tmpp.end());
-    N.insert(N.end(), tmpp.begin(), tmpp.end());
+    vector<bool> R = N;        // remainder
+    R.insert(R.begin(), false);
+    D.insert(D.end(), false);
 
-    vector<bool> R(D.size(), false);        // remainder
+
     vector<bool> Q(divisor.mantissa.size(), false);
 
 
-    for(unsigned long i = 0; i < D.size(); i++){
+    for(unsigned long i = 0; i < Q.size(); i++){
         shiftLeft(&R);
-        R[R.size()-1] = N[i];
+        //R[R.size()-1] = N[i];
 
-        cout << "------------------" << endl;
+/*
+        cout << "-----------------" << endl;
 
         std::string str;
         for(bool bit : R){
@@ -1098,9 +1101,8 @@ mps mps::division(const mps& dividend, const mps& divisor, bool set_sign) {
             }
         }
 
-        cout << str << endl;
-
-        str="";
+        cout << "R: " << str << endl;
+        str = "";
         for(bool bit : D){
             if(bit){
                 str.append("1");
@@ -1109,12 +1111,25 @@ mps mps::division(const mps& dividend, const mps& divisor, bool set_sign) {
             }
         }
 
-        cout << str << endl;
+        cout << "D: " << str << endl;
+
+        str = "";
+        for(bool bit : Q){
+            if(bit){
+                str.append("1");
+            } else {
+                str.append("0");
+            }
+        }
+
+        cout << "Q: " << str << endl;
+
+*/
 
         char tmp = larger(R, D);
         if(1 == tmp || 0 == tmp){
             R = binarySubtraction(R, D);
-            Q[i - divisor.mantissa.size()] = true;
+            Q[i] = true;
         } else {
             //Q[(unsigned long) i] = false;
         }
@@ -1125,21 +1140,24 @@ mps mps::division(const mps& dividend, const mps& divisor, bool set_sign) {
     // normalisation
     //-------------------------------
     unsigned long count = 0;
+    vector<bool> count_vec(divisor.exponent.size(), false);
+
     for(unsigned long i = 0; i < Q.size(); i++){
-        if(1 == Q[i]){
+        if(Q[0]){
             Q.erase(Q.begin());
             count++;
+            //addOneToBinary(&count_vec);
             break;
         } else {
             Q.erase(Q.begin());
             count++;
+            addOneToBinary(&count_vec);
         }
     }
 
     // rerun the algorithm for every leading bit removed.
     for(unsigned long i = 0; i < count; i++){
         shiftLeft(&R);
-        R[R.size()-1] = false;
 
         char tmp = larger(R, D);
         if(1 == tmp || 0 == tmp){
@@ -1150,18 +1168,17 @@ mps mps::division(const mps& dividend, const mps& divisor, bool set_sign) {
         }
     }
 
-    // TODO: adjust exponent
+    ret.exponent = binarySubtraction(ret.exponent, count_vec);
     //-------------------------------
 
 
     // rounding
     //-------------------------------
     shiftLeft(&R);
-    R[R.size()-1] = false;
 
     char tmp = larger(R, D);
     if(1 == tmp || 0 == tmp){
-        Q[Q.size()-1] = true;
+        addOneToBinary(&Q);
     }
     //-------------------------------
 
