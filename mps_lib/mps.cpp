@@ -1070,20 +1070,102 @@ mps mps::division(const mps& dividend, const mps& divisor, bool set_sign) {
 
     // Division
     //-------------------------------
-    vector<bool> R(dividend.mantissa.size(), false);        // remainder
+    vector<bool> D = divisor.mantissa;
+    D.insert(D.begin(), true);
+    vector<bool> N = dividend.mantissa;
+    N.insert(N.begin(), true);
 
-    for(unsigned long i = 0; i < dividend.mantissa_length; i++){
-        R[i] = dividend.mantissa[i];
-        char tmp = larger(R, dividend.mantissa);
+    vector<bool> tmpp(D.size(), false);
+    D.insert(D.begin(), tmpp.begin(), tmpp.end());
+    N.insert(N.end(), tmpp.begin(), tmpp.end());
+
+    vector<bool> R(D.size(), false);        // remainder
+    vector<bool> Q(divisor.mantissa.size(), false);
+
+
+    for(unsigned long i = 0; i < D.size(); i++){
+        shiftLeft(&R);
+        R[R.size()-1] = N[i];
+
+        cout << "------------------" << endl;
+
+        std::string str;
+        for(bool bit : R){
+            if(bit){
+                str.append("1");
+            } else {
+                str.append("0");
+            }
+        }
+
+        cout << str << endl;
+
+        str="";
+        for(bool bit : D){
+            if(bit){
+                str.append("1");
+            } else {
+                str.append("0");
+            }
+        }
+
+        cout << str << endl;
+
+        char tmp = larger(R, D);
         if(1 == tmp || 0 == tmp){
-            R = binarySubtraction(R, dividend.mantissa);
-            ret.mantissa[i] = true;
+            R = binarySubtraction(R, D);
+            Q[i - divisor.mantissa.size()] = true;
         } else {
-            ret.mantissa[i] = false;
+            //Q[(unsigned long) i] = false;
         }
     }
     //-------------------------------
 
+
+    // normalisation
+    //-------------------------------
+    unsigned long count = 0;
+    for(unsigned long i = 0; i < Q.size(); i++){
+        if(1 == Q[i]){
+            Q.erase(Q.begin());
+            count++;
+            break;
+        } else {
+            Q.erase(Q.begin());
+            count++;
+        }
+    }
+
+    // rerun the algorithm for every leading bit removed.
+    for(unsigned long i = 0; i < count; i++){
+        shiftLeft(&R);
+        R[R.size()-1] = false;
+
+        char tmp = larger(R, D);
+        if(1 == tmp || 0 == tmp){
+            R = binarySubtraction(R, D);
+            Q.push_back(true);
+        } else {
+            Q.push_back(false);
+        }
+    }
+
+    // TODO: adjust exponent
+    //-------------------------------
+
+
+    // rounding
+    //-------------------------------
+    shiftLeft(&R);
+    R[R.size()-1] = false;
+
+    char tmp = larger(R, D);
+    if(1 == tmp || 0 == tmp){
+        Q[Q.size()-1] = true;
+    }
+    //-------------------------------
+
+    ret.mantissa = Q;
     return ret;
 }
 
@@ -1319,5 +1401,11 @@ bool mps::addOneToBinary(vector<bool>* vector){
  */
 [[nodiscard]] bool mps::allTrue(const vector<bool>& vector) {
     return std::all_of(vector.begin(), vector.end(), [](bool i){return i;});
+}
+
+void mps::shiftLeft(vector<bool>* vec){
+
+    vec->erase(vec->begin());
+    vec->push_back(false);
 }
 //-------------------------------

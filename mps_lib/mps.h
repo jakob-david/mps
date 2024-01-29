@@ -86,6 +86,7 @@ private:
 
     [[nodiscard]] long getBias() const;
     [[nodiscard]] static char larger(const vector<bool>& a, const vector<bool>& b);
+    static void shiftLeft(vector<bool>* vec);
     static void matchMantissas(vector<bool>* vector_right_shift, vector<bool>* vector_left_shift, unsigned long amount);
     static bool addOneToBinary(vector<bool>* vector);
     [[nodiscard]] static bool allTrue(const vector<bool>& vector);

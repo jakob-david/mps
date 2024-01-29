@@ -2609,15 +2609,15 @@ TEST(division_tests, neg_val_zero_right_double) {
 
 TEST(division_tests, coding) {
 
-    float value_1 = 6.0f;
-    float value_2 = 0.5f;
+    float value_1 = 234.0f;
+    float value_2 = 345.5f;
 
     mps MPS(23,8,value_1);
     mps MPS_2(23,8,value_2);
 
     auto test = MPS / MPS_2;
 
-    EXPECT_EQ(should_value(value_1 / value_2), is_mps(test.getBitArray()));
+    EXPECT_EQ(should_value(value_1 / value_2), is_mps(test.getBitArray())+"v");
     EXPECT_EQ(value_1, MPS.getValue());
     EXPECT_EQ(value_2, MPS_2.getValue());
 }
