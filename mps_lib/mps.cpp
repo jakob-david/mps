@@ -610,6 +610,7 @@ mps mps::operator/(const mps& other) const {
         return ret;
     }
 
+
     return division(*this, other, this->sign != other.sign);
 }
 
@@ -1016,6 +1017,14 @@ mps mps::multiplication(const mps& one, const mps& two, bool set_sign) {
     return ret;
 }
 
+/**
+ * Performs a division on two mps objects which have the same sign.
+ *
+ * @param dividend reference to the dividend of the division.
+ * @param quotient reference to the quotient of the division.
+ * @param set_sign the sign to which the final result should be set.
+ * @return the resulting mps object.
+ */
 mps mps::division(const mps& dividend, const mps& quotient, bool set_sign) {
 
     mps ret(dividend.mantissa_length,quotient.exponent_length, 33.53);
