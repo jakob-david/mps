@@ -1021,15 +1021,70 @@ mps mps::multiplication(const mps& one, const mps& two, bool set_sign) {
  * Performs a division on two mps objects which have the same sign.
  *
  * @param dividend reference to the dividend of the division.
- * @param quotient reference to the quotient of the division.
+ * @param divisor reference to the divisor of the division.
  * @param set_sign the sign to which the final result should be set.
  * @return the resulting mps object.
  */
-mps mps::division(const mps& dividend, const mps& quotient, bool set_sign) {
+mps mps::division(const mps& dividend, const mps& divisor, bool set_sign) {
 
-    mps ret(dividend.mantissa_length,quotient.exponent_length, 33.53);
+    // Set up the return object.
+    //-------------------------------
+    mps ret(dividend.mantissa_length, divisor.exponent_length);
+    ret.setValue(1.35236); // TODO: remove
     ret.sign = set_sign;
-    return ret; // TODO: change
+    //-------------------------------
+
+
+    // Calculate the exponent
+    //-------------------------------
+    if(divisor.exponent[0]){ // Both exponents are positive.
+
+        vector<bool> subtrahend = divisor.exponent;
+
+        subtrahend[0] = !subtrahend[0];
+        addOneToBinary(&subtrahend);    // Carrier bit must not be checked because of if-statement.
+
+        ret.exponent = binarySubtraction(dividend.exponent, subtrahend);
+
+        // TODO: check for minimum
+
+
+    } else if(!divisor.exponent[0]){
+
+        vector<bool> subtrahend;
+        subtrahend.reserve(divisor.exponent.size());
+        subtrahend.push_back(false);
+        for(unsigned long i = 1; i < divisor.exponent.size(); i++){
+            subtrahend.push_back(true);
+        }
+
+        subtrahend = binarySubtraction(subtrahend, divisor.exponent);
+
+        ret.exponent = binaryAddition(dividend.exponent, subtrahend, false);
+
+        // TODO: check for maximum
+
+    }
+    //-------------------------------
+
+
+    // Division
+    //-------------------------------
+    vector<bool> R(dividend.mantissa.size(), false);        // remainder
+
+    for(unsigned long i = 0; i < dividend.mantissa_length; i++){
+        R[i] = dividend.mantissa[i];
+        char tmp = larger(R, dividend.mantissa);
+        if(1 == tmp || 0 == tmp){
+            R = binarySubtraction(R, dividend.mantissa);
+            ret.mantissa[i] = true;
+        } else {
+            ret.mantissa[i] = false;
+        }
+    }
+    //-------------------------------
+
+    return ret;
 }
 
 //-------------------------------

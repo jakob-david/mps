@@ -71,7 +71,7 @@ private:
     [[nodiscard]] static mps addition(const mps& one, const mps& two, bool set_sign) ;
     [[nodiscard]] static mps subtraction(const mps& minued, const mps& subtrahend, bool set_sign) ;
     [[nodiscard]] static mps multiplication(const mps& minued, const mps& subtrahend, bool set_sign) ;
-    [[nodiscard]] static mps division(const mps& dividend, const mps& quotient, bool set_sign) ;
+    [[nodiscard]] static mps division(const mps& dividend, const mps& divisor, bool set_sign) ;
 
 
 private:
