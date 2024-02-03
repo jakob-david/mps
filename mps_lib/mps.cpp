@@ -1076,13 +1076,15 @@ mps mps::division(const mps& dividend, const mps& divisor, bool set_sign) {
     D.insert(D.begin(), true);
     D.insert(D.begin(), false);
 
-    vector<bool> N = dividend.mantissa;
-    N.insert(N.begin(), true);
-    N.insert(N.begin(), false);
+    //vector<bool> N = dividend.mantissa;
+    //N.insert(N.begin(), true);
+    //N.insert(N.begin(), false);
 
     // remainder
-    vector<bool> R = N;
-    R.insert(R.begin(), false);
+    vector<bool> R = dividend.mantissa;
+    R.insert(R.begin(), true);
+    R.insert(R.begin(), 2, false);
+    //R.insert(R.begin(), false);
     D.insert(D.end(), false);
 
     // quotient
