@@ -675,7 +675,6 @@ void mps::setValue(const double value) {
 
     // Getting the exponent in binary format.
     // The sign is not relevant. Always returns a "positive" value.
-    // TODO: Maybe prevent insert.
     for(auto i = mantissa_shift + getBias(); i > 0; i /= 2){
         exponent.insert(exponent.begin(), i % 2);
     }
@@ -701,9 +700,7 @@ void mps::setValue(const double value) {
         return;
 
     } else {
-        for(unsigned long i = exponent.size(); i < exponent_length; i++){
-            exponent.insert(exponent.begin(), false);
-        }
+        exponent.insert(exponent.begin(), exponent_length-exponent.size(), false);
     }
     //-------------------------------
 

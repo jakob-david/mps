@@ -67,7 +67,7 @@ public:
 private:
     // helper for operators
     //-------------------------------
-    void setValue(double value);
+public: void setValue(double value);
     [[nodiscard]] static mps addition(const mps& one, const mps& two, bool set_sign) ;
     [[nodiscard]] static mps subtraction(const mps& minued, const mps& subtrahend, bool set_sign) ;
     [[nodiscard]] static mps multiplication(const mps& minued, const mps& subtrahend, bool set_sign) ;

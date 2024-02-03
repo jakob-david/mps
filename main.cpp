@@ -31,7 +31,7 @@ void func(vector<bool> test_1, vector<bool> test_2, vector<bool> test_3, unsigne
 int main() {
 
 
-for (unsigned long mant = 2; mant <= 53; mant++) {
+for (unsigned long mant = 53; mant <= 53; mant++) {
     mps one(mant, 11, 7.45);
     mps two(mant, 11, 4.3 );
 
@@ -41,12 +41,12 @@ for (unsigned long mant = 2; mant <= 53; mant++) {
 
     //cout << "Mant: " << mant << endl;
     //one * two;
-    for (long int i = 0; i < 100000; i++) {
+    for (long int i = 0; i < 1000000; i++) {
 
 
         //one.setValue(4);
         //one = 4;
-        one / two;
+        one.setValue(numeric_limits<double>::max());
         //c = b*a;
     }
 
