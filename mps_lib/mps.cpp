@@ -974,11 +974,9 @@ mps mps::multiplication(const mps& one, const mps& two, bool set_sign) {
 
 
         if(!P.end()[-2] && P.back()){
-            //P = binaryAddition(P, A, false);
             binarySummation(&P, A);
             //sum++;
         } else if(P.end()[-2] && !P.back()) {
-            //P = binaryAddition(P, S, false);
             binarySummation(&P, S);
             //sum++;
         }
