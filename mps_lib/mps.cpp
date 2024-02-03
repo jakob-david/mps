@@ -948,14 +948,14 @@ mps mps::multiplication(const mps& one, const mps& two, bool set_sign) {
     vector<bool> S;                                                           // subtract
 
     // set up A vector.
-    A.reserve(A.size() + two.mantissa_length + 1 +2);
+    A.reserve(A.size() + 2);                // 2 => sign and "invisible 1"
     A.insert(A.begin(), true);
     A.insert(A.begin(), false);
 
     // set up S vector.
-    S.reserve(A.size() + two.mantissa_length + 1 +2);
-    for(unsigned long i = 0; i < A.size(); i++){
-        S.push_back(!A[i]);
+    S.reserve(A.size() + 2);                // 2 => sign and "invisible 1"
+    for(auto && i : A){
+        S.push_back(!i);
     }
     addOneToBinary(&S);
 
@@ -963,7 +963,7 @@ mps mps::multiplication(const mps& one, const mps& two, bool set_sign) {
     // set up P vector (product)
     vector<bool> &P = ret.mantissa;     // Use reference P in order to keep the naming.
     P.clear();
-    P.reserve(A.size() + two.mantissa_length + 5);              // 5 => 2*(sign and "invisible 1") + 1
+    P.reserve(A.size() + two.mantissa_length + 3);              // 3 => sign and "invisible 1" + 1
     for(unsigned long i = 0; i < one.mantissa_length + 2; i++){    // 2 => sign and "invisible 1"
         P.push_back(false);
     }
