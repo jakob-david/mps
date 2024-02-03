@@ -1223,9 +1223,11 @@ vector<bool> mps::binarySubtraction(const vector<bool>& minuend, const vector<bo
  * Performs an addition but adds directly to the summand. The addend can be smaller.
  * If so the addend will be "virtually" shifted to the left so the the first bits match.
  *
- * @param minuend reference to the vector which should be reduced
- * @param subtrahend reference to the vector which should be subtracted.
- * @return the result as a binary number.
+ * ATTENTION: The function does not check whether a carrier bit is present at the end,
+ * since it is expected that the vectors either have an appropriate structure or actually a subtraction is performed.
+ *
+ * @param summand pointer to the vector to which the addend is added.
+ * @param addend reference to the addend which is going to be added to the summand.
  */
 void mps::binarySummation(vector<bool> *summand, const vector<bool> &addend) {
 
