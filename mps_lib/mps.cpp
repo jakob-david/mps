@@ -1095,54 +1095,13 @@ mps mps::division(const mps& dividend, const mps& divisor, bool set_sign) {
 
 
     // main loop
-    for(unsigned long i = 0; i < Q.size(); i++){
+    for(auto && i : Q){
         shiftLeft(&R);
-        //R[R.size()-1] = N[i];
-
-
-        cout << "-----------------" << endl;
-
-        std::string str;
-        for(bool bit : R){
-            if(bit){
-                str.append("1");
-            } else {
-                str.append("0");
-            }
-        }
-
-        cout << "R: " << str << endl;
-        str = "";
-        for(bool bit : D){
-            if(bit){
-                str.append("1");
-            } else {
-                str.append("0");
-            }
-        }
-
-        cout << "D: " << str << endl;
-
-        str = "";
-        for(bool bit : Q){
-            if(bit){
-                str.append("1");
-            } else {
-                str.append("0");
-            }
-        }
-
-        cout << "Q: " << str << endl;
-
-
 
         char tmp = larger(R, D);
         if(1 == tmp || 0 == tmp){
-            // R = binarySubtraction(R, D);
             binarySummation(&R, S);
-            Q[i] = true;
-        } else {
-            //Q[(unsigned long) i] = false;
+            i = true;
         }
     }
     //-------------------------------
@@ -1260,11 +1219,11 @@ vector<bool> mps::binarySubtraction(const vector<bool>& minuend, const vector<bo
     return binaryAddition(minuend, tmp, false);
 }
 
-void mps::binarySummation(vector<bool> *summand, const vector<bool> &addend, unsigned long start) {
+void mps::binarySummation(vector<bool> *summand, const vector<bool> &addend) {
 
     bool carrier = false;
     bool tmp;
-    auto j = addend.size() + start;
+    auto j = addend.size(); // + start
 
     // full adder
     for(auto i = addend.size(); i > 0;){
@@ -1275,7 +1234,7 @@ void mps::binarySummation(vector<bool> *summand, const vector<bool> &addend, uns
         (*summand)[j] = tmp;
     }
 
-    j = start;
+    j = 0; // = start
     while(carrier && j > 0){
         j--;
         if(!(*summand)[j]){
