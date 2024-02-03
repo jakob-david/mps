@@ -944,29 +944,27 @@ mps mps::multiplication(const mps& one, const mps& two, bool set_sign) {
 
     // Calculate the mantissa
     //-------------------------------
-    vector<bool> A(one.mantissa.begin(), one.mantissa.end());
-    vector<bool> S;
+    vector<bool> A(one.mantissa.begin(), one.mantissa.end());       // add
+    vector<bool> S;                                                           // subtract
 
-    A.reserve(A.size() + (two.mantissa_length + two.exponent_length + 1) + 1 +2 +2);
+    // set up A vector.
+    A.reserve(A.size() + two.mantissa_length + 1 +2);
     A.insert(A.begin(), true);
     A.insert(A.begin(), false);
-    S.reserve(A.size() + (two.mantissa_length + two.exponent_length + 1) + 1 +2 +2);
 
+    // set up S vector.
+    S.reserve(A.size() + two.mantissa_length + 1 +2);
     for(unsigned long i = 0; i < A.size(); i++){
         S.push_back(!A[i]);
     }
     addOneToBinary(&S);
 
-    for(unsigned long i = 0; i < two.mantissa_length + 1 +1 +1; i++){
-        A.push_back(false);
-        S.push_back(false);
-    }
 
-
+    // set up P vector (product)
     vector<bool> &P = ret.mantissa;     // Use reference P in order to keep the naming.
     P.clear();
-    P.reserve(A.size() + (two.mantissa_length + two.exponent_length + 1) + 1 +2 +2);
-    for(unsigned long i = 0; i < one.mantissa_length+1+1; i++){
+    P.reserve(A.size() + two.mantissa_length + 5);              // 5 => 2*(sign and "invisible 1") + 1
+    for(unsigned long i = 0; i < one.mantissa_length + 2; i++){    // 2 => sign and "invisible 1"
         P.push_back(false);
     }
     P.push_back(false);
@@ -976,14 +974,18 @@ mps mps::multiplication(const mps& one, const mps& two, bool set_sign) {
     }
     P.push_back(false);
 
-
+    //unsigned long sum = 0;
     for(unsigned long i = 0; i < two.mantissa_length+2; i++){
 
 
         if(!P.end()[-2] && P.back()){
-            P = binaryAddition(P, A, false);
+            //P = binaryAddition(P, A, false);
+            binarySummation(&P, A, 0);
+            //sum++;
         } else if(P.end()[-2] && !P.back()) {
-            P = binaryAddition(P, S, false);
+            //P = binaryAddition(P, S, false);
+            binarySummation(&P, S, 0);
+            //sum++;
         }
 
         P.pop_back();
@@ -992,7 +994,9 @@ mps mps::multiplication(const mps& one, const mps& two, bool set_sign) {
     }
 
     P.pop_back();
-    P.erase (P.begin());
+    P.erase (P.begin());        // delete "invisible 1"
+
+    // normalize
     int count = 0;
     for(unsigned long i = 0; i < P.size(); i++){
         if(P[0]){
@@ -1014,6 +1018,7 @@ mps mps::multiplication(const mps& one, const mps& two, bool set_sign) {
     }
     //-------------------------------
 
+    //cout << "Sum: " << sum << endl;
     return ret;
 }
 
@@ -1257,6 +1262,31 @@ vector<bool> mps::binarySubtraction(const vector<bool>& minuend, const vector<bo
     }
 
     return binaryAddition(minuend, tmp_subtrahend, false);
+}
+
+void mps::binarySummation(vector<bool> *summand, const vector<bool> &addend, unsigned long start) {
+
+    bool carrier = false;
+    bool tmp;
+    auto j = addend.size() + start;
+
+    // full adder
+    for(auto i = addend.size(); i > 0;){
+        i--;
+        j--;
+        tmp = ((*summand)[j] ^ addend[i]) ^ carrier;
+        carrier = (((*summand)[j] && addend[i]) || ((*summand)[j] && carrier)) || (addend[i] && carrier);
+        (*summand)[j] = tmp;
+    }
+
+    j = start;
+    while(carrier && j > 0){
+        j--;
+        if(!(*summand)[j]){
+            (*summand)[j] = true;
+            carrier = false;
+        }
+    }
 }
 
 /**
