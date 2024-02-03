@@ -81,7 +81,7 @@ private:
     [[nodiscard]] static vector<bool> binarySubtraction(const vector<bool>& minuend, const vector<bool>& subtrahend);
 
     static void binarySummation(vector<bool>* summand, const vector<bool>& addend);
-    static vector<bool> binaryOffsetAddition(const vector<bool>& one, const vector<bool>& two, unsigned long off_set, bool* carrier_return = nullptr);
+    static vector<bool> binaryOffsetAddition(const vector<bool>& lp, const vector<bool>& rp, unsigned long off_set, bool c, bool hd[2],  bool* cr = nullptr);
     static inline void round(vector<bool>* mantissa, unsigned long mantissa_len);
 
     [[nodiscard]] static unsigned long binaryToInt(vector<bool> bit_vector);

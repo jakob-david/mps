@@ -30,7 +30,6 @@ void func(vector<bool> test_1, vector<bool> test_2, vector<bool> test_3, unsigne
 
 int main() {
 
-
 for (unsigned long mant = 2; mant <= 53; mant++) {
     mps one(mant, 11, 7.45);
     mps two(mant, 11, 4.3 );

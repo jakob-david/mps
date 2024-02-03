@@ -752,10 +752,9 @@ mps mps::addition(const mps &one, const mps &two, const bool set_sign) {
     //b_mantissa.insert(b_mantissa.begin(), true);
     //-------------------------------
 
+    bool hd[2] = {true, true};
 
     //TODO: check for max exponent diff
-
-    // TODO: decide variant => binaryOffsetAddition VS match Mantissa
 
     // Match mantissas and set exponent
     //-------------------------------
@@ -765,13 +764,13 @@ mps mps::addition(const mps &one, const mps &two, const bool set_sign) {
     if(1 == larger_tmp){
         exponent_diff = binaryToInt(binarySubtraction(one.exponent, two.exponent));
         ret.exponent = one.exponent;
-        ret.mantissa = binaryOffsetAddition(two.mantissa, one.mantissa, exponent_diff, &carrier);
+        ret.mantissa = binaryOffsetAddition(two.mantissa, one.mantissa, exponent_diff, true, hd, &carrier);
     } else if(-1 == larger_tmp){
         exponent_diff = binaryToInt(binarySubtraction(two.exponent, one.exponent));
         ret.exponent = two.exponent;
-        ret.mantissa = binaryOffsetAddition(one.mantissa, two.mantissa, exponent_diff, &carrier);
+        ret.mantissa = binaryOffsetAddition(one.mantissa, two.mantissa, exponent_diff, true, hd, &carrier);
     } else {
-        ret.mantissa = binaryOffsetAddition(two.mantissa, one.mantissa, 0, &carrier);
+        ret.mantissa = binaryOffsetAddition(two.mantissa, one.mantissa, 0, true, hd, &carrier);
         ret.exponent = two.exponent;
     }
     //-------------------------------
@@ -1256,16 +1255,24 @@ void mps::binarySummation(vector<bool> *summand, const vector<bool> &addend) {
      */
 }
 
-vector<bool> mps::binaryOffsetAddition(const vector<bool>& lp, const vector<bool>& rp, unsigned long off_set, bool *carrier_return){
+vector<bool> mps::binaryOffsetAddition(const vector<bool>& lp, const vector<bool>& rp, unsigned long off_set, bool c, bool hd[2],  bool* cr){
+
+    // Setting up basic variable.
     vector<bool> ret;
     bool carrier = false;
 
+    // Calculate right padding part.
+    //-------------------------------
     for(auto i = lp.size(); i > lp.size()-off_set;){
         i--;
         ret.insert(ret.begin(), lp[i] ^ carrier);
         carrier = ((lp[i] && false) || (lp[i] && carrier));
     }
+    //-------------------------------
 
+
+    // Calculate part between the padding.
+    //-------------------------------
     unsigned long j = rp.size();
     for(auto i = lp.size()-off_set; i > 0;){
         i--;
@@ -1273,34 +1280,58 @@ vector<bool> mps::binaryOffsetAddition(const vector<bool>& lp, const vector<bool
         ret.insert(ret.begin(), (lp[i] ^ rp[j]) ^ carrier);
         carrier = ((lp[i] && rp[j]) || (lp[i] && carrier)) || (rp[j] && carrier);
     }
+    //-------------------------------
+
 
     if(off_set > 0){
-        j--;
-        ret.insert(ret.begin(), !rp[j] ^ carrier);
-        carrier = (rp[j] || carrier) || (rp[j] && carrier);
 
+        // Calculate left parts hidden digit.
+        j--;
+        ret.insert(ret.begin(), (hd[0] ^ rp[j]) ^ carrier);
+        carrier = ((hd[0] && rp[j]) || (hd[0] && carrier)) || (rp[j] && carrier);
+
+
+        // Calculate left padding part.
+        //-------------------------------
         for(; j > 0;){
             j--;
             ret.insert(ret.begin(), rp[j] ^ carrier);
             carrier = (rp[j] && carrier);
         }
+        //-------------------------------
 
-        ret.insert(ret.begin(), !carrier);
 
-        if(carrier_return != nullptr) {
-            *carrier_return = carrier;
+        // Calculate right parts hidden digit.
+        ret.insert(ret.begin(), hd[1] ^ carrier);
+        carrier = (hd[1] && carrier);
+
+        // Perform carrier step if wanted.
+        if(c && carrier){
+            ret.insert(ret.begin(), !carrier);
+            ret.pop_back();
+        }
+
+        // Save carrier bit if wanted.
+        if(cr != nullptr) {
+            *cr = carrier;
         }
 
     } else {
 
-        ret.insert(ret.begin(), carrier);
+        // Calculate hidden digit of both variables.
+        ret.insert(ret.begin(), (hd[0] ^ hd[1]) ^ carrier);
+        carrier = ((hd[0] && hd[1]) || (hd[0] && carrier)) || (hd[1] && carrier);
 
-        if(carrier_return != nullptr){
-            *carrier_return = true;
+        // Perform carrier step if wanted.
+        if(c && carrier){
+            ret.insert(ret.begin(), !carrier);
+            ret.pop_back();
         }
 
-        ret.insert(ret.begin(), !carrier);
-        ret.pop_back();
+        // Save carrier bit if wanted.
+        if(cr != nullptr){
+            *cr = true;
+        }
     }
 
     return ret;
