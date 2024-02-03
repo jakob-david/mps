@@ -1237,6 +1237,7 @@ void mps::binarySummation(vector<bool> *summand, const vector<bool> &addend) {
         (*summand)[j] = tmp;
     }
 
+    /*
     j = 0; // = start
     while(carrier && j > 0){
         j--;
@@ -1245,7 +1246,55 @@ void mps::binarySummation(vector<bool> *summand, const vector<bool> &addend) {
             carrier = false;
         }
     }
+     */
 }
+
+vector<bool> mps::binaryOffsetAddition(const vector<bool>& lp, const vector<bool>& rp, unsigned long off_set, bool *carrier_return){
+    vector<bool> ret;
+    bool carrier = false;
+
+    for(auto i = lp.size(); i > lp.size()-off_set;){
+        i--;
+        ret.insert(ret.begin(), lp[i] ^ carrier);
+        carrier = ((lp[i] && false) || (lp[i] && carrier));
+    }
+
+    unsigned long j = rp.size();
+    for(auto i = lp.size()-off_set; i > 0;){
+        i--;
+        j--;
+        ret.insert(ret.begin(), (lp[i] ^ rp[j]) ^ carrier);
+        carrier = ((lp[i] && rp[j]) || (lp[i] && carrier)) || (rp[j] && carrier);
+    }
+
+    if(0 != off_set){
+        j--;
+        ret.insert(ret.begin(), !rp[j] ^ carrier);
+        carrier = (rp[j] || carrier) || (rp[j] && carrier);
+
+        for(; j > 0;){
+            j--;
+            ret.insert(ret.begin(), rp[j] ^ carrier);
+            carrier = (rp[j] && carrier);
+        }
+
+        ret.insert(ret.begin(), true);
+
+        *carrier_return = false;
+
+    } else {
+        ret.insert(ret.begin(), true);
+
+        *carrier_return = true;
+
+        ret.insert(ret.begin(), true);
+        ret.pop_back();
+    }
+
+    return ret;
+}
+
+
 
 /**
  * Performs the rounding of the mantissa according to IEEE754.

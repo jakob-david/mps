@@ -41,12 +41,12 @@ for (unsigned long mant = 2; mant <= 53; mant++) {
 
     //cout << "Mant: " << mant << endl;
     //one * two;
-    for (long int i = 0; i < 1000000; i++) {
+    for (long int i = 0; i < 10000000; i++) {
 
 
         //one.setValue(4);
         //one = 4;
-        one / two;
+        one + two;
         //c = b*a;
     }
 
