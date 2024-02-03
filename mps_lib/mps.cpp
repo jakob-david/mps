@@ -745,35 +745,40 @@ mps mps::addition(const mps &one, const mps &two, const bool set_sign) {
 
     // Extract exponents and mantissas
     //-------------------------------
-    vector<bool> a_mantissa = one.mantissa;
-    a_mantissa.insert(a_mantissa.begin(), true);
+    //vector<bool> a_mantissa = one.mantissa;
+    //a_mantissa.insert(a_mantissa.begin(), true);
 
-    vector<bool> b_mantissa = two.mantissa;
-    b_mantissa.insert(b_mantissa.begin(), true);
+    //vector<bool> b_mantissa = two.mantissa;
+    //b_mantissa.insert(b_mantissa.begin(), true);
     //-------------------------------
 
+
+    //TODO: check for max exponent diff
+
+    // TODO: decide variant => binaryOffsetAddition VS match Mantissa
 
     // Match mantissas and set exponent
     //-------------------------------
+    bool carrier;
     unsigned long exponent_diff;
     char larger_tmp = larger(one.exponent, two.exponent);
     if(1 == larger_tmp){
         exponent_diff = binaryToInt(binarySubtraction(one.exponent, two.exponent));
         ret.exponent = one.exponent;
-        matchMantissas(&b_mantissa, &a_mantissa, exponent_diff);
+        ret.mantissa = binaryOffsetAddition(two.mantissa, one.mantissa, exponent_diff, &carrier);
     } else if(-1 == larger_tmp){
         exponent_diff = binaryToInt(binarySubtraction(two.exponent, one.exponent));
         ret.exponent = two.exponent;
-        matchMantissas(&a_mantissa, &b_mantissa, exponent_diff);
+        ret.mantissa = binaryOffsetAddition(one.mantissa, two.mantissa, exponent_diff, &carrier);
     } else {
-        ret.exponent = one.exponent;
+        ret.mantissa = binaryOffsetAddition(two.mantissa, one.mantissa, 0, &carrier);
+        ret.exponent = two.exponent;
     }
     //-------------------------------
 
     // Actual addition and adjusting mantissa
     //-------------------------------
-    bool carrier;
-    ret.mantissa = binaryAddition(a_mantissa, b_mantissa,true, &carrier);
+    //ret.mantissa = binaryAddition(a_mantissa, b_mantissa,true, &carrier);
     ret.mantissa.erase(ret.mantissa.begin(), ret.mantissa.begin()+1);
     if(carrier){
         addOneToBinary(&ret.exponent);
@@ -1267,7 +1272,7 @@ vector<bool> mps::binaryOffsetAddition(const vector<bool>& lp, const vector<bool
         carrier = ((lp[i] && rp[j]) || (lp[i] && carrier)) || (rp[j] && carrier);
     }
 
-    if(0 != off_set){
+    if(off_set > 0){
         j--;
         ret.insert(ret.begin(), !rp[j] ^ carrier);
         carrier = (rp[j] || carrier) || (rp[j] && carrier);
@@ -1278,16 +1283,21 @@ vector<bool> mps::binaryOffsetAddition(const vector<bool>& lp, const vector<bool
             carrier = (rp[j] && carrier);
         }
 
-        ret.insert(ret.begin(), true);
+        ret.insert(ret.begin(), !carrier);
 
-        *carrier_return = false;
+        if(carrier_return != nullptr) {
+            *carrier_return = carrier;
+        }
 
     } else {
-        ret.insert(ret.begin(), true);
 
-        *carrier_return = true;
+        ret.insert(ret.begin(), carrier);
 
-        ret.insert(ret.begin(), true);
+        if(carrier_return != nullptr){
+            *carrier_return = true;
+        }
+
+        ret.insert(ret.begin(), !carrier);
         ret.pop_back();
     }
 
