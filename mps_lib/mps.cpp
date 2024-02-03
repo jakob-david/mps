@@ -1082,14 +1082,24 @@ mps mps::division(const mps& dividend, const mps& divisor, bool set_sign) {
     N.insert(N.begin(), true);
     N.insert(N.begin(), false);
 
-    vector<bool> R = N;        // remainder
+    // remainder
+    vector<bool> R = N;
     R.insert(R.begin(), false);
     D.insert(D.end(), false);
 
-
+    // quotient
     vector<bool> Q(divisor.mantissa.size(), false);
 
+    // subtrahend (used for binarySummation)
+    vector<bool> S; // TODO: make function
+    S.reserve(D.size());
+    for(auto && i : D){
+        S.push_back(!i);
+    }
+    addOneToBinary(&S);
 
+
+    // main loop
     for(unsigned long i = 0; i < Q.size(); i++){
         shiftLeft(&R);
         //R[R.size()-1] = N[i];
@@ -1133,7 +1143,8 @@ mps mps::division(const mps& dividend, const mps& divisor, bool set_sign) {
 
         char tmp = larger(R, D);
         if(1 == tmp || 0 == tmp){
-            R = binarySubtraction(R, D);
+            // R = binarySubtraction(R, D);
+            binarySummation(&R, S);
             Q[i] = true;
         } else {
             //Q[(unsigned long) i] = false;
@@ -1166,7 +1177,8 @@ mps mps::division(const mps& dividend, const mps& divisor, bool set_sign) {
 
         char tmp = larger(R, D);
         if(1 == tmp || 0 == tmp){
-            R = binarySubtraction(R, D);
+            // R = binarySubtraction(R, D);
+            binarySummation(&R, S);
             Q.push_back(true);
         } else {
             Q.push_back(false);

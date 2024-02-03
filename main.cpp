@@ -46,7 +46,7 @@ for (unsigned long mant = 2; mant <= 53; mant++) {
 
         //one.setValue(4);
         //one = 4;
-        one * two;
+        one / two;
         //c = b*a;
     }
 
