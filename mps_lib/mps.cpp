@@ -1091,12 +1091,7 @@ mps mps::division(const mps& dividend, const mps& divisor, bool set_sign) {
     vector<bool> Q(divisor.mantissa.size(), false);
 
     // subtrahend (used for binarySummation)
-    vector<bool> S; // TODO: make function
-    S.reserve(D.size());
-    for(auto && i : D){
-        S.push_back(!i);
-    }
-    addOneToBinary(&S);
+    auto S = invertAndAddOne(D);    // carry bit must not be checked because d must not be 0;
 
 
     // main loop
@@ -1104,7 +1099,7 @@ mps mps::division(const mps& dividend, const mps& divisor, bool set_sign) {
         shiftLeft(&R);
         //R[R.size()-1] = N[i];
 
-/*
+
         cout << "-----------------" << endl;
 
         std::string str;
@@ -1139,7 +1134,7 @@ mps mps::division(const mps& dividend, const mps& divisor, bool set_sign) {
 
         cout << "Q: " << str << endl;
 
-*/
+
 
         char tmp = larger(R, D);
         if(1 == tmp || 0 == tmp){
@@ -1255,25 +1250,14 @@ vector<bool> mps::binaryAddition(const vector<bool>& a, const vector<bool>& b, b
  */
 vector<bool> mps::binarySubtraction(const vector<bool>& minuend, const vector<bool>& subtrahend){
 
-    vector<bool> tmp_subtrahend;
-    tmp_subtrahend.reserve(subtrahend.size());
+    bool carrie;
+    auto tmp = invertAndAddOne(subtrahend, &carrie);
 
-    for(auto i : subtrahend){
-        tmp_subtrahend.push_back(!i);
-    }
-
-    /*
-    // invert
-    for(auto && i : subtrahend){
-        i = !i;
-    }
-*/
-    // add one
-    if(addOneToBinary(&tmp_subtrahend)){
+    if(carrie){
         return minuend; // if there is a carrier bit present at the end the subtrahend is zero.
     }
 
-    return binaryAddition(minuend, tmp_subtrahend, false);
+    return binaryAddition(minuend, tmp, false);
 }
 
 void mps::binarySummation(vector<bool> *summand, const vector<bool> &addend, unsigned long start) {
@@ -1450,6 +1434,25 @@ bool mps::addOneToBinary(vector<bool>* vector){
     vector->insert(vector->begin(), true);
     vector->pop_back();
     return true;
+}
+
+
+vector<bool> mps::invertAndAddOne(const vector<bool> &vec, bool *carrie){
+
+    vector<bool> ret;
+    ret.reserve(vec.size());
+
+    for(auto && i : vec){
+        ret.push_back(!i);
+    }
+
+    if(carrie != nullptr){
+        *carrie = addOneToBinary(&ret);
+    } else {
+        addOneToBinary(&ret);
+    }
+
+    return ret;
 }
 
 /**
