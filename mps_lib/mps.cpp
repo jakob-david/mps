@@ -865,11 +865,9 @@ mps mps::subtraction(const mps &minued, const mps &subtrahend, bool set_sign) {
 
     ret.mantissa.erase(ret.mantissa.begin(), ret.mantissa.begin() + (long) exponent_shift + 1);
 
-    // TODO: Place for improvement
+
     vector<bool> exponent_shift_binary = intToBinary(exponent_shift);
-    for(unsigned long i = exponent_shift_binary.size(); i < ret.exponent_length; i++){
-        exponent_shift_binary.insert(exponent_shift_binary.begin(), false);
-    }
+    exponent_shift_binary.insert(exponent_shift_binary.begin(), ret.exponent_length - exponent_shift_binary.size(), false);
     ret.exponent = binarySubtraction(ret.exponent, exponent_shift_binary);
 
     //-------------------------------
@@ -1018,7 +1016,7 @@ mps mps::multiplication(const mps& one, const mps& two, bool set_sign) {
     }
     //-------------------------------
 
-    //cout << "Sum: " << sum << endl;
+    // cout << "Sum: " << sum << endl;
     return ret;
 }
 
