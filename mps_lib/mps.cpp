@@ -1219,6 +1219,14 @@ vector<bool> mps::binarySubtraction(const vector<bool>& minuend, const vector<bo
     return binaryAddition(minuend, tmp, false);
 }
 
+/**
+ * Performs an addition but adds directly to the summand. The addend can be smaller.
+ * If so the addend will be "virtually" shifted to the left so the the first bits match.
+ *
+ * @param minuend reference to the vector which should be reduced
+ * @param subtrahend reference to the vector which should be subtracted.
+ * @return the result as a binary number.
+ */
 void mps::binarySummation(vector<bool> *summand, const vector<bool> &addend) {
 
     bool carrier = false;
@@ -1395,7 +1403,13 @@ bool mps::addOneToBinary(vector<bool>* vector){
     return true;
 }
 
-
+/**
+ * Creates a copy of the vector vec. Then inverts the copy, adds one to it and returns it afterwards.
+ *
+ * @param vec reference to the vector which copy should be inverted and added one to it.
+ * @param carrie pointer to a boolean value which will be set to true if a carrier bit is present at the end.
+ * @return the resulting copied and tempered vector.
+ */
 vector<bool> mps::invertAndAddOne(const vector<bool> &vec, bool *carrie){
 
     vector<bool> ret;
@@ -1424,6 +1438,11 @@ vector<bool> mps::invertAndAddOne(const vector<bool> &vec, bool *carrie){
     return std::all_of(vector.begin(), vector.end(), [](bool i){return i;});
 }
 
+/**
+ * Shifts a vector to the left.
+ *
+ * @param vector pointer to the vector which should be shifted to the left.
+ */
 void mps::shiftLeft(vector<bool>* vec){
 
     vec->erase(vec->begin());
