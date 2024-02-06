@@ -1498,25 +1498,6 @@ char mps::larger(const vector<bool>& a, const vector<bool>& b){
 }
 
 /**
- * Aligns two bit vectors about an amount.
- * The amount is the number so that after the operation the two bit vectors align and have the same exponent.
- *
- * The vectors are not really shifted but zeros are added either to the left or the right.
- * Therefore the size of both vectors is increased by the amount both are "shifted".
- *
- * @param vector_right_shift pointer to the vector which should be "shifted" to the right
- * @param vector_left_shift pointer to the vector which should be "shifted" to the left
- * @param amount amount the two vectors should be "shifted"
- */
-void mps::matchMantissas(vector<bool>* vector_right_shift, vector<bool>* vector_left_shift, unsigned long amount){
-
-    for(unsigned long i = 0; i < amount; i++){
-        vector_right_shift->insert(vector_right_shift->begin(), false);
-        vector_left_shift->insert(vector_left_shift->end(), false);
-    }
-}
-
-/**
  * Adds one to a binary number saved inside a vector.
  * The vector consists of booleans which represents a binary number.
  *
