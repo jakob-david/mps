@@ -756,8 +756,6 @@ mps mps::addition(const mps &one, const mps &two, const bool set_sign) {
     };
     //-------------------------------
 
-    // TODO: check for max exponent diff
-
     // set exponent and addition
     //-------------------------------
     bool carrier;
@@ -768,21 +766,29 @@ mps mps::addition(const mps &one, const mps &two, const bool set_sign) {
         exponent_diff = binaryToInt(binarySubtraction(one.exponent, two.exponent));
         ret.exponent = one.exponent;
 
-        ret.mantissa = add(two.mantissa, one.mantissa, exponent_diff, &carrier);
+        if(exponent_diff <= one.mantissa.size()){
+            ret.mantissa = add(two.mantissa, one.mantissa, exponent_diff, &carrier);
+        } else {
+            ret.mantissa = one.mantissa;
+            return ret;
+        }
 
     } else if(-1 == larger_tmp){
 
         exponent_diff = binaryToInt(binarySubtraction(two.exponent, one.exponent));
         ret.exponent = two.exponent;
 
-        ret.mantissa = add(one.mantissa, two.mantissa, exponent_diff, &carrier);
+        if(exponent_diff <= one.mantissa.size()){
+            ret.mantissa = add(one.mantissa, two.mantissa, exponent_diff, &carrier);
+        } else {
+            ret.mantissa = two.mantissa;
+            return ret;
+        }
 
     } else {
 
         ret.exponent = two.exponent;
-
         ret.mantissa = add(one.mantissa, two.mantissa, 0, &carrier);
-
     }
     //-------------------------------
 
@@ -846,15 +852,35 @@ mps mps::subtraction(const mps &minued, const mps &subtrahend, bool set_sign) {
         unsigned long exponent_diff = binaryToInt(binarySubtraction(minued.exponent, subtrahend.exponent));
         ret.exponent = minued.exponent;
 
-        ret.mantissa = subtract(minued.mantissa, subtrahend.mantissa, exponent_diff);
+        if(exponent_diff <= minued.mantissa.size()){
+            ret.mantissa = subtract(minued.mantissa, subtrahend.mantissa, exponent_diff);
+        } else if (exponent_diff == minued.mantissa.size() + 1){
+            ret.mantissa = minued.mantissa;
+            subtractOneFromBinary(&ret.exponent);
+            subtractOneFromBinary(&ret.mantissa);
+            return ret;
+        } else {
+            ret.mantissa = minued.mantissa;
+            return ret;
+        }
 
     } else if(-1 == larger_tmp){
 
         unsigned long exponent_diff = binaryToInt(binarySubtraction(subtrahend.exponent, minued.exponent));
         ret.exponent = subtrahend.exponent;
-
-        ret.mantissa = subtract(subtrahend.mantissa, minued.mantissa, exponent_diff);
         ret.sign = !ret.sign; // flip sign
+
+        if(exponent_diff <= minued.mantissa.size()){
+            ret.mantissa = subtract(subtrahend.mantissa, minued.mantissa, exponent_diff);
+        } else if(exponent_diff == minued.mantissa.size() + 1){
+            ret.mantissa = subtrahend.mantissa;
+            subtractOneFromBinary(&ret.exponent);
+            subtractOneFromBinary(&ret.mantissa);
+            return ret;
+        } else {
+            ret.mantissa = subtrahend.mantissa;
+            return ret;
+        }
 
     } else {
 
@@ -1347,7 +1373,7 @@ vector<bool> mps::binaryOffsetAddition(const vector<bool>& lp, const vector<bool
 
     // Perform carrier step if wanted.
     if(c && carrier){
-        ret.insert(ret.begin(), true); // TODO: should be false code.
+        ret.insert(ret.begin(), true);
         ret.pop_back();
     }
 
@@ -1492,9 +1518,6 @@ void mps::matchMantissas(vector<bool>* vector_right_shift, vector<bool>* vector_
  * Adds one to a binary number saved inside a vector.
  * The vector consists of booleans which represents a binary number.
  *
- * If a carrier bit is present in the last iteration a "one" is added at the beginning
- * and the last element is erased.
- *
  * @param vector pointer to the vector containing the binary number where one should be added
  * @return true if a carrier bit was present in the last iteration, false otherwise
  */
@@ -1510,6 +1533,26 @@ bool mps::addOneToBinary(vector<bool>* vector){
 
     //vector->insert(vector->begin(), true);
     //vector->pop_back();   // TODO: maybe check if remove is justified everywhere.
+    return true;
+}
+
+/**
+ * Subtracts one to a binary number saved inside a vector.
+ * The vector consists of booleans which represents a binary number.
+ *
+ * @param vector pointer to the vector containing the binary number where one should be subtracted
+ * @return true if a carrier bit was present in the last iteration, false otherwise
+ */
+bool mps::subtractOneFromBinary(vector<bool> *vector){
+
+    for(auto i = vector->size(); i > 0;){
+        i--;
+        (*vector)[i] = !(*vector)[i];
+        if(!(*vector)[i]){
+            return false;
+        }
+    }
+
     return true;
 }
 

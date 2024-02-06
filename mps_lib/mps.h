@@ -9,6 +9,7 @@ using namespace std;
 class mps {
 
 private:
+public:
 
     // properties of the bit array
     //-------------------------------
@@ -92,6 +93,7 @@ private:
     static void shiftLeft(vector<bool>* vec);
     static void matchMantissas(vector<bool>* vector_right_shift, vector<bool>* vector_left_shift, unsigned long amount);
     static bool addOneToBinary(vector<bool>* vector);
+    static bool subtractOneFromBinary(vector<bool>* vector);
     [[nodiscard]] static vector<bool> invertAndAddOne(const vector<bool> &vec, bool *carrie = nullptr);
     [[nodiscard]] static bool allTrue(const vector<bool>& vector);
 };
