@@ -960,7 +960,7 @@ mps mps::multiplication(const mps& one, const mps& two, bool set_sign) {
         addOneToBinary(&addend);    // Carrier bit must not be checked because of if-statement.
 
         bool tmp_carry;
-        ret.exponent = binaryAddition(one.exponent, addend, false, &tmp_carry);
+        ret.exponent = binaryAddition(one.exponent, addend, &tmp_carry);
 
         // Check if the number will be more than the maximal allowed value.
         if(tmp_carry && one.exponent[0] && !addend[0]){
@@ -1114,7 +1114,7 @@ mps mps::division(const mps& dividend, const mps& divisor, bool set_sign) {
 
         subtrahend = binarySubtraction(subtrahend, divisor.exponent);
 
-        ret.exponent = binaryAddition(dividend.exponent, subtrahend, false);
+        ret.exponent = binaryAddition(dividend.exponent, subtrahend);
 
         // TODO: check for maximum
 
@@ -1225,7 +1225,7 @@ mps mps::division(const mps& dividend, const mps& divisor, bool set_sign) {
  * @param carrier_return pointer to a boolean where the last state of the carrier bit can be save
  * @return the result as binary number.
  */
-vector<bool> mps::binaryAddition(const vector<bool>& a, const vector<bool>& b, bool carry, bool* carrier_return){
+vector<bool> mps::binaryAddition(const vector<bool>& a, const vector<bool>& b, bool* carrier_return){
 
     vector<bool> ret;
     bool carrier = false;
@@ -1237,11 +1237,13 @@ vector<bool> mps::binaryAddition(const vector<bool>& a, const vector<bool>& b, b
         carrier = ((a[i] && b[i]) || (a[i] && carrier)) || (b[i] && carrier);
     }
 
+    /*
     // adjust if carrier bit is 1
     if(carry && carrier){
         ret.insert(ret.begin(), true);
         ret.pop_back();
     }
+     */
 
     // save the state of the carrier bit in carrier_return.
     if(carrier_return != nullptr){
@@ -1268,7 +1270,7 @@ vector<bool> mps::binarySubtraction(const vector<bool>& minuend, const vector<bo
         return minuend; // if there is a carrier bit present at the end the subtrahend is zero.
     }
 
-    return binaryAddition(minuend, tmp, false);
+    return binaryAddition(minuend, tmp);
 }
 
 /**

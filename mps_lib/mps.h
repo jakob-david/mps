@@ -78,7 +78,7 @@ private:
 private:
     // general helper functions
     //-------------------------------
-    [[nodiscard]] static vector<bool> binaryAddition(const vector<bool>& one, const vector<bool>& two, bool carry, bool* carrier_return = nullptr);
+    [[nodiscard]] static vector<bool> binaryAddition(const vector<bool>& one, const vector<bool>& two, bool* carrier_return = nullptr);
     [[nodiscard]] static vector<bool> binarySubtraction(const vector<bool>& minuend, const vector<bool>& subtrahend);
 
     static void binarySummation(vector<bool>* summand, const vector<bool>& addend);
