@@ -756,47 +756,38 @@ mps mps::addition(const mps &one, const mps &two, const bool set_sign) {
     };
     //-------------------------------
 
-
-    // Extract exponents and mantissas
-    //-------------------------------
-    //vector<bool> a_mantissa = one.mantissa;
-    //a_mantissa.insert(a_mantissa.begin(), true);
-
-    //vector<bool> b_mantissa = two.mantissa;
-    //b_mantissa.insert(b_mantissa.begin(), true);
-    //-------------------------------
-
-    // bool hd[2] = {true, true};
-    // bool p[2] = {false, false};
-
-    // TODO: Lambda
     // TODO: check for max exponent diff
 
-    // Match mantissas and set exponent
+    // set exponent and addition
     //-------------------------------
     bool carrier;
     unsigned long exponent_diff;
     char larger_tmp = larger(one.exponent, two.exponent);
     if(1 == larger_tmp){
+
         exponent_diff = binaryToInt(binarySubtraction(one.exponent, two.exponent));
         ret.exponent = one.exponent;
+
         ret.mantissa = add(two.mantissa, one.mantissa, exponent_diff, &carrier);
-        // ret.mantissa = binaryOffsetAddition(two.mantissa, one.mantissa, exponent_diff, true, p, hd, &carrier);
+
     } else if(-1 == larger_tmp){
+
         exponent_diff = binaryToInt(binarySubtraction(two.exponent, one.exponent));
         ret.exponent = two.exponent;
+
         ret.mantissa = add(one.mantissa, two.mantissa, exponent_diff, &carrier);
-        //ret.mantissa = binaryOffsetAddition(one.mantissa, two.mantissa, exponent_diff, true, p, hd, &carrier);
+
     } else {
-        // ret.mantissa = binaryOffsetAddition(two.mantissa, one.mantissa, 0, true, p, hd, &carrier);
+
         ret.exponent = two.exponent;
+
         ret.mantissa = add(one.mantissa, two.mantissa, 0, &carrier);
+
     }
     //-------------------------------
 
-    // Actual addition and adjusting mantissa
+    // adjusting the mantissa
     //-------------------------------
-    //ret.mantissa = binaryAddition(a_mantissa, b_mantissa,true, &carrier);
     ret.mantissa.erase(ret.mantissa.begin(), ret.mantissa.begin()+1);
     if(carrier){
         addOneToBinary(&ret.exponent);
