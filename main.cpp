@@ -30,9 +30,9 @@ void func(vector<bool> test_1, vector<bool> test_2, vector<bool> test_3, unsigne
 
 int main() {
 
-for (unsigned long mant = 2; mant <= 53; mant++) {
-    mps one(mant, 11, 7.45);
-    mps two(mant, 11, 4.3 );
+for (unsigned long mant = 53; mant <= 53; mant++) {
+    mps one(mant, 11, 235234.0);
+    mps two(mant, 11, 345.0 );
 
     std::chrono::milliseconds t_1 = chrono::duration_cast<chrono::milliseconds>(
             std::chrono::system_clock::now().time_since_epoch()
@@ -45,7 +45,7 @@ for (unsigned long mant = 2; mant <= 53; mant++) {
 
         //one.setValue(4);
         //one = 4;
-        one + two;
+        one - two;
         //c = b*a;
     }
 

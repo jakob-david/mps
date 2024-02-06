@@ -753,8 +753,11 @@ mps mps::addition(const mps &one, const mps &two, const bool set_sign) {
     //-------------------------------
 
     bool hd[2] = {true, true};
+    bool p[2] = {false, false};
 
-    //TODO: check for max exponent diff
+    // TODO: Lambda
+    // TODO: Write test for same exponent.
+    // TODO: check for max exponent diff
 
     // Match mantissas and set exponent
     //-------------------------------
@@ -764,13 +767,13 @@ mps mps::addition(const mps &one, const mps &two, const bool set_sign) {
     if(1 == larger_tmp){
         exponent_diff = binaryToInt(binarySubtraction(one.exponent, two.exponent));
         ret.exponent = one.exponent;
-        ret.mantissa = binaryOffsetAddition(two.mantissa, one.mantissa, exponent_diff, true, hd, &carrier);
+        ret.mantissa = binaryOffsetAddition(two.mantissa, one.mantissa, exponent_diff, true, p, hd, &carrier);
     } else if(-1 == larger_tmp){
         exponent_diff = binaryToInt(binarySubtraction(two.exponent, one.exponent));
         ret.exponent = two.exponent;
-        ret.mantissa = binaryOffsetAddition(one.mantissa, two.mantissa, exponent_diff, true, hd, &carrier);
+        ret.mantissa = binaryOffsetAddition(one.mantissa, two.mantissa, exponent_diff, true, p, hd, &carrier);
     } else {
-        ret.mantissa = binaryOffsetAddition(two.mantissa, one.mantissa, 0, true, hd, &carrier);
+        ret.mantissa = binaryOffsetAddition(two.mantissa, one.mantissa, 0, true, p, hd, &carrier);
         ret.exponent = two.exponent;
     }
     //-------------------------------
@@ -812,44 +815,59 @@ mps mps::subtraction(const mps &minued, const mps &subtrahend, bool set_sign) {
     //-------------------------------
 
 
-    // Extract exponents and mantissas
+    // subtraction of mantissas.
     //-------------------------------
-    vector<bool> a_mantissa = minued.mantissa;
-    a_mantissa.insert(a_mantissa.begin(), true);
+    auto subtract = []
+            (const vector<bool> &first, const vector<bool> &sub, unsigned long off_set) -> vector<bool>{
 
-    vector<bool> b_mantissa = subtrahend.mantissa;
-    b_mantissa.insert(b_mantissa.begin(), true);
+            bool carrier;
+
+            auto iSub = invertAndAddOne(sub, &carrier);
+            bool hd[2] = {carrier, true};
+            bool p[2] = {true, false};
+
+            return binaryOffsetAddition(iSub, first, off_set, false, p, hd);
+    };
     //-------------------------------
 
 
-    // Match mantissas and set exponent
+    // set exponent and do calculation.
     //-------------------------------
     char larger_tmp = larger(minued.exponent, subtrahend.exponent);
     if(1 == larger_tmp){
+
         unsigned long exponent_diff = binaryToInt(binarySubtraction(minued.exponent, subtrahend.exponent));
         ret.exponent = minued.exponent;
-        matchMantissas(&b_mantissa, &a_mantissa, exponent_diff);
+
+        ret.mantissa = subtract(minued.mantissa, subtrahend.mantissa, exponent_diff);
+
     } else if(-1 == larger_tmp){
+
         unsigned long exponent_diff = binaryToInt(binarySubtraction(subtrahend.exponent, minued.exponent));
         ret.exponent = subtrahend.exponent;
-        matchMantissas(&a_mantissa, &b_mantissa, exponent_diff);
-    } else {
-        ret.exponent = minued.exponent;
-    }
-    //-------------------------------
 
-
-    // Actual Subtraction
-    //-------------------------------
-    larger_tmp = larger(a_mantissa, b_mantissa);
-    if(1 == larger_tmp){
-        ret.mantissa = binarySubtraction(a_mantissa, b_mantissa);
-    } else if(-1 == larger_tmp){
-        ret.mantissa = binarySubtraction(b_mantissa, a_mantissa);
+        ret.mantissa = subtract(subtrahend.mantissa, minued.mantissa, exponent_diff);
         ret.sign = !ret.sign; // flip sign
+
     } else {
-        ret.setZero();
-        return ret;
+
+        ret.exponent = minued.exponent;
+
+        larger_tmp = larger(minued.mantissa, subtrahend.mantissa);
+        if(1 == larger_tmp){
+
+            ret.mantissa = subtract(minued.mantissa, subtrahend.mantissa, 0);
+
+        } else if(-1 == larger_tmp){
+
+            ret.mantissa = subtract(subtrahend.mantissa, minued.mantissa, 0);
+            ret.sign = !ret.sign; // flip sign
+
+        } else {
+            ret.setZero();
+            return ret;
+        }
+
     }
     //-------------------------------
 
@@ -862,6 +880,9 @@ mps mps::subtraction(const mps &minued, const mps &subtrahend, bool set_sign) {
             exponent_shift = i;
             break;
         }
+
+        // for every "right shift" pull one zero form the right.
+        ret.mantissa.push_back(false);
     }
 
     ret.mantissa.erase(ret.mantissa.begin(), ret.mantissa.begin() + (long) exponent_shift + 1);
@@ -870,7 +891,6 @@ mps mps::subtraction(const mps &minued, const mps &subtrahend, bool set_sign) {
     vector<bool> exponent_shift_binary = intToBinary(exponent_shift);
     exponent_shift_binary.insert(exponent_shift_binary.begin(), ret.exponent_length - exponent_shift_binary.size(), false);
     ret.exponent = binarySubtraction(ret.exponent, exponent_shift_binary);
-
     //-------------------------------
 
 
@@ -1255,7 +1275,7 @@ void mps::binarySummation(vector<bool> *summand, const vector<bool> &addend) {
      */
 }
 
-vector<bool> mps::binaryOffsetAddition(const vector<bool>& lp, const vector<bool>& rp, unsigned long off_set, bool c, bool hd[2],  bool* cr){
+vector<bool> mps::binaryOffsetAddition(const vector<bool>& lp, const vector<bool>& rp, unsigned long off_set, bool c, const bool p[2], const bool hd[2],  bool* cr){
 
     // Setting up basic variable.
     vector<bool> ret;
@@ -1265,8 +1285,10 @@ vector<bool> mps::binaryOffsetAddition(const vector<bool>& lp, const vector<bool
     //-------------------------------
     for(auto i = lp.size(); i > lp.size()-off_set;){
         i--;
-        ret.insert(ret.begin(), lp[i] ^ carrier);
-        carrier = ((lp[i] && false) || (lp[i] && carrier));
+        //ret.insert(ret.begin(), lp[i] ^ carrier);
+        //carrier = ((lp[i] && false) || (lp[i] && carrier));
+        ret.insert(ret.begin(), (lp[i] ^ p[1]) ^ carrier);
+        carrier = ((lp[i] && p[1]) || (lp[i] && carrier)) || (p[1] && carrier);
     }
     //-------------------------------
 
@@ -1295,44 +1317,38 @@ vector<bool> mps::binaryOffsetAddition(const vector<bool>& lp, const vector<bool
         //-------------------------------
         for(; j > 0;){
             j--;
-            ret.insert(ret.begin(), rp[j] ^ carrier);
-            carrier = (rp[j] && carrier);
+            //ret.insert(ret.begin(), rp[j] ^ carrier);
+            //carrier = (rp[j] && carrier);
+            ret.insert(ret.begin(), (p[0] ^ rp[j]) ^ carrier);
+            carrier = ((p[0] && rp[j]) || (p[0] && carrier)) || (rp[j] && carrier);
         }
         //-------------------------------
 
 
         // Calculate right parts hidden digit.
-        ret.insert(ret.begin(), hd[1] ^ carrier);
-        carrier = (hd[1] && carrier);
-
-        // Perform carrier step if wanted.
-        if(c && carrier){
-            ret.insert(ret.begin(), !carrier);
-            ret.pop_back();
-        }
-
-        // Save carrier bit if wanted.
-        if(cr != nullptr) {
-            *cr = carrier;
-        }
+        // ret.insert(ret.begin(), hd[1] ^ carrier);
+        // carrier = (hd[1] && carrier);
+        ret.insert(ret.begin(), (p[0] ^ hd[1]) ^ carrier);
+        carrier = ((p[0]  && hd[1]) || (p[0]  && carrier)) || (hd[1] && carrier);
 
     } else {
 
         // Calculate hidden digit of both variables.
         ret.insert(ret.begin(), (hd[0] ^ hd[1]) ^ carrier);
         carrier = ((hd[0] && hd[1]) || (hd[0] && carrier)) || (hd[1] && carrier);
-
-        // Perform carrier step if wanted.
-        if(c && carrier){
-            ret.insert(ret.begin(), !carrier);
-            ret.pop_back();
-        }
-
-        // Save carrier bit if wanted.
-        if(cr != nullptr){
-            *cr = true;
-        }
     }
+
+    // Perform carrier step if wanted.
+    if(c && carrier){
+        ret.insert(ret.begin(), true); // TODO: should be false code.
+        ret.pop_back();
+    }
+
+    // Save carrier bit if wanted.
+    if(cr != nullptr) {
+        *cr = carrier;
+    }
+
 
     return ret;
 }
@@ -1485,8 +1501,8 @@ bool mps::addOneToBinary(vector<bool>* vector){
         }
     }
 
-    vector->insert(vector->begin(), true);
-    vector->pop_back();
+    //vector->insert(vector->begin(), true);
+    //vector->pop_back();   // TODO: maybe check if remove is justified everywhere.
     return true;
 }
 
