@@ -3662,6 +3662,126 @@ TEST(division_tests, small_large_double) {
     EXPECT_EQ(value_2, MPS_2.getValue());
 }
 
+TEST(division_tests, max_min_float) {
+
+    float value_1 = numeric_limits<float>::max();
+    float value_2 = numeric_limits<float>::min();
+
+    mps MPS(23,8,value_1);
+    mps MPS_2(23,8,value_2);
+
+    auto test = MPS / MPS_2;
+
+    EXPECT_EQ(value_1/value_2, test.getValue());
+    EXPECT_EQ(value_1, MPS.getValue());
+    EXPECT_EQ(value_2, MPS_2.getValue());
+}
+
+TEST(division_tests, max_min_double) {
+
+    double value_1 = numeric_limits<double>::max();
+    double value_2 = numeric_limits<double>::min();
+
+    mps MPS(52,11,value_1);
+    mps MPS_2(52,11,value_2);
+
+    auto test = MPS / MPS_2;
+
+    EXPECT_EQ(value_1/value_2, test.getValue());
+    EXPECT_EQ(value_1, MPS.getValue());
+    EXPECT_EQ(value_2, MPS_2.getValue());
+}
+
+TEST(division_tests, min_max_float) {
+
+    float value_1 = numeric_limits<float>::min();
+    float value_2 = numeric_limits<float>::max();
+
+    mps MPS(23,8,value_1);
+    mps MPS_2(23,8,value_2);
+
+    auto test = MPS / MPS_2;
+
+    EXPECT_EQ(value_1/value_2, test.getValue());
+    EXPECT_EQ(value_1, MPS.getValue());
+    EXPECT_EQ(value_2, MPS_2.getValue());
+}
+
+TEST(division_tests, min_max_double) {
+
+    double value_1 = numeric_limits<double>::min();
+    double value_2 = numeric_limits<double>::max();
+
+    mps MPS(52,11,value_1);
+    mps MPS_2(52,11,value_2);
+
+    auto test = MPS / MPS_2;
+
+    EXPECT_EQ(value_1/value_2, test.getValue());
+    EXPECT_EQ(value_1, MPS.getValue());
+    EXPECT_EQ(value_2, MPS_2.getValue());
+}
+
+TEST(division_tests, min_min_float) {
+
+    float value_1 = numeric_limits<float>::min();
+    float value_2 = numeric_limits<float>::min();
+
+    mps MPS(23,8,value_1);
+    mps MPS_2(23,8,value_2);
+
+    auto test = MPS / MPS_2;
+
+    EXPECT_EQ(value_1/value_2, test.getValue());
+    EXPECT_EQ(value_1, MPS.getValue());
+    EXPECT_EQ(value_2, MPS_2.getValue());
+}
+
+TEST(division_tests, min_min_double) {
+
+    double value_1 = numeric_limits<double>::min();
+    double value_2 = numeric_limits<double>::min();
+
+    mps MPS(52,11,value_1);
+    mps MPS_2(52,11,value_2);
+
+    auto test = MPS / MPS_2;
+
+    EXPECT_EQ(value_1/value_2, test.getValue());
+    EXPECT_EQ(value_1, MPS.getValue());
+    EXPECT_EQ(value_2, MPS_2.getValue());
+}
+
+TEST(division_tests, max_max_float) {
+
+    float value_1 = numeric_limits<float>::max();
+    float value_2 = numeric_limits<float>::max();
+
+    mps MPS(23,8,value_1);
+    mps MPS_2(23,8,value_2);
+
+    auto test = MPS / MPS_2;
+
+    EXPECT_EQ(value_1/value_2, test.getValue());
+    EXPECT_EQ(value_1, MPS.getValue());
+    EXPECT_EQ(value_2, MPS_2.getValue());
+}
+
+TEST(division_tests, max_max_double) {
+
+    double value_1 = numeric_limits<double>::max();
+    double value_2 = numeric_limits<double>::max();
+
+    mps MPS(52,11,value_1);
+    mps MPS_2(52,11,value_2);
+
+    auto test = MPS / MPS_2;
+
+    EXPECT_EQ(value_1/value_2, test.getValue());
+    EXPECT_EQ(value_1, MPS.getValue());
+    EXPECT_EQ(value_2, MPS_2.getValue());
+}
+
 
 
 TEST(division_tests, coding) {

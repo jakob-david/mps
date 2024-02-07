@@ -1100,7 +1100,11 @@ mps mps::division(const mps& dividend, const mps& divisor, bool set_sign) {
 
         ret.exponent = binarySubtraction(dividend.exponent, subtrahend);
 
-        // TODO: check for minimum
+        // TODO: is there a more intelligent way
+        if(1 == larger(ret.exponent, dividend.exponent)){
+            ret.setZero();
+            return ret;
+        }
 
 
     } else if(!divisor.exponent[0]){
@@ -1114,9 +1118,14 @@ mps mps::division(const mps& dividend, const mps& divisor, bool set_sign) {
 
         subtrahend = binarySubtraction(subtrahend, divisor.exponent);
 
-        ret.exponent = binaryAddition(dividend.exponent, subtrahend);
+        bool carrier;
+        ret.exponent = binaryAddition(dividend.exponent, subtrahend, &carrier);
 
-        // TODO: check for maximum
+        // TODO: is there a more intelligent way
+        if(carrier || allTrue(ret.exponent)){
+            ret.setInf(ret.sign);
+            return ret;
+        }
 
     }
     //-------------------------------
