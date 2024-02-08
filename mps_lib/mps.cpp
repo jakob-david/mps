@@ -996,26 +996,19 @@ mps mps::multiplication(const mps& one, const mps& two, bool set_sign) {
 
     // Calculate the mantissa
     //-------------------------------
-    vector<bool> A(one.mantissa.begin(), one.mantissa.end());       // add
-    vector<bool> S;                                                           // subtract
+    bool prefix[2] = {false, true};
 
-    // set up A vector.
-    A.reserve(A.size() + 2);                // 2 => sign and "invisible 1"
-    A.insert(A.begin(), true);
-    A.insert(A.begin(), false);
-
-    // set up S vector.
-    S.reserve(A.size() + 2);                // 2 => sign and "invisible 1"
-    for(auto && i : A){
-        S.push_back(!i);
-    }
-    addOneToBinary(&S);
+    vector<bool> S;
+    bool carrier;
+    S = invertAndAddOne(one.mantissa, &carrier);
+    S.insert(S.begin(), carrier);
+    S.insert(S.begin(), true);
 
 
     // set up P vector (product)
     vector<bool> &P = ret.mantissa;     // Use reference P in order to keep the naming.
     P.clear();
-    P.reserve(A.size() + two.mantissa_length + 3);              // 3 => sign and "invisible 1" + 1
+    P.reserve(one.mantissa.size() + two.mantissa_length + 5);              // 3 => 2* (sign and "invisible 1") + 1
     for(unsigned long i = 0; i < one.mantissa_length + 2; i++){    // 2 => sign and "invisible 1"
         P.push_back(false);
     }
@@ -1026,12 +1019,13 @@ mps mps::multiplication(const mps& one, const mps& two, bool set_sign) {
     }
     P.push_back(false);
 
+    // main loop
     //unsigned long sum = 0;
     for(unsigned long i = 0; i < two.mantissa_length+2; i++){
 
 
         if(!P.end()[-2] && P.back()){
-            binarySummation(&P, A);
+            binarySummation(&P, one.mantissa, prefix);
             //sum++;
         } else if(P.end()[-2] && !P.back()) {
             binarySummation(&P, S);
@@ -1292,11 +1286,15 @@ vector<bool> mps::binarySubtraction(const vector<bool>& minuend, const vector<bo
  * @param summand pointer to the vector to which the addend is added.
  * @param addend reference to the addend which is going to be added to the summand.
  */
-void mps::binarySummation(vector<bool> *summand, const vector<bool> &addend) {
+void mps::binarySummation(vector<bool> *summand, const vector<bool> &addend, const bool prefix[2]) {
 
     bool carrier = false;
     bool tmp;
     auto j = addend.size(); // + start
+
+    if(nullptr != prefix) {
+        j += 2;
+    }
 
     // full adder
     for(auto i = addend.size(); i > 0;){
@@ -1305,6 +1303,16 @@ void mps::binarySummation(vector<bool> *summand, const vector<bool> &addend) {
         tmp = ((*summand)[j] ^ addend[i]) ^ carrier;
         carrier = (((*summand)[j] && addend[i]) || ((*summand)[j] && carrier)) || (addend[i] && carrier);
         (*summand)[j] = tmp;
+    }
+
+    if(nullptr != prefix) {
+        for (auto i = 2; i > 0;) {
+            i--;
+            j--;
+            tmp = ((*summand)[j] ^ prefix[i]) ^ carrier;
+            carrier = (((*summand)[j] && prefix[i]) || ((*summand)[j] && carrier)) || (prefix[i] && carrier);
+            (*summand)[j] = tmp;
+        }
     }
 
     /*

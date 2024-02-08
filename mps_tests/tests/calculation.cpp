@@ -3782,6 +3782,37 @@ TEST(division_tests, max_max_double) {
     EXPECT_EQ(value_2, MPS_2.getValue());
 }
 
+TEST(division_tests, over_max_float) {
+
+    float value_1 = numeric_limits<float>::max();
+    float value_2 = 0.5f;
+
+    mps MPS(23,8,value_1);
+    mps MPS_2(23,8,value_2);
+
+    auto test = MPS / MPS_2;
+
+    EXPECT_EQ(value_1/value_2, test.getValue());
+    EXPECT_EQ(value_1, MPS.getValue());
+    EXPECT_EQ(value_2, MPS_2.getValue());
+}
+
+TEST(division_tests, over_max_double) {
+
+    double value_1 = numeric_limits<double>::max();
+    double value_2 = 0.5;
+
+    mps MPS(52,11,value_1);
+    mps MPS_2(52,11,value_2);
+
+    auto test = MPS / MPS_2;
+
+    EXPECT_EQ(value_1/value_2, test.getValue());
+    EXPECT_EQ(value_1, MPS.getValue());
+    EXPECT_EQ(value_2, MPS_2.getValue());
+}
+
+
 
 
 TEST(division_tests, coding) {
