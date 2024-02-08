@@ -276,6 +276,11 @@ bool mps::isNaN() const{
  */
 void mps::setInf(bool negative) {
 
+    if( exponent.empty() || mantissa.empty()){
+        exponent.resize(exponent_length);
+        mantissa.resize(exponent_length);
+    }
+
     if(negative){
         sign = true;
     } else {
@@ -296,7 +301,13 @@ void mps::setInf(bool negative) {
  */
 void mps::setZero(){
 
+    if( exponent.empty() || mantissa.empty()){
+        exponent.resize(exponent_length);
+        mantissa.resize(exponent_length);
+    }
+
     sign = false;
+
     for(unsigned long i = 0; i < exponent_length; i++){
         exponent[i] = false;
     }
@@ -309,6 +320,11 @@ void mps::setZero(){
  * Sets the floating point number to NaN (not a number)
  */
 void mps::setNaN(bool negative){
+
+    if( exponent.empty() || mantissa.empty()){
+        exponent.resize(exponent_length);
+        mantissa.resize(exponent_length);
+    }
 
     if(negative){
         sign = true;
@@ -1078,7 +1094,9 @@ mps mps::division(const mps& dividend, const mps& divisor, bool set_sign) {
 
     // Set up the return object.
     //-------------------------------
-    mps ret(dividend.mantissa_length, divisor.exponent_length);
+    mps ret; //(dividend.mantissa_length, divisor.exponent_length);
+    ret.mantissa_length = dividend.mantissa_length;
+    ret.exponent_length = dividend.exponent_length;
     ret.sign = set_sign;
     //-------------------------------
 
@@ -1127,23 +1145,20 @@ mps mps::division(const mps& dividend, const mps& divisor, bool set_sign) {
 
     // Division
     //-------------------------------
+    // TODO: remove copying.
     vector<bool> D = divisor.mantissa;
     D.insert(D.begin(), true);
     D.insert(D.begin(), false);
-
-    //vector<bool> N = dividend.mantissa;
-    //N.insert(N.begin(), true);
-    //N.insert(N.begin(), false);
+    D.insert(D.end(), false);
 
     // remainder
     vector<bool> R = dividend.mantissa;
     R.insert(R.begin(), true);
     R.insert(R.begin(), 2, false);
-    //R.insert(R.begin(), false);
-    D.insert(D.end(), false);
 
     // quotient
-    vector<bool> Q(divisor.mantissa.size(), false);
+    vector<bool> &Q = ret.mantissa;         // reference for better naming.
+    Q.resize(ret.mantissa_length, false);
 
     // subtrahend (used for binarySummation)
     auto S = invertAndAddOne(D);    // carry bit must not be checked because d must not be 0;
@@ -1208,7 +1223,6 @@ mps mps::division(const mps& dividend, const mps& divisor, bool set_sign) {
     }
     //-------------------------------
 
-    ret.mantissa = Q;
     return ret;
 }
 
