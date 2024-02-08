@@ -996,7 +996,7 @@ mps mps::multiplication(const mps& one, const mps& two, bool set_sign) {
 
     // Calculate the mantissa
     //-------------------------------
-    bool prefix[2] = {false, true};
+    //bool prefix[2] = {false, true};
 
     vector<bool> S;
     bool carrier;
@@ -1025,7 +1025,7 @@ mps mps::multiplication(const mps& one, const mps& two, bool set_sign) {
 
 
         if(!P.end()[-2] && P.back()){
-            binarySummation(&P, one.mantissa, prefix);
+            binarySummation(&P, one.mantissa, true);
             //sum++;
         } else if(P.end()[-2] && !P.back()) {
             binarySummation(&P, S);
@@ -1286,13 +1286,13 @@ vector<bool> mps::binarySubtraction(const vector<bool>& minuend, const vector<bo
  * @param summand pointer to the vector to which the addend is added.
  * @param addend reference to the addend which is going to be added to the summand.
  */
-void mps::binarySummation(vector<bool> *summand, const vector<bool> &addend, const bool prefix[2]) {
+void mps::binarySummation(vector<bool> *summand, const vector<bool> &addend, const bool prefix) {
 
     bool carrier = false;
     bool tmp;
     auto j = addend.size(); // + start
 
-    if(nullptr != prefix) {
+    if(prefix) {
         j += 2;
     }
 
@@ -1305,14 +1305,15 @@ void mps::binarySummation(vector<bool> *summand, const vector<bool> &addend, con
         (*summand)[j] = tmp;
     }
 
-    if(nullptr != prefix) {
-        for (auto i = 2; i > 0;) {
-            i--;
-            j--;
-            tmp = ((*summand)[j] ^ prefix[i]) ^ carrier;
-            carrier = (((*summand)[j] && prefix[i]) || ((*summand)[j] && carrier)) || (prefix[i] && carrier);
-            (*summand)[j] = tmp;
-        }
+    if(prefix) { // prefix: false, true
+
+        j--;
+        tmp = !(*summand)[j] ^ carrier;
+        carrier = ((*summand)[j] || ((*summand)[j] && carrier)) || carrier;
+        (*summand)[j] = tmp;
+
+        j--;
+        (*summand)[j] = (*summand)[j] ^ carrier;
     }
 
     /*
