@@ -1145,11 +1145,6 @@ mps mps::division(const mps& dividend, const mps& divisor, bool set_sign) {
 
     // Division
     //-------------------------------
-    // TODO: remove copying.
-    vector<bool> D = divisor.mantissa;
-    D.insert(D.begin(), true);
-    D.insert(D.begin(), false);
-    D.insert(D.end(), false);
 
     // remainder
     vector<bool> R = dividend.mantissa;
@@ -1161,14 +1156,14 @@ mps mps::division(const mps& dividend, const mps& divisor, bool set_sign) {
     Q.resize(ret.mantissa_length, false);
 
     // subtrahend (used for binarySummation)
-    auto S = invertAndAddOne(D);    // carry bit must not be checked because d must not be 0;
+    auto S = invertAndAddOne(divisor.mantissa, nullptr, true);    // carry bit must not be checked because d must not be 0;
 
 
     // main loop
     for(auto && i : Q){
         shiftLeft(&R);
 
-        char tmp = larger(R, D);
+        char tmp = larger(R, divisor.mantissa, true);
         if(1 == tmp || 0 == tmp){
             binarySummation(&R, S);
             i = true;
@@ -1199,7 +1194,7 @@ mps mps::division(const mps& dividend, const mps& divisor, bool set_sign) {
     for(unsigned long i = 0; i < count; i++){
         shiftLeft(&R);
 
-        char tmp = larger(R, D);
+        char tmp = larger(R, divisor.mantissa, true);
         if(1 == tmp || 0 == tmp){
             // R = binarySubtraction(R, D);
             binarySummation(&R, S);
@@ -1217,7 +1212,7 @@ mps mps::division(const mps& dividend, const mps& divisor, bool set_sign) {
     //-------------------------------
     shiftLeft(&R);
 
-    char tmp = larger(R, D);
+    char tmp = larger(R, divisor.mantissa, true);
     if(1 == tmp || 0 == tmp){
         addOneToBinary(&Q);
     }
@@ -1516,16 +1511,38 @@ long mps::getBias() const{
  *
  * Only works for vectors of same size. ATTENTION: Does not check for same length!
  *
+ * Division Case: In the case of a division the routine must account for "hidden" bits.
+ *
  * @param a reference to the vector containing the first binary number
  * @param b reference to the vector containing the second binary number
+ * @param division_case whether the division case is wanted or not.
  * @return 1 if a > b, 0 if a == b, -1 if a < b
  */
-char mps::larger(const vector<bool>& a, const vector<bool>& b){
+char mps::larger(const vector<bool>& a, const vector<bool>& b, const bool division_case){
 
-    for(unsigned long i = 0; i < a.size(); i++){
-        if(a[i] && !b[i]) { return 1;}
-        else if(b[i] && !a[i]) {return -1;}
+    if(!division_case){
+        for(unsigned long i = 0; i < a.size(); i++){
+            if(a[i] && !b[i]) { return 1;}
+            else if(b[i] && !a[i]) {return -1;}
+        }
+    } else {
+
+        if (a[0]){
+            return 1;
+        } else if(!a[1]) {
+            return -1;
+        }
+
+        for(unsigned long i = 0; i < b.size(); i++){
+            if(a[i+2] && !b[i]) { return 1;}
+            else if(b[i] && !a[i+2]) {return -1;}
+        }
+
+        if(a[a.size()-1]){
+            return 1;
+        }
     }
+
     return 0;
 }
 
@@ -1578,13 +1595,24 @@ bool mps::subtractOneFromBinary(vector<bool> *vector){
  * @param carrie pointer to a boolean value which will be set to true if a carrier bit is present at the end.
  * @return the resulting copied and tempered vector.
  */
-vector<bool> mps::invertAndAddOne(const vector<bool> &vec, bool *carrie){
+vector<bool> mps::invertAndAddOne(const vector<bool> &vec, bool *carrie, const bool division_case){
 
     vector<bool> ret;
-    ret.reserve(vec.size());
+
+    if(!division_case){
+        ret.reserve(vec.size());
+    } else {
+        ret.reserve(vec.size()+3);
+        ret.push_back(true);
+        ret.push_back(false);
+    }
 
     for(auto && i : vec){
         ret.push_back(!i);
+    }
+
+    if(division_case){
+        ret.push_back(true);
     }
 
     if(carrie != nullptr){

@@ -30,7 +30,7 @@ void func(vector<bool> test_1, vector<bool> test_2, vector<bool> test_3, unsigne
 
 int main() {
 
-for (unsigned long mant = 2; mant <= 53; mant++) {
+for (unsigned long mant = 53; mant <= 53; mant++) {
     mps one(mant, 11, 235.0);
     mps two(mant, 11, 345.0 );
 
@@ -48,7 +48,7 @@ for (unsigned long mant = 2; mant <= 53; mant++) {
 
         //one.setValue(4);
         //one = 4;
-        one * two;
+        one / two;
         //c = b*a;
     }
 

@@ -89,11 +89,11 @@ private:
     [[nodiscard]] static vector<bool> intToBinary(unsigned long value);
 
     [[nodiscard]] long getBias() const;
-    [[nodiscard]] static char larger(const vector<bool>& a, const vector<bool>& b);
+    [[nodiscard]] static char larger(const vector<bool>& a, const vector<bool>& b, const bool division_case = false);
     static void shiftLeft(vector<bool>* vec);
     static bool addOneToBinary(vector<bool>* vector);
     static bool subtractOneFromBinary(vector<bool>* vector);
-    [[nodiscard]] static vector<bool> invertAndAddOne(const vector<bool> &vec, bool *carrie = nullptr);
+    [[nodiscard]] static vector<bool> invertAndAddOne(const vector<bool> &vec, bool *carrie = nullptr, const bool division_case = false);
     [[nodiscard]] static bool allTrue(const vector<bool>& vector);
 };
 
