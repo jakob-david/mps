@@ -1245,6 +1245,26 @@ bool mps::operator==(const mps& other) const{
     }
 }
 
+bool mps::operator!=(const mps& other) const{
+
+    if (this->exponent_length != other.exponent_length) {
+        cout << "ERROR: in != : Exponents do not match" << endl;
+    }
+    if (this->mantissa_length != other.mantissa_length) {
+        cout << "ERROR: in != : Mantissas do not match" << endl;
+    }
+
+    if(this->isNaN() || other.isNaN()){
+        return true;
+    }
+
+    if(this->sign != other.sign) {             // positive positive case
+        return true;
+    } else {
+        return notEqual(*this, other);
+    }
+}
+
 bool mps::operator>(const mps& other) const{
 
     if (this->exponent_length != other.exponent_length) {
@@ -1351,6 +1371,17 @@ bool mps::operator<=(const mps& other) const {
         return true;
     } else {
         return false;
+    }
+}
+
+[[nodiscard]] bool mps::notEqual(const mps& one, const mps& two){
+
+    auto res = compare(one, two);
+
+    if(0 == res) {
+        return false;
+    } else {
+        return true;
     }
 }
 
