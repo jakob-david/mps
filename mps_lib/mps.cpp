@@ -1225,6 +1225,26 @@ mps mps::division(const mps& dividend, const mps& divisor, bool set_sign) {
 
 // comparators
 //-------------------------------
+bool mps::operator==(const mps& other) const{
+
+    if (this->exponent_length != other.exponent_length) {
+        cout << "ERROR: in == : Exponents do not match" << endl;
+    }
+    if (this->mantissa_length != other.mantissa_length) {
+        cout << "ERROR: in == : Mantissas do not match" << endl;
+    }
+
+    if(this->isNaN() || other.isNaN()){
+        return false;
+    }
+
+    if(this->sign != other.sign) {             // positive positive case
+        return false;
+    } else {
+        return equal(*this, other);
+    }
+}
+
 bool mps::operator>(const mps& other) const{
 
     if (this->exponent_length != other.exponent_length) {
@@ -1276,10 +1296,10 @@ bool mps::operator<(const mps& other) const{
 bool mps::operator>=(const mps& other) const {
 
     if (this->exponent_length != other.exponent_length) {
-        cout << "ERROR: in > : Exponents do not match" << endl;
+        cout << "ERROR: in >= : Exponents do not match" << endl;
     }
     if (this->mantissa_length != other.mantissa_length) {
-        cout << "ERROR: in > : Mantissas do not match" << endl;
+        cout << "ERROR: in >= : Mantissas do not match" << endl;
     }
 
     if(this->isNaN() || other.isNaN()){
@@ -1297,7 +1317,42 @@ bool mps::operator>=(const mps& other) const {
     }
 }
 
+bool mps::operator<=(const mps& other) const {
 
+    if (this->exponent_length != other.exponent_length) {
+        cout << "ERROR: in <= : Exponents do not match" << endl;
+    }
+    if (this->mantissa_length != other.mantissa_length) {
+        cout << "ERROR: in <= : Mantissas do not match" << endl;
+    }
+
+    if(this->isNaN() || other.isNaN()){
+        return false;
+    }
+
+    if(!this->sign &&!other.sign) {             // positive positive case
+        return smallerEqual(*this, other);
+    } else if(!this->sign && other.sign) {      // positive negative case
+        return false;
+    } else if(this->sign && !other.sign){       // negative positive case
+        return true;
+    } else {                                    // negative negative case
+        return smallerEqual(other, *this);
+    }
+}
+
+
+
+[[nodiscard]] bool mps::equal(const mps& one, const mps& two){
+
+    auto res = compare(one, two);
+
+    if(0 == res) {
+        return true;
+    } else {
+        return false;
+    }
+}
 
 [[nodiscard]] bool mps::larger(const mps& one, const mps& two){
 
@@ -1326,6 +1381,17 @@ bool mps::operator>=(const mps& other) const {
     auto res = compare(one, two);
 
     if(1 == res || 0 == res) {
+        return true;
+    } else {
+        return false;
+    }
+}
+
+[[nodiscard]] bool mps::smallerEqual(const mps& one, const mps& two){
+
+    auto res = compare(one, two);
+
+    if(-1 == res || 0 == res){
         return true;
     } else {
         return false;
