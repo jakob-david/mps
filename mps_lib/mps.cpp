@@ -15,6 +15,7 @@
  * TODO: add docstrings to comparators
  * TODO: add round function
  * TODO: add exceptions
+ * TODO: remove NOTES (above ;) )
  */
 
 // constructors and destructor
