@@ -1273,58 +1273,63 @@ bool mps::operator<(const mps& other) const{
     }
 }
 
+bool mps::operator>=(const mps& other) const {
+
+    auto test = other;
+
+    return false;
+}
+
 
 
 [[nodiscard]] bool mps::larger(const mps& one, const mps& two){
 
-    for(unsigned long i = 0; i < one.exponent_length; i++){
+    auto res = compare(one, two);
 
-        if(one.exponent[i] && !two.exponent[i]){
-            return true;
-        }
-        if(two.exponent[i] && !one.exponent[i]){
-            return false;
-        }
+    if(-1 == res || 0 == res) {
+        return false;
+    } else {
+        return true;
     }
-
-    for(unsigned long i = 0; i < one.mantissa_length; i++){
-
-        if(one.mantissa[i] && !two.mantissa[i]){
-            return true;
-        }
-        if(two.mantissa[i] && !one.mantissa[i]){
-            return false;
-        }
-    }
-
-    // equal case
-    return false;
 }
 
 [[nodiscard]] bool mps::smaller(const mps& one, const mps& two){
 
+    auto res = compare(one, two);
+
+    if(1 == res || 0 == res){
+        return false;
+    } else {
+        return true;
+    }
+}
+
+[[nodiscard]] char mps::compare(const mps& one, const mps& two){
+
+    // compare exponent
     for(unsigned long i = 0; i < one.exponent_length; i++){
 
         if(one.exponent[i] && !two.exponent[i]){
-            return false;
+            return 1;
         }
         if(two.exponent[i] && !one.exponent[i]){
-            return true;
+            return -1;
         }
     }
 
+    // compare mantissa
     for(unsigned long i = 0; i < one.mantissa_length; i++){
 
         if(one.mantissa[i] && !two.mantissa[i]){
-            return false;
+            return 1;
         }
         if(two.mantissa[i] && !one.mantissa[i]){
-            return true;
+            return -1;
         }
     }
 
     // equal case
-    return false;
+    return 0;
 }
 //-------------------------------
 

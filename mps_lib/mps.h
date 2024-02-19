@@ -69,6 +69,7 @@ public:
     //-------------------------------
     bool operator>(const mps& other) const;
     bool operator<(const mps& other) const;
+    bool operator>=(const mps& other) const;
 
 private:
     // helper for operators
@@ -83,6 +84,8 @@ private:
     //-------------------------------
     [[nodiscard]] static bool larger(const mps& one, const mps& two) ;
     [[nodiscard]] static bool smaller(const mps& one, const mps& two) ;
+
+    [[nodiscard]] static char compare(const mps& one, const mps& two) ;
 
 
 private:
