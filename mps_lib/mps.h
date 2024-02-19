@@ -65,6 +65,10 @@ public:
     mps operator*(const mps& other) const;
     mps operator/(const mps& other) const;
 
+    // comparators
+    //-------------------------------
+    bool operator>(const mps& other) const;
+
 private:
     // helper for operators
     //-------------------------------
@@ -73,6 +77,10 @@ private:
     [[nodiscard]] static mps subtraction(const mps& minued, const mps& subtrahend, bool set_sign) ;
     [[nodiscard]] static mps multiplication(const mps& minued, const mps& subtrahend, bool set_sign) ;
     [[nodiscard]] static mps division(const mps& dividend, const mps& divisor, bool set_sign) ;
+
+    // helper for comparators
+    //-------------------------------
+    [[nodiscard]] static bool larger(const mps& one, const mps& two) ;
 
 
 private:
