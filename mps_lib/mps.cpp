@@ -11,6 +11,12 @@
  *
  * */
 
+/*
+ * TODO: add docstrings to comparators
+ * TODO: add round function
+ * TODO: add exceptions
+ */
+
 // constructors and destructor
 //-------------------------------
 
