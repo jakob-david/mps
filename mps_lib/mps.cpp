@@ -1410,6 +1410,12 @@ mps mps::division(const mps& dividend, const mps& divisor, bool set_sign) {
 
 // comparators
 //-------------------------------
+
+/**
+ * Checks whether two mps objects are the same.
+ *
+ * @return true if they are the same, false otherwise.
+ */
 bool mps::operator==(const mps& other) const{
 
     if (this->exponent_length != other.exponent_length) {
@@ -1430,6 +1436,11 @@ bool mps::operator==(const mps& other) const{
     }
 }
 
+/**
+ * Checks whether two mps objects are not the same.
+ *
+ * @return true if they are not the same, false otherwise.
+ */
 bool mps::operator!=(const mps& other) const{
 
     if (this->exponent_length != other.exponent_length) {
@@ -1450,6 +1461,11 @@ bool mps::operator!=(const mps& other) const{
     }
 }
 
+/**
+ * Checks whether the first mps object is larger than the other mps object.
+ *
+ * @return true if it is larger, false otherwise.
+ */
 bool mps::operator>(const mps& other) const{
 
     if (this->exponent_length != other.exponent_length) {
@@ -1474,6 +1490,11 @@ bool mps::operator>(const mps& other) const{
     }
 }
 
+/**
+ * Checks whether the first mps object is smaller than the other mps object.
+ *
+ * @return true if it is smaller, false otherwise.
+ */
 bool mps::operator<(const mps& other) const{
 
     if (this->exponent_length != other.exponent_length) {
@@ -1498,6 +1519,11 @@ bool mps::operator<(const mps& other) const{
     }
 }
 
+/**
+ * Checks whether the first mps object is larger or equal than the other mps object.
+ *
+ * @return true if it is larger or equal, false otherwise.
+ */
 bool mps::operator>=(const mps& other) const {
 
     if (this->exponent_length != other.exponent_length) {
@@ -1522,6 +1548,11 @@ bool mps::operator>=(const mps& other) const {
     }
 }
 
+/**
+ * Checks whether the first mps object is smaller or equal than the other mps object.
+ *
+ * @return true if it is larger, false otherwise.
+ */
 bool mps::operator<=(const mps& other) const {
 
     if (this->exponent_length != other.exponent_length) {
