@@ -1299,3 +1299,32 @@ TEST(round, double_to_float_exponent_too_large_2){
     EXPECT_EQ(true, isinf((float) value));
 }
 
+TEST(round, double_to_float_exponent_too_small){
+
+    double value = numeric_limits<double>::min();
+
+    mps MPS(52, 11, value);
+
+    MPS.round(23,8);
+
+    EXPECT_EQ(should_value((float) value), is_mps(MPS.getBitArray()));
+    EXPECT_EQ(23, MPS.getMantisseLength());
+    EXPECT_EQ(8, MPS.getExponentLength());
+    EXPECT_EQ(true, MPS.isZero());
+    EXPECT_EQ(0, (float) value);
+}
+
+TEST(round, double_to_float_exponent_too_small_2){
+
+    double value = (double) numeric_limits<float>::min() / 2;
+
+    mps MPS(52, 11, value);
+
+    MPS.round(23,8);
+
+    // cannot be tested directly since the system uses subnormal numbers.
+    EXPECT_EQ(23, MPS.getMantisseLength());
+    EXPECT_EQ(8, MPS.getExponentLength());
+    EXPECT_EQ(true, MPS.isZero());
+}
+
