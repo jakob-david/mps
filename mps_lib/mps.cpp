@@ -381,10 +381,10 @@ mps& mps::operator=(const mps& other) {
         this->mantissa.resize(this->mantissa_length);
     } else {
         if (this->exponent_length != other.exponent_length) {
-            cout << "ERROR: in = : Exponents do not match" << endl;
+            throw std::invalid_argument("ERROR: in = : Exponents do not match");
         }
         if (this->mantissa_length != other.mantissa_length) {
-            cout << "ERROR: in = : Mantissas do not match" << endl;
+            throw std::invalid_argument("ERROR: in = : Mantissas do not match");
         }
     }
 
@@ -410,10 +410,10 @@ mps& mps::operator=(const mps& other) {
 mps mps::operator+(const mps& other) const {
 
     if (this->exponent_length != other.exponent_length) {
-        cout << "ERROR: in + : Exponents do not match" << endl;
+        throw std::invalid_argument("ERROR: in + : Exponents do not match");
     }
     if (this->mantissa_length != other.mantissa_length) {
-        cout << "ERROR: in + : Mantissas do not match" << endl;
+        throw std::invalid_argument("ERROR: in + : Mantissas do not match");
     }
 
 
@@ -472,10 +472,10 @@ mps mps::operator+(const mps& other) const {
 mps mps::operator-(const mps& other) const {
 
     if (this->exponent_length != other.exponent_length) {
-        cout << "ERROR: in - : Exponents do not match" << endl;
+        throw std::invalid_argument("ERROR: in - : Exponents do not match");
     }
     if (this->mantissa_length != other.mantissa_length) {
-        cout << "ERROR: in - : Mantissas do not match" << endl;
+        throw std::invalid_argument("ERROR: in - : Mantissas do not match");
     }
 
 
@@ -535,10 +535,10 @@ mps mps::operator-(const mps& other) const {
 mps mps::operator*(const mps& other) const {
 
     if (this->exponent_length != other.exponent_length) {
-        cout << "ERROR: in * : Exponents do not match" << endl;
+        throw std::invalid_argument("ERROR: in * : Exponents do not match");
     }
     if (this->mantissa_length != other.mantissa_length) {
-        cout << "ERROR: in * : Mantissas do not match" << endl;
+        throw std::invalid_argument("ERROR: in * : Mantissas do not match");
     }
 
 
@@ -588,10 +588,10 @@ mps mps::operator*(const mps& other) const {
 mps mps::operator/(const mps& other) const {
 
     if (this->exponent_length != other.exponent_length) {
-        cout << "ERROR: in / : Exponents do not match" << endl;
+        throw std::invalid_argument("ERROR: in / : Exponents do not match");
     }
     if (this->mantissa_length != other.mantissa_length) {
-        cout << "ERROR: in / : Mantissas do not match" << endl;
+        throw std::invalid_argument("ERROR: in / : Mantissas do not match");
     }
 
 
@@ -1235,10 +1235,10 @@ mps mps::division(const mps& dividend, const mps& divisor, bool set_sign) {
 bool mps::operator==(const mps& other) const{
 
     if (this->exponent_length != other.exponent_length) {
-        cout << "ERROR: in == : Exponents do not match" << endl;
+        throw std::invalid_argument("ERROR: in == : Exponents do not match");
     }
     if (this->mantissa_length != other.mantissa_length) {
-        cout << "ERROR: in == : Mantissas do not match" << endl;
+        throw std::invalid_argument("ERROR: in == : Mantissas do not match");
     }
 
     if(this->isNaN() || other.isNaN()){
@@ -1255,10 +1255,10 @@ bool mps::operator==(const mps& other) const{
 bool mps::operator!=(const mps& other) const{
 
     if (this->exponent_length != other.exponent_length) {
-        cout << "ERROR: in != : Exponents do not match" << endl;
+        throw std::invalid_argument("ERROR: in != : Exponents do not match" );
     }
     if (this->mantissa_length != other.mantissa_length) {
-        cout << "ERROR: in != : Mantissas do not match" << endl;
+        throw std::invalid_argument("ERROR: in != : Mantissas do not match");
     }
 
     if(this->isNaN() || other.isNaN()){
@@ -1275,10 +1275,10 @@ bool mps::operator!=(const mps& other) const{
 bool mps::operator>(const mps& other) const{
 
     if (this->exponent_length != other.exponent_length) {
-        cout << "ERROR: in > : Exponents do not match" << endl;
+        throw std::invalid_argument("ERROR: in > : Exponents do not match" );
     }
     if (this->mantissa_length != other.mantissa_length) {
-        cout << "ERROR: in > : Mantissas do not match" << endl;
+        throw std::invalid_argument("ERROR: in > : Mantissas do not match" );
     }
 
     if(this->isNaN() || other.isNaN()){
@@ -1299,10 +1299,10 @@ bool mps::operator>(const mps& other) const{
 bool mps::operator<(const mps& other) const{
 
     if (this->exponent_length != other.exponent_length) {
-        cout << "ERROR: in < : Exponents do not match" << endl;
+        throw std::invalid_argument("ERROR: in < : Exponents do not match" );
     }
     if (this->mantissa_length != other.mantissa_length) {
-        cout << "ERROR: in < : Mantissas do not match" << endl;
+        throw std::invalid_argument("ERROR: in < : Mantissas do not match" );
     }
 
     if(this->isNaN() || other.isNaN()){
@@ -1323,10 +1323,10 @@ bool mps::operator<(const mps& other) const{
 bool mps::operator>=(const mps& other) const {
 
     if (this->exponent_length != other.exponent_length) {
-        cout << "ERROR: in >= : Exponents do not match" << endl;
+        throw std::invalid_argument("ERROR: in >= : Exponents do not match" );
     }
     if (this->mantissa_length != other.mantissa_length) {
-        cout << "ERROR: in >= : Mantissas do not match" << endl;
+        throw std::invalid_argument("ERROR: in >= : Mantissas do not match" );
     }
 
     if(this->isNaN() || other.isNaN()){
@@ -1347,10 +1347,10 @@ bool mps::operator>=(const mps& other) const {
 bool mps::operator<=(const mps& other) const {
 
     if (this->exponent_length != other.exponent_length) {
-        cout << "ERROR: in <= : Exponents do not match" << endl;
+        throw std::invalid_argument("ERROR: in <= : Exponents do not match" );
     }
     if (this->mantissa_length != other.mantissa_length) {
-        cout << "ERROR: in <= : Mantissas do not match" << endl;
+        throw std::invalid_argument("ERROR: in <= : Mantissas do not match" );
     }
 
     if(this->isNaN() || other.isNaN()){

@@ -589,3 +589,469 @@ TEST(setter_tests, set_NAN_float) {
 }
 
 
+
+
+
+TEST(exception, different_length_exponent_assign){
+
+    bool test = false;
+
+    mps ONE(23, 9, 345.234);
+    mps TWO(23, 8, 345.234);
+
+    try
+    {
+        ONE = TWO;
+    }
+
+    catch (std::invalid_argument& e)
+    {
+        test = true;
+    }
+
+    EXPECT_EQ(true, test);
+}
+
+TEST(exception, different_length_mantissa_assign){
+
+    bool test = false;
+
+    mps ONE(20, 8, 345.234);
+    mps TWO(23, 8, 345.234);
+
+    try
+    {
+        ONE = TWO;
+    }
+
+    catch (std::invalid_argument& e)
+    {
+        test = true;
+    }
+
+    EXPECT_EQ(true, test);
+}
+
+TEST(exception, different_length_exponent_addition){
+
+    bool test = false;
+
+    mps ONE(23, 9, 345.234);
+    mps TWO(23, 8, 345.234);
+
+    try
+    {
+        ONE + TWO;
+    }
+
+    catch (std::invalid_argument& e)
+    {
+        test = true;
+    }
+
+    EXPECT_EQ(true, test);
+}
+
+TEST(exception, different_length_mantissa_addition){
+
+    bool test = false;
+
+    mps ONE(20, 8, 345.234);
+    mps TWO(23, 8, 345.234);
+
+    try
+    {
+        ONE + TWO;
+    }
+
+    catch (std::invalid_argument& e)
+    {
+        test = true;
+    }
+
+    EXPECT_EQ(true, test);
+}
+
+TEST(exception, different_length_exponent_subtraction){
+
+    bool test = false;
+
+    mps ONE(23, 9, 345.234);
+    mps TWO(23, 8, 345.234);
+
+    try
+    {
+        ONE - TWO;
+    }
+
+    catch (std::invalid_argument& e)
+    {
+        test = true;
+    }
+
+    EXPECT_EQ(true, test);
+}
+
+TEST(exception, different_length_mantissa_subtraction){
+
+    bool test = false;
+
+    mps ONE(20, 8, 345.234);
+    mps TWO(23, 8, 345.234);
+
+    try
+    {
+        ONE - TWO;
+    }
+
+    catch (std::invalid_argument& e)
+    {
+        test = true;
+    }
+
+    EXPECT_EQ(true, test);
+}
+
+TEST(exception, different_length_exponent_multiplication){
+
+    bool test = false;
+
+    mps ONE(23, 9, 345.234);
+    mps TWO(23, 8, 345.234);
+
+    try
+    {
+        ONE * TWO;
+    }
+
+    catch (std::invalid_argument& e)
+    {
+        test = true;
+    }
+
+    EXPECT_EQ(true, test);
+}
+
+TEST(exception, different_length_mantissa_multiplication){
+
+    bool test = false;
+
+    mps ONE(20, 8, 345.234);
+    mps TWO(23, 8, 345.234);
+
+    try
+    {
+        ONE * TWO;
+    }
+
+    catch (std::invalid_argument& e)
+    {
+        test = true;
+    }
+
+    EXPECT_EQ(true, test);
+}
+
+TEST(exception, different_length_exponent_division){
+
+    bool test = false;
+
+    mps ONE(23, 9, 345.234);
+    mps TWO(23, 8, 345.234);
+
+    try
+    {
+        ONE / TWO;
+    }
+
+    catch (std::invalid_argument& e)
+    {
+        test = true;
+    }
+
+    EXPECT_EQ(true, test);
+}
+
+TEST(exception, different_length_mantissa_division){
+
+    bool test = false;
+
+    mps ONE(20, 8, 345.234);
+    mps TWO(23, 8, 345.234);
+
+    try
+    {
+        ONE / TWO;
+    }
+
+    catch (std::invalid_argument& e)
+    {
+        test = true;
+    }
+
+    EXPECT_EQ(true, test);
+}
+
+TEST(exception, different_length_exponent_equal){
+
+    bool test = false;
+
+    mps ONE(23, 9, 345.234);
+    mps TWO(23, 8, 345.234);
+
+    try
+    {
+        if(ONE == TWO){
+            test = false;
+        }
+    }
+
+    catch (std::invalid_argument& e)
+    {
+        test = true;
+    }
+
+    EXPECT_EQ(true, test);
+}
+
+TEST(exception, different_length_mantissa_equal){
+
+    bool test = false;
+
+    mps ONE(20, 8, 345.234);
+    mps TWO(23, 8, 345.234);
+
+    try
+    {
+        if(ONE == TWO){
+            test = false;
+        }
+    }
+
+    catch (std::invalid_argument& e)
+    {
+        test = true;
+    }
+
+    EXPECT_EQ(true, test);
+}
+
+TEST(exception, different_length_exponent_notequal){
+
+    bool test = false;
+
+    mps ONE(23, 9, 345.234);
+    mps TWO(23, 8, 345.234);
+
+    try
+    {
+        if(ONE != TWO){
+            test = false;
+        }
+    }
+
+    catch (std::invalid_argument& e)
+    {
+        test = true;
+    }
+
+    EXPECT_EQ(true, test);
+}
+
+TEST(exception, different_length_mantissa_notequal){
+
+    bool test = false;
+
+    mps ONE(20, 8, 345.234);
+    mps TWO(23, 8, 345.234);
+
+    try
+    {
+        if(ONE != TWO){
+            test = false;
+        }
+    }
+
+    catch (std::invalid_argument& e)
+    {
+        test = true;
+    }
+
+    EXPECT_EQ(true, test);
+}
+
+TEST(exception, different_length_exponent_larger){
+
+    bool test = false;
+
+    mps ONE(23, 9, 345.234);
+    mps TWO(23, 8, 345.234);
+
+    try
+    {
+        if(ONE > TWO){
+            test = false;
+        }
+    }
+
+    catch (std::invalid_argument& e)
+    {
+        test = true;
+    }
+
+    EXPECT_EQ(true, test);
+}
+
+TEST(exception, different_length_mantissa_larger){
+
+    bool test = false;
+
+    mps ONE(20, 8, 345.234);
+    mps TWO(23, 8, 345.234);
+
+    try
+    {
+        if(ONE > TWO){
+            test = false;
+        }
+    }
+
+    catch (std::invalid_argument& e)
+    {
+        test = true;
+    }
+
+    EXPECT_EQ(true, test);
+}
+
+TEST(exception, different_length_exponent_smaller){
+
+    bool test = false;
+
+    mps ONE(23, 9, 345.234);
+    mps TWO(23, 8, 345.234);
+
+    try
+    {
+        if(ONE < TWO){
+            test = false;
+        }
+    }
+
+    catch (std::invalid_argument& e)
+    {
+        test = true;
+    }
+
+    EXPECT_EQ(true, test);
+}
+
+TEST(exception, different_length_mantissa_smaller){
+
+    bool test = false;
+
+    mps ONE(20, 8, 345.234);
+    mps TWO(23, 8, 345.234);
+
+    try
+    {
+        if(ONE < TWO){
+            test = false;
+        }
+    }
+
+    catch (std::invalid_argument& e)
+    {
+        test = true;
+    }
+
+    EXPECT_EQ(true, test);
+}
+
+TEST(exception, different_length_exponent_larger_equal){
+
+    bool test = false;
+
+    mps ONE(23, 9, 345.234);
+    mps TWO(23, 8, 345.234);
+
+    try
+    {
+        if(ONE >= TWO){
+            test = false;
+        }
+    }
+
+    catch (std::invalid_argument& e)
+    {
+        test = true;
+    }
+
+    EXPECT_EQ(true, test);
+}
+
+TEST(exception, different_length_mantissa_larger_equal){
+
+    bool test = false;
+
+    mps ONE(20, 8, 345.234);
+    mps TWO(23, 8, 345.234);
+
+    try
+    {
+        if(ONE >= TWO){
+            test = false;
+        }
+    }
+
+    catch (std::invalid_argument& e)
+    {
+        test = true;
+    }
+
+    EXPECT_EQ(true, test);
+}
+
+TEST(exception, different_length_exponent_smaller_equal){
+
+    bool test = false;
+
+    mps ONE(23, 9, 345.234);
+    mps TWO(23, 8, 345.234);
+
+    try
+    {
+        if(ONE <= TWO){
+            test = false;
+        }
+    }
+
+    catch (std::invalid_argument& e)
+    {
+        test = true;
+    }
+
+    EXPECT_EQ(true, test);
+}
+
+TEST(exception, different_length_mantissa_smaller_equal){
+
+    bool test = false;
+
+    mps ONE(20, 8, 345.234);
+    mps TWO(23, 8, 345.234);
+
+    try
+    {
+        if(ONE <= TWO){
+            test = false;
+        }
+    }
+
+    catch (std::invalid_argument& e)
+    {
+        test = true;
+    }
+
+    EXPECT_EQ(true, test);
+}

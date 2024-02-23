@@ -5,7 +5,7 @@ project(Google_tests)
 add_subdirectory(lib)
 include_directories(./lib/googletest/include ./lib/googletest)
 
-add_executable(mps_tests tests/constructor.cpp
+add_executable(mps_tests tests/general_object.cpp
         tests/calculation.cpp
         functions/functions.h
         tests/comparators.cpp)
