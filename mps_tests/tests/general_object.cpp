@@ -1056,6 +1056,44 @@ TEST(exception, different_length_mantissa_smaller_equal){
     EXPECT_EQ(true, test);
 }
 
+TEST(exception, round_too_small_mantissa){
+
+    bool test = false;
+
+    mps ONE(20, 8, 345.234);
+
+    try
+    {
+        ONE.round(0,13);
+    }
+
+    catch (std::invalid_argument& e)
+    {
+        test = true;
+    }
+
+    EXPECT_EQ(true, test);
+}
+
+TEST(exception, round_too_small_mantissa){
+
+    bool test = false;
+
+    mps ONE(20, 8, 345.234);
+    mps TWO(23, 8, 345.234);
+
+    try
+    {
+        ONE.round(13,0);
+    }
+
+    catch (std::invalid_argument& e)
+    {
+        test = true;
+    }
+
+    EXPECT_EQ(true, test);
+}
 
 
 
@@ -1267,8 +1305,6 @@ TEST(round, double_to_float_max){
     EXPECT_EQ(8, MPS.getExponentLength());
 }
 
-
-
 TEST(round, double_to_float_exponent_too_large){
 
     double value = numeric_limits<double>::max();
@@ -1328,3 +1364,80 @@ TEST(round, double_to_float_exponent_too_small_2){
     EXPECT_EQ(true, MPS.isZero());
 }
 
+TEST(round, float_to_double_NAN){
+
+    float value = NAN;
+
+    mps MPS(23, 8, value);
+
+    MPS.round(52,11);
+
+    EXPECT_EQ(should_value((double) value), is_mps(MPS.getBitArray()));
+    EXPECT_EQ(52, MPS.getMantisseLength());
+    EXPECT_EQ(11, MPS.getExponentLength());
+}
+
+TEST(round, double_to_float_NAN){
+
+    double value = NAN;
+
+    mps MPS(52, 11, value);
+
+    MPS.round(23,8);
+
+    EXPECT_EQ(should_value((float) value), is_mps(MPS.getBitArray()));
+    EXPECT_EQ(23, MPS.getMantisseLength());
+    EXPECT_EQ(8, MPS.getExponentLength());
+}
+
+TEST(round, float_to_double_pos_inf){
+
+    float value = numeric_limits<float>::infinity();
+
+    mps MPS(23, 8, value);
+
+    MPS.round(52,11);
+
+    EXPECT_EQ(should_value((double) value), is_mps(MPS.getBitArray()));
+    EXPECT_EQ(52, MPS.getMantisseLength());
+    EXPECT_EQ(11, MPS.getExponentLength());
+}
+
+TEST(round, double_to_float_pos_inf){
+
+    double value = numeric_limits<double>::infinity();
+
+    mps MPS(52, 11, value);
+
+    MPS.round(23,8);
+
+    EXPECT_EQ(should_value((float) value), is_mps(MPS.getBitArray()));
+    EXPECT_EQ(23, MPS.getMantisseLength());
+    EXPECT_EQ(8, MPS.getExponentLength());
+}
+
+TEST(round, float_to_double_neg_inf){
+
+    float value = numeric_limits<float>::infinity() * -1;
+
+    mps MPS(23, 8, value);
+
+    MPS.round(52,11);
+
+    EXPECT_EQ(should_value((double) value), is_mps(MPS.getBitArray()));
+    EXPECT_EQ(52, MPS.getMantisseLength());
+    EXPECT_EQ(11, MPS.getExponentLength());
+}
+
+TEST(round, double_to_float_neg_inf){
+
+    double value = numeric_limits<double>::infinity() * -1;
+
+    mps MPS(52, 11, value);
+
+    MPS.round(23,8);
+
+    EXPECT_EQ(should_value((float) value), is_mps(MPS.getBitArray()));
+    EXPECT_EQ(23, MPS.getMantisseLength());
+    EXPECT_EQ(8, MPS.getExponentLength());
+}

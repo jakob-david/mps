@@ -13,10 +13,8 @@
 
 /*
  * TODO: add docstrings to comparators
- * TODO: add round function
  * TODO: add print function
  * TODO: make setters and round secure
- * TODO: add special values for round.
  * TODO: remove NOTES (above ;) )
  */
 
@@ -358,6 +356,22 @@ void mps::setNaN(bool negative){
 void mps::round(const unsigned long new_mantissa_size, const unsigned long new_exponent_size){
 
 
+
+
+    // handle special values
+    //-------------------------------
+    if(this->isNaN()){
+        this->resize_mps_object(new_mantissa_size, new_exponent_size);
+        this->setNaN();
+        return;
+    } else if(this->isInfinity()){
+        this->resize_mps_object(new_mantissa_size, new_exponent_size);
+        this->setInf(this->sign);
+        return;
+    }
+    //-------------------------------
+
+
     // rounding of the exponent
     //-------------------------------
     if(new_exponent_size > this->exponent_length){
@@ -425,23 +439,24 @@ void mps::round(const unsigned long new_mantissa_size, const unsigned long new_e
 
         this->exponent_length = new_exponent_size;
         //-------------------------------
-
-        // rounding of the mantissa
-        //-------------------------------
-        if(new_mantissa_size > this->mantissa_length){
-
-            for(unsigned long i = this->mantissa_length; i < new_mantissa_size; i++){
-                this->mantissa.push_back(false);
-            }
-            this->mantissa_length = new_mantissa_size;
-
-        } else if(new_mantissa_size < this->mantissa_length) {
-
-            round(&(this->mantissa), new_mantissa_size);
-            this->mantissa_length = new_mantissa_size;
-        }
-        //-------------------------------
     }
+
+
+    // rounding of the mantissa
+    //-------------------------------
+    if(new_mantissa_size > this->mantissa_length){
+
+        for(unsigned long i = this->mantissa_length; i < new_mantissa_size; i++){
+            this->mantissa.push_back(false);
+        }
+        this->mantissa_length = new_mantissa_size;
+
+    } else if(new_mantissa_size < this->mantissa_length) {
+
+        round(&(this->mantissa), new_mantissa_size);
+        this->mantissa_length = new_mantissa_size;
+    }
+    //-------------------------------
 }
 
 void mps::resize_mps_object(const unsigned long new_mantissa_size, const unsigned long new_exponent_size){
