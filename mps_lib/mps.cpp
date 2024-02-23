@@ -14,7 +14,6 @@
 /*
  * TODO: add docstrings to comparators
  * TODO: add round function
- * TODO: add exceptions
  * TODO: remove NOTES (above ;) )
  */
 
@@ -350,6 +349,19 @@ void mps::setNaN(bool negative){
 }
 //-------------------------------
 
+
+// setter methods
+//-------------------------------
+void mps::round(const unsigned long mant, const unsigned long exp){
+
+    auto value = mant;
+    value = exp;
+
+    if(value == 3){
+        value = 4;
+    }
+}
+//-------------------------------
 
 
 // operators

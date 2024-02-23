@@ -54,8 +54,10 @@ public:
     void setZero();
     void setNaN(bool negative = false);
 
+    // round
+    //-------------------------------
+    void round(const unsigned long mant, const unsigned long exp);
 
-public:
     // operators
     //-------------------------------
     mps& operator=(const mps& other);
@@ -73,6 +75,7 @@ public:
     bool operator<(const mps& other) const;
     bool operator>=(const mps& other) const;
     bool operator<=(const mps& other) const;
+
 
 private:
     // helper for operators
