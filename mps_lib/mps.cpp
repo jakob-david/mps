@@ -1006,9 +1006,15 @@ void mps::setValue(const double value) {
     }
     //-------------------------------
 
-    // adjusting the mantissa
+
+    // adjusting the mantissa   // TODO: maybe move further down.
     //-------------------------------
     ret.mantissa.erase(ret.mantissa.begin(), ret.mantissa.begin()+1);
+    round(&ret.mantissa, ret.mantissa_length);
+    //-------------------------------
+
+    // adjusting the mantissa
+    //-------------------------------
     if(carrier){
         addOneToBinary(&ret.exponent);
         if(allTrue(ret.exponent)){
@@ -1018,7 +1024,7 @@ void mps::setValue(const double value) {
     }
     //-------------------------------
 
-    round(&ret.mantissa, ret.mantissa_length);
+
 
     return ret;
 }
@@ -1872,8 +1878,7 @@ void mps::binarySummation(vector<bool> *summand, const vector<bool> &addend, con
  * The padding can be set individually.
  *
  * It can be decided whether a carrier step should be made at the and. This is is at the end of the addition a carrier
- * bit is present, an extra element (bool) will be added at the beginning of the resulting vector. To account for this
- * extra element the last element is deleted.
+ * bit is present, an extra element (bool) will be added at the beginning of the resulting vector.
  *
  * Since this is an addition for floating point mantissas it considers the hidden digit. This is the first bit left of
  * the decimal point which is not saved since it is there by definition. To be able to use the code for inverted vectors
@@ -1956,7 +1961,6 @@ vector<bool> mps::binaryOffsetAddition(const vector<bool>& lp, const vector<bool
     // Perform carrier step if wanted.
     if(c && carrier){
         ret.insert(ret.begin(), true);
-        ret.pop_back();
     }
 
     // Save carrier bit if wanted.

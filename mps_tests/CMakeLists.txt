@@ -8,7 +8,8 @@ include_directories(./lib/googletest/include ./lib/googletest)
 add_executable(mps_tests tests/general_object.cpp
         tests/calculation.cpp
         functions/functions.h
-        tests/comparators.cpp)
+        tests/comparators.cpp
+        tests/random.cpp)
 
 target_link_libraries(mps_tests mps_lib)
 target_link_libraries(mps_tests gtest gtest_main)
