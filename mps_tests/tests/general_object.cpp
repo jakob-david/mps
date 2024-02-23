@@ -1266,3 +1266,36 @@ TEST(round, double_to_float_max){
     EXPECT_EQ(23, MPS.getMantisseLength());
     EXPECT_EQ(8, MPS.getExponentLength());
 }
+
+
+
+TEST(round, double_to_float_exponent_too_large){
+
+    double value = numeric_limits<double>::max();
+
+    mps MPS(52, 11, value);
+
+    MPS.round(23,8);
+
+    EXPECT_EQ(should_value((float) value), is_mps(MPS.getBitArray()));
+    EXPECT_EQ(23, MPS.getMantisseLength());
+    EXPECT_EQ(8, MPS.getExponentLength());
+    EXPECT_EQ(true, MPS.isInfinity());
+    EXPECT_EQ(true, isinf((float) value));
+}
+
+TEST(round, double_to_float_exponent_too_large_2){
+
+    double value = 2 * (double) numeric_limits<float>::max();
+
+    mps MPS(52, 11, value);
+
+    MPS.round(23,8);
+
+    EXPECT_EQ(should_value((float) value), is_mps(MPS.getBitArray()));
+    EXPECT_EQ(23, MPS.getMantisseLength());
+    EXPECT_EQ(8, MPS.getExponentLength());
+    EXPECT_EQ(true, MPS.isInfinity());
+    EXPECT_EQ(true, isinf((float) value));
+}
+

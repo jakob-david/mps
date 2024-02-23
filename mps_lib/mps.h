@@ -78,6 +78,11 @@ public:
 
 
 private:
+
+    // helper for round
+    //-------------------------------
+    void resize_mps_object(const unsigned long new_mantissa_size, const unsigned long new_exponent_size);
+
     // helper for operators
     //-------------------------------
     void setValue(double value);

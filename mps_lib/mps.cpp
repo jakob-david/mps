@@ -14,6 +14,7 @@
 /*
  * TODO: add docstrings to comparators
  * TODO: add round function
+ * TODO: add print function
  * TODO: remove NOTES (above ;) )
  */
 
@@ -350,7 +351,7 @@ void mps::setNaN(bool negative){
 //-------------------------------
 
 
-// setter methods
+// round
 //-------------------------------
 void mps::round(const unsigned long new_mantissa_size, const unsigned long new_exponent_size){
 
@@ -364,9 +365,8 @@ void mps::round(const unsigned long new_mantissa_size, const unsigned long new_e
 
     } else if(new_mantissa_size < this->mantissa_length) {
 
-        round(&(this->mantissa), this->mantissa_length);
+        round(&(this->mantissa), new_mantissa_size);
         this->mantissa_length = new_mantissa_size;
-
     }
 
 
@@ -379,7 +379,7 @@ void mps::round(const unsigned long new_mantissa_size, const unsigned long new_e
                 this->exponent.insert(this->exponent.begin()+1, false);
             }
 
-        } else {                    // negative exponent case
+        } else {    // negative exponent case
 
             for(auto i = this->exponent_length; i < new_exponent_size; i++){
                 this->exponent.insert(this->exponent.begin()+1, true);
@@ -391,10 +391,72 @@ void mps::round(const unsigned long new_mantissa_size, const unsigned long new_e
 
     } else if(new_exponent_size < this->exponent_length) {
 
+        // TODO: check if exponent is too large
+        // check if exponent is too large or too small
+        // ------------------------------------------------------
+
+        if(!this->isZero()) {
+            // "normal case"
+            auto tmp = this->exponent_length - new_exponent_size + 1;
+            for (unsigned long i = 1; i < tmp; i++) {
+                if ((this->exponent)[i] == (this->exponent)[0]) {
+                    this->resize_mps_object(new_mantissa_size, new_exponent_size);
+                    this->setInf();
+                    return;
+                }
+            }
+
+            // case if new exponent would be all 1's.
+            if((this->exponent)[0]) {
+                auto tmp_case = true;
+                for (auto i = this->exponent_length-1; i > (this->exponent_length - new_exponent_size + 1); i--) {
+                    if (!(this->exponent)[i]) {
+                        tmp_case = false;
+                        continue;
+                    }
+                }
+                if (tmp_case) {
+                    this->resize_mps_object(new_mantissa_size, new_exponent_size);
+                    this->setInf();
+                    return;
+                }
+            }
+        }
+        // ------------------------------------------------------
+
+
+        for(auto i = new_exponent_size; i < this->exponent_length; i++){
+            this->exponent.erase(this->exponent.begin()+1);
+        }
 
         this->exponent_length = new_exponent_size;
-
     }
+}
+
+void mps::resize_mps_object(const unsigned long new_mantissa_size, const unsigned long new_exponent_size){
+
+    if(new_mantissa_size > this->mantissa_length){
+        for(auto i = this->mantissa_length; i < new_mantissa_size; i++){
+            this->mantissa.push_back(false);
+        }
+    } else if(new_mantissa_size < this->mantissa_length){
+        for(auto i = new_mantissa_size; i < this->mantissa_length; i++){
+            this->mantissa.pop_back();
+        }
+    }
+
+    if(new_exponent_size > this->exponent_length){
+        for(auto i = this->exponent_length; i < new_exponent_size; i++){
+            this->exponent.push_back(false);
+        }
+    } else if(new_exponent_size < this->exponent_length){
+        for(auto i = new_exponent_size; i < this->exponent_length; i++){
+            this->exponent.pop_back();
+        }
+    }
+
+    this->mantissa_length = new_mantissa_size;
+    this->exponent_length = new_exponent_size;
 }
 //-------------------------------
 
