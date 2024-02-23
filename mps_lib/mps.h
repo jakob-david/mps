@@ -56,7 +56,7 @@ public:
 
     // round
     //-------------------------------
-    void round(const unsigned long mant, const unsigned long exp);
+    void round(const unsigned long new_mantissa_size, const unsigned long new_exponent_size);
 
     // operators
     //-------------------------------

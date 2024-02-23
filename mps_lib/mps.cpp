@@ -352,13 +352,48 @@ void mps::setNaN(bool negative){
 
 // setter methods
 //-------------------------------
-void mps::round(const unsigned long mant, const unsigned long exp){
+void mps::round(const unsigned long new_mantissa_size, const unsigned long new_exponent_size){
 
-    auto value = mant;
-    value = exp;
+    // rounding of the mantissa
+    if(new_mantissa_size > this->mantissa_length){
 
-    if(value == 3){
-        value = 4;
+        for(unsigned long i = this->mantissa_length; i < new_mantissa_size; i++){
+            this->mantissa.push_back(false);
+        }
+        this->mantissa_length = new_mantissa_size;
+
+    } else if(new_mantissa_size < this->mantissa_length) {
+
+        round(&(this->mantissa), this->mantissa_length);
+        this->mantissa_length = new_mantissa_size;
+
+    }
+
+
+    // rounding of the exponent
+    if(new_exponent_size > this->exponent_length){
+
+        if((this->exponent)[0] || this->isZero()){    // positive exponent case
+
+            for(auto i = this->exponent_length; i < new_exponent_size; i++){
+                this->exponent.insert(this->exponent.begin()+1, false);
+            }
+
+        } else {                    // negative exponent case
+
+            for(auto i = this->exponent_length; i < new_exponent_size; i++){
+                this->exponent.insert(this->exponent.begin()+1, true);
+            }
+
+        }
+
+        this->exponent_length = new_exponent_size;
+
+    } else if(new_exponent_size < this->exponent_length) {
+
+
+        this->exponent_length = new_exponent_size;
+
     }
 }
 //-------------------------------
