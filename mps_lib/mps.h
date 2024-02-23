@@ -58,7 +58,7 @@ public:
 
     // cast
     //-------------------------------
-    void cast(const unsigned long new_mantissa_size, const unsigned long new_exponent_size);
+    void cast(unsigned long new_mantissa_size, unsigned long new_exponent_size);
 
     // operators
     //-------------------------------
@@ -83,7 +83,7 @@ private:
 
     // helper for cast
     //-------------------------------
-    void resize_mps_object(const unsigned long new_mantissa_size, const unsigned long new_exponent_size);
+    void resize_mps_object(unsigned long new_mantissa_size, unsigned long new_exponent_size);
 
     // helper for operators
     //-------------------------------
@@ -111,7 +111,7 @@ private:
     [[nodiscard]] static vector<bool> binaryAddition(const vector<bool>& one, const vector<bool>& two, bool* carrier_return = nullptr);
     [[nodiscard]] static vector<bool> binarySubtraction(const vector<bool>& minuend, const vector<bool>& subtrahend);
 
-    static void binarySummation(vector<bool>* summand, const vector<bool>& addend, const bool = false);
+    static void binarySummation(vector<bool>* summand, const vector<bool>& addend, bool = false);
     static vector<bool> binaryOffsetAddition(const vector<bool>& lp, const vector<bool>& rp, unsigned long off_set, bool c, const bool p[2], const bool hd[2],  bool* cr = nullptr);
     static inline void round(vector<bool>* mantissa, unsigned long mantissa_len);
 
@@ -119,11 +119,11 @@ private:
     [[nodiscard]] static vector<bool> intToBinary(unsigned long value);
 
     [[nodiscard]] long getBias() const;
-    [[nodiscard]] static char larger(const vector<bool>& a, const vector<bool>& b, const bool division_case = false);
+    [[nodiscard]] static char larger(const vector<bool>& a, const vector<bool>& b, bool division_case = false);
     static void shiftLeft(vector<bool>* vec);
     static bool addOneToBinary(vector<bool>* vector);
     static bool subtractOneFromBinary(vector<bool>* vector);
-    [[nodiscard]] static vector<bool> invertAndAddOne(const vector<bool> &vec, bool *carrie = nullptr, const bool division_case = false);
+    [[nodiscard]] static vector<bool> invertAndAddOne(const vector<bool> &vec, bool *carrie = nullptr, bool division_case = false);
     [[nodiscard]] static bool allTrue(const vector<bool>& vector);
 };
 

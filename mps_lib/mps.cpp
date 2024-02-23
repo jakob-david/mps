@@ -1443,7 +1443,7 @@ bool mps::operator!=(const mps& other) const{
         return true;
     }
 
-    if(this->sign != other.sign) {             // positive positive case
+    if(this->sign != other.sign) {  // positive positive case
         return true;
     } else {
         return notEqual(*this, other);
@@ -1463,13 +1463,13 @@ bool mps::operator>(const mps& other) const{
         return false;
     }
 
-    if(!this->sign &&!other.sign) {             // positive positive case
+    if(!this->sign &&!other.sign) { // positive positive case
         return larger(*this, other);
-    } else if(!this->sign && other.sign) {      // positive negative case
+    } else if(!this->sign) {        // positive negative case
         return true;
-    } else if(this->sign && !other.sign){       // negative positive case
+    } else if(!other.sign){         // negative positive case
         return false;
-    } else {                                    // negative negative case
+    } else {                        // negative negative case
         return larger(other, *this);
     }
 }
@@ -1487,13 +1487,13 @@ bool mps::operator<(const mps& other) const{
         return false;
     }
 
-    if(!this->sign &&!other.sign) {             // positive positive case
+    if(!this->sign &&!other.sign) { // positive positive case
         return smaller(*this, other);
-    } else if(!this->sign && other.sign) {      // positive negative case
+    } else if(!this->sign) {        // positive negative case
         return false;
-    } else if(this->sign && !other.sign){       // negative positive case
+    } else if(!other.sign){         // negative positive case
         return true;
-    } else {                                    // negative negative case
+    } else {                        // negative negative case
         return smaller(other, *this);
     }
 }
@@ -1511,13 +1511,13 @@ bool mps::operator>=(const mps& other) const {
         return false;
     }
 
-    if(!this->sign &&!other.sign) {             // positive positive case
+    if(!this->sign &&!other.sign) { // positive positive case
         return largerEqual(*this, other);
-    } else if(!this->sign && other.sign) {      // positive negative case
+    } else if(!this->sign) {        // positive negative case
         return true;
-    } else if(this->sign && !other.sign){       // negative positive case
+    } else if(!other.sign){         // negative positive case
         return false;
-    } else {                                    // negative negative case
+    } else {                        // negative negative case
         return largerEqual(other, *this);
     }
 }
@@ -1535,13 +1535,13 @@ bool mps::operator<=(const mps& other) const {
         return false;
     }
 
-    if(!this->sign &&!other.sign) {             // positive positive case
+    if(!this->sign &&!other.sign) { // positive positive case
         return smallerEqual(*this, other);
-    } else if(!this->sign && other.sign) {      // positive negative case
+    } else if(!this->sign) {        // positive negative case
         return false;
-    } else if(this->sign && !other.sign){       // negative positive case
+    } else if(!other.sign){         // negative positive case
         return true;
-    } else {                                    // negative negative case
+    } else {                        // negative negative case
         return smallerEqual(other, *this);
     }
 }
