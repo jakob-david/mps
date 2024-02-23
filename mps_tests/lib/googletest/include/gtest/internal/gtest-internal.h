@@ -217,7 +217,7 @@ GTEST_API_ std::string GetBoolAssertionFailureMessage(
 // template parameters).
 //
 // The purpose of this class is to do more sophisticated number
-// comparison.  (Due to round-off error, etc, it's very unlikely that
+// comparison.  (Due to cast-off error, etc, it's very unlikely that
 // two floating-points will be equal exactly.  Hence a naive
 // comparison by the == operation often doesn't work.)
 //

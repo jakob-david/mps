@@ -14,7 +14,6 @@
 /*
  * TODO: add docstrings to comparators
  * TODO: add print function
- * TODO: make setters and round secure
  * TODO: remove NOTES (above ;) )
  */
 
@@ -29,6 +28,17 @@
  * @param value Value of the floating point number.
  */
 mps::mps(unsigned long mantissa_length, unsigned long exponent_length, double value) {
+
+    // check input values
+    //-------------------------------
+    if (mantissa_length <= 0) {
+        throw std::invalid_argument("ERROR: in constructor : mantissa size too small");
+    }
+    if (exponent_length <= 1) {
+        throw std::invalid_argument("ERROR: in constructor : exponent size too small");
+    }
+    //-------------------------------
+
     this->mantissa_length = mantissa_length;
     this->exponent_length = exponent_length;
 
@@ -48,6 +58,17 @@ mps::mps(unsigned long mantissa_length, unsigned long exponent_length, double va
  * @param exponent Exponent of the floating point representation.
  */
 mps::mps(unsigned long mantissa_length, unsigned long exponent_length) {
+
+    // check input values
+    //-------------------------------
+    if (mantissa_length <= 0) {
+        throw std::invalid_argument("ERROR: in constructor : mantissa size too small");
+    }
+    if (exponent_length <= 1) {
+        throw std::invalid_argument("ERROR: in constructor : exponent size too small");
+    }
+    //-------------------------------
+
     this->mantissa_length = mantissa_length;
     this->exponent_length = exponent_length;
 
@@ -351,11 +372,20 @@ void mps::setNaN(bool negative){
 //-------------------------------
 
 
-// round
+// cast
 //-------------------------------
-void mps::round(const unsigned long new_mantissa_size, const unsigned long new_exponent_size){
+void mps::cast(const unsigned long new_mantissa_size, const unsigned long new_exponent_size){
 
 
+    // check input values
+    //-------------------------------
+    if (new_mantissa_size <= 0) {
+        throw std::invalid_argument("ERROR: in cast : new mantissa size too small");
+    }
+    if (new_exponent_size <= 1) {
+        throw std::invalid_argument("ERROR: in cast : new exponent size too small");
+    }
+    //-------------------------------
 
 
     // handle special values

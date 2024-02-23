@@ -54,9 +54,9 @@ public:
     void setZero();
     void setNaN(bool negative = false);
 
-    // round
+    // cast
     //-------------------------------
-    void round(const unsigned long new_mantissa_size, const unsigned long new_exponent_size);
+    void cast(const unsigned long new_mantissa_size, const unsigned long new_exponent_size);
 
     // operators
     //-------------------------------
@@ -79,7 +79,7 @@ public:
 
 private:
 
-    // helper for round
+    // helper for cast
     //-------------------------------
     void resize_mps_object(const unsigned long new_mantissa_size, const unsigned long new_exponent_size);
 
