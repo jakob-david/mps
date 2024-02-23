@@ -1508,3 +1508,41 @@ TEST(cast, double_to_float_neg_inf){
     EXPECT_EQ(23, MPS.getMantisseLength());
     EXPECT_EQ(8, MPS.getExponentLength());
 }
+
+
+
+TEST(print, simple_print_1){
+
+    double value = 345634.3453;
+
+    mps MPS(52, 11, value);
+
+    EXPECT_EQ(should_value(value), MPS.print());
+}
+
+TEST(print, simple_print_2){
+
+    double value = -345634.3453;
+
+    mps MPS(52, 11, value);
+
+    EXPECT_EQ(should_value(value), MPS.print());
+}
+
+TEST(print, simple_print_3){
+
+    double value = 0.0000345;
+
+    mps MPS(52, 11, value);
+
+    EXPECT_EQ(should_value(value), MPS.print());
+}
+
+TEST(print, simple_print_4){
+
+    double value = -0.0000345;
+
+    mps MPS(52, 11, value);
+
+    EXPECT_EQ(should_value(value), MPS.print());
+}

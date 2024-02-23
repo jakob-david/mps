@@ -13,7 +13,6 @@
 
 /*
  * TODO: add docstrings to comparators
- * TODO: add print function
  * TODO: remove NOTES (above ;) )
  */
 
@@ -290,6 +289,20 @@ bool mps::isNaN() const{
     }
 
     return true ;
+}
+
+std::string mps::print() const {
+
+    std::string str;
+    for(bool bit : this->getBitArray()){
+        if(bit){
+            str.append("1");
+        } else {
+            str.append("0");
+        }
+    }
+
+    return str;
 }
 //-------------------------------
 

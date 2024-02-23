@@ -48,6 +48,8 @@ public:
     [[nodiscard]] bool isPositive() const;
     [[nodiscard]] bool isNaN() const;
 
+    [[nodiscard]] std::string print() const;
+
     // setter methods
     //-------------------------------
     void setInf(bool negative = false);
