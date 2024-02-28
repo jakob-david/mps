@@ -8,28 +8,47 @@
 #ifndef MPS_IRA_H
 #define MPS_IRA_H
 
-struct PLU {
-
-    unsigned long one;
-    unsigned long two;
-
-    //std::vector<std::vector<int>> P;
-    //std::string firstName;
-};
-
 
 class ira {
 
+private:
+
+    // general_properties
+    //-------------------------------
+    unsigned long n;    // dimension of the matrix
+    mps* matrix;        // the matrix which should be solved
+    //-------------------------------
+
+    // PLU_calculated_properties
+    //-------------------------------
+    mps* L;             // The resulting lower triangular Matrix after PLU decomposition.
+    mps* U;             // The resulting upper triangular Matrix after PLU decomposition.
+    mps* P;             // The resulting permutation matrix after PLU decomposition.
+    //-------------------------------
+
 public:
 
-    unsigned long n;
-    mps* matrix;
-
+    // constructor and destructor
+    //-------------------------------
     explicit ira(unsigned long n);
     ~ira();
+    //-------------------------------
 
+    // setter
+    //-------------------------------
     void unitary(unsigned long mantissa_length, unsigned long exponent_length) const;
+    void setMatrix(unsigned long mantissa_length, unsigned long exponent_length, vector<double> new_matrix);
+    //-------------------------------
+
+    // getter
+    //-------------------------------
     [[nodiscard]] std::string to_string() const;
+    //-------------------------------
+
+    // algorithms
+    //-------------------------------
+    void PLU_decomposition() const;
+    //-------------------------------
 
 };
 
