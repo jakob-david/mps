@@ -5,11 +5,11 @@ project(Google_tests)
 add_subdirectory(lib)
 include_directories(./lib/googletest/include ./lib/googletest)
 
-add_executable(mps_tests tests/general_object.cpp
-        tests/calculation.cpp
+add_executable(mps_tests tests/mps_general.cpp
+        tests/mps_calculation.cpp
         functions/functions.h
-        tests/comparators.cpp
-        tests/random.cpp
+        tests/mps_comparators.cpp
+        tests/mps_random.cpp
         tests/ira_general.cpp)
 
 target_link_libraries(mps_tests mps_lib)
