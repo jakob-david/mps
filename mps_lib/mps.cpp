@@ -297,7 +297,11 @@ std::string mps::print() const {
     return str;
 }
 
-// TODO: test
+/**
+ * Returns the (double) value of the mps object as a string instead of a double.
+ *
+ * @return the value as string
+ */
 std::string mps::to_string() const {
     return std::to_string(this->getValue());
 }
