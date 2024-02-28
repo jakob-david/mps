@@ -16,7 +16,7 @@ private:
     // general_properties
     //-------------------------------
     unsigned long n;    // dimension of the A
-    mps* A;        // the A which should be solved
+    mps* A;             // the A which should be solved
     //-------------------------------
 
     // PLU_calculated_properties
@@ -43,12 +43,22 @@ public:
     // getter
     //-------------------------------
     [[nodiscard]] mps getMatrixElement(unsigned long idx);
-    [[nodiscard]] std::string to_string(const char& matrix, const int precision = -1) const;
+    [[nodiscard]] std::string to_string(const char& matrix, int precision = -1) const;
     //-------------------------------
 
     // algorithms
     //-------------------------------
-    void PLU_decomposition() const;
+    void PLU_decomposition();
+    //-------------------------------
+
+
+private:
+
+    // helper functions
+    //-------------------------------
+    unsigned long get_idx(unsigned long row, unsigned long column) const;
+    unsigned long get_max_U_idx(unsigned long column, unsigned long start, unsigned long end) const;
+    void interchangeRow(mps* matrix, unsigned long row_one, unsigned long row_two, unsigned long start, unsigned long end);
     //-------------------------------
 
 };

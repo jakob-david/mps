@@ -8,7 +8,7 @@ TEST(PLU, simple_3x3_1) {
     unsigned long mantissa_length = 53;
     unsigned long exponent_length = 11;
 
-    vector<double> new_matrix{ 10, 20, 30, 40, 50, 60, 70, 80, 90};
+    vector<double> new_matrix{ 1, 2, 3, 4, 5, 6, 7, 8, 9};
 
     ira IRA(3);
     IRA.setMatrix(mantissa_length, exponent_length, new_matrix);
@@ -22,9 +22,9 @@ TEST(PLU, simple_3x3_1) {
 
     try
     {
-        L_result = IRA.to_string('L', 0);
-        U_result = IRA.to_string('L', 0);
-        P_result = IRA.to_string('L', 0);
+        L_result = IRA.to_string('L', 2);
+        U_result = IRA.to_string('U', 2);
+        P_result = IRA.to_string('P', 2);
     }
 
     catch (std::invalid_argument& e)
@@ -32,8 +32,9 @@ TEST(PLU, simple_3x3_1) {
         test = false;
     }
 
-    EXPECT_EQ(L_result, "1, 0, 0, 4, 1, 0, 7, 2, 1");
-    EXPECT_EQ(U_result, "1, 2, 3, 0, -3, -6, 0, 0, 0");
-    EXPECT_EQ(P_result, "1, 0, 0, 0, 1, 0, 0, 0, 1");
+
+    EXPECT_EQ(L_result, "1.00, 0.00, 0.00, 0.14, 1.00, 0.00, 0.57, 0.50, 1.00");
+    EXPECT_EQ(U_result, "7.00, 8.00, 9.00, 0.00, 0.86, 1.71, 0.00, 0.00, 0.00");
+    EXPECT_EQ(P_result, "0.00, 0.00, 1.00, 1.00, 0.00, 0.00, 0.00, 1.00, 0.00");
     EXPECT_EQ(true, test);
 }

@@ -393,6 +393,11 @@ void mps::setNaN(bool negative){
         mantissa[i] = false;
     }
 }
+
+// TODO: test
+void mps::setSign(bool negative){
+    this->sign = negative;
+}
 //-------------------------------
 
 

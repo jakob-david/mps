@@ -56,6 +56,7 @@ public:
     void setInf(bool negative = false);
     void setZero();
     void setNaN(bool negative = false);
+    void setSign(bool negative);
 
     // cast
     //-------------------------------
