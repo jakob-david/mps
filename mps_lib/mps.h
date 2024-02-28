@@ -49,6 +49,7 @@ public:
     [[nodiscard]] bool isNaN() const;
 
     [[nodiscard]] std::string print() const;
+    [[nodiscard]] std::string to_string() const;
 
     // setter methods
     //-------------------------------

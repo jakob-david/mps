@@ -296,6 +296,11 @@ std::string mps::print() const {
 
     return str;
 }
+
+// TODO: test
+std::string mps::to_string() const {
+    return std::to_string(this->getValue());
+}
 //-------------------------------
 
 

@@ -9,7 +9,8 @@ add_executable(mps_tests tests/general_object.cpp
         tests/calculation.cpp
         functions/functions.h
         tests/comparators.cpp
-        tests/random.cpp)
+        tests/random.cpp
+        tests/ira_general.cpp)
 
 target_link_libraries(mps_tests mps_lib)
 target_link_libraries(mps_tests gtest gtest_main)

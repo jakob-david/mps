@@ -1546,3 +1546,39 @@ TEST(print, simple_print_4){
 
     EXPECT_EQ(should_value(value), MPS.print());
 }
+
+TEST(to_string, simple_to_string_1){
+
+    double value = 355345.000;
+
+    mps MPS(52, 11, value);
+
+    EXPECT_EQ(std::to_string(value), MPS.to_string());
+}
+
+TEST(to_string, simple_to_string_2){
+
+    double value = -355345.000;
+
+    mps MPS(52, 11, value);
+
+    EXPECT_EQ(std::to_string(value), MPS.to_string());
+}
+
+TEST(to_string, simple_to_string_3){
+
+double value = 0.0000345;
+
+mps MPS(52, 11, value);
+
+EXPECT_EQ(std::to_string(value), MPS.to_string());
+}
+
+TEST(to_string, simple_to_string_4){
+
+    double value = -0.0000345;
+
+    mps MPS(52, 11, value);
+
+    EXPECT_EQ(std::to_string(value), MPS.to_string());
+}
