@@ -2,6 +2,8 @@
 #include <iostream>
 #include <algorithm>
 
+#include <sstream>
+
 
 // constructors and destructor
 //-------------------------------
@@ -302,8 +304,16 @@ std::string mps::print() const {
  *
  * @return the value as string
  */
-std::string mps::to_string() const {
-    return std::to_string(this->getValue());
+std::string mps::to_string(const int precision) const {
+
+    if(precision < 0){
+        return std::to_string(this->getValue());
+    } else {
+        std::ostringstream out;
+        out.precision(precision);
+        out << std::fixed << this->getValue();
+        return std::move(out).str();
+    }
 }
 //-------------------------------
 

@@ -15,15 +15,15 @@ private:
 
     // general_properties
     //-------------------------------
-    unsigned long n;    // dimension of the matrix
-    mps* matrix;        // the matrix which should be solved
+    unsigned long n;    // dimension of the A
+    mps* A;        // the A which should be solved
     //-------------------------------
 
     // PLU_calculated_properties
     //-------------------------------
     mps* L;             // The resulting lower triangular Matrix after PLU decomposition.
     mps* U;             // The resulting upper triangular Matrix after PLU decomposition.
-    mps* P;             // The resulting permutation matrix after PLU decomposition.
+    mps* P;             // The resulting permutation A after PLU decomposition.
     //-------------------------------
 
 public:
@@ -42,7 +42,8 @@ public:
 
     // getter
     //-------------------------------
-    [[nodiscard]] std::string to_string() const;
+    [[nodiscard]] mps getMatrixElement(unsigned long idx);
+    [[nodiscard]] std::string to_string(const char& matrix, const int precision = -1) const;
     //-------------------------------
 
     // algorithms
