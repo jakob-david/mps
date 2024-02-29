@@ -370,6 +370,10 @@ void mps::setZero(){
 
 /**
  * Sets the floating point number to NaN (not a number)
+ *
+ * The sign bit can be set individually using the parameter.
+ *
+ * @param negative sets the sign bit of the NaN value.
  */
 void mps::setNaN(bool negative){
 
@@ -394,7 +398,12 @@ void mps::setNaN(bool negative){
     }
 }
 
-// TODO: test
+
+/**
+ * Sets the sign bit of the mps object to a new value.
+ *
+ * @param negative the value to which the sign bit should be set. (true for negative)
+ */
 void mps::setSign(bool negative){
     this->sign = negative;
 }

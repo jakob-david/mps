@@ -1600,3 +1600,33 @@ TEST(to_string, round_to_string_2){
 
     EXPECT_EQ("-355345.34", MPS.to_string(2));
 }
+
+
+
+TEST(setSign, positive_to_negative){
+
+    double value = 355345.344;
+
+    mps MPS(52, 11, value);
+    MPS.setSign(true);
+
+    value *= -1;
+
+    EXPECT_EQ(value, MPS.getValue());
+}
+
+TEST(setSign, negative_to_positve){
+
+    double value = -355345.344;
+
+    mps MPS(52, 11, value);
+    MPS.setSign(false);
+
+    value *= -1;
+
+    EXPECT_EQ(value, MPS.getValue());
+}
+
+
+
+
