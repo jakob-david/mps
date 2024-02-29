@@ -1333,10 +1333,17 @@ void mps::setValue(const double value) {
     }
     //-------------------------------
 
-
+    cout << "===============" << endl;
+    cout << ret.getValue() << endl;
+    cout << ret.print() << endl;
+    cout << "---------------" << endl;
     // rounding
     //-------------------------------
     round(&P, ret.mantissa_length);
+    cout << "---------------" << endl;
+    cout << ret.getValue() << endl;
+    cout << ret.print() << endl;
+    cout << "===============" << endl;
 
     if(count <= 1){
         addOneToBinary(&ret.exponent);
@@ -2045,6 +2052,8 @@ vector<bool> mps::binaryOffsetAddition(const vector<bool>& lp, const vector<bool
  */
 void mps::round(vector<bool> *mantissa, unsigned long mantissa_len) {
 
+    //bool ret = false;
+
     if(mantissa->size() > mantissa_len){
         bool tmp = false;
         for(auto i = mantissa_len+1 ; i < mantissa->size(); i++){
@@ -2053,6 +2062,7 @@ void mps::round(vector<bool> *mantissa, unsigned long mantissa_len) {
                 break;
             }
         }
+
         if((*mantissa)[mantissa_len] && tmp){
             mantissa->erase(mantissa->end()- (long) (mantissa->size()- mantissa_len), mantissa->end());
             if(addOneToBinary(mantissa)){
@@ -2060,10 +2070,44 @@ void mps::round(vector<bool> *mantissa, unsigned long mantissa_len) {
             }
         } else if((*mantissa)[mantissa_len]){
             if((*mantissa)[mantissa_len-1]){
-                mantissa->erase(mantissa->end()- (long) (mantissa->size()-mantissa_len), mantissa->end());
-                if(addOneToBinary(mantissa)){
-                    addOneToBinary( mantissa);
+
+                std::string str;
+                for(bool bit : *mantissa){
+                    if(bit){
+                        str.append("1");
+                    } else {
+                        str.append("0");
+                    }
                 }
+                cout << str << endl;
+
+                mantissa->erase(mantissa->end() - (long) (mantissa->size()-mantissa_len), mantissa->end());
+
+                str = "";
+                for(bool bit : *mantissa){
+                    if(bit){
+                        str.append("1");
+                    } else {
+                        str.append("0");
+                    }
+                }
+                cout << str << endl;
+
+                if(addOneToBinary(mantissa)){
+                    // addOneToBinary( mantissa);
+                    //ret = true;
+                }
+
+                str = "";
+                for(bool bit : *mantissa){
+                    if(bit){
+                        str.append("1");
+                    } else {
+                        str.append("0");
+                    }
+                }
+                cout << str << endl;
+
             } else {
                 mantissa->erase(mantissa->end()- (long) (mantissa->size()-mantissa_len), mantissa->end());
             }
@@ -2071,6 +2115,8 @@ void mps::round(vector<bool> *mantissa, unsigned long mantissa_len) {
             mantissa->erase(mantissa->end()- (long) (mantissa->size()-mantissa_len), mantissa->end());
         }
     }
+
+    //return ret;
 }
 
 
