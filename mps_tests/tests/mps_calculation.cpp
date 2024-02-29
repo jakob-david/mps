@@ -3305,9 +3305,6 @@ TEST(multiplication_tests, special_1_double) {
 
     mps MPS_2(52,11, value_2);
 
-    cout << MPS.print() << endl;
-    cout << MPS_2.print() << endl;
-
     auto test = MPS * MPS_2;
 
     EXPECT_EQ(MPS.getValue() * MPS_2.getValue(), test.getValue());
