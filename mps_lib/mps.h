@@ -57,6 +57,8 @@ public:
     void setZero(bool negative = false);
     void setNaN(bool negative = false);
     void setSign(bool negative);
+    void setMantissa(vector<bool>& new_mantissa);
+    void setExponent(vector<bool>& new_exponent);
 
     // cast
     //-------------------------------

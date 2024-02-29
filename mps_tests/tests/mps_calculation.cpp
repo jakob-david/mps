@@ -3292,6 +3292,25 @@ TEST(multiplication_tests, zero_right_double) {
     EXPECT_EQ(value_2, MPS_2.getValue());
 }
 
+TEST(multiplication_tests, special_1) {
+
+    mps MPS(52,11);
+    MPS.setSign(false);
+    vector<bool> exp{0,1,1,1,1,1,1,1,1,1,0};
+    vector<bool> mant{0,0,1,0,0,1,0,0,1,0,0,1,0,0,1,0,0,1,0,0,1,0,0,1,0,0,1,0,0,1,0,0,1,0,0,1,0,0,1,0,0,1,0,0,1,0,0,1,0,0,1,0};
+    MPS.setExponent(exp);
+    MPS.setMantissa(mant);
+
+    mps MPS_2(52,11, 7);
+
+    auto test = MPS * MPS_2;
+
+    EXPECT_EQ(MPS.getValue() * MPS_2.getValue(), test.getValue());
+    EXPECT_EQ(should_value(MPS.getValue() * MPS_2.getValue()), is_mps(test.getBitArray()));
+    EXPECT_EQ(7, MPS_2.getValue());
+}
+
+
 
 
 
@@ -4224,6 +4243,23 @@ TEST(division_tests, over_max_double) {
 
     double value_1 = numeric_limits<double>::max();
     double value_2 = 0.5;
+
+    mps MPS(52,11,value_1);
+    mps MPS_2(52,11,value_2);
+
+    auto test = MPS / MPS_2;
+
+    EXPECT_EQ(value_1/value_2, test.getValue());
+    EXPECT_EQ(should_value(value_1/value_2), is_mps(test.getBitArray()));
+    EXPECT_EQ(value_1, MPS.getValue());
+    EXPECT_EQ(value_2, MPS_2.getValue());
+}
+
+
+TEST(division_tests, four_seven_double) {
+
+    double value_1 = 4;
+    double value_2 = 7;
 
     mps MPS(52,11,value_1);
     mps MPS_2(52,11,value_2);

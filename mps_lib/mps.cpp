@@ -406,6 +406,25 @@ void mps::setNaN(bool negative){
 void mps::setSign(bool negative){
     this->sign = negative;
 }
+
+// TODO: test and docstring
+void mps::setMantissa(vector<bool>& new_mantissa){
+
+    this->mantissa.resize(new_mantissa.size());
+
+    for(unsigned long i = 0; i < new_mantissa.size(); i++){
+        this->mantissa[i] = new_mantissa[i];
+    }
+}
+
+void mps::setExponent(vector<bool>& new_exponent){
+
+    this->exponent.resize(new_exponent.size());
+
+    for(unsigned long i = 0; i < new_exponent.size(); i++){
+        this->exponent[i] = new_exponent[i];
+    }
+}
 //-------------------------------
 
 
