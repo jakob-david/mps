@@ -159,7 +159,6 @@ void ira::PLU_decomposition() {
 
     // algorithm
     //-------------------------------
-    // TODO: probably k = 0 (also at interchange L and P)
     for(unsigned long k = 0; k < this->n; k++){
 
         auto max_row = get_max_U_idx(k, k, n);
@@ -173,7 +172,45 @@ void ira::PLU_decomposition() {
             this->L[get_idx(j, k)] = this->U[get_idx(j, k)] / this->U[get_idx(k, k)];
 
             for(unsigned long i = k; i < n; i++){
-                this->U[get_idx(j, i)]  = this->U[get_idx(j, i)] - this->L[get_idx(j, k)] * this->U[get_idx(k, i)];
+
+                if(i==0){
+                    cout << "===============" << endl;
+
+                    auto val = this->L[get_idx(j, k)].getValue();
+                    val = 0.571429;
+
+                    if(this->L[get_idx(j, k)].getValue() == val){
+                        cout << "noooo" << endl;
+                    }
+
+                    std::cout << this->U[get_idx(j, i)].getValue() << std::endl;
+                    std::cout << this->L[get_idx(j, k)].getValue() << std::endl;
+                    std::cout << this->U[get_idx(k, i)].getValue() << std::endl;
+
+                    mps MPS(52,11, val);
+                    mps MPS2(52,11, 7);
+                    auto tmp = (MPS) * (MPS2);
+                    std::cout << "res: " << tmp.getValue() << std::endl;
+
+                    std::cout << MPS.print() << endl;
+                    std::cout << this->L[get_idx(j, k)].print() << endl;
+
+                    std::string compare_str;
+                    char* bits = reinterpret_cast<char*>(&val);
+                    for(unsigned long nn = 0; nn < sizeof val; ++nn) {
+                        std::string tmpp = std::bitset<8>((unsigned long long) bits[nn]).to_string();
+                        compare_str.insert (0, tmpp);
+                    }
+                    cout << compare_str << endl;
+
+                }
+
+                this->U[get_idx(j, i)]  = this->U[get_idx(j, i)] - (this->L[get_idx(j, k)] * this->U[get_idx(k, i)]);
+
+                if(i==0){
+                    cout << "----------------" << endl;
+                    std::cout << this->U[get_idx(j, i)].getValue() << std::endl;
+                }
             }
         }
 

@@ -190,14 +190,11 @@ double mps::getValue() const {
 
 /**
  * Returns true if the mps object is zero.
+ * The sign bit is irrelevant.
  *
  * @return true if zero.
  */
 bool mps::isZero() const{
-
-    if(this->sign){
-        return false;
-    }
 
     for(unsigned long i = 0; i < this->exponent_length; i++){
         if(this->exponent[i]){
@@ -350,15 +347,17 @@ void mps::setInf(bool negative) {
 
 /**
  * Sets the floating point number to zero.
+ *
+ * @param negative set to true for negative zero. (default false)
  */
-void mps::setZero(){
+void mps::setZero(bool negative){
 
     if( exponent.empty() || mantissa.empty()){
         exponent.resize(exponent_length);
         mantissa.resize(exponent_length);
     }
 
-    sign = false;
+    sign = negative;
 
     for(unsigned long i = 0; i < exponent_length; i++){
         exponent[i] = false;
@@ -550,22 +549,24 @@ void mps::cast(const unsigned long new_mantissa_size, const unsigned long new_ex
  */
 void mps::resize_mps_object(const unsigned long new_mantissa_size, const unsigned long new_exponent_size){
 
-    if(new_mantissa_size > this->mantissa_length){
-        for(auto i = this->mantissa_length; i < new_mantissa_size; i++){
+    // previous mistake: new_mantissa_size > this->mantissa_length
+
+    if(new_mantissa_size > this->mantissa.size()){
+        for(auto i = this->mantissa.size(); i < new_mantissa_size; i++){
             this->mantissa.push_back(false);
         }
-    } else if(new_mantissa_size < this->mantissa_length){
-        for(auto i = new_mantissa_size; i < this->mantissa_length; i++){
+    } else if(new_mantissa_size < this->mantissa.size()){
+        for(auto i = new_mantissa_size; i < this->mantissa.size(); i++){
             this->mantissa.pop_back();
         }
     }
 
-    if(new_exponent_size > this->exponent_length){
-        for(auto i = this->exponent_length; i < new_exponent_size; i++){
+    if(new_exponent_size > this->exponent.size()){
+        for(auto i = this->exponent.size(); i < new_exponent_size; i++){
             this->exponent.push_back(false);
         }
-    } else if(new_exponent_size < this->exponent_length){
-        for(auto i = new_exponent_size; i < this->exponent_length; i++){
+    } else if(new_exponent_size < this->exponent.size()){
+        for(auto i = new_exponent_size; i < exponent.size(); i++){
             this->exponent.pop_back();
         }
     }
@@ -844,12 +845,20 @@ mps mps::operator/(const mps& other) const {
     } else if(other.isInfinity()){
 
         mps ret(other.mantissa_length, other.exponent_length);
-        ret.setZero();
+        if(this->isPositive() == other.isPositive()){
+            ret.setZero();
+        } else {
+            ret.setZero(true);
+        }
         return ret;
 
     } else if(this->isZero()){
         mps ret(other.mantissa_length, other.exponent_length);
-        ret.setZero();
+        if(this->isPositive() == other.isPositive()){
+            ret.setZero();
+        } else {
+            ret.setZero(true);
+        }
         return ret;
     } else if(other.isZero()){
         mps ret(other.mantissa_length, other.exponent_length);
@@ -1351,6 +1360,7 @@ void mps::setValue(const double value) {
 
         // TODO: is there a more intelligent way
         if(1 == larger(ret.exponent, dividend.exponent)){
+            ret.resize_mps_object(ret.mantissa_length, ret.exponent_length);
             ret.setZero();
             return ret;
         }
@@ -1372,6 +1382,7 @@ void mps::setValue(const double value) {
 
         // TODO: is there a more intelligent way
         if(carrier || allTrue(ret.exponent)){
+            ret.resize_mps_object(ret.mantissa_length, ret.exponent_length);
             ret.setInf(ret.sign);
             return ret;
         }

@@ -54,7 +54,7 @@ public:
     // setter methods
     //-------------------------------
     void setInf(bool negative = false);
-    void setZero();
+    void setZero(bool negative = false);
     void setNaN(bool negative = false);
     void setSign(bool negative);
 

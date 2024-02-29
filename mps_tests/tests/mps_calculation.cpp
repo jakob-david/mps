@@ -2490,6 +2490,23 @@ TEST(multiplication_tests, small_large_double) {
     auto test = MPS * MPS_2;
 
     EXPECT_EQ(value_1*value_2, test.getValue());
+    EXPECT_EQ(should_value(value_1*value_2), is_mps(test.getBitArray()));
+    EXPECT_EQ(value_1, MPS.getValue());
+    EXPECT_EQ(value_2, MPS_2.getValue());
+}
+
+TEST(multiplication_tests, small_large_double_2) {
+
+    double value_1 = 0.571429;
+    double value_2 = 7;
+
+    mps MPS(52,11,value_1);
+    mps MPS_2(52,11,value_2);
+
+    auto test = MPS * MPS_2;
+
+    EXPECT_EQ(value_1*value_2, test.getValue());
+    EXPECT_EQ(should_value(value_1*value_2), is_mps(test.getBitArray()));
     EXPECT_EQ(value_1, MPS.getValue());
     EXPECT_EQ(value_2, MPS_2.getValue());
 }
@@ -2941,6 +2958,7 @@ TEST(division_tests, NAN_left_float) {
     auto test = MPS / MPS_2;
 
     EXPECT_EQ(isnan(value_1/value_2), isnan(test.getValue()));
+    EXPECT_EQ(should_value(value_1/value_2), is_mps(test.getBitArray()));
     EXPECT_EQ(true, isnan(value_1/value_2));
     EXPECT_EQ(true, isnan(value_1));
     EXPECT_EQ(value_2, MPS_2.getValue());
@@ -2957,6 +2975,7 @@ TEST(division_tests, NAN_left_double) {
     auto test = MPS / MPS_2;
 
     EXPECT_EQ(isnan(value_1/value_2), isnan(test.getValue()));
+    EXPECT_EQ(should_value(value_1/value_2), is_mps(test.getBitArray()));
     EXPECT_EQ(true, isnan(value_1/value_2));
     EXPECT_EQ(true, isnan(value_1));
     EXPECT_EQ(value_2, MPS_2.getValue());
@@ -2973,6 +2992,7 @@ TEST(division_tests, NAN_right_float) {
     auto test = MPS / MPS_2;
 
     EXPECT_EQ(isnan(value_1/value_2), isnan(test.getValue()));
+    EXPECT_EQ(should_value(value_1/value_2), is_mps(test.getBitArray()));
     EXPECT_EQ(true, isnan(value_1/value_2));
     EXPECT_EQ(true, isnan(value_2));
     EXPECT_EQ(value_1, MPS.getValue());
@@ -2989,6 +3009,7 @@ TEST(division_tests, NAN_right_double) {
     auto test = MPS / MPS_2;
 
     EXPECT_EQ(isnan(value_1/value_2), isnan(test.getValue()));
+    EXPECT_EQ(should_value(value_1/value_2), is_mps(test.getBitArray()));
     EXPECT_EQ(true, isnan(value_1/value_2));
     EXPECT_EQ(true, isnan(value_2));
     EXPECT_EQ(value_1, MPS.getValue());
@@ -3005,6 +3026,7 @@ TEST(division_tests, pos_inf_left_float) {
     auto test = MPS / MPS_2;
 
     EXPECT_EQ(value_1/value_2, test.getValue());
+    EXPECT_EQ(should_value(value_1/value_2), is_mps(test.getBitArray()));
     EXPECT_EQ(isnan(value_1/value_2), isnan(test.getValue()));
     EXPECT_EQ(value_1, MPS.getValue());
     EXPECT_EQ(value_2, MPS_2.getValue());
@@ -3021,6 +3043,7 @@ TEST(division_tests, pos_inf_left_double) {
     auto test = MPS / MPS_2;
 
     EXPECT_EQ(value_1/value_2, test.getValue());
+    EXPECT_EQ(should_value(value_1/value_2), is_mps(test.getBitArray()));
     EXPECT_EQ(isnan(value_1/value_2), isnan(test.getValue()));
     EXPECT_EQ(value_1, MPS.getValue());
     EXPECT_EQ(value_2, MPS_2.getValue());
@@ -3037,6 +3060,7 @@ TEST(division_tests, pos_inf_right_float) {
     auto test = MPS / MPS_2;
 
     EXPECT_EQ(value_1/value_2, test.getValue());
+    EXPECT_EQ(should_value(value_1/value_2), is_mps(test.getBitArray()));
     EXPECT_EQ(isnan(value_1/value_2), isnan(test.getValue()));
     EXPECT_EQ(value_1, MPS.getValue());
     EXPECT_EQ(value_2, MPS_2.getValue());
@@ -3053,6 +3077,7 @@ TEST(division_tests, pos_inf_right_double) {
     auto test = MPS / MPS_2;
 
     EXPECT_EQ(value_1/value_2, test.getValue());
+    EXPECT_EQ(should_value(value_1/value_2), is_mps(test.getBitArray()));
     EXPECT_EQ(isnan(value_1/value_2), isnan(test.getValue()));
     EXPECT_EQ(value_1, MPS.getValue());
     EXPECT_EQ(value_2, MPS_2.getValue());
@@ -3069,6 +3094,7 @@ TEST(division_tests, neg_inf_left_float) {
     auto test = MPS / MPS_2;
 
     EXPECT_EQ(value_1/value_2, test.getValue());
+    EXPECT_EQ(should_value(value_1/value_2), is_mps(test.getBitArray()));
     EXPECT_EQ(isnan(value_1/value_2), isnan(test.getValue()));
     EXPECT_EQ(value_1, MPS.getValue());
     EXPECT_EQ(value_2, MPS_2.getValue());
@@ -3085,6 +3111,7 @@ TEST(division_tests, neg_inf_left_double) {
     auto test = MPS / MPS_2;
 
     EXPECT_EQ(value_1/value_2, test.getValue());
+    EXPECT_EQ(should_value(value_1/value_2), is_mps(test.getBitArray()));
     EXPECT_EQ(isnan(value_1/value_2), isnan(test.getValue()));
     EXPECT_EQ(value_1, MPS.getValue());
     EXPECT_EQ(value_2, MPS_2.getValue());
@@ -3101,6 +3128,7 @@ TEST(division_tests, neg_inf_right_float) {
     auto test = MPS / MPS_2;
 
     EXPECT_EQ(value_1/value_2, test.getValue());
+    EXPECT_EQ(should_value(value_1/value_2), is_mps(test.getBitArray()));
     EXPECT_EQ(isnan(value_1/value_2), isnan(test.getValue()));
     EXPECT_EQ(value_1, MPS.getValue());
     EXPECT_EQ(value_2, MPS_2.getValue());
@@ -3117,6 +3145,7 @@ TEST(division_tests, neg_inf_right_double) {
     auto test = MPS / MPS_2;
 
     EXPECT_EQ(value_1/value_2, test.getValue());
+    EXPECT_EQ(should_value(value_1/value_2), is_mps(test.getBitArray()));
     EXPECT_EQ(isnan(value_1/value_2), isnan(test.getValue()));
     EXPECT_EQ(value_1, MPS.getValue());
     EXPECT_EQ(value_2, MPS_2.getValue());
@@ -3133,6 +3162,7 @@ TEST(division_tests, zero_left_float) {
     auto test = MPS / MPS_2;
 
     EXPECT_EQ(value_1/value_2, test.getValue());
+    EXPECT_EQ(should_value(value_1/value_2), is_mps(test.getBitArray()));
     EXPECT_EQ(value_1, MPS.getValue());
     EXPECT_EQ(value_2, MPS_2.getValue());
 }
@@ -3148,6 +3178,7 @@ TEST(division_tests, zero_left_double) {
     auto test = MPS / MPS_2;
 
     EXPECT_EQ(value_1/value_2, test.getValue());
+    EXPECT_EQ(should_value(value_1/value_2), is_mps(test.getBitArray()));
     EXPECT_EQ(value_1, MPS.getValue());
     EXPECT_EQ(value_2, MPS_2.getValue());
 }
@@ -3163,6 +3194,7 @@ TEST(division_tests, pos_val_zero_right_float) {
     auto test = MPS / MPS_2;
 
     EXPECT_EQ(value_1/value_2, test.getValue());
+    EXPECT_EQ(should_value(value_1/value_2), is_mps(test.getBitArray()));
     EXPECT_EQ(value_1, MPS.getValue());
     EXPECT_EQ(value_2, MPS_2.getValue());
 }
@@ -3178,6 +3210,7 @@ TEST(division_tests, pos_val_zero_right_double) {
     auto test = MPS / MPS_2;
 
     EXPECT_EQ(value_1/value_2, test.getValue());
+    EXPECT_EQ(should_value(value_1/value_2), is_mps(test.getBitArray()));
     EXPECT_EQ(value_1, MPS.getValue());
     EXPECT_EQ(value_2, MPS_2.getValue());
 }
@@ -3193,6 +3226,7 @@ TEST(division_tests, neg_val_zero_right_float) {
     auto test = MPS / MPS_2;
 
     EXPECT_EQ(value_1/value_2, test.getValue());
+    EXPECT_EQ(should_value(value_1/value_2), is_mps(test.getBitArray()));
     EXPECT_EQ(value_1, MPS.getValue());
     EXPECT_EQ(value_2, MPS_2.getValue());
 }
@@ -3208,6 +3242,7 @@ TEST(division_tests, neg_val_zero_right_double) {
     auto test = MPS / MPS_2;
 
     EXPECT_EQ(value_1/value_2, test.getValue());
+    EXPECT_EQ(should_value(value_1/value_2), is_mps(test.getBitArray()));
     EXPECT_EQ(value_1, MPS.getValue());
     EXPECT_EQ(value_2, MPS_2.getValue());
 }
@@ -3223,6 +3258,7 @@ TEST(division_tests, division_float_1) {
     auto test = MPS / MPS_2;
 
     EXPECT_EQ(value_1/value_2, test.getValue());
+    EXPECT_EQ(should_value(value_1/value_2), is_mps(test.getBitArray()));
     EXPECT_EQ(value_1, MPS.getValue());
     EXPECT_EQ(value_2, MPS_2.getValue());
 }
@@ -3238,6 +3274,7 @@ TEST(division_tests, division_double_1) {
     auto test = MPS / MPS_2;
 
     EXPECT_EQ(value_1/value_2, test.getValue());
+    EXPECT_EQ(should_value(value_1/value_2), is_mps(test.getBitArray()));
     EXPECT_EQ(value_1, MPS.getValue());
     EXPECT_EQ(value_2, MPS_2.getValue());
 }
@@ -3253,6 +3290,7 @@ TEST(division_tests, division_float_2) {
     auto test = MPS / MPS_2;
 
     EXPECT_EQ(value_1/value_2, test.getValue());
+    EXPECT_EQ(should_value(value_1/value_2), is_mps(test.getBitArray()));
     EXPECT_EQ(value_1, MPS.getValue());
     EXPECT_EQ(value_2, MPS_2.getValue());
 }
@@ -3268,6 +3306,7 @@ TEST(division_tests, division_double_2) {
     auto test = MPS / MPS_2;
 
     EXPECT_EQ(value_1/value_2, test.getValue());
+    EXPECT_EQ(should_value(value_1/value_2), is_mps(test.getBitArray()));
     EXPECT_EQ(value_1, MPS.getValue());
     EXPECT_EQ(value_2, MPS_2.getValue());
 }
@@ -3283,6 +3322,7 @@ TEST(division_tests, division_float_3) {
     auto test = MPS / MPS_2;
 
     EXPECT_EQ(value_1/value_2, test.getValue());
+    EXPECT_EQ(should_value(value_1/value_2), is_mps(test.getBitArray()));
     EXPECT_EQ(value_1, MPS.getValue());
     EXPECT_EQ(value_2, MPS_2.getValue());
 }
@@ -3298,6 +3338,7 @@ TEST(division_tests, division_double_3) {
     auto test = MPS / MPS_2;
 
     EXPECT_EQ(value_1/value_2, test.getValue());
+    EXPECT_EQ(should_value(value_1/value_2), is_mps(test.getBitArray()));
     EXPECT_EQ(value_1, MPS.getValue());
     EXPECT_EQ(value_2, MPS_2.getValue());
 }
@@ -3313,6 +3354,7 @@ TEST(division_tests, division_float_4) {
     auto test = MPS / MPS_2;
 
     EXPECT_EQ(value_1/value_2, test.getValue());
+    EXPECT_EQ(should_value(value_1/value_2), is_mps(test.getBitArray()));
     EXPECT_EQ(value_1, MPS.getValue());
     EXPECT_EQ(value_2, MPS_2.getValue());
 }
@@ -3328,6 +3370,7 @@ TEST(division_tests, division_double_4) {
     auto test = MPS / MPS_2;
 
     EXPECT_EQ(value_1/value_2, test.getValue());
+    EXPECT_EQ(should_value(value_1/value_2), is_mps(test.getBitArray()));
     EXPECT_EQ(value_1, MPS.getValue());
     EXPECT_EQ(value_2, MPS_2.getValue());
 }
@@ -3343,6 +3386,7 @@ TEST(division_tests, division_float_5) {
     auto test = MPS / MPS_2;
 
     EXPECT_EQ(value_1/value_2, test.getValue());
+    EXPECT_EQ(should_value(value_1/value_2), is_mps(test.getBitArray()));
     EXPECT_EQ(value_1, MPS.getValue());
     EXPECT_EQ(value_2, MPS_2.getValue());
 }
@@ -3358,6 +3402,7 @@ TEST(division_tests, division_double_5) {
     auto test = MPS / MPS_2;
 
     EXPECT_EQ(value_1/value_2, test.getValue());
+    EXPECT_EQ(should_value(value_1/value_2), is_mps(test.getBitArray()));
     EXPECT_EQ(value_1, MPS.getValue());
     EXPECT_EQ(value_2, MPS_2.getValue());
 }
@@ -3373,6 +3418,7 @@ TEST(division_tests, division_float_6) {
     auto test = MPS / MPS_2;
 
     EXPECT_EQ(value_1/value_2, test.getValue());
+    EXPECT_EQ(should_value(value_1/value_2), is_mps(test.getBitArray()));
     EXPECT_EQ(value_1, MPS.getValue());
     EXPECT_EQ(value_2, MPS_2.getValue());
 }
@@ -3388,6 +3434,7 @@ TEST(division_tests, division_double_6) {
     auto test = MPS / MPS_2;
 
     EXPECT_EQ(value_1/value_2, test.getValue());
+    EXPECT_EQ(should_value(value_1/value_2), is_mps(test.getBitArray()));
     EXPECT_EQ(value_1, MPS.getValue());
     EXPECT_EQ(value_2, MPS_2.getValue());
 }
@@ -3403,6 +3450,7 @@ TEST(division_tests, division_float_7) {
     auto test = MPS / MPS_2;
 
     EXPECT_EQ(value_1/value_2, test.getValue());
+    EXPECT_EQ(should_value(value_1/value_2), is_mps(test.getBitArray()));
     EXPECT_EQ(value_1, MPS.getValue());
     EXPECT_EQ(value_2, MPS_2.getValue());
 }
@@ -3418,6 +3466,7 @@ TEST(division_tests, division_double_7) {
     auto test = MPS / MPS_2;
 
     EXPECT_EQ(value_1/value_2, test.getValue());
+    EXPECT_EQ(should_value(value_1/value_2), is_mps(test.getBitArray()));
     EXPECT_EQ(value_1, MPS.getValue());
     EXPECT_EQ(value_2, MPS_2.getValue());
 }
@@ -3433,6 +3482,7 @@ TEST(division_tests, pos_pos_float) {
     auto test = MPS / MPS_2;
 
     EXPECT_EQ(value_1/value_2, test.getValue());
+    EXPECT_EQ(should_value(value_1/value_2), is_mps(test.getBitArray()));
     EXPECT_EQ(value_1, MPS.getValue());
     EXPECT_EQ(value_2, MPS_2.getValue());
 }
@@ -3448,6 +3498,7 @@ TEST(division_tests, pos_pos_double) {
     auto test = MPS / MPS_2;
 
     EXPECT_EQ(value_1/value_2, test.getValue());
+    EXPECT_EQ(should_value(value_1/value_2), is_mps(test.getBitArray()));
     EXPECT_EQ(value_1, MPS.getValue());
     EXPECT_EQ(value_2, MPS_2.getValue());
 }
@@ -3463,6 +3514,7 @@ TEST(division_tests, neg_neg_float) {
     auto test = MPS / MPS_2;
 
     EXPECT_EQ(value_1/value_2, test.getValue());
+    EXPECT_EQ(should_value(value_1/value_2), is_mps(test.getBitArray()));
     EXPECT_EQ(value_1, MPS.getValue());
     EXPECT_EQ(value_2, MPS_2.getValue());
 }
@@ -3478,6 +3530,7 @@ TEST(division_tests, neg_neg_double) {
     auto test = MPS / MPS_2;
 
     EXPECT_EQ(value_1/value_2, test.getValue());
+    EXPECT_EQ(should_value(value_1/value_2), is_mps(test.getBitArray()));
     EXPECT_EQ(value_1, MPS.getValue());
     EXPECT_EQ(value_2, MPS_2.getValue());
 }
@@ -3493,6 +3546,7 @@ TEST(division_tests, pos_neg_float) {
     auto test = MPS / MPS_2;
 
     EXPECT_EQ(value_1/value_2, test.getValue());
+    EXPECT_EQ(should_value(value_1/value_2), is_mps(test.getBitArray()));
     EXPECT_EQ(value_1, MPS.getValue());
     EXPECT_EQ(value_2, MPS_2.getValue());
 }
@@ -3508,6 +3562,7 @@ TEST(division_tests, pos_neg_double) {
     auto test = MPS / MPS_2;
 
     EXPECT_EQ(value_1/value_2, test.getValue());
+    EXPECT_EQ(should_value(value_1/value_2), is_mps(test.getBitArray()));
     EXPECT_EQ(value_1, MPS.getValue());
     EXPECT_EQ(value_2, MPS_2.getValue());
 }
@@ -3523,6 +3578,7 @@ TEST(division_tests, neg_pos_float) {
     auto test = MPS / MPS_2;
 
     EXPECT_EQ(value_1/value_2, test.getValue());
+    EXPECT_EQ(should_value(value_1/value_2), is_mps(test.getBitArray()));
     EXPECT_EQ(value_1, MPS.getValue());
     EXPECT_EQ(value_2, MPS_2.getValue());
 }
@@ -3538,6 +3594,7 @@ TEST(division_tests, neg_pos_double) {
     auto test = MPS / MPS_2;
 
     EXPECT_EQ(value_1/value_2, test.getValue());
+    EXPECT_EQ(should_value(value_1/value_2), is_mps(test.getBitArray()));
     EXPECT_EQ(value_1, MPS.getValue());
     EXPECT_EQ(value_2, MPS_2.getValue());
 }
@@ -3553,6 +3610,7 @@ TEST(division_tests, small_small_float) {
     auto test = MPS / MPS_2;
 
     EXPECT_EQ(value_1/value_2, test.getValue());
+    EXPECT_EQ(should_value(value_1/value_2), is_mps(test.getBitArray()));
     EXPECT_EQ(value_1, MPS.getValue());
     EXPECT_EQ(value_2, MPS_2.getValue());
 }
@@ -3568,6 +3626,7 @@ TEST(division_tests, small_small_double) {
     auto test = MPS / MPS_2;
 
     EXPECT_EQ(value_1/value_2, test.getValue());
+    EXPECT_EQ(should_value(value_1/value_2), is_mps(test.getBitArray()));
     EXPECT_EQ(value_1, MPS.getValue());
     EXPECT_EQ(value_2, MPS_2.getValue());
 }
@@ -3583,6 +3642,7 @@ TEST(division_tests, large_large_float) {
     auto test = MPS / MPS_2;
 
     EXPECT_EQ(value_1/value_2, test.getValue());
+    EXPECT_EQ(should_value(value_1/value_2), is_mps(test.getBitArray()));
     EXPECT_EQ(value_1, MPS.getValue());
     EXPECT_EQ(value_2, MPS_2.getValue());
 }
@@ -3598,6 +3658,7 @@ TEST(division_tests, large_large_double) {
     auto test = MPS / MPS_2;
 
     EXPECT_EQ(value_1/value_2, test.getValue());
+    EXPECT_EQ(should_value(value_1/value_2), is_mps(test.getBitArray()));
     EXPECT_EQ(value_1, MPS.getValue());
     EXPECT_EQ(value_2, MPS_2.getValue());
 }
@@ -3613,6 +3674,7 @@ TEST(division_tests, large_small_float) {
     auto test = MPS / MPS_2;
 
     EXPECT_EQ(value_1/value_2, test.getValue());
+    EXPECT_EQ(should_value(value_1/value_2), is_mps(test.getBitArray()));
     EXPECT_EQ(value_1, MPS.getValue());
     EXPECT_EQ(value_2, MPS_2.getValue());
 }
@@ -3628,6 +3690,7 @@ TEST(division_tests, large_small_double) {
     auto test = MPS / MPS_2;
 
     EXPECT_EQ(value_1/value_2, test.getValue());
+    EXPECT_EQ(should_value(value_1/value_2), is_mps(test.getBitArray()));
     EXPECT_EQ(value_1, MPS.getValue());
     EXPECT_EQ(value_2, MPS_2.getValue());
 }
@@ -3643,6 +3706,7 @@ TEST(division_tests, small_large_float) {
     auto test = MPS / MPS_2;
 
     EXPECT_EQ(value_1/value_2, test.getValue());
+    EXPECT_EQ(should_value(value_1/value_2), is_mps(test.getBitArray()));
     EXPECT_EQ(value_1, MPS.getValue());
     EXPECT_EQ(value_2, MPS_2.getValue());
 }
@@ -3658,6 +3722,7 @@ TEST(division_tests, small_large_double) {
     auto test = MPS / MPS_2;
 
     EXPECT_EQ(value_1/value_2, test.getValue());
+    EXPECT_EQ(should_value(value_1/value_2), is_mps(test.getBitArray()));
     EXPECT_EQ(value_1, MPS.getValue());
     EXPECT_EQ(value_2, MPS_2.getValue());
 }
@@ -3673,6 +3738,7 @@ TEST(division_tests, max_min_float) {
     auto test = MPS / MPS_2;
 
     EXPECT_EQ(value_1/value_2, test.getValue());
+    EXPECT_EQ(should_value(value_1/value_2), is_mps(test.getBitArray()));
     EXPECT_EQ(value_1, MPS.getValue());
     EXPECT_EQ(value_2, MPS_2.getValue());
 }
@@ -3688,6 +3754,7 @@ TEST(division_tests, max_min_double) {
     auto test = MPS / MPS_2;
 
     EXPECT_EQ(value_1/value_2, test.getValue());
+    EXPECT_EQ(should_value(value_1/value_2), is_mps(test.getBitArray()));
     EXPECT_EQ(value_1, MPS.getValue());
     EXPECT_EQ(value_2, MPS_2.getValue());
 }
@@ -3703,6 +3770,7 @@ TEST(division_tests, min_max_float) {
     auto test = MPS / MPS_2;
 
     EXPECT_EQ(value_1/value_2, test.getValue());
+    EXPECT_EQ(should_value(value_1/value_2), is_mps(test.getBitArray()));
     EXPECT_EQ(value_1, MPS.getValue());
     EXPECT_EQ(value_2, MPS_2.getValue());
 }
@@ -3718,6 +3786,7 @@ TEST(division_tests, min_max_double) {
     auto test = MPS / MPS_2;
 
     EXPECT_EQ(value_1/value_2, test.getValue());
+    EXPECT_EQ(should_value(value_1/value_2), is_mps(test.getBitArray()));
     EXPECT_EQ(value_1, MPS.getValue());
     EXPECT_EQ(value_2, MPS_2.getValue());
 }
@@ -3733,6 +3802,7 @@ TEST(division_tests, min_min_float) {
     auto test = MPS / MPS_2;
 
     EXPECT_EQ(value_1/value_2, test.getValue());
+    EXPECT_EQ(should_value(value_1/value_2), is_mps(test.getBitArray()));
     EXPECT_EQ(value_1, MPS.getValue());
     EXPECT_EQ(value_2, MPS_2.getValue());
 }
@@ -3748,6 +3818,7 @@ TEST(division_tests, min_min_double) {
     auto test = MPS / MPS_2;
 
     EXPECT_EQ(value_1/value_2, test.getValue());
+    EXPECT_EQ(should_value(value_1/value_2), is_mps(test.getBitArray()));
     EXPECT_EQ(value_1, MPS.getValue());
     EXPECT_EQ(value_2, MPS_2.getValue());
 }
@@ -3763,6 +3834,7 @@ TEST(division_tests, max_max_float) {
     auto test = MPS / MPS_2;
 
     EXPECT_EQ(value_1/value_2, test.getValue());
+    EXPECT_EQ(should_value(value_1/value_2), is_mps(test.getBitArray()));
     EXPECT_EQ(value_1, MPS.getValue());
     EXPECT_EQ(value_2, MPS_2.getValue());
 }
@@ -3778,6 +3850,7 @@ TEST(division_tests, max_max_double) {
     auto test = MPS / MPS_2;
 
     EXPECT_EQ(value_1/value_2, test.getValue());
+    EXPECT_EQ(should_value(value_1/value_2), is_mps(test.getBitArray()));
     EXPECT_EQ(value_1, MPS.getValue());
     EXPECT_EQ(value_2, MPS_2.getValue());
 }
@@ -3793,6 +3866,7 @@ TEST(division_tests, over_max_float) {
     auto test = MPS / MPS_2;
 
     EXPECT_EQ(value_1/value_2, test.getValue());
+    EXPECT_EQ(should_value(value_1/value_2), is_mps(test.getBitArray()));
     EXPECT_EQ(value_1, MPS.getValue());
     EXPECT_EQ(value_2, MPS_2.getValue());
 }
@@ -3808,6 +3882,7 @@ TEST(division_tests, over_max_double) {
     auto test = MPS / MPS_2;
 
     EXPECT_EQ(value_1/value_2, test.getValue());
+    EXPECT_EQ(should_value(value_1/value_2), is_mps(test.getBitArray()));
     EXPECT_EQ(value_1, MPS.getValue());
     EXPECT_EQ(value_2, MPS_2.getValue());
 }
@@ -3826,6 +3901,7 @@ TEST(division_tests, coding) {
     auto test = MPS / MPS_2;
 
     EXPECT_EQ(should_value(value_1 / value_2), is_mps(test.getBitArray()));
+    EXPECT_EQ(should_value(value_1/value_2), is_mps(test.getBitArray()));
     EXPECT_EQ(value_1, MPS.getValue());
     EXPECT_EQ(value_2, MPS_2.getValue());
 }
