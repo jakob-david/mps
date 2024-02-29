@@ -40,6 +40,42 @@ TEST(PLU, simple_3x3_float_1) {
     EXPECT_EQ(true, test);
 }
 
+TEST(PLU, simple_3x3_float_2) {
+
+    unsigned long mantissa_length = 23;
+    unsigned long exponent_length = 8;
+
+    vector<double> new_matrix{ 4, -7, 2, -3, 1, -6, 3.5, 3, -8.4};
+
+    ira IRA(3);
+    IRA.setMatrix(mantissa_length, exponent_length, new_matrix);
+    IRA.PLU_decomposition();
+
+
+    bool test = true;
+    std::string L_result;
+    std::string U_result;
+    std::string P_result;
+
+    try
+    {
+        L_result = IRA.to_string('L', 4);
+        U_result = IRA.to_string('U', 4);
+        P_result = IRA.to_string('P', 4);
+    }
+
+    catch (std::invalid_argument& e)
+    {
+        test = false;
+    }
+
+
+    EXPECT_EQ(L_result, "1.0000, 0.0000, 0.0000, 0.8750, 1.0000, 0.0000, -0.7500, -0.4658, 1.0000");
+    EXPECT_EQ(U_result, "4.0000, -7.0000, 2.0000, 0.0000, 9.1250, -10.1500, 0.0000, 0.0000, -9.2274");
+    EXPECT_EQ(P_result, "1.0000, 0.0000, 0.0000, 0.0000, 0.0000, 1.0000, 0.0000, 1.0000, 0.0000");
+    EXPECT_EQ(true, test);
+}
+
 TEST(PLU, simple_3x3_double_1) {
 
     unsigned long mantissa_length = 52;
@@ -73,6 +109,42 @@ TEST(PLU, simple_3x3_double_1) {
     EXPECT_EQ(L_result, "1.00000000, 0.00000000, 0.00000000, 0.14285714, 1.00000000, 0.00000000, 0.57142857, 0.50000000, 1.00000000");
     EXPECT_EQ(U_result, "7.00000000, 8.00000000, 9.00000000, 0.00000000, 0.85714286, 1.71428571, 0.00000000, 0.00000000, 0.00000000");
     EXPECT_EQ(P_result, "0.00000000, 0.00000000, 1.00000000, 1.00000000, 0.00000000, 0.00000000, 0.00000000, 1.00000000, 0.00000000");
+    EXPECT_EQ(true, test);
+}
+
+TEST(PLU, simple_3x3_double_2) {
+
+    unsigned long mantissa_length = 52;
+    unsigned long exponent_length = 11;
+
+    vector<double> new_matrix{ 4, -7, 2, -3, 1, -6, 3.5, 3, -8.4};
+
+    ira IRA(3);
+    IRA.setMatrix(mantissa_length, exponent_length, new_matrix);
+    IRA.PLU_decomposition();
+
+
+    bool test = true;
+    std::string L_result;
+    std::string U_result;
+    std::string P_result;
+
+    try
+    {
+        L_result = IRA.to_string('L', 8);
+        U_result = IRA.to_string('U', 8);
+        P_result = IRA.to_string('P', 8);
+    }
+
+    catch (std::invalid_argument& e)
+    {
+        test = false;
+    }
+
+
+    EXPECT_EQ(L_result, "1.00000000, 0.00000000, 0.00000000, 0.87500000, 1.00000000, 0.00000000, -0.75000000, -0.46575342, 1.00000000");
+    EXPECT_EQ(U_result, "4.00000000, -7.00000000, 2.00000000, 0.00000000, 9.12500000, -10.15000000, 0.00000000, 0.00000000, -9.22739726");
+    EXPECT_EQ(P_result, "1.00000000, 0.00000000, 0.00000000, 0.00000000, 0.00000000, 1.00000000, 0.00000000, 1.00000000, 0.00000000");
     EXPECT_EQ(true, test);
 }
 

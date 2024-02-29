@@ -3292,7 +3292,7 @@ TEST(multiplication_tests, zero_right_double) {
     EXPECT_EQ(value_2, MPS_2.getValue());
 }
 
-TEST(multiplication_tests, special_1_double) {
+TEST(multiplication_tests, inverse_special_double) {
 
     double value_2 = 7.0;
 
@@ -3313,7 +3313,7 @@ TEST(multiplication_tests, special_1_double) {
     EXPECT_EQ(4.0/value_2, MPS.getValue());
 }
 
-TEST(multiplication_tests, special_2_double) {
+TEST(multiplication_tests, inverse_pp_double) {
 
     double value_1 = 4.0/7.0;
     double value_2 = 7.0;
@@ -3329,7 +3329,87 @@ TEST(multiplication_tests, special_2_double) {
     EXPECT_EQ(value_2, MPS_2.getValue());
 }
 
-TEST(multiplication_tests, special_3_double) {
+TEST(multiplication_tests, inverse_np_double) {
+
+    double value_1 = -(4.0/7.0);
+    double value_2 = 7.0;
+
+    mps MPS(52,11,value_1);
+    mps MPS_2(52,11,value_2);
+
+    auto test = MPS * MPS_2;
+
+    EXPECT_EQ(value_1*value_2, test.getValue());
+    EXPECT_EQ(should_value(value_1*value_2), is_mps(test.getBitArray()));
+    EXPECT_EQ(value_1, MPS.getValue());
+    EXPECT_EQ(value_2, MPS_2.getValue());
+}
+
+TEST(multiplication_tests, inverse_pn_double) {
+
+    double value_1 = (4.0/7.0);
+    double value_2 = -7.0;
+
+    mps MPS(52,11,value_1);
+    mps MPS_2(52,11,value_2);
+
+    auto test = MPS * MPS_2;
+
+    EXPECT_EQ(value_1*value_2, test.getValue());
+    EXPECT_EQ(should_value(value_1*value_2), is_mps(test.getBitArray()));
+    EXPECT_EQ(value_1, MPS.getValue());
+    EXPECT_EQ(value_2, MPS_2.getValue());
+}
+
+TEST(multiplication_tests, inverse_nn_double) {
+
+    double value_1 = -(4.0 / 7.0);
+    double value_2 = -7.0;
+
+    mps MPS(52, 11, value_1);
+    mps MPS_2(52, 11, value_2);
+
+    auto test = MPS * MPS_2;
+
+    EXPECT_EQ(value_1 * value_2, test.getValue());
+    EXPECT_EQ(should_value(value_1 * value_2), is_mps(test.getBitArray()));
+    EXPECT_EQ(value_1, MPS.getValue());
+    EXPECT_EQ(value_2, MPS_2.getValue());
+}
+
+TEST(multiplication_tests, inverse_s1_double) {
+
+    double value_1 = 4.0/-7.0;
+    double value_2 = 7.0;
+
+    mps MPS(52,11,value_1);
+    mps MPS_2(52,11,value_2);
+
+    auto test = MPS * MPS_2;
+
+    EXPECT_EQ(value_1*value_2, test.getValue());
+    EXPECT_EQ(should_value(value_1*value_2), is_mps(test.getBitArray()));
+    EXPECT_EQ(value_1, MPS.getValue());
+    EXPECT_EQ(value_2, MPS_2.getValue());
+}
+
+TEST(multiplication_tests, inverse_s2_double) {
+
+    double value_1 = -4.0/7.0;
+    double value_2 = 7.0;
+
+    mps MPS(52,11,value_1);
+    mps MPS_2(52,11,value_2);
+
+    auto test = MPS * MPS_2;
+
+    EXPECT_EQ(value_1*value_2, test.getValue());
+    EXPECT_EQ(should_value(value_1*value_2), is_mps(test.getBitArray()));
+    EXPECT_EQ(value_1, MPS.getValue());
+    EXPECT_EQ(value_2, MPS_2.getValue());
+}
+
+TEST(multiplication_tests, inverse_extra1_double) {
 
     double value_1 = 4.0/6.0;
     double value_2 = 6.0;
@@ -3345,7 +3425,7 @@ TEST(multiplication_tests, special_3_double) {
     EXPECT_EQ(value_2, MPS_2.getValue());
 }
 
-TEST(multiplication_tests, special_4_double) {
+TEST(multiplication_tests, inverse_extra2_double) {
 
     double value_1 = 4.0/-6.0;
     double value_2 = -6.0;
@@ -3361,7 +3441,133 @@ TEST(multiplication_tests, special_4_double) {
     EXPECT_EQ(value_2, MPS_2.getValue());
 }
 
+TEST(multiplication_tests, inverse_pp_float) {
 
+    float value_1 = 4.0f/7.0f;
+    float value_2 = 7.0f;
+
+    mps MPS(23,8,value_1);
+    mps MPS_2(23,8,value_2);
+
+    auto test = MPS * MPS_2;
+
+    EXPECT_EQ(value_1*value_2, test.getValue());
+    EXPECT_EQ(should_value(value_1*value_2), is_mps(test.getBitArray()));
+    EXPECT_EQ(value_1, MPS.getValue());
+    EXPECT_EQ(value_2, MPS_2.getValue());
+}
+
+TEST(multiplication_tests, inverse_np_float) {
+
+    float value_1 = -(4.0f/7.0f);
+    float value_2 = 7.0f;
+
+    mps MPS(23,8,value_1);
+    mps MPS_2(23,8,value_2);
+
+    auto test = MPS * MPS_2;
+
+    EXPECT_EQ(value_1*value_2, test.getValue());
+    EXPECT_EQ(should_value(value_1*value_2), is_mps(test.getBitArray()));
+    EXPECT_EQ(value_1, MPS.getValue());
+    EXPECT_EQ(value_2, MPS_2.getValue());
+}
+
+TEST(multiplication_tests, inverse_pn_float) {
+
+    float value_1 = (4.0f/7.0f);
+    float value_2 = -7.0f;
+
+    mps MPS(23,8,value_1);
+    mps MPS_2(23,8,value_2);
+
+    auto test = MPS * MPS_2;
+
+    EXPECT_EQ(value_1*value_2, test.getValue());
+    EXPECT_EQ(should_value(value_1*value_2), is_mps(test.getBitArray()));
+    EXPECT_EQ(value_1, MPS.getValue());
+    EXPECT_EQ(value_2, MPS_2.getValue());
+}
+
+TEST(multiplication_tests, inverse_nn_float) {
+
+    float value_1 = -(4.0f / 7.0f);
+    float value_2 = -7.0f;
+
+    mps MPS(23, 8, value_1);
+    mps MPS_2(23, 8, value_2);
+
+    auto test = MPS * MPS_2;
+
+    EXPECT_EQ(value_1 * value_2, test.getValue());
+    EXPECT_EQ(should_value(value_1 * value_2), is_mps(test.getBitArray()));
+    EXPECT_EQ(value_1, MPS.getValue());
+    EXPECT_EQ(value_2, MPS_2.getValue());
+}
+
+TEST(multiplication_tests, inverse_s1_float) {
+
+    float value_1 = 4.0f/-7.0f;
+    float value_2 = 7.0f;
+
+    mps MPS(23,8,value_1);
+    mps MPS_2(23,8,value_2);
+
+    auto test = MPS * MPS_2;
+
+    EXPECT_EQ(value_1*value_2, test.getValue());
+    EXPECT_EQ(should_value(value_1*value_2), is_mps(test.getBitArray()));
+    EXPECT_EQ(value_1, MPS.getValue());
+    EXPECT_EQ(value_2, MPS_2.getValue());
+}
+
+TEST(multiplication_tests, inverse_s2_float) {
+
+    float value_1 = -4.0f/7.0f;
+    float value_2 = 7.0f;
+
+    mps MPS(23,8,value_1);
+    mps MPS_2(23,8,value_2);
+
+    auto test = MPS * MPS_2;
+
+    EXPECT_EQ(value_1*value_2, test.getValue());
+    EXPECT_EQ(should_value(value_1*value_2), is_mps(test.getBitArray()));
+    EXPECT_EQ(value_1, MPS.getValue());
+    EXPECT_EQ(value_2, MPS_2.getValue());
+}
+
+TEST(multiplication_tests, inverse_extra1_float) {
+
+    float value_1 = 4.0f/6.0f;
+    float value_2 = 6.0f;
+
+    mps MPS(23,8,value_1);
+    mps MPS_2(23,8,value_2);
+
+    auto test = MPS * MPS_2;
+
+    EXPECT_EQ(value_1*value_2, test.getValue());
+    EXPECT_EQ(should_value(value_1*value_2), is_mps(test.getBitArray()));
+    EXPECT_EQ(value_1, MPS.getValue());
+    EXPECT_EQ(value_2, MPS_2.getValue());
+}
+
+TEST(multiplication_tests, inverse_extra2_float) {
+
+    float value_1 = 4.0f/-6.0f;
+    float value_2 = -6.0f;
+
+    mps MPS(23,8,value_1);
+    mps MPS_2(23,8,value_2);
+
+    auto test = MPS * MPS_2;
+
+    EXPECT_EQ(value_1*value_2, test.getValue());
+    EXPECT_EQ(should_value(value_1*value_2), is_mps(test.getBitArray()));
+    EXPECT_EQ(value_1, MPS.getValue());
+    EXPECT_EQ(value_2, MPS_2.getValue());
+}
 
 
 
