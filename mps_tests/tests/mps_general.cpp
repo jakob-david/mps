@@ -1627,6 +1627,222 @@ TEST(setSign, negative_to_positve){
     EXPECT_EQ(value, MPS.getValue());
 }
 
+TEST(setCustom, simple_1_flaot){
+
+    mps MPS(23, 8);
+
+    bool sign = false;
+    vector<bool> exp{1,0,0,0,0,0,0,0};
+    vector<bool> mant{1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1};
+
+    MPS.setSign(sign);
+    MPS.setExponent(exp);
+    MPS.setMantissa(mant);
+
+    std::string should = "";
+    if(sign){
+        should += "1";
+    } else {
+        should += "0";
+    }
+
+    for(bool bit : exp){
+        if(bit){
+            should += "1";
+        } else {
+            should += "0";
+        }
+    }
+
+    for(bool bit : mant){
+        if(bit){
+            should += "1";
+        } else {
+            should += "0";
+        }
+    }
+
+    EXPECT_EQ(should, MPS.print());
+}
+
+TEST(setCustom, simple_2_flaot){
+
+    mps MPS(23, 8);
+
+    bool sign = false;
+    vector<bool> exp{1,0,1,0,1,0,0,0};
+    vector<bool> mant{1,1,1,1,1,0,1,1,1,0,0,1,1,1,0,1,1,1,1,1,1,1,1};
+
+    MPS.setSign(sign);
+    MPS.setExponent(exp);
+    MPS.setMantissa(mant);
+
+    std::string should = "";
+    if(sign){
+        should += "1";
+    } else {
+        should += "0";
+    }
+
+    for(bool bit : exp){
+        if(bit){
+            should += "1";
+        } else {
+            should += "0";
+        }
+    }
+
+    for(bool bit : mant){
+        if(bit){
+            should += "1";
+        } else {
+            should += "0";
+        }
+    }
+
+    EXPECT_EQ(should, MPS.print());
+}
+
+TEST(setCustom, simple_3_flaot){
+
+    mps MPS(23, 8);
+
+    bool sign = false;
+    vector<bool> exp{0,0,0,0,1,0,0,1};
+    vector<bool> mant{1,1,1,1,0,0,0,1,1,1,0,1,1,0,1,1,1,1,1,1,1,0,1};
+
+    MPS.setSign(sign);
+    MPS.setExponent(exp);
+    MPS.setMantissa(mant);
+
+    std::string should = "";
+    if(sign){
+        should += "1";
+    } else {
+        should += "0";
+    }
+
+    for(bool bit : exp){
+        if(bit){
+            should += "1";
+        } else {
+            should += "0";
+        }
+    }
+
+    for(bool bit : mant){
+        if(bit){
+            should += "1";
+        } else {
+            should += "0";
+        }
+    }
+
+    EXPECT_EQ(should, MPS.print());
+}
+
+TEST(setCustom, mantissa_too_small_flaot){
+
+    mps MPS(23, 8);
+
+    bool sign = false;
+    vector<bool> exp{1,0,0,0,0,0,0,0};
+    vector<bool> mant{1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1};
+
+    MPS.setSign(sign);
+    MPS.setExponent(exp);
+
+    bool test = false;
+
+    try
+    {
+        MPS.setMantissa(mant);
+    }
+
+    catch (std::invalid_argument& e)
+    {
+        test = true;
+    }
+
+    EXPECT_EQ(true, test);
+}
+
+TEST(setCustom, mantissa_too_large_flaot){
+
+    mps MPS(23, 8);
+
+    bool sign = false;
+    vector<bool> exp{1,0,0,0,0,0,0,0};
+    vector<bool> mant{1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1};
+
+    MPS.setSign(sign);
+    MPS.setExponent(exp);
+
+    bool test = false;
+
+    try
+    {
+        MPS.setMantissa(mant);
+    }
+
+    catch (std::invalid_argument& e)
+    {
+        test = true;
+    }
+
+    EXPECT_EQ(true, test);
+}
+
+TEST(setCustom, exponent_too_small_flaot){
+
+    mps MPS(23, 8);
+
+    bool sign = false;
+    vector<bool> exp{1,0,0,0,0,0,0};
+    vector<bool> mant{1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1};
+
+    MPS.setSign(sign);
+    MPS.setMantissa(mant);
+
+    bool test = false;
+
+    try
+    {
+        MPS.setExponent(exp);
+    }
+
+    catch (std::invalid_argument& e)
+    {
+        test = true;
+    }
+
+    EXPECT_EQ(true, test);
+}
+
+TEST(setCustom, exponent_too_large_flaot){
+
+    mps MPS(23, 8);
+
+    bool sign = false;
+    vector<bool> exp{1,0,0,0,0,0,0,0,0};
+    vector<bool> mant{1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1};
+
+    bool test = false;
+    MPS.setSign(sign);
+    MPS.setMantissa(mant);
+
+    try
+    {
+        MPS.setExponent(exp);
+    }
+
+    catch (std::invalid_argument& e)
+    {
+        test = true;
+    }
+
+    EXPECT_EQ(true, test);
+}
 
 
 

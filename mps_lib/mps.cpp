@@ -407,19 +407,35 @@ void mps::setSign(bool negative){
     this->sign = negative;
 }
 
-// TODO: test and docstring
+
+/**
+ * Sets the Mantissa to a new Mantissa.
+ * Throws an error if the new Mantissa has the same size as the olf mantissa.
+ *
+ * @param new_mantissa the vector to which the mantissa should be set.
+ */
 void mps::setMantissa(vector<bool>& new_mantissa){
 
-    this->mantissa.resize(new_mantissa.size());
+    if(new_mantissa.size() != this->mantissa.size()){
+        throw std::invalid_argument("ERROR: in setMantissa: New mantissa has wrong size.");
+    }
 
     for(unsigned long i = 0; i < new_mantissa.size(); i++){
         this->mantissa[i] = new_mantissa[i];
     }
 }
 
+/**
+ * Sets the Exponent to a new Exponent.
+ * Throws an error if the new exponent has the same size as the old exponent.
+ *
+ * @param new_mantissa the vector to which the mantissa should be set.
+ */
 void mps::setExponent(vector<bool>& new_exponent){
 
-    this->exponent.resize(new_exponent.size());
+    if(new_exponent.size() != this->exponent.size()){
+        throw std::invalid_argument("ERROR: in setExponent: New exponent has wrong size.");
+    }
 
     for(unsigned long i = 0; i < new_exponent.size(); i++){
         this->exponent[i] = new_exponent[i];
@@ -568,24 +584,22 @@ void mps::cast(const unsigned long new_mantissa_size, const unsigned long new_ex
  */
 void mps::resize_mps_object(const unsigned long new_mantissa_size, const unsigned long new_exponent_size){
 
-    // previous mistake: new_mantissa_size > this->mantissa_length
-
-    if(new_mantissa_size > this->mantissa.size()){
-        for(auto i = this->mantissa.size(); i < new_mantissa_size; i++){
+    if(new_mantissa_size > this->mantissa_length){
+        for(auto i = this->mantissa_length; i < new_mantissa_size; i++){
             this->mantissa.push_back(false);
         }
-    } else if(new_mantissa_size < this->mantissa.size()){
-        for(auto i = new_mantissa_size; i < this->mantissa.size(); i++){
+    } else if(new_mantissa_size < this->mantissa_length){
+        for(auto i = new_mantissa_size; i < this->mantissa_length; i++){
             this->mantissa.pop_back();
         }
     }
 
-    if(new_exponent_size > this->exponent.size()){
-        for(auto i = this->exponent.size(); i < new_exponent_size; i++){
+    if(new_exponent_size > this->exponent_length){
+        for(auto i = this->exponent_length; i < new_exponent_size; i++){
             this->exponent.push_back(false);
         }
-    } else if(new_exponent_size < this->exponent.size()){
-        for(auto i = new_exponent_size; i < exponent.size(); i++){
+    } else if(new_exponent_size < this->exponent_length){
+        for(auto i = new_exponent_size; i < this->exponent_length; i++){
             this->exponent.pop_back();
         }
     }
@@ -1335,7 +1349,7 @@ void mps::setValue(const double value) {
 
     // rounding
     //-------------------------------
-    // TODO: Maybe check if it is neccesary to check if exponent overflows.
+    // TODO: Maybe check if it is necessary to check if exponent overflows.
     if(round(&P, ret.mantissa_length)){
         addOneToBinary(&ret.exponent);
     }
@@ -1381,7 +1395,8 @@ void mps::setValue(const double value) {
 
         // TODO: is there a more intelligent way
         if(1 == larger(ret.exponent, dividend.exponent)){
-            ret.resize_mps_object(ret.mantissa_length, ret.exponent_length);
+            ret.mantissa.resize(ret.mantissa_length, false);
+            ret.exponent.resize(ret.exponent_length, false);
             ret.setZero();
             return ret;
         }
@@ -1403,7 +1418,8 @@ void mps::setValue(const double value) {
 
         // TODO: is there a more intelligent way
         if(carrier || allTrue(ret.exponent)){
-            ret.resize_mps_object(ret.mantissa_length, ret.exponent_length);
+            ret.mantissa.resize(ret.mantissa_length, false);
+            ret.exponent.resize(ret.exponent_length, false);
             ret.setInf(ret.sign);
             return ret;
         }
