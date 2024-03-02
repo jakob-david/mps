@@ -121,26 +121,30 @@ std::string ira::to_string(const char& matrix, const int precision) const {
 
 // algorithms
 //-------------------------------
-void ira::PLU_decomposition() {
+void ira::PLU_decomposition(unsigned long mantissa_precision, unsigned long exponent_precision) {
 
-    // TODO: maybe use different precision
-    unsigned long mantissa_length = A[0].mantissa_length;
-    unsigned long exponent_length = A[0].exponent_length;
     unsigned long matrix_1D_size = this->n * this->n;
+    unsigned long idx;
 
     // set up L and P
     //-------------------------------
-    // TODO: Maybe set bit array directly;
     this->L = new mps[matrix_1D_size];
     this->P= new mps[matrix_1D_size];
+
+    mps mps_zero(mantissa_precision, exponent_precision, 0);
+    mps mps_one(mantissa_precision, exponent_precision, 1);
+
     for(unsigned long i = 0; i <  this->n; i++){
         for(unsigned long j = 0; j < this->n; j++){
+
+            idx = get_idx(i, j);
+
             if(i == j){
-                this->L[get_idx(i, j)] = mps(mantissa_length, exponent_length, 1);
-                this->P[get_idx(i, j)] = this->L[get_idx(i, j)];
+                this->L[idx] = mps_one;
+                this->P[idx] = mps_one;
             } else {
-                this->L[get_idx(i, j)] = mps(mantissa_length, exponent_length, 0);
-                this->P[get_idx(i, j)] = this->L[get_idx(i, j)];
+                this->L[idx] = mps_zero;
+                this->P[idx] = mps_zero;
             }
         }
     }
@@ -151,7 +155,11 @@ void ira::PLU_decomposition() {
     this->U = new mps[matrix_1D_size];
     for(unsigned long i = 0; i <  this->n; i++){
         for(unsigned long j = 0; j < this->n; j++){
-            this->U[get_idx(i, j)] = A[get_idx(i, j)];
+
+            idx = get_idx(i, j);
+
+            this->U[idx] = A[idx];
+            this->U[idx].cast(mantissa_precision, exponent_precision);
         }
     }
     //-------------------------------
@@ -169,11 +177,12 @@ void ira::PLU_decomposition() {
 
         for(unsigned long j = k+1; j < n; j++){
 
-            this->L[get_idx(j, k)] = this->U[get_idx(j, k)] / this->U[get_idx(k, k)];
+            idx = get_idx(j, k);
+            this->L[idx] = this->U[idx] / this->U[get_idx(k, k)];
 
             for(unsigned long i = k; i < n; i++){
 
-                this->U[get_idx(j, i)]  = this->U[get_idx(j, i)] - (this->L[get_idx(j, k)] * this->U[get_idx(k, i)]);
+                this->U[get_idx(j, i)]  = this->U[get_idx(j, i)] - (this->L[idx] * this->U[get_idx(k, i)]);
             }
         }
 

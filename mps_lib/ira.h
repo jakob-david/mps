@@ -48,7 +48,7 @@ public:
 
     // algorithms
     //-------------------------------
-    void PLU_decomposition();
+    void PLU_decomposition(unsigned long mantissa_precision, unsigned long exponent_precision);
     //-------------------------------
 
 

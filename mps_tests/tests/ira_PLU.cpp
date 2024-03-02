@@ -13,7 +13,7 @@ TEST(PLU, simple_3x3_float_1) {
 
     ira IRA(3);
     IRA.setMatrix(mantissa_length, exponent_length, new_matrix);
-    IRA.PLU_decomposition();
+    IRA.PLU_decomposition(mantissa_length, exponent_length);
 
 
     bool test = true;
@@ -49,7 +49,7 @@ TEST(PLU, simple_3x3_float_2) {
 
     ira IRA(3);
     IRA.setMatrix(mantissa_length, exponent_length, new_matrix);
-    IRA.PLU_decomposition();
+    IRA.PLU_decomposition(mantissa_length, exponent_length);
 
 
     bool test = true;
@@ -85,7 +85,7 @@ TEST(PLU, simple_3x3_double_1) {
 
     ira IRA(3);
     IRA.setMatrix(mantissa_length, exponent_length, new_matrix);
-    IRA.PLU_decomposition();
+    IRA.PLU_decomposition(mantissa_length, exponent_length);
 
 
     bool test = true;
@@ -121,7 +121,7 @@ TEST(PLU, simple_3x3_double_2) {
 
     ira IRA(3);
     IRA.setMatrix(mantissa_length, exponent_length, new_matrix);
-    IRA.PLU_decomposition();
+    IRA.PLU_decomposition(mantissa_length, exponent_length);
 
 
     bool test = true;
@@ -157,7 +157,7 @@ TEST(PLU, simple_4x4_float_1) {
 
     ira IRA(4);
     IRA.setMatrix(mantissa_length, exponent_length, new_matrix);
-    IRA.PLU_decomposition();
+    IRA.PLU_decomposition(mantissa_length, exponent_length);
 
 
     bool test = true;
@@ -193,7 +193,7 @@ TEST(PLU, simple_4x4_float_2) {
 
     ira IRA(4);
     IRA.setMatrix(mantissa_length, exponent_length, new_matrix);
-    IRA.PLU_decomposition();
+    IRA.PLU_decomposition(mantissa_length, exponent_length);
 
 
     bool test = true;
@@ -229,7 +229,7 @@ TEST(PLU, simple_4x4_double_1) {
 
     ira IRA(4);
     IRA.setMatrix(mantissa_length, exponent_length, new_matrix);
-    IRA.PLU_decomposition();
+    IRA.PLU_decomposition(mantissa_length, exponent_length);
 
 
     bool test = true;
@@ -265,7 +265,7 @@ TEST(PLU, simple_4x4_double_2) {
 
     ira IRA(4);
     IRA.setMatrix(mantissa_length, exponent_length, new_matrix);
-    IRA.PLU_decomposition();
+    IRA.PLU_decomposition(mantissa_length, exponent_length);
 
 
     bool test = true;
