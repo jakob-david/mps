@@ -19,9 +19,9 @@ ira::ira(unsigned long n){
     //-------------------------------
     this->A = new mps[matrix_1D_size];
 
-    this->L = new mps[matrix_1D_size];;
-    this->U = new mps[matrix_1D_size];;
-    this->P = new mps[matrix_1D_size];;
+    this->L = new mps[matrix_1D_size];
+    this->U = new mps[matrix_1D_size];
+    this->P = new mps[matrix_1D_size];
 }
 
 ira::~ira(){
