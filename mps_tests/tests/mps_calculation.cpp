@@ -1352,6 +1352,37 @@ TEST(addition_tests, over_max_exp_diff_right_float) {
     EXPECT_EQ(value_2, MPS_2.getValue());
 }
 
+TEST(addition_tests, addition_special_float) {
+
+    float value_1 = 2.0f / 3.0f;
+    float value_2 = 3.0f + (1.0f/3.0f);
+
+    mps MPS(23,8,value_1);
+    mps MPS_2(23,8,value_2);
+
+    auto test = MPS + MPS_2;
+
+    EXPECT_EQ(value_2+value_1, test.getValue());
+    EXPECT_EQ(should_value(value_1 + value_2), is_mps(test.getBitArray()));
+    EXPECT_EQ(value_1, MPS.getValue());
+    EXPECT_EQ(value_2, MPS_2.getValue());
+}
+
+TEST(addition_tests, addition_special_double) {
+
+    double value_1 = 2.0 / 3.0;
+    double value_2 = 3.0 + (1.0/3.0);
+
+    mps MPS(52,11,value_1);
+    mps MPS_2(52,11,value_2);
+
+    auto test = MPS + MPS_2;
+
+    EXPECT_EQ(value_2+value_1, test.getValue());
+    EXPECT_EQ(should_value(value_1 + value_2), is_mps(test.getBitArray()));
+    EXPECT_EQ(value_1, MPS.getValue());
+    EXPECT_EQ(value_2, MPS_2.getValue());
+}
 
 
 
@@ -2318,6 +2349,7 @@ TEST(subtraction_tests, over_max_exp_diff_right_float) {
     EXPECT_EQ(value_1, MPS.getValue());
     EXPECT_EQ(value_2, MPS_2.getValue());
 }
+
 
 
 

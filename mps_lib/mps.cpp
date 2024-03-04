@@ -1085,7 +1085,10 @@ void mps::setValue(const double value) {
     // adjusting the mantissa   // TODO: maybe move further down.
     //-------------------------------
     ret.mantissa.erase(ret.mantissa.begin(), ret.mantissa.begin()+1);
-    round(&ret.mantissa, ret.mantissa_length);
+    // TODO: Maybe check if it is necessary to check if exponent overflows.
+    if(round(&ret.mantissa, ret.mantissa_length)){
+        addOneToBinary(&ret.exponent);
+    }
     //-------------------------------
 
     // adjusting the mantissa
@@ -1222,8 +1225,11 @@ void mps::setValue(const double value) {
     //-------------------------------
 
 
-    round(&ret.mantissa, ret.mantissa_length);
-
+    // TODO: Maybe check if it is necessary to check if exponent overflows.
+    // TODO: Maybe find test case...
+    if(round(&ret.mantissa, ret.mantissa_length)){
+        addOneToBinary(&ret.exponent);
+    }
 
     return ret;
 }

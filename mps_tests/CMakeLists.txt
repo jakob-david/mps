@@ -11,7 +11,7 @@ add_executable(mps_tests tests/mps_general.cpp
         tests/mps_comparators.cpp
         tests/mps_random.cpp
         tests/ira_general.cpp
-        tests/ira_PLU.cpp)
+        tests/ira_algorithms.cpp)
 
 target_link_libraries(mps_tests mps_lib)
 target_link_libraries(mps_tests gtest gtest_main)

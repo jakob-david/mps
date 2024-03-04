@@ -12,15 +12,24 @@ using namespace std;
 ira::ira(unsigned long n){
 
     this->n = n;
-    this->A = new mps[n * n];
+    unsigned long matrix_1D_size = this->n * this->n;
 
-    this->L = nullptr;
-    this->U = nullptr;
-    this->P = nullptr;
+
+    // set up matrices
+    //-------------------------------
+    this->A = new mps[matrix_1D_size];
+
+    this->L = new mps[matrix_1D_size];;
+    this->U = new mps[matrix_1D_size];;
+    this->P = new mps[matrix_1D_size];;
 }
 
 ira::~ira(){
     delete[] this->A;
+
+    delete[] this->L;
+    delete[] this->U;
+    delete[] this->P;
 }
 //-------------------------------
 
@@ -43,14 +52,44 @@ void ira::unitary(unsigned long mantissa_length, unsigned long exponent_length) 
 void ira::setMatrix(unsigned long mantissa_length, unsigned long exponent_length, vector<double> new_matrix) {
 
     if (new_matrix.size() > this->n * this->n) {
-        throw std::invalid_argument("ERROR: in setMatrix : new_matrix too large");
+        throw std::invalid_argument("ERROR: in setMatrix: new_matrix too large");
     }
     if (new_matrix.size() < this->n * this->n) {
-        throw std::invalid_argument("ERROR: in setMatrix : new_matrix too small");
+        throw std::invalid_argument("ERROR: in setMatrix: new_matrix too small");
     }
 
     for(unsigned i = 0; i < new_matrix.size(); i++){
         this->A[i] = mps(mantissa_length, exponent_length, new_matrix[i]);
+    }
+}
+
+// TODO: test
+void ira::setL(unsigned long mantissa_length, unsigned long exponent_length, vector<double> new_L) {
+
+    if (new_L.size() > this->n * this->n) {
+        throw std::invalid_argument("ERROR: in setL: new_L too large");
+    }
+    if (new_L.size() < this->n * this->n) {
+        throw std::invalid_argument("ERROR: in setL: new_L too small");
+    }
+
+    for(unsigned long i = 0; i < new_L.size(); i++){
+        this->L[i] = mps(mantissa_length, exponent_length, new_L[i]);
+    }
+}
+
+// TODO: test
+void ira::setU(unsigned long mantissa_length, unsigned long exponent_length, vector<double> new_U) {
+
+    if (new_U.size() > this->n * this->n) {
+        throw std::invalid_argument("ERROR: in setU: new_U too large");
+    }
+    if (new_U.size() < this->n * this->n) {
+        throw std::invalid_argument("ERROR: in setU: new_U too small");
+    }
+
+    for(unsigned long i = 0; i < new_U.size(); i++){
+        this->U[i] = mps(mantissa_length, exponent_length, new_U[i]);
     }
 }
 //-------------------------------
@@ -123,13 +162,13 @@ std::string ira::to_string(const char& matrix, const int precision) const {
 //-------------------------------
 void ira::PLU_decomposition(unsigned long mantissa_precision, unsigned long exponent_precision) {
 
-    unsigned long matrix_1D_size = this->n * this->n;
+    //unsigned long matrix_1D_size = this->n * this->n;
     unsigned long idx;
 
     // set up L and P
     //-------------------------------
-    this->L = new mps[matrix_1D_size];
-    this->P= new mps[matrix_1D_size];
+    //this->L = new mps[matrix_1D_size];
+    //this->P = new mps[matrix_1D_size];
 
     mps mps_zero(mantissa_precision, exponent_precision, 0);
     mps mps_one(mantissa_precision, exponent_precision, 1);
@@ -152,7 +191,7 @@ void ira::PLU_decomposition(unsigned long mantissa_precision, unsigned long expo
 
     // set up U
     //-------------------------------
-    this->U = new mps[matrix_1D_size];
+    //this->U = new mps[matrix_1D_size];
     for(unsigned long i = 0; i <  this->n; i++){
         for(unsigned long j = 0; j < this->n; j++){
 
@@ -188,6 +227,53 @@ void ira::PLU_decomposition(unsigned long mantissa_precision, unsigned long expo
 
     }
     //-------------------------------
+}
+
+vector<mps> ira::forwardSubstitution(const vector<mps>& b) const {
+
+    vector<mps> x(b.size(), mps(this->L->mantissa_length, this->L->exponent_length));
+
+    x[0] = b[0]/L[get_idx(0, 0)];
+
+    // TODO: maybe do a performance test if summation is needed
+    mps tmp_sum(this->L->mantissa_length, this->L->exponent_length);
+
+    for(unsigned long i = 1; i < this->n; i++){
+
+        tmp_sum = 0;
+        for(unsigned long j = 0; j < i; j++){
+            tmp_sum =  tmp_sum + (L[get_idx(i,j)] * x[j]);
+        }
+
+        x[i] = (b[i] - tmp_sum) / L[get_idx(i, i)];
+    }
+
+    return x;
+}
+
+vector<mps> ira::backwardSubstitution(const vector<mps>& b) const {
+
+    vector<mps> x(b.size(), mps(this->U->mantissa_length, this->U->exponent_length));
+
+    x[this->n-1] = b[this->n-1]/U[get_idx(this->n-1, this->n-1)];
+
+    // TODO: maybe do a performance test if summation is needed
+    mps tmp_sum(this->U->mantissa_length, this->U->exponent_length);
+
+    for(unsigned long i = this->n-1; i > 0;){
+
+        i--;
+
+        tmp_sum = 0;
+        for(unsigned long j = this->n-1; j > i; j--){
+
+            tmp_sum =  tmp_sum + (U[get_idx(i,j)] * x[j]);
+        }
+
+        x[i] = (b[i] - tmp_sum) / U[get_idx(i, i)];
+    }
+
+    return x;
 }
 //-------------------------------
 

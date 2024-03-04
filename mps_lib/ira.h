@@ -38,6 +38,8 @@ public:
     //-------------------------------
     void unitary(unsigned long mantissa_length, unsigned long exponent_length) const;
     void setMatrix(unsigned long mantissa_length, unsigned long exponent_length, vector<double> new_matrix);
+    void setL(unsigned long mantissa_length, unsigned long exponent_length, vector<double> new_L);
+    void setU(unsigned long mantissa_length, unsigned long exponent_length, vector<double> new_U);
     //-------------------------------
 
     // getter
@@ -49,6 +51,10 @@ public:
     // algorithms
     //-------------------------------
     void PLU_decomposition(unsigned long mantissa_precision, unsigned long exponent_precision);
+
+    [[nodiscard]] vector<mps> forwardSubstitution(const vector<mps>& b) const;
+
+    [[nodiscard]] vector<mps> backwardSubstitution(const vector<mps>& b) const;
     //-------------------------------
 
 
