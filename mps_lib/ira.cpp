@@ -17,26 +17,20 @@ ira::ira(unsigned long n){
 
     // set up matrices
     //-------------------------------
-    this->A = new mps[matrix_1D_size];
+    this->A.resize(matrix_1D_size);
 
-    this->L = new mps[matrix_1D_size];
-    this->U = new mps[matrix_1D_size];
-    this->P = new mps[matrix_1D_size];
+    this->L.resize(matrix_1D_size);
+    this->U.resize(matrix_1D_size);
+    this->P.resize(matrix_1D_size);
 }
 
-ira::~ira(){
-    delete[] this->A;
-
-    delete[] this->L;
-    delete[] this->U;
-    delete[] this->P;
-}
+ira::~ira() = default;
 //-------------------------------
 
 
 // setter
 //-------------------------------
-void ira::unitary(unsigned long mantissa_length, unsigned long exponent_length) const {
+void ira::unitary(unsigned long mantissa_length, unsigned long exponent_length) {
 
     for(unsigned long i = 0; i <  this->n; i++){
         for(unsigned long j = 0; j < this->n; j++){
@@ -113,10 +107,6 @@ void ira::setU(unsigned long mantissa_length, unsigned long exponent_length, vec
 
     } else if('L' == matrix){
 
-        if (nullptr == this->L) {
-            throw std::invalid_argument("ERROR: in to_string : L matrix is nullptr");
-        }
-
         ret += this->L[0].to_string(precision);
         for(unsigned long i = 1; i < n*n; i++){
             ret.append(", ");
@@ -125,10 +115,6 @@ void ira::setU(unsigned long mantissa_length, unsigned long exponent_length, vec
 
     } else if('U' == matrix) {
 
-        if (nullptr == this->U) {
-            throw std::invalid_argument("ERROR: in to_string : U matrix is nullptr");
-        }
-
         ret += this->U[0].to_string(precision);
         for(unsigned long i = 1; i < n*n; i++){
             ret.append(", ");
@@ -136,10 +122,6 @@ void ira::setU(unsigned long mantissa_length, unsigned long exponent_length, vec
         }
 
     } else if('P' == matrix) {
-
-        if (nullptr == this->P) {
-            throw std::invalid_argument("ERROR: in to_string : P matrix is nullptr");
-        }
 
         ret += this->P[0].to_string(precision);
         for(unsigned long i = 1; i < n*n; i++){
@@ -158,6 +140,104 @@ void ira::setU(unsigned long mantissa_length, unsigned long exponent_length, vec
 
 // algorithms
 //-------------------------------
+[[nodiscard]] mps ira::vectorNorm_L1(const vector<mps>& a){
+
+    if (a.empty()) {
+        throw std::invalid_argument("ERROR: in vectorNorm: a is empty");
+    }
+
+    auto ret = a[0];
+
+    for(unsigned long i = 1; i < a.size(); i++){
+        ret = ret + a[i];
+    }
+
+    return ret;
+}
+
+[[nodiscard]] vector<mps> ira::vectorAddition(const vector<mps>& a, const vector<mps>& b) {
+
+    if (a.empty()) {
+        throw std::invalid_argument("ERROR: in vectorAddition: a is empty");
+    }
+    if (b.empty()) {
+        throw std::invalid_argument("ERROR: in vectorAddition: b is empty");
+    }
+    if (a.size() != b.size()) {
+        throw std::invalid_argument("ERROR: in vectorAddition: dimensions of a and b do not match");
+    }
+    if (a[0].exponent_length != b[0].exponent_length) {
+        throw std::invalid_argument("ERROR: in vectorAddition: exponents do not match");
+    }
+    if (a[0].mantissa_length != b[0].mantissa_length) {
+        throw std::invalid_argument("ERROR: in vectorAddition: mantissas do not match");
+    }
+
+    vector<mps> result(a.size(), mps(a[0].mantissa_length, a[0].exponent_length, 0.0));
+
+    for(unsigned long i = 0; i < a.size(); i++){
+        result[i] = a[i] + b[i];
+    }
+
+    return result;
+}
+
+[[nodiscard]] vector<mps> ira::vectorSubtraction(const vector<mps>& a, const vector<mps>& b) {
+
+    if (a.empty()) {
+        throw std::invalid_argument("ERROR: in vectorSubtraction: a is empty");
+    }
+    if (b.empty()) {
+        throw std::invalid_argument("ERROR: in vectorSubtraction: b is empty");
+    }
+    if (a.size() != b.size()) {
+        throw std::invalid_argument("ERROR: in vectorSubtraction: dimensions of a and b do not match");
+    }
+    if (a[0].exponent_length != b[0].exponent_length) {
+        throw std::invalid_argument("ERROR: in vectorSubtraction: exponents do not match");
+    }
+    if (a[0].mantissa_length != b[0].mantissa_length) {
+        throw std::invalid_argument("ERROR: in vectorSubtraction: mantissas do not match");
+    }
+
+    vector<mps> result(a.size(), mps(a[0].mantissa_length, a[0].exponent_length, 0.0));
+
+    for(unsigned long i = 0; i < a.size(); i++){
+        result[i] = a[i] - b[i];
+    }
+
+    return result;
+}
+
+[[nodiscard]] vector<mps> ira::matrixVectorProduct(const vector<mps>& D, const vector<mps>& x) const {
+
+    if (D.empty()) {
+        throw std::invalid_argument("ERROR: in matrixVectorProduct: D is empty");
+    }
+    if (x.empty()) {
+        throw std::invalid_argument("ERROR: in matrixVectorProduct: x is empty");
+    }
+    if (D.size() != (x.size() * x.size())) {
+        throw std::invalid_argument("ERROR: in matrixVectorProduct: dimensions of D and x do not match");
+    }
+    if (D[0].exponent_length != x[0].exponent_length) {
+        throw std::invalid_argument("ERROR: in matrixVectorProduct: exponents do not match");
+    }
+    if (D[0].mantissa_length != x[0].mantissa_length) {
+        throw std::invalid_argument("ERROR: in matrixVectorProduct: mantissas do not match");
+    }
+
+    vector<mps> y(x.size(), mps(D[0].mantissa_length, D[0].exponent_length, 0.0));
+
+    for(unsigned long i = 0; i < x.size(); i++){
+        for(unsigned long j = 0; j < x.size(); j++){
+            y[i] = y[i] + (x[j] * D[get_idx(i, j)]);
+        }
+    }
+
+    return y;
+}
+
 void ira::PLU_decomposition(unsigned long mantissa_precision, unsigned long exponent_precision) {
 
     //unsigned long matrix_1D_size = this->n * this->n;
@@ -208,9 +288,9 @@ void ira::PLU_decomposition(unsigned long mantissa_precision, unsigned long expo
 
         auto max_row = get_max_U_idx(k, k, n);
 
-        interchangeRow(this->U, k, max_row, k, n);
-        interchangeRow(this->L, k, max_row, 0, k);
-        interchangeRow(this->P, k, max_row, 0, n);
+        interchangeRow(&this->U, k, max_row, k, n);
+        interchangeRow(&this->L, k, max_row, 0, k);
+        interchangeRow(&this->P, k, max_row, 0, n);
 
         for(unsigned long j = k+1; j < n; j++){
 
@@ -229,12 +309,13 @@ void ira::PLU_decomposition(unsigned long mantissa_precision, unsigned long expo
 
 [[nodiscard]] vector<mps> ira::forwardSubstitution(const vector<mps>& b) const {
 
-    vector<mps> x(b.size(), mps(this->L->mantissa_length, this->L->exponent_length));
+    // TODO: make sure that L is not empty
+    vector<mps> x(b.size(), mps(this->L[0].mantissa_length, this->L[0].exponent_length));
 
     x[0] = b[0]/L[get_idx(0, 0)];
 
     // TODO: maybe do a performance test if summation is needed
-    mps tmp_sum(this->L->mantissa_length, this->L->exponent_length);
+    mps tmp_sum(this->L[0].mantissa_length, this->L[0].exponent_length);
 
     for(unsigned long i = 1; i < this->n; i++){
 
@@ -251,12 +332,13 @@ void ira::PLU_decomposition(unsigned long mantissa_precision, unsigned long expo
 
 [[nodiscard]] vector<mps> ira::backwardSubstitution(const vector<mps>& b) const {
 
-    vector<mps> x(b.size(), mps(this->U->mantissa_length, this->U->exponent_length));
+    // TODO: check that U is not null
+    vector<mps> x(b.size(), mps(this->U[0].mantissa_length, this->U[0].exponent_length));
 
     x[this->n-1] = b[this->n-1]/U[get_idx(this->n-1, this->n-1)];
 
     // TODO: maybe do a performance test if summation is needed
-    mps tmp_sum(this->U->mantissa_length, this->U->exponent_length);
+    mps tmp_sum(this->U[0].mantissa_length, this->U[0].exponent_length);
 
     for(unsigned long i = this->n-1; i > 0;){
 
@@ -274,35 +356,6 @@ void ira::PLU_decomposition(unsigned long mantissa_precision, unsigned long expo
     return x;
 }
 
-[[nodiscard]] vector<mps> ira::matrixVectorProduct(const vector<mps>& A, const vector<mps>& x) const {
-
-    if (A.empty()) {
-        throw std::invalid_argument("ERROR: in matrixVectorProduct: A is empty");
-    }
-    if (x.empty()) {
-        throw std::invalid_argument("ERROR: in matrixVectorProduct: x is empty");
-    }
-    if (A.size() != (x.size() * x.size())) {
-        throw std::invalid_argument("ERROR: in matrixVectorProduct: dimensions of A and x do not match");
-    }
-    if (A[0].exponent_length != x[0].exponent_length) {
-        throw std::invalid_argument("ERROR: in matrixVectorProduct: exponents do not match");
-    }
-    if (A[0].mantissa_length != x[0].mantissa_length) {
-        throw std::invalid_argument("ERROR: in matrixVectorProduct: mantissas do not match");
-    }
-
-    vector<mps> y(x.size(), mps(A[0].mantissa_length, A[0].exponent_length, 0.0));
-
-    for(unsigned long i = 0; i < x.size(); i++){
-        for(unsigned long j = 0; j < x.size(); j++){
-            y[i] = y[i] + (x[j] * A[get_idx(i, j)]);
-        }
-    }
-
-    return x;
-}
-
 [[nodiscard]] vector<mps> ira::iterativeRefinementLU(const vector<mps>& b){
 
     unsigned long exp_precision = b[0].exponent_length;
@@ -310,14 +363,20 @@ void ira::PLU_decomposition(unsigned long mantissa_precision, unsigned long expo
 
     this->PLU_decomposition(mant_precision, exp_precision);
 
-    auto x = this->forwardSubstitution(b);
+    auto x = this->matrixVectorProduct(this->P, b);
+    x = this->forwardSubstitution(x);
     x = this->backwardSubstitution(x);
 
-    //auto r = this->matrixVectorProduct(this->A, x);
-    for(unsigned long i = 0; i < 1; i++){
+    vector<mps> r(b.size(), mps(mant_precision, exp_precision));
+    vector<mps> d(b.size(), mps(mant_precision, exp_precision));
 
+    for(unsigned long i = 0; i < 10; i++){
+        r = vectorSubtraction(b, this->matrixVectorProduct(this->A, x));
+        d = this->forwardSubstitution(r);
+        d = this->backwardSubstitution(d);
+        // cout << vectorNorm_L1(d).to_string(3)<< endl;
+        x = vectorAddition(x, d);
     }
-
 
     return x;
 }
@@ -359,12 +418,13 @@ unsigned long ira::get_max_U_idx(unsigned long column, unsigned long start, unsi
     return max_row;
 }
 
-void ira::interchangeRow(mps* matrix, unsigned long row_one, unsigned long row_two, unsigned long start, unsigned long end){
+// TODO: smartpointer....?
+void ira::interchangeRow(vector<mps>* matrix, unsigned long row_one, unsigned long row_two, unsigned long start, unsigned long end){
 
     for(auto i = start; i < end; i++){
-        auto tmp = matrix[get_idx(row_one, i)];
-        matrix[get_idx(row_one, i)] = matrix[get_idx(row_two, i)];
-        matrix[get_idx(row_two, i)] = tmp;
+        auto tmp = (*matrix)[get_idx(row_one, i)];
+        (*matrix)[get_idx(row_one, i)] = (*matrix)[get_idx(row_two, i)];
+        (*matrix)[get_idx(row_two, i)] = tmp;
     }
 }
 //-------------------------------

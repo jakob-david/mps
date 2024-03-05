@@ -16,14 +16,14 @@ private:
     // general_properties
     //-------------------------------
     unsigned long n;    // dimension of the A
-    mps* A;             // the A which should be solved
+    vector<mps> A;             // the A which should be solved
     //-------------------------------
 
     // PLU_calculated_properties
     //-------------------------------
-    mps* L;             // The resulting lower triangular Matrix after PLU decomposition.
-    mps* U;             // The resulting upper triangular Matrix after PLU decomposition.
-    mps* P;             // The resulting permutation A after PLU decomposition.
+    vector<mps> L;             // The resulting lower triangular Matrix after PLU decomposition.
+    vector<mps> U;             // The resulting upper triangular Matrix after PLU decomposition.
+    vector<mps> P;             // The resulting permutation A after PLU decomposition.
     //-------------------------------
 
 public:
@@ -36,7 +36,7 @@ public:
 
     // setter
     //-------------------------------
-    void unitary(unsigned long mantissa_length, unsigned long exponent_length) const;
+    void unitary(unsigned long mantissa_length, unsigned long exponent_length);
     void setMatrix(unsigned long mantissa_length, unsigned long exponent_length, vector<double> new_matrix);
     void setL(unsigned long mantissa_length, unsigned long exponent_length, vector<double> new_L);
     void setU(unsigned long mantissa_length, unsigned long exponent_length, vector<double> new_U);
@@ -50,14 +50,23 @@ public:
 
     // algorithms
     //-------------------------------
+    // TODO: test
+    [[nodiscard]] static mps vectorNorm_L1(const vector<mps>& a);
+
+    // TODO: test
+    [[nodiscard]] static vector<mps> vectorAddition(const vector<mps>& a, const vector<mps>& b);
+
+    // TODO: test
+    [[nodiscard]] static vector<mps> vectorSubtraction(const vector<mps>& a, const vector<mps>& b);
+
+    // TODO: test
+    [[nodiscard]] vector<mps> matrixVectorProduct(const vector<mps>& D, const vector<mps>& x) const;
+
     void PLU_decomposition(unsigned long mantissa_precision, unsigned long exponent_precision);
 
     [[nodiscard]] vector<mps> forwardSubstitution(const vector<mps>& b) const;
 
     [[nodiscard]] vector<mps> backwardSubstitution(const vector<mps>& b) const;
-
-    // TODO: test
-    [[nodiscard]] vector<mps> matrixVectorProduct(const vector<mps>& A, const vector<mps>& x) const;
 
     // TODO: test
     [[nodiscard]] vector<mps> iterativeRefinementLU(const vector<mps>& b);
@@ -70,7 +79,7 @@ private:
     //-------------------------------
     unsigned long get_idx(unsigned long row, unsigned long column) const;
     unsigned long get_max_U_idx(unsigned long column, unsigned long start, unsigned long end) const;
-    void interchangeRow(mps* matrix, unsigned long row_one, unsigned long row_two, unsigned long start, unsigned long end);
+    void interchangeRow(vector<mps>* matrix, unsigned long row_one, unsigned long row_two, unsigned long start, unsigned long end);
     //-------------------------------
 
 };

@@ -760,3 +760,32 @@ TEST(BS, simple_5x5_double_2){
     EXPECT_EQ(solution, "-17.52297946, -3.37140356, -0.86724477, 5.10549922, 1.56701031");
 
 }
+
+
+
+
+TEST(IR, simple_3x3_double_1){
+
+    unsigned long mantissa_length = 52;
+    unsigned long exponent_length = 11;
+
+    ira IRA(3);
+
+    vector<double> new_A{5, 1 ,3, 1, 1 ,1, 1, 2 ,1};
+    IRA.setMatrix(mantissa_length, exponent_length, new_A);
+
+    vector<mps> b;
+    b.emplace_back(mantissa_length, exponent_length, 16);
+    b.emplace_back(mantissa_length, exponent_length, 6);
+    b.emplace_back(mantissa_length, exponent_length, 8);
+
+    auto x = IRA.iterativeRefinementLU(b);
+
+    std::string solution = x[0].to_string(8);
+    for(unsigned long i = 1; i < b.size(); i++){
+        solution += ", ";
+        solution += x[i].to_string(8);
+    }
+
+    EXPECT_EQ(solution, "1.00000000, 2.00000000, 3.00000000");
+}
