@@ -63,7 +63,6 @@ void ira::setMatrix(unsigned long mantissa_length, unsigned long exponent_length
     }
 }
 
-// TODO: test
 void ira::setL(unsigned long mantissa_length, unsigned long exponent_length, vector<double> new_L) {
 
     if (new_L.size() > this->n * this->n) {
@@ -78,7 +77,6 @@ void ira::setL(unsigned long mantissa_length, unsigned long exponent_length, vec
     }
 }
 
-// TODO: test
 void ira::setU(unsigned long mantissa_length, unsigned long exponent_length, vector<double> new_U) {
 
     if (new_U.size() > this->n * this->n) {

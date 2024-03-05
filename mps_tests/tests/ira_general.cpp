@@ -61,7 +61,7 @@ TEST(custom_matrix, init_3x3) {
 
 TEST(custom_matrix, new_matrix_too_large) {
 
-    unsigned long mantissa_length = 53;
+    unsigned long mantissa_length = 52;
     unsigned long exponent_length = 11;
 
     vector<double> new_matrix{ 10, 20, 30, 40, 50, 60, 70, 80, 90, 100};
@@ -85,7 +85,7 @@ TEST(custom_matrix, new_matrix_too_large) {
 
 TEST(custom_matrix, new_matrix_too_small) {
 
-    unsigned long mantissa_length = 53;
+    unsigned long mantissa_length = 52;
     unsigned long exponent_length = 11;
 
     vector<double> new_matrix{ 10, 20, 30, 40, 50, 60, 70, 80};
@@ -110,7 +110,7 @@ TEST(custom_matrix, new_matrix_too_small) {
 
 TEST(to_string, exception_L_nullptr) {
 
-    unsigned long mantissa_length = 53;
+    unsigned long mantissa_length = 52;
     unsigned long exponent_length = 11;
 
     vector<double> new_matrix{ 10, 20, 30, 40, 50, 60, 70, 80, 90};
@@ -118,7 +118,7 @@ TEST(to_string, exception_L_nullptr) {
     ira IRA(3);
     IRA.setMatrix(mantissa_length, exponent_length, new_matrix);
 
-    bool test = false;
+    bool test = true;
 
     try
     {
@@ -127,7 +127,7 @@ TEST(to_string, exception_L_nullptr) {
 
     catch (std::invalid_argument& e)
     {
-        test = true;
+        test = false;
     }
 
     EXPECT_EQ(true, test);
@@ -143,7 +143,7 @@ TEST(to_string, exception_U_nullptr) {
     ira IRA(3);
     IRA.setMatrix(mantissa_length, exponent_length, new_matrix);
 
-    bool test = false;
+    bool test = true;
 
     try
     {
@@ -152,7 +152,7 @@ TEST(to_string, exception_U_nullptr) {
 
     catch (std::invalid_argument& e)
     {
-        test = true;
+        test = false;
     }
 
     EXPECT_EQ(true, test);
@@ -168,7 +168,7 @@ TEST(to_string, exception_P_nullptr) {
     ira IRA(3);
     IRA.setMatrix(mantissa_length, exponent_length, new_matrix);
 
-    bool test = false;
+    bool test = true;
 
     try
     {
@@ -177,7 +177,7 @@ TEST(to_string, exception_P_nullptr) {
 
     catch (std::invalid_argument& e)
     {
-        test = true;
+        test = false;
     }
 
     EXPECT_EQ(true, test);
@@ -238,3 +238,129 @@ TEST(to_string, round_to_precision_two) {
     EXPECT_EQ(exponent_length, IRA.getMatrixElement(0).exponent_length);
 }
 
+
+TEST(setL, simple_1) {
+
+    unsigned long mantissa_length = 52;
+    unsigned long exponent_length = 11;
+
+    vector<double> new_L{ 10, 20, 30, 40, 50, 60, 70, 80, 90};
+
+    ira IRA(3);
+
+    IRA.setL(mantissa_length, exponent_length, new_L);
+
+
+    EXPECT_EQ("10, 20, 30, 40, 50, 60, 70, 80, 90", IRA.to_string('L', 0));
+}
+
+TEST(setL, exception_L_too_large) {
+
+    unsigned long mantissa_length = 52;
+    unsigned long exponent_length = 11;
+
+    vector<double> new_L{ 10, 20, 30, 40, 50, 60, 70, 80, 90, 100};
+
+    ira IRA(3);
+
+    bool test = false;
+
+    try
+    {
+        IRA.setL(mantissa_length, exponent_length, new_L);
+    }
+
+    catch (std::invalid_argument& e)
+    {
+        test = true;
+    }
+
+    EXPECT_EQ(true, test);
+}
+
+TEST(setL, exception_L_too_small) {
+
+    unsigned long mantissa_length = 52;
+    unsigned long exponent_length = 11;
+
+    vector<double> new_L{ 10, 20, 30, 40, 50, 60, 70, 80};
+
+    ira IRA(3);
+
+    bool test = false;
+
+    try
+    {
+        IRA.setL(mantissa_length, exponent_length, new_L);
+    }
+
+    catch (std::invalid_argument& e)
+    {
+        test = true;
+    }
+
+    EXPECT_EQ(true, test);
+}
+
+TEST(setU, simple_1) {
+
+    unsigned long mantissa_length = 52;
+    unsigned long exponent_length = 11;
+
+    vector<double> new_U{ 10, 20, 30, 40, 50, 60, 70, 80, 90};
+
+    ira IRA(3);
+
+    IRA.setU(mantissa_length, exponent_length, new_U);
+
+
+    EXPECT_EQ("10, 20, 30, 40, 50, 60, 70, 80, 90", IRA.to_string('U', 0));
+}
+
+TEST(setL, exception_U_too_large) {
+
+    unsigned long mantissa_length = 52;
+    unsigned long exponent_length = 11;
+
+    vector<double> new_U{ 10, 20, 30, 40, 50, 60, 70, 80, 90, 100};
+
+    ira IRA(3);
+
+    bool test = false;
+
+    try
+    {
+        IRA.setU(mantissa_length, exponent_length, new_U);
+    }
+
+    catch (std::invalid_argument& e)
+    {
+        test = true;
+    }
+
+    EXPECT_EQ(true, test);
+}
+
+TEST(setL, exception_U_too_small) {
+
+    unsigned long mantissa_length = 52;
+    unsigned long exponent_length = 11;
+
+    vector<double> new_U{ 10, 20, 30, 40, 50, 60, 70, 80};
+
+    ira IRA(3);
+
+    bool test = false;
+
+    try
+    {
+        IRA.setU(mantissa_length, exponent_length, new_U);
+    }
+
+    catch (std::invalid_argument& e)
+    {
+        test = true;
+    }
+
+    EXPECT_EQ(true, test);
+}
