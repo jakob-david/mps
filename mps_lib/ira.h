@@ -55,6 +55,12 @@ public:
     [[nodiscard]] vector<mps> forwardSubstitution(const vector<mps>& b) const;
 
     [[nodiscard]] vector<mps> backwardSubstitution(const vector<mps>& b) const;
+
+    // TODO: test
+    [[nodiscard]] vector<mps> matrixVectorProduct(const vector<mps>& A, const vector<mps>& x) const;
+
+    // TODO: test
+    [[nodiscard]] vector<mps> iterativeRefinementLU(const vector<mps>& b);
     //-------------------------------
 
 

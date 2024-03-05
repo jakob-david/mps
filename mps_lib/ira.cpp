@@ -99,7 +99,7 @@ void ira::setU(unsigned long mantissa_length, unsigned long exponent_length, vec
     return this->A[idx];
 }
 
-std::string ira::to_string(const char& matrix, const int precision) const {
+[[nodiscard]] std::string ira::to_string(const char& matrix, const int precision) const {
 
     std::string ret;
 
@@ -227,7 +227,7 @@ void ira::PLU_decomposition(unsigned long mantissa_precision, unsigned long expo
     //-------------------------------
 }
 
-vector<mps> ira::forwardSubstitution(const vector<mps>& b) const {
+[[nodiscard]] vector<mps> ira::forwardSubstitution(const vector<mps>& b) const {
 
     vector<mps> x(b.size(), mps(this->L->mantissa_length, this->L->exponent_length));
 
@@ -249,7 +249,7 @@ vector<mps> ira::forwardSubstitution(const vector<mps>& b) const {
     return x;
 }
 
-vector<mps> ira::backwardSubstitution(const vector<mps>& b) const {
+[[nodiscard]] vector<mps> ira::backwardSubstitution(const vector<mps>& b) const {
 
     vector<mps> x(b.size(), mps(this->U->mantissa_length, this->U->exponent_length));
 
@@ -270,6 +270,54 @@ vector<mps> ira::backwardSubstitution(const vector<mps>& b) const {
 
         x[i] = (b[i] - tmp_sum) / U[get_idx(i, i)];
     }
+
+    return x;
+}
+
+[[nodiscard]] vector<mps> ira::matrixVectorProduct(const vector<mps>& A, const vector<mps>& x) const {
+
+    if (A.empty()) {
+        throw std::invalid_argument("ERROR: in matrixVectorProduct: A is empty");
+    }
+    if (x.empty()) {
+        throw std::invalid_argument("ERROR: in matrixVectorProduct: x is empty");
+    }
+    if (A.size() != (x.size() * x.size())) {
+        throw std::invalid_argument("ERROR: in matrixVectorProduct: dimensions of A and x do not match");
+    }
+    if (A[0].exponent_length != x[0].exponent_length) {
+        throw std::invalid_argument("ERROR: in matrixVectorProduct: exponents do not match");
+    }
+    if (A[0].mantissa_length != x[0].mantissa_length) {
+        throw std::invalid_argument("ERROR: in matrixVectorProduct: mantissas do not match");
+    }
+
+    vector<mps> y(x.size(), mps(A[0].mantissa_length, A[0].exponent_length, 0.0));
+
+    for(unsigned long i = 0; i < x.size(); i++){
+        for(unsigned long j = 0; j < x.size(); j++){
+            y[i] = y[i] + (x[j] * A[get_idx(i, j)]);
+        }
+    }
+
+    return x;
+}
+
+[[nodiscard]] vector<mps> ira::iterativeRefinementLU(const vector<mps>& b){
+
+    unsigned long exp_precision = b[0].exponent_length;
+    unsigned long mant_precision = b[0].mantissa_length;
+
+    this->PLU_decomposition(mant_precision, exp_precision);
+
+    auto x = this->forwardSubstitution(b);
+    x = this->backwardSubstitution(x);
+
+    //auto r = this->matrixVectorProduct(this->A, x);
+    for(unsigned long i = 0; i < 1; i++){
+
+    }
+
 
     return x;
 }
