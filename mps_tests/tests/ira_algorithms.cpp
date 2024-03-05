@@ -642,3 +642,121 @@ TEST(BS, simple_4x4_double_2){
     EXPECT_EQ(solution, "7.61688098, -0.28752840, -4.67003578, 0.00790698");
 
 }
+
+TEST(BS, simple_5x5_float_1){
+
+    unsigned long mantissa_length = 23;
+    unsigned long exponent_length = 8;
+
+    ira IRA(5);
+
+    vector<double> new_U{3, 0.5, 1, 3, 2, 0, 1, -1, 1, 3, 0, 0, 1, 0.1, -3, 0, 0, 0, 3, -1, 0, 0, 0, 0, -4};
+    IRA.setU(mantissa_length, exponent_length, new_U);
+
+
+    vector<mps> b;
+    b.emplace_back(mantissa_length, exponent_length, 4);
+    b.emplace_back(mantissa_length, exponent_length, 2);
+    b.emplace_back(mantissa_length, exponent_length, 3);
+    b.emplace_back(mantissa_length, exponent_length, 2);
+    b.emplace_back(mantissa_length, exponent_length, 4);
+
+    auto x = IRA.backwardSubstitution(b);
+
+    std::string solution = x[0].to_string(2);
+    for(unsigned long i = 1; i < b.size(); i++){
+        solution += ", ";
+        solution += x[i].to_string(2);
+    }
+
+    EXPECT_EQ(solution, "0.91, 4.63, -0.03, 0.33, -1.00");
+
+}
+
+TEST(BS, simple_5x5_float_2){
+
+    unsigned long mantissa_length = 23;
+    unsigned long exponent_length = 8;
+
+    ira IRA(5);
+
+    vector<double> new_U{2.4, 0.5, 3.253, 7, 9.23, 0, 3.2, -1.53, 2.21, 4.23, 0, 0, 7.8, 0.64, -0.321, 0, 0, 0, 7.3, -14, 0, 0, 0, 0, -4.85};
+    IRA.setU(mantissa_length, exponent_length, new_U);
+
+    vector<mps> b;
+    b.emplace_back(mantissa_length, exponent_length, 3.64);
+    b.emplace_back(mantissa_length, exponent_length, 8.45);
+    b.emplace_back(mantissa_length, exponent_length, -4);
+    b.emplace_back(mantissa_length, exponent_length, 15.332);
+    b.emplace_back(mantissa_length, exponent_length, -7.6);
+
+    auto x = IRA.backwardSubstitution(b);
+
+    std::string solution = x[0].to_string(2);
+    for(unsigned long i = 1; i < b.size(); i++){
+        solution += ", ";
+        solution += x[i].to_string(2);
+    }
+
+    EXPECT_EQ(solution, "-17.52, -3.37, -0.87, 5.11, 1.57");
+
+}
+
+TEST(BS, simple_5x5_double_1){
+
+    unsigned long mantissa_length = 52;
+    unsigned long exponent_length = 11;
+
+    ira IRA(5);
+
+    vector<double> new_U{3, 0.5, 1, 3, 2, 0, 1, -1, 1, 3, 0, 0, 1, 0.1, -3, 0, 0, 0, 3, -1, 0, 0, 0, 0, -4};
+    IRA.setU(mantissa_length, exponent_length, new_U);
+
+
+    vector<mps> b;
+    b.emplace_back(mantissa_length, exponent_length, 4);
+    b.emplace_back(mantissa_length, exponent_length, 2);
+    b.emplace_back(mantissa_length, exponent_length, 3);
+    b.emplace_back(mantissa_length, exponent_length, 2);
+    b.emplace_back(mantissa_length, exponent_length, 4);
+
+    auto x = IRA.backwardSubstitution(b);
+
+    std::string solution = x[0].to_string(8);
+    for(unsigned long i = 1; i < b.size(); i++){
+        solution += ", ";
+        solution += x[i].to_string(8);
+    }
+
+    EXPECT_EQ(solution, "0.90555556, 4.63333333, -0.03333333, 0.33333333, -1.00000000");
+
+}
+
+TEST(BS, simple_5x5_double_2){
+
+    unsigned long mantissa_length = 52;
+    unsigned long exponent_length = 11;
+
+    ira IRA(5);
+
+    vector<double> new_U{2.4, 0.5, 3.253, 7, 9.23, 0, 3.2, -1.53, 2.21, 4.23, 0, 0, 7.8, 0.64, -0.321, 0, 0, 0, 7.3, -14, 0, 0, 0, 0, -4.85};
+    IRA.setU(mantissa_length, exponent_length, new_U);
+
+    vector<mps> b;
+    b.emplace_back(mantissa_length, exponent_length, 3.64);
+    b.emplace_back(mantissa_length, exponent_length, 8.45);
+    b.emplace_back(mantissa_length, exponent_length, -4);
+    b.emplace_back(mantissa_length, exponent_length, 15.332);
+    b.emplace_back(mantissa_length, exponent_length, -7.6);
+
+    auto x = IRA.backwardSubstitution(b);
+
+    std::string solution = x[0].to_string(8);
+    for(unsigned long i = 1; i < b.size(); i++){
+        solution += ", ";
+        solution += x[i].to_string(8);
+    }
+
+    EXPECT_EQ(solution, "-17.52297946, -3.37140356, -0.86724477, 5.10549922, 1.56701031");
+
+}
