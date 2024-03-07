@@ -531,7 +531,7 @@ void ira::PLU_decomposition(unsigned long mantissa_precision, unsigned long expo
 
     this->PLU_decomposition(mant_precision, exp_precision);
 
-    auto x = this->matrixVectorProduct(this->P, b);
+    auto x = ira::matrixVectorProduct(this->P, b);
     x = this->forwardSubstitution(x);
     x = this->backwardSubstitution(x);
 
@@ -539,7 +539,7 @@ void ira::PLU_decomposition(unsigned long mantissa_precision, unsigned long expo
     vector<mps> d(b.size(), mps(mant_precision, exp_precision));
 
     for(unsigned long i = 0; i < 10; i++){
-        r = vectorSubtraction(b, this->matrixVectorProduct(this->A, x));
+        r = vectorSubtraction(b, ira::matrixVectorProduct(this->A, x));
         d = this->forwardSubstitution(r);
         d = this->backwardSubstitution(d);
         // cout << vectorNorm_L1(d).to_string(3)<< endl;
