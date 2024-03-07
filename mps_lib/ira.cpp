@@ -251,6 +251,21 @@ void ira::setU(unsigned long mantissa_length, unsigned long exponent_length, vec
 
     return ret;
 }
+
+void ira::castVectorElements(unsigned long mantissa_length, unsigned long exponent_length, vector<mps>* vec){
+
+    if ((*vec).empty()) {
+        throw std::invalid_argument("ERROR: in castVectorElements: vector is empty");
+    }
+
+    if(mantissa_length == (*vec)[0].mantissa_length && exponent_length == (*vec)[0].exponent_length){
+        return;
+    }
+
+    for(auto & i : *vec){
+        i.cast(mantissa_length, exponent_length);
+    }
+}
 //-------------------------------
 
 // operators
@@ -524,26 +539,59 @@ void ira::PLU_decomposition(unsigned long mantissa_precision, unsigned long expo
     return x;
 }
 
-[[nodiscard]] vector<mps> ira::iterativeRefinementLU(const vector<mps>& b){
+[[nodiscard]] vector<mps> ira::iterativeRefinementLU(const vector<mps>& b, unsigned long u[2], unsigned long uf[2]){
 
-    unsigned long exp_precision = b[0].exponent_length;
-    unsigned long mant_precision = b[0].mantissa_length;
+    //unsigned long exp_precision = b[0].exponent_length;
+    //unsigned long mant_precision = b[0].mantissa_length;
 
-    this->PLU_decomposition(mant_precision, exp_precision);
+    vector<unsigned long> ur{A[0].mantissa_length, A[0].exponent_length};
 
-    auto x = ira::matrixVectorProduct(this->P, b);
+    this->PLU_decomposition(uf[0], uf[1]);
+
+    // initialize x vector
+    // calculate in precision: uf
+    // save in precision: u
+    //-------------------------------
+    auto tmp_b = b;
+    ira::castVectorElements(uf[0], uf[1], &tmp_b);
+    auto x = ira::matrixVectorProduct(this->P, tmp_b);
     x = this->forwardSubstitution(x);
     x = this->backwardSubstitution(x);
+    ira::castVectorElements(u[0], u[1], &x);
+    //-------------------------------
 
-    vector<mps> r(b.size(), mps(mant_precision, exp_precision));
-    vector<mps> d(b.size(), mps(mant_precision, exp_precision));
+    // initialize r and d vector
+    //-------------------------------
+    //vector<mps> r(b.size(), mps(mant_precision, exp_precision));
+    //vector<mps> d(b.size(), mps(mant_precision, exp_precision));
+    //-------------------------------
 
     for(unsigned long i = 0; i < 10; i++){
-        r = vectorSubtraction(b, ira::matrixVectorProduct(this->A, x));
-        d = this->forwardSubstitution(r);
+
+        // calculate: r_i = b − A * x_i
+        // in precision: ur
+        //-------------------------------
+        auto tmp_x = x;
+        ira::castVectorElements(ur[0], ur[1], &tmp_x);
+        auto r = vectorSubtraction(b, ira::matrixVectorProduct(this->A, tmp_x));
+        //-------------------------------
+
+        cout << vectorNorm_L1(r).to_string(50)<< endl;
+
+        // solve: A * d_i = r_i
+        // in precision: uf
+        //-------------------------------
+        ira::castVectorElements(uf[0], uf[1], &r);
+        auto d = this->forwardSubstitution(r);
         d = this->backwardSubstitution(d);
-        // cout << vectorNorm_L1(d).to_string(3)<< endl;
+        //-------------------------------
+
+        // calculate: x_i+1 = x_i + d_i i
+        // n precision u.
+        //-------------------------------
+        ira::castVectorElements(u[0], u[1], &d);
         x = vectorAddition(x, d);
+        //-------------------------------
     }
 
     return x;

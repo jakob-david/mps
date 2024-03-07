@@ -769,6 +769,9 @@ TEST(IR, simple_3x3_double_1){
     unsigned long mantissa_length = 52;
     unsigned long exponent_length = 11;
 
+    unsigned long uf[2] = {52, 11};
+    unsigned long u[2] = {52, 11};
+
     ira IRA(3);
 
     vector<double> new_A{5, 1 ,3, 1, 1 ,1, 1, 2 ,1};
@@ -779,7 +782,7 @@ TEST(IR, simple_3x3_double_1){
     b.emplace_back(mantissa_length, exponent_length, 6);
     b.emplace_back(mantissa_length, exponent_length, 8);
 
-    auto x = IRA.iterativeRefinementLU(b);
+    auto x = IRA.iterativeRefinementLU(b, u, uf);
 
     std::string solution = x[0].to_string(8);
     for(unsigned long i = 1; i < b.size(); i++){
@@ -788,4 +791,40 @@ TEST(IR, simple_3x3_double_1){
     }
 
     EXPECT_EQ(solution, "1.00000000, 2.00000000, 3.00000000");
+}
+
+
+
+
+
+TEST(IR, coding){
+
+
+    unsigned long ur[2] = {55, 11};  // precision: A
+    unsigned long uf[2] = {23, 11}; // precision: LU
+    unsigned long u[2] = {23, 11};  // precision: working
+
+    ira IRA(3);
+
+    vector<double> new_A{5.759387592852853456, 1.759387592852853456 ,3.759387592852853456, 1.759387592852853456, 1.759387592852853456 ,1.759387592852853456, 1.759387592852853456, 2.759387592852853456 ,1.759387592852853456};
+    IRA.setMatrix(ur[0], ur[1], new_A);
+
+    vector<mps> b;
+    b.emplace_back(ur[0], ur[1], 16.759387592852853456);
+    b.emplace_back(ur[0], ur[1], 6.759387592852853456);
+    b.emplace_back(ur[0], ur[1], 8.759387592852853456);
+
+    auto x = IRA.iterativeRefinementLU(b, u, uf);
+
+   // std::string solution = x[0].to_string(8);
+   // for(unsigned long i = 1; i < b.size(); i++){
+   //     solution += ", ";
+   //     solution += x[i].to_string(8);
+    //}
+
+    cout << ira::to_string(x) << endl;
+
+    EXPECT_EQ(x[0].print(), mps(23,11,1).print());
+    EXPECT_EQ(x[1].print(), mps(23,11,2).print());
+    EXPECT_EQ(x[2].print(), mps(23,11,3).print());
 }
