@@ -46,9 +46,15 @@ public:
     //-------------------------------
     [[nodiscard]] mps getMatrixElement(unsigned long idx);
     [[nodiscard]] std::string to_string(const char& matrix, int precision = -1) const;
+    [[nodiscard]] static std::string to_string(vector<mps> vec, int precision = -1);
     //-------------------------------
 
-    // algorithms
+    // converters
+    //-------------------------------
+    [[nodiscard]] static vector<mps> double_to_mps(unsigned long mantissa_length, unsigned long exponent_length, vector<double> double_vector);
+    //-------------------------------
+
+    // operators
     //-------------------------------
     // TODO: test
     [[nodiscard]] static mps vectorNorm_L1(const vector<mps>& a);
@@ -61,7 +67,10 @@ public:
 
     // TODO: test
     [[nodiscard]] vector<mps> matrixVectorProduct(const vector<mps>& D, const vector<mps>& x) const;
+    //-------------------------------
 
+    // algorithms
+    //-------------------------------
     void PLU_decomposition(unsigned long mantissa_precision, unsigned long exponent_precision);
 
     [[nodiscard]] vector<mps> forwardSubstitution(const vector<mps>& b) const;
@@ -77,8 +86,8 @@ private:
 
     // helper functions
     //-------------------------------
-    unsigned long get_idx(unsigned long row, unsigned long column) const;
-    unsigned long get_max_U_idx(unsigned long column, unsigned long start, unsigned long end) const;
+    [[nodiscard]] unsigned long get_idx(unsigned long row, unsigned long column) const;
+    [[nodiscard]] unsigned long get_max_U_idx(unsigned long column, unsigned long start, unsigned long end) const;
     void interchangeRow(vector<mps>* matrix, unsigned long row_one, unsigned long row_two, unsigned long start, unsigned long end);
     //-------------------------------
 

@@ -135,10 +135,64 @@ void ira::setU(unsigned long mantissa_length, unsigned long exponent_length, vec
 
     return ret;
 }
+
+/**
+ * Takes a vector of mps objects and returns the vector in an std::string format.
+ *
+ * @param vec the vector consisting of mps objects.
+ * @param precision the precision in which the values should be displayed. (-1 = "normal" precision)
+ * @return the vector in an std::string format.
+ */
+[[nodiscard]] std::string ira::to_string(vector<mps> vec, int precision) {
+
+    if (vec.empty()) {
+        throw std::invalid_argument("ERROR: to_string (vector): a is empty");
+    }
+
+    auto ret = vec[0].to_string(precision);
+    for(unsigned long i = 1; i < vec.size(); i++) {
+        ret.append(", ");
+        ret.append(vec[i].to_string(precision));
+    }
+
+    return ret;
+}
 //-------------------------------
 
+// converters
+//-------------------------------
+/**
+ * Converts a vector of booleans to a vector of mps objects.
+ * The double vector is not destroyed but a new vector consisting of mps objects is created.
+ *
+ * @param mantissa_length the mantissa lengths of the mps objects
+ * @param exponent_length the exponent lengths of the mps objects
+ * @param double_vector the vector of booleans which should be converted.
+ * @return vector consisting of mps objects.
+ */
+[[nodiscard]] vector<mps> ira::double_to_mps(unsigned long mantissa_length, unsigned long exponent_length, vector<double> double_vector){
 
-// algorithms
+    if (double_vector.empty()) {
+        throw std::invalid_argument("ERROR: in vectorNorm: a is empty");
+    }
+    if (mantissa_length <= 0) {
+        throw std::invalid_argument("ERROR: in double_to_mps : mantissa size too small");
+    }
+    if (exponent_length <= 1) {
+        throw std::invalid_argument("ERROR: in double_to_mps : exponent size too small");
+    }
+
+    vector<mps> ret(double_vector.size(), mps(mantissa_length, exponent_length));
+
+    for(unsigned long i = 0; i < double_vector.size(); i++){
+        ret[i] = double_vector[i];
+    }
+
+    return ret;
+}
+//-------------------------------
+
+// operators
 //-------------------------------
 [[nodiscard]] mps ira::vectorNorm_L1(const vector<mps>& a){
 
@@ -237,7 +291,11 @@ void ira::setU(unsigned long mantissa_length, unsigned long exponent_length, vec
 
     return y;
 }
+//-------------------------------
 
+
+// algorithms
+//-------------------------------
 void ira::PLU_decomposition(unsigned long mantissa_precision, unsigned long exponent_precision) {
 
     //unsigned long matrix_1D_size = this->n * this->n;

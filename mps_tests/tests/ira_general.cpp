@@ -239,6 +239,58 @@ TEST(to_string, round_to_precision_two) {
 }
 
 
+TEST(to_string_vector, exception_vector_empty) {
+
+    vector<mps> mps_vector;
+
+    bool test = false;
+
+    try
+    {
+        auto ret = ira::to_string(mps_vector);
+    }
+
+    catch (std::invalid_argument& e)
+    {
+        test = true;
+    }
+
+    EXPECT_EQ(true, test);
+}
+
+TEST(to_string_vector, simple_float) {
+
+    unsigned long mantissa_length = 23;
+    unsigned long exponent_length = 8;
+
+    vector<mps> mps_vector;
+    mps_vector.emplace_back(mantissa_length, exponent_length, 45.34);
+    mps_vector.emplace_back(mantissa_length, exponent_length, -32);
+    mps_vector.emplace_back(mantissa_length, exponent_length, 3463246);
+    mps_vector.emplace_back(mantissa_length, exponent_length, -0.34345);
+
+    EXPECT_EQ(ira::to_string(mps_vector, 2), "45.34, -32.00, 3463246.00, -0.34");
+    EXPECT_EQ(mantissa_length, mps_vector[0].mantissa_length);
+    EXPECT_EQ(exponent_length, mps_vector[0].exponent_length);
+}
+
+TEST(to_string_vector, simple_double) {
+
+    unsigned long mantissa_length = 52;
+    unsigned long exponent_length = 11;
+
+    vector<mps> mps_vector;
+    mps_vector.emplace_back(mantissa_length, exponent_length, 45.34);
+    mps_vector.emplace_back(mantissa_length, exponent_length, -32);
+    mps_vector.emplace_back(mantissa_length, exponent_length, 3463246);
+    mps_vector.emplace_back(mantissa_length, exponent_length, -0.34346);
+
+    EXPECT_EQ(ira::to_string(mps_vector, 4), "45.3400, -32.0000, 3463246.0000, -0.3435");
+    EXPECT_EQ(mantissa_length, mps_vector[0].mantissa_length);
+    EXPECT_EQ(exponent_length, mps_vector[0].exponent_length);
+}
+
+
 TEST(setL, simple_1) {
 
     unsigned long mantissa_length = 52;
@@ -364,3 +416,109 @@ TEST(setL, exception_U_too_small) {
 
     EXPECT_EQ(true, test);
 }
+
+
+TEST(double_to_mps, exception_vector_empty) {
+
+    unsigned long mantissa_length = 52;
+    unsigned long exponent_length = 11;
+
+    vector<double> double_vector;
+
+    bool test = false;
+
+    try
+    {
+        auto ret = ira::double_to_mps(mantissa_length, exponent_length, double_vector);
+    }
+
+    catch (std::invalid_argument& e)
+    {
+        test = true;
+    }
+
+    EXPECT_EQ(true, test);
+}
+
+TEST(double_to_mps, exception_mantissa_too_small) {
+
+    unsigned long mantissa_length = 0;
+    unsigned long exponent_length = 11;
+
+    vector<double> double_vector;
+
+    bool test = false;
+
+    try
+    {
+        auto ret = ira::double_to_mps(mantissa_length, exponent_length, double_vector);
+    }
+
+    catch (std::invalid_argument& e)
+    {
+        test = true;
+    }
+
+    EXPECT_EQ(true, test);
+}
+
+TEST(double_to_mps, exception_exponent_too_small) {
+
+    unsigned long mantissa_length = 52;
+    unsigned long exponent_length = 0;
+
+    vector<double> double_vector;
+
+    bool test = false;
+
+    try
+    {
+        auto ret = ira::double_to_mps(mantissa_length, exponent_length, double_vector);
+    }
+
+    catch (std::invalid_argument& e)
+    {
+        test = true;
+    }
+
+    EXPECT_EQ(true, test);
+}
+
+TEST(double_to_mps, simple_float) {
+
+    unsigned long mantissa_length = 23;
+    unsigned long exponent_length = 8;
+
+    vector<double> double_vector;
+    double_vector.push_back(45.34);
+    double_vector.push_back(-32);
+    double_vector.push_back(3463246);
+    double_vector.push_back(-0.34345);
+
+    auto mps_vector = ira::double_to_mps(mantissa_length, exponent_length, double_vector);
+
+    EXPECT_EQ(ira::to_string(mps_vector, 2), "45.34, -32.00, 3463246.00, -0.34");
+    EXPECT_EQ(mantissa_length, mps_vector[0].mantissa_length);
+    EXPECT_EQ(exponent_length, mps_vector[0].exponent_length);
+}
+
+TEST(double_to_mps, simple_double) {
+
+    unsigned long mantissa_length = 52;
+    unsigned long exponent_length = 11;
+
+    vector<double> double_vector;
+    double_vector.push_back(45.34);
+    double_vector.push_back(-32);
+    double_vector.push_back(3463246);
+    double_vector.push_back(-0.34345);
+
+    auto mps_vector = ira::double_to_mps(mantissa_length, exponent_length, double_vector);
+
+    EXPECT_EQ(ira::to_string(mps_vector, 2), "45.34, -32.00, 3463246.00, -0.34");
+    EXPECT_EQ(mantissa_length, mps_vector[0].mantissa_length);
+    EXPECT_EQ(exponent_length, mps_vector[0].exponent_length);
+}
+
+
+
