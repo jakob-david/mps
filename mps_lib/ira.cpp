@@ -9,6 +9,14 @@ using namespace std;
 
 // constructor and destructor
 //-------------------------------
+/**
+ * Constructor for an "iterative refinement algorithm" object (ira).
+ *
+ * The vector for the system matrix and the vectors for the matrices L, U, and P are initialized using resize,
+ * but are not set to any meaningful value.
+ *
+ * @param n the size of the system matrix.
+ */
 ira::ira(unsigned long n){
 
     this->n = n;
@@ -24,12 +32,21 @@ ira::ira(unsigned long n){
     this->P.resize(matrix_1D_size);
 }
 
+/**
+ * Default destructor.
+ */
 ira::~ira() = default;
 //-------------------------------
 
 
 // setter
 //-------------------------------
+/**
+ * Sets the system matrix of the ira object to an identity matrix of a custom size.
+ *
+ * @param mantissa_length the size of the mantissa of the elements of the matrix
+ * @param exponent_length the size of the exponent of the elements of the matrix
+ */
 void ira::unitary(unsigned long mantissa_length, unsigned long exponent_length) {
 
     for(unsigned long i = 0; i <  this->n; i++){
@@ -43,6 +60,13 @@ void ira::unitary(unsigned long mantissa_length, unsigned long exponent_length) 
     }
 }
 
+/**
+ * Sets the system matrix of the ira object to an arbitrary matrix.
+ *
+ * @param mantissa_length the size of the mantissa of the elements of the matrix
+ * @param exponent_length the size of the exponent of the elements of the matrix
+ * @param new_matrix the new matrix to which the system matrix should be set.
+ */
 void ira::setMatrix(unsigned long mantissa_length, unsigned long exponent_length, vector<double> new_matrix) {
 
     if (new_matrix.size() > this->n * this->n) {
@@ -57,6 +81,14 @@ void ira::setMatrix(unsigned long mantissa_length, unsigned long exponent_length
     }
 }
 
+/**
+ * Sets the lower triangular matrix of the ira object to an arbitrary matrix.
+ * This should be done with caution since this matrix should actually only be set by performing the PLU decomposition.
+ *
+ * @param mantissa_length the size of the mantissa of the elements of the matrix
+ * @param exponent_length the size of the exponent of the elements of the matrix
+ * @param new_L the new matrix to which the lower triangular matrix should be set.
+ */
 void ira::setL(unsigned long mantissa_length, unsigned long exponent_length, vector<double> new_L) {
 
     if (new_L.size() > this->n * this->n) {
@@ -71,6 +103,14 @@ void ira::setL(unsigned long mantissa_length, unsigned long exponent_length, vec
     }
 }
 
+/**
+ * Sets the upper triangular matrix of the ira object to an arbitrary matrix.
+ * This should be done with caution since this matrix should actually only be set by performing the PLU decomposition.
+ *
+ * @param mantissa_length the size of the mantissa of the elements of the matrix
+ * @param exponent_length the size of the exponent of the elements of the matrix
+ * @param new_U the new matrix to which the upper triangular matrix should be set.
+ */
 void ira::setU(unsigned long mantissa_length, unsigned long exponent_length, vector<double> new_U) {
 
     if (new_U.size() > this->n * this->n) {
@@ -88,11 +128,32 @@ void ira::setU(unsigned long mantissa_length, unsigned long exponent_length, vec
 
 // getter
 //-------------------------------
+/**
+ * Returns one element of the system matrix.
+ *
+ * @param idx the index of the element in the array.
+ * @return the element at the index.
+ */
 [[nodiscard]] mps ira::getMatrixElement(unsigned long idx){
+
+    if (idx >= (this->n * this->n)) {
+        throw std::invalid_argument("ERROR: to_string (vector): a is empty");
+    }
 
     return this->A[idx];
 }
 
+/**
+ * Takes one of the matrices of the ira object and converts it into an std::string.
+ *
+ * A...system matrix
+ * L...lower triangular matrix after PLU decomposition
+ * U...upper triangular matrix after PLU decomposition
+ *
+ * @param matrix the letter referencing to the matrix which should be printed.
+ * @param precision the precision in which the values should be displayed. (-1 = "normal" precision)
+ * @return the matrix in an std::string format
+ */
 [[nodiscard]] std::string ira::to_string(const char& matrix, const int precision) const {
 
     std::string ret;
@@ -194,6 +255,12 @@ void ira::setU(unsigned long mantissa_length, unsigned long exponent_length, vec
 
 // operators
 //-------------------------------
+/**
+ * Returns the L1 norm of a vector consisting of mps objects.
+ *
+ * @param a the vector for which the L1 norm should be calculated
+ * @return the L1 norm of the vector
+ */
 [[nodiscard]] mps ira::vectorNorm_L1(const vector<mps>& a){
 
     if (a.empty()) {
@@ -209,6 +276,13 @@ void ira::setU(unsigned long mantissa_length, unsigned long exponent_length, vec
     return ret;
 }
 
+/**
+ * Adds two vectors together. The vectors consist of mps objects.
+ *
+ * @param a the first vector.
+ * @param b the second vector.
+ * @return the resulting vector after the addition.
+ */
 [[nodiscard]] vector<mps> ira::vectorAddition(const vector<mps>& a, const vector<mps>& b) {
 
     if (a.empty()) {
@@ -236,6 +310,13 @@ void ira::setU(unsigned long mantissa_length, unsigned long exponent_length, vec
     return result;
 }
 
+/**
+ * Subtracts one vector from another. The vectors consist of mps objects.
+ *
+ * @param a the first vector from which will be subtracted.
+ * @param b the second vector which is the amount to subtract.
+ * @return the resulting vector after the subtraction.
+ */
 [[nodiscard]] vector<mps> ira::vectorSubtraction(const vector<mps>& a, const vector<mps>& b) {
 
     if (a.empty()) {
@@ -263,7 +344,15 @@ void ira::setU(unsigned long mantissa_length, unsigned long exponent_length, vec
     return result;
 }
 
-[[nodiscard]] vector<mps> ira::matrixVectorProduct(const vector<mps>& D, const vector<mps>& x) const {
+/**
+ * Performs a vector matrix product.
+ * The elements of the matrix and the vector are mps objects.
+ *
+ * @param D the matrix for the multiplication
+ * @param x the vector for the multiplication
+ * @return the resulting vector after the multiplication.
+ */
+[[nodiscard]] vector<mps> ira::matrixVectorProduct(const vector<mps>& D, const vector<mps>& x) {
 
     if (D.empty()) {
         throw std::invalid_argument("ERROR: in matrixVectorProduct: D is empty");
@@ -285,7 +374,7 @@ void ira::setU(unsigned long mantissa_length, unsigned long exponent_length, vec
 
     for(unsigned long i = 0; i < x.size(); i++){
         for(unsigned long j = 0; j < x.size(); j++){
-            y[i] = y[i] + (x[j] * D[get_idx(i, j)]);
+            y[i] = y[i] + (x[j] * D[get_idx(i, j, x.size())]);
         }
     }
 
@@ -296,6 +385,13 @@ void ira::setU(unsigned long mantissa_length, unsigned long exponent_length, vec
 
 // algorithms
 //-------------------------------
+/**
+ * Performs a PLU-Decomposition of the form PA = LU.
+ * The result is saved into internal variables of the ira object, namely L, U and P.
+ *
+ * @param mantissa_precision the precision of the mantissa for the PLU-decomposition.
+ * @param exponent_precision the precision of the exponent for the PLU-decomposition.
+ */
 void ira::PLU_decomposition(unsigned long mantissa_precision, unsigned long exponent_precision) {
 
     //unsigned long matrix_1D_size = this->n * this->n;
@@ -344,7 +440,7 @@ void ira::PLU_decomposition(unsigned long mantissa_precision, unsigned long expo
     //-------------------------------
     for(unsigned long k = 0; k < this->n; k++){
 
-        auto max_row = get_max_U_idx(k, k, n);
+        auto max_row = get_max_U_idx(k, k);
 
         interchangeRow(&this->U, k, max_row, k, n);
         interchangeRow(&this->L, k, max_row, 0, k);
@@ -365,6 +461,13 @@ void ira::PLU_decomposition(unsigned long mantissa_precision, unsigned long expo
     //-------------------------------
 }
 
+/**
+ * Performs a forward substitution.
+ * The values of the needed lower triangular matrix are taken from the internal matrix L of the ira object.
+ *
+ * @param b the b vector needed for the substitution.
+ * @return the resulting x vector.
+ */
 [[nodiscard]] vector<mps> ira::forwardSubstitution(const vector<mps>& b) const {
 
     // TODO: make sure that L is not empty
@@ -388,6 +491,13 @@ void ira::PLU_decomposition(unsigned long mantissa_precision, unsigned long expo
     return x;
 }
 
+/**
+ * Performs a backward substitution.
+ * The values of the needed upper triangular matrix are taken from the internal matrix U of the ira object.
+ *
+ * @param b the b vector needed for the substitution.
+ * @return the resulting x vector.
+ */
 [[nodiscard]] vector<mps> ira::backwardSubstitution(const vector<mps>& b) const {
 
     // TODO: check that U is not null
@@ -445,16 +555,51 @@ void ira::PLU_decomposition(unsigned long mantissa_precision, unsigned long expo
 
 // helper functions
 //-------------------------------
+/**
+ * Since the matrices are saved as a vector this function converts 2D-coordinates of the matrix to the 1D-index
+ * used for the vector.
+ *
+ * The needed variable n is taken from the ira object.
+ *
+ * @param row the row index of the element of the matrix
+ * @param column the column index of the element of the matrix
+ * @return the resulting 1D-index.
+ */
 unsigned long ira::get_idx(unsigned long row, unsigned long column) const{
     return this->n * row + column;
 }
 
-unsigned long ira::get_max_U_idx(unsigned long column, unsigned long start, unsigned long end) const {
+/**
+ * Since the matrices are saved as a vector this function converts 2D-coordinates of the matrix to the 1D-index
+ * used for the vector.
+ *
+ * The needed variable n is given via a variable.
+ *
+ * @param row the row index of the element of the matrix
+ * @param column the column index of the element of the matrix
+ * @param n the dimension of the matrix.
+ * @return the resulting 1D-index.
+ */
+unsigned long ira::get_idx(unsigned long row, unsigned long column, unsigned long n){
+    return n * row + column;
+}
+
+/**
+ * This function searches for the maximal element (abs) of the matrix U for a given column and returns its row index.
+ * It can start at an arbitrary row index and thereby ignoring all values previous to this index.
+ *
+ * It returns the index of the element represented as a 1D-index usable for a matrix saved inside a vector.
+ *
+ * @param column the column in which the max element should be determined.
+ * @param start the index of the starting column.
+ * @return the 1D-index of the largest element.
+ */
+unsigned long ira::get_max_U_idx(unsigned long column, unsigned long start) const {
 
     unsigned long max_row = start;
     mps value = U[get_idx(start, column)];
 
-    for(unsigned long i = start; i < end; i++){
+    for(unsigned long i = start; i < this->n; i++){
 
         unsigned long idx = get_idx(i, column);
 
@@ -476,8 +621,19 @@ unsigned long ira::get_max_U_idx(unsigned long column, unsigned long start, unsi
     return max_row;
 }
 
-// TODO: smartpointer....?
+/**
+ * Interchanges two rows of a given matrix.
+ * A column index can be set to omit all elements before that index.
+ * A second index (argument: end) can be set to omit all elements after and including that index.
+ *
+ * @param matrix pointer to the matrix for which rows should be switched
+ * @param row_one the index of the first row
+ * @param row_two the index of the second row
+ * @param start the index of the starting column
+ * @param start the index of the ending column
+ */
 void ira::interchangeRow(vector<mps>* matrix, unsigned long row_one, unsigned long row_two, unsigned long start, unsigned long end){
+// TODO: smartpointer....?
 
     for(auto i = start; i < end; i++){
         auto tmp = (*matrix)[get_idx(row_one, i)];

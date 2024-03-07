@@ -56,25 +56,16 @@ public:
 
     // operators
     //-------------------------------
-    // TODO: test
     [[nodiscard]] static mps vectorNorm_L1(const vector<mps>& a);
-
-    // TODO: test
     [[nodiscard]] static vector<mps> vectorAddition(const vector<mps>& a, const vector<mps>& b);
-
-    // TODO: test
     [[nodiscard]] static vector<mps> vectorSubtraction(const vector<mps>& a, const vector<mps>& b);
-
-    // TODO: test
-    [[nodiscard]] vector<mps> matrixVectorProduct(const vector<mps>& D, const vector<mps>& x) const;
+    [[nodiscard]] static vector<mps> matrixVectorProduct(const vector<mps>& D, const vector<mps>& x);
     //-------------------------------
 
     // algorithms
     //-------------------------------
     void PLU_decomposition(unsigned long mantissa_precision, unsigned long exponent_precision);
-
     [[nodiscard]] vector<mps> forwardSubstitution(const vector<mps>& b) const;
-
     [[nodiscard]] vector<mps> backwardSubstitution(const vector<mps>& b) const;
 
     // TODO: test
@@ -87,7 +78,8 @@ private:
     // helper functions
     //-------------------------------
     [[nodiscard]] unsigned long get_idx(unsigned long row, unsigned long column) const;
-    [[nodiscard]] unsigned long get_max_U_idx(unsigned long column, unsigned long start, unsigned long end) const;
+    [[nodiscard]] static unsigned long get_idx(unsigned long row, unsigned long column, unsigned long n);
+    [[nodiscard]] unsigned long get_max_U_idx(unsigned long column, unsigned long start) const;
     void interchangeRow(vector<mps>* matrix, unsigned long row_one, unsigned long row_two, unsigned long start, unsigned long end);
     //-------------------------------
 
