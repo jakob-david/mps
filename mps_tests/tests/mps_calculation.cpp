@@ -2350,6 +2350,57 @@ TEST(subtraction_tests, over_max_exp_diff_right_float) {
     EXPECT_EQ(value_2, MPS_2.getValue());
 }
 
+TEST(subtraction_tests, spezial_1) {
+
+    mps one(52,11);
+    one.setSign(false);
+    vector<bool> exponent_one{0, 1,1,1,1,1,1,1,1,1,1};
+    vector<bool> mantissa_one{0,0,0,1,0,0,1,0,0,0,0,0,0,1,0,0,1,1,0,1,0,1,0,0,0,0,1,1,1,0,0,1,0,0,0,1,1,1,1,1,1,1,0,0,1,0,0,0,1,1,0,0};
+    one.setSign(false);
+    one.setExponent(exponent_one);
+    one.setMantissa(mantissa_one);
+
+    mps two(52,11);
+    two.setSign(false);
+    vector<bool> exponent_two{0,1,1,1,1,0,0,1,0,1,0};
+    vector<bool> mantissa_two{1,0,1,0,1,1,0,1,0,0,0,0,1,1,0,0,0,1,1,1,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0};
+    two.setSign(false);
+    two.setExponent(exponent_two);
+    two.setMantissa(mantissa_two);
+
+
+    auto result = one - two;
+
+    EXPECT_EQ(one.getValue()-two.getValue(), result.getValue());
+    EXPECT_EQ(should_value(one.getValue()-two.getValue()), is_mps(result.getBitArray()));
+}
+
+TEST(subtraction_tests, spezial_2) {
+
+    mps one(52,11);
+    one.setSign(false);
+    vector<bool> exponent_one{0, 1,1,1,1,1,1,1,1,1,1};
+    vector<bool> mantissa_one{0,0,0,1,0,0,1,0,0,0,0,0,0,1,0,0,1,1,0,1,0,1,0,0,0,0,1,1,1,0,0,1,0,0,0,1,1,1,1,1,1,1,0,0,1,0,0,0,1,1,0,0};
+    one.setSign(false);
+    one.setExponent(exponent_one);
+    one.setMantissa(mantissa_one);
+
+    mps two(52,11);
+    two.setSign(false);
+    vector<bool> exponent_two{0,1,1,1,1,0,0,1,0,1,0};
+    vector<bool> mantissa_two{1,0,1,0,1,1,0,1,0,0,0,0,1,1,0,0,0,1,1,1,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0};
+    two.setSign(false);
+    two.setExponent(exponent_two);
+    two.setMantissa(mantissa_two);
+
+
+    auto result = two - one;
+
+    EXPECT_EQ(two.getValue()-one.getValue(), result.getValue());
+    EXPECT_EQ(should_value(two.getValue()-one.getValue()), is_mps(result.getBitArray()));
+}
+
+
 
 
 

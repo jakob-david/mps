@@ -129,6 +129,7 @@ private:
     static bool subtractOneFromBinary(vector<bool>* vector);
     [[nodiscard]] static vector<bool> invertAndAddOne(const vector<bool> &vec, bool *carrie = nullptr, bool division_case = false);
     [[nodiscard]] static bool allTrue(const vector<bool>& vector);
+    [[nodiscard]] static bool allFalse(const vector<bool>& vector);
 };
 
 

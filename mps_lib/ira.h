@@ -73,6 +73,8 @@ public:
 
     // TODO: test
     [[nodiscard]] vector<mps> iterativeRefinementLU(const vector<mps>& b, unsigned long u[2], unsigned long uf[2]);
+    // TODO: test
+    [[nodiscard]] vector<mps> solve_LU(const vector<mps>& b, unsigned long u[2]);
     //-------------------------------
 
 

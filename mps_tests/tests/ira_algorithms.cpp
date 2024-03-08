@@ -784,6 +784,7 @@ TEST(IR, simple_3x3_double_1){
 
     auto x = IRA.iterativeRefinementLU(b, u, uf);
 
+
     std::string solution = x[0].to_string(8);
     for(unsigned long i = 1; i < b.size(); i++){
         solution += ", ";
@@ -799,22 +800,22 @@ TEST(IR, simple_3x3_double_1){
 
 TEST(IR, coding){
 
-
-    unsigned long ur[2] = {55, 11};  // precision: A
-    unsigned long uf[2] = {23, 11}; // precision: LU
-    unsigned long u[2] = {23, 11};  // precision: working
+    unsigned long ur[2] = {52, 11};  // precision: A
+    unsigned long uf[2] = { 23, 11};  // precision: LU
+    unsigned long u[2] = {52, 11};   // precision: working
 
     ira IRA(3);
 
-    vector<double> new_A{5.759387592852853456, 1.759387592852853456 ,3.759387592852853456, 1.759387592852853456, 1.759387592852853456 ,1.759387592852853456, 1.759387592852853456, 2.759387592852853456 ,1.759387592852853456};
+    vector<double> new_A{563.46, 634.346, 575.346, 694.3453, 573.234, 4638.67, 985.456, 575.56, 978.56};
     IRA.setMatrix(ur[0], ur[1], new_A);
 
     vector<mps> b;
-    b.emplace_back(ur[0], ur[1], 16.759387592852853456);
-    b.emplace_back(ur[0], ur[1], 6.759387592852853456);
-    b.emplace_back(ur[0], ur[1], 8.759387592852853456);
+    b.emplace_back(ur[0], ur[1], 463.56);
+    b.emplace_back(ur[0], ur[1], 875.357);
+    b.emplace_back(ur[0], ur[1], 235.5745);
 
     auto x = IRA.iterativeRefinementLU(b, u, uf);
+
 
    // std::string solution = x[0].to_string(8);
    // for(unsigned long i = 1; i < b.size(); i++){
@@ -823,8 +824,9 @@ TEST(IR, coding){
     //}
 
     cout << ira::to_string(x) << endl;
+    auto x_should = IRA.solve_LU(b, u);
 
-    EXPECT_EQ(x[0].print(), mps(23,11,1).print());
-    EXPECT_EQ(x[1].print(), mps(23,11,2).print());
-    EXPECT_EQ(x[2].print(), mps(23,11,3).print());
+    EXPECT_EQ(x[0].print(), x_should[0].print());
+    EXPECT_EQ(x[1].print(), x_should[1].print());
+    EXPECT_EQ(x[2].print(), x_should[2].print());
 }

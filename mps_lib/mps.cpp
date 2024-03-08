@@ -637,7 +637,7 @@ mps& mps::operator=(const mps& other) {
 
         this->exponent.resize(this->exponent_length);
         this->mantissa.resize(this->mantissa_length);
-    } else {
+    } else { //  TODO: maybe remove
         if (this->exponent_length != other.exponent_length) {
             throw std::invalid_argument("ERROR: in = : Exponents do not match");
         }
@@ -1146,7 +1146,6 @@ void mps::setValue(const double value) {
     //-------------------------------
     char larger_tmp = larger(minued.exponent, subtrahend.exponent);
     if(1 == larger_tmp){
-
         unsigned long exponent_diff = binaryToInt(binarySubtraction(minued.exponent, subtrahend.exponent));
         ret.exponent = minued.exponent;
 
@@ -1154,8 +1153,12 @@ void mps::setValue(const double value) {
             ret.mantissa = subtract(minued.mantissa, subtrahend.mantissa, exponent_diff);
         } else if (exponent_diff == minued.mantissa.size() + 1){
             ret.mantissa = minued.mantissa;
-            subtractOneFromBinary(&ret.exponent);
+
+            if(allFalse(ret.mantissa)){
+                subtractOneFromBinary(&ret.exponent);
+            }
             subtractOneFromBinary(&ret.mantissa);
+
             return ret;
         } else {
             ret.mantissa = minued.mantissa;
@@ -1172,8 +1175,12 @@ void mps::setValue(const double value) {
             ret.mantissa = subtract(subtrahend.mantissa, minued.mantissa, exponent_diff);
         } else if(exponent_diff == minued.mantissa.size() + 1){
             ret.mantissa = subtrahend.mantissa;
-            subtractOneFromBinary(&ret.exponent);
+
+            if(allFalse(ret.mantissa)){
+                subtractOneFromBinary(&ret.exponent);
+            }
             subtractOneFromBinary(&ret.mantissa);
+
             return ret;
         } else {
             ret.mantissa = subtrahend.mantissa;
@@ -2286,6 +2293,16 @@ vector<bool> mps::invertAndAddOne(const vector<bool> &vec, bool *carrie, const b
  */
 [[nodiscard]] bool mps::allTrue(const vector<bool>& vector) {
     return std::all_of(vector.begin(), vector.end(), [](bool i){return i;});
+}
+
+/**
+ * Checks if a vector consisting of only false booleans.
+ *
+ * @param vector reference to the vector which should be checked.
+ * @return true is all entries of the vector are false.
+ */
+[[nodiscard]] bool mps::allFalse(const vector<bool>& vector) {
+    return std::all_of(vector.begin(), vector.end(), [](bool i){return !i;});
 }
 
 /**

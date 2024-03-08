@@ -285,7 +285,14 @@ void ira::castVectorElements(unsigned long mantissa_length, unsigned long expone
     auto ret = a[0];
 
     for(unsigned long i = 1; i < a.size(); i++){
-        ret = ret + a[i];
+
+        if(!a[i].isZero()){
+            if(a[i].isPositive()){
+                ret = ret + a[i];
+            } else {
+                ret = ret - a[i];
+            }
+        }
     }
 
     return ret;
@@ -436,6 +443,7 @@ void ira::PLU_decomposition(unsigned long mantissa_precision, unsigned long expo
     }
     //-------------------------------
 
+
     // set up U
     //-------------------------------
     //this->U = new mps[matrix_1D_size];
@@ -449,7 +457,6 @@ void ira::PLU_decomposition(unsigned long mantissa_precision, unsigned long expo
         }
     }
     //-------------------------------
-
 
     // algorithm
     //-------------------------------
@@ -489,6 +496,7 @@ void ira::PLU_decomposition(unsigned long mantissa_precision, unsigned long expo
     vector<mps> x(b.size(), mps(this->L[0].mantissa_length, this->L[0].exponent_length));
 
     x[0] = b[0]/L[get_idx(0, 0)];
+
 
     // TODO: maybe do a performance test if summation is needed
     mps tmp_sum(this->L[0].mantissa_length, this->L[0].exponent_length);
@@ -539,6 +547,23 @@ void ira::PLU_decomposition(unsigned long mantissa_precision, unsigned long expo
     return x;
 }
 
+
+[[nodiscard]] vector<mps> ira::solve_LU(const vector<mps>& b, unsigned long u[2]){
+
+
+    this->PLU_decomposition(u[0], u[1]);
+    auto tmp_b = b;
+    ira::castVectorElements(u[0], u[1], &tmp_b);
+
+
+
+    auto x = ira::matrixVectorProduct(this->P, tmp_b);
+    x = this->forwardSubstitution(x);
+    x = this->backwardSubstitution(x);
+
+    return x;
+}
+
 [[nodiscard]] vector<mps> ira::iterativeRefinementLU(const vector<mps>& b, unsigned long u[2], unsigned long uf[2]){
 
     //unsigned long exp_precision = b[0].exponent_length;
@@ -576,22 +601,36 @@ void ira::PLU_decomposition(unsigned long mantissa_precision, unsigned long expo
         auto r = vectorSubtraction(b, ira::matrixVectorProduct(this->A, tmp_x));
         //-------------------------------
 
-        cout << vectorNorm_L1(r).to_string(50)<< endl;
+        //cout << "------------------------" << endl;
+        //cout << i << ": Ax: " << ira::to_string(ira::matrixVectorProduct(this->A, tmp_x), 30) << endl;
+        //cout << i << ": r: " << ira::to_string(r, 30) << endl;
+        cout << i << ": r: " << vectorNorm_L1(r).to_string(30)<< endl;
 
         // solve: A * d_i = r_i
         // in precision: uf
         //-------------------------------
         ira::castVectorElements(uf[0], uf[1], &r);
+        r = ira::matrixVectorProduct(this->P, r);
         auto d = this->forwardSubstitution(r);
         d = this->backwardSubstitution(d);
         //-------------------------------
+
+        // cout << i << ": d: " << ira::to_string(d, 30) << endl;
 
         // calculate: x_i+1 = x_i + d_i i
         // n precision u.
         //-------------------------------
         ira::castVectorElements(u[0], u[1], &d);
+        //cout << i << ": d: " << ira::to_string(d, 30) << endl;
+        //auto tmp = x[1] + d[1];
+        //cout << i << ": x_1: " << x[1].print() << endl;
+        //cout << i << ": d_1: " << d[1].print() << endl;
+        //cout << i << ": tmp: " << tmp.to_string(30) << endl;
+        //cout << i << ": tmp: " << tmp.print() << endl;
         x = vectorAddition(x, d);
         //-------------------------------
+
+        // cout << i << ": x: " << ira::to_string(x, 30) << endl;
     }
 
     return x;
