@@ -67,6 +67,7 @@ public:
     // operators
     //-------------------------------
     mps& operator=(const mps& other);
+    mps& operator|=(const mps& other);
     mps& operator=(double value);
     mps operator+(const mps& other) const;
     mps operator-(const mps& other) const;

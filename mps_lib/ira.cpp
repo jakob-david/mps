@@ -433,11 +433,11 @@ void ira::PLU_decomposition(unsigned long mantissa_precision, unsigned long expo
             idx = get_idx(i, j);
 
             if(i == j){
-                this->L[idx] = mps_one;
-                this->P[idx] = mps_one;
+                this->L[idx] |= mps_one;
+                this->P[idx] |= mps_one;
             } else {
-                this->L[idx] = mps_zero;
-                this->P[idx] = mps_zero;
+                this->L[idx] |= mps_zero;
+                this->P[idx] |= mps_zero;
             }
         }
     }
@@ -452,7 +452,7 @@ void ira::PLU_decomposition(unsigned long mantissa_precision, unsigned long expo
 
             idx = get_idx(i, j);
 
-            this->U[idx] = A[idx];
+            this->U[idx] |= A[idx];
             this->U[idx].cast(mantissa_precision, exponent_precision);
         }
     }
@@ -591,7 +591,7 @@ void ira::PLU_decomposition(unsigned long mantissa_precision, unsigned long expo
     //vector<mps> d(b.size(), mps(mant_precision, exp_precision));
     //-------------------------------
 
-    for(unsigned long i = 0; i < 10; i++){
+    for(unsigned long i = 0; i < 1; i++){
 
         // calculate: r_i = b − A * x_i
         // in precision: ur

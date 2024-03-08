@@ -591,7 +591,6 @@ TEST(setter_tests, set_NAN_float) {
 
 
 
-
 TEST(exception, different_length_exponent_assign){
 
     bool test = false;

@@ -631,13 +631,14 @@ mps& mps::operator=(const mps& other) {
         return *this;
     }
 
+    // TODO: maybe change to |=
     if(0 == this->exponent_length && 0 == this->mantissa_length){
         this->exponent_length = other.exponent_length;
         this->mantissa_length = other.mantissa_length;
 
         this->exponent.resize(this->exponent_length);
         this->mantissa.resize(this->mantissa_length);
-    } else { //  TODO: maybe remove
+    } else {
         if (this->exponent_length != other.exponent_length) {
             throw std::invalid_argument("ERROR: in = : Exponents do not match");
         }
@@ -645,6 +646,7 @@ mps& mps::operator=(const mps& other) {
             throw std::invalid_argument("ERROR: in = : Mantissas do not match");
         }
     }
+
 
     this->sign = other.sign;
     for(unsigned long i = 0; i < this->mantissa_length; i++){
@@ -654,8 +656,32 @@ mps& mps::operator=(const mps& other) {
         this->exponent[i] = other.exponent[i];
     }
 
-    this->mantissa_length = other.mantissa_length;
-    this->exponent_length = other.exponent_length;
+    return *this;
+}
+
+// TODO: test
+mps& mps::operator|=(const mps& other) {
+
+    if (this == &other){
+        return *this;
+    }
+
+    if (this->exponent_length != other.exponent_length) {
+        this->exponent_length = other.exponent_length;
+        this->exponent.resize(this->exponent_length);
+    }
+    if (this->mantissa_length != other.mantissa_length) {
+        this->mantissa_length = other.mantissa_length;
+        this->mantissa.resize(this->mantissa_length);
+    }
+
+    this->sign = other.sign;
+    for(unsigned long i = 0; i < this->mantissa_length; i++){
+        this->mantissa[i] = other.mantissa[i];
+    }
+    for(unsigned long i = 0; i < this->exponent_length; i++){
+        this->exponent[i] = other.exponent[i];
+    }
 
     return *this;
 }
