@@ -252,11 +252,25 @@ void ira::setU(unsigned long mantissa_length, unsigned long exponent_length, vec
     return ret;
 }
 
+/**
+ * Given a vector of mps objects this function casts all of its elements to new mantissa and exponent sizes.
+ *
+ * @param mantissa_length the new mantissa length of the mps objects
+ * @param exponent_length the new exponent length of the mps objects
+ * @param double_vector the vector of mos objects which should be converted
+ */
 void ira::castVectorElements(unsigned long mantissa_length, unsigned long exponent_length, vector<mps>* vec){
 
     if ((*vec).empty()) {
         throw std::invalid_argument("ERROR: in castVectorElements: vector is empty");
     }
+    if (mantissa_length <= 0) {
+        throw std::invalid_argument("ERROR: in castVectorElements : mantissa size too small");
+    }
+    if (exponent_length <= 1) {
+        throw std::invalid_argument("ERROR: in castVectorElements : exponent size too small");
+    }
+
 
     if(mantissa_length == (*vec)[0].mantissa_length && exponent_length == (*vec)[0].exponent_length){
         return;

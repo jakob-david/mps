@@ -376,6 +376,110 @@ TEST(double_to_mps, simple_double) {
 }
 
 
+
+TEST(castVectorElements, exception_vector_empty) {
+
+    vector<mps> mps_vector;
+
+    bool test = false;
+
+    try
+    {
+        ira::castVectorElements(52, 11, &mps_vector);
+    }
+
+    catch (std::invalid_argument& e)
+    {
+        test = true;
+    }
+
+    EXPECT_EQ(true, test);
+}
+
+TEST(castVectorElements, exception_mantissa_too_small) {
+
+    vector<double> double_vector;
+    double_vector.push_back(45.34);
+    double_vector.push_back(-32);
+    double_vector.push_back(3463246);
+    double_vector.push_back(-0.34345);
+
+    auto mps_vector = ira::double_to_mps(23, 8, double_vector);
+
+    bool test = false;
+
+    try
+    {
+        ira::castVectorElements(0, 11, &mps_vector);
+    }
+
+    catch (std::invalid_argument& e)
+    {
+        test = true;
+    }
+
+    EXPECT_EQ(true, test);
+}
+
+TEST(castVectorElements, exception_exponent_too_small) {
+
+    vector<double> double_vector;
+    double_vector.push_back(45.34);
+    double_vector.push_back(-32);
+    double_vector.push_back(3463246);
+    double_vector.push_back(-0.34345);
+
+    auto mps_vector = ira::double_to_mps(23, 8, double_vector);
+
+    bool test = false;
+
+    try
+    {
+        ira::castVectorElements(52, 1, &mps_vector);
+    }
+
+    catch (std::invalid_argument& e)
+    {
+        test = true;
+    }
+
+    EXPECT_EQ(true, test);
+}
+
+TEST(castVectorElements, float_to_double_1) {
+
+    vector<double> double_vector;
+    double_vector.push_back(45.34);
+    double_vector.push_back(-32);
+    double_vector.push_back(3463246);
+    double_vector.push_back(-0.34345);
+
+    auto mps_vector = ira::double_to_mps(23, 8, double_vector);
+    ira::castVectorElements(52, 11, &mps_vector);
+
+    EXPECT_EQ(ira::to_string(mps_vector, 2), "45.34, -32.00, 3463246.00, -0.34");
+    EXPECT_EQ(52, mps_vector[0].mantissa_length);
+    EXPECT_EQ(11, mps_vector[0].exponent_length);
+}
+
+TEST(castVectorElements, double_to_float_1) {
+
+    vector<double> double_vector;
+    double_vector.push_back(45.34);
+    double_vector.push_back(-32);
+    double_vector.push_back(3463246);
+    double_vector.push_back(-0.34345);
+
+    auto mps_vector = ira::double_to_mps(52, 11, double_vector);
+    ira::castVectorElements(23, 8, &mps_vector);
+
+    EXPECT_EQ(ira::to_string(mps_vector, 2), "45.34, -32.00, 3463246.00, -0.34");
+    EXPECT_EQ(23, mps_vector[0].mantissa_length);
+    EXPECT_EQ(8, mps_vector[0].exponent_length);
+}
+
+
+
 TEST(to_string, exception_L_nullptr) {
 
     unsigned long mantissa_length = 52;
