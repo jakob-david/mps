@@ -7,7 +7,6 @@ include_directories(./lib/googletest/include ./lib/googletest)
 
 add_executable(mps_tests tests/mps_general.cpp
         functions/functions.h
-        tests/mps_comparators.cpp
         tests/mps_random.cpp
         tests/ira_general.cpp
         tests/ira_algorithms.cpp
@@ -17,6 +16,9 @@ add_executable(mps_tests tests/mps_general.cpp
         tests/mps_opa_subtraction.cpp
         tests/mps_opa_multiplication.cpp
         tests/mps_opa_division.cpp
+        tests/mps_comp_equal.cpp
+        tests/mps_comp_larger.cpp
+        tests/mps_comp_smaller.cpp
 )
 
 target_link_libraries(mps_tests mps_lib)
