@@ -610,7 +610,13 @@ void ira::PLU_decomposition(unsigned long mantissa_precision, unsigned long expo
     return x;
 }
 
-
+/**
+ * Solves a system of equation using a LU-Factorisation.
+ * The system matrix needs not to be added since it must set beforehand.
+ *
+ * @param b the solution vector of the system.
+ * @return u the precision in which the system should be solved.
+ */
 [[nodiscard]] vector<mps> ira::solve_LU(const vector<mps>& b, unsigned long u[2]){
 
 
