@@ -659,7 +659,14 @@ mps& mps::operator=(const mps& other) {
     return *this;
 }
 
-// TODO: test
+/**
+ * Sets one mps object equal to an other mps object.
+ *
+ * The the mantissa or the exponent do not match this operator does not throw an exception
+ * but reformats the object instead.
+ *
+ * This operator should be used with caution since in this way implicit casts are possible.
+ */
 mps& mps::operator|=(const mps& other) {
 
     if (this == &other){

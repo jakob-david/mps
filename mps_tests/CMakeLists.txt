@@ -11,11 +11,11 @@ add_executable(mps_tests tests/mps_general.cpp
         tests/ira_general.cpp
         tests/ira_algorithms.cpp
         tests/ira_oparators.cpp
-        tests/mps_opa_assign.cpp
-        tests/mps_opa_addition.cpp
-        tests/mps_opa_subtraction.cpp
-        tests/mps_opa_multiplication.cpp
-        tests/mps_opa_division.cpp
+        tests/mps_oper_assign.cpp
+        tests/mps_oper_addition.cpp
+        tests/mps_oper_subtraction.cpp
+        tests/mps_oper_multiplication.cpp
+        tests/mps_oper_division.cpp
         tests/mps_comp_equal.cpp
         tests/mps_comp_larger.cpp
         tests/mps_comp_smaller.cpp
