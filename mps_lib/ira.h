@@ -53,7 +53,6 @@ public:
     //-------------------------------
     [[nodiscard]] static vector<mps> double_to_mps(unsigned long mantissa_length, unsigned long exponent_length, vector<double> double_vector);
 
-    // TODO: test
     static void castVectorElements(unsigned long mantissa_length, unsigned long exponent_length, vector<mps>* vec);
     //-------------------------------
 

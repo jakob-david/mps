@@ -4,6 +4,52 @@
 
 
 
+TEST(PLU, exception_mantissa_too_small) {
+
+    unsigned long mantissa_length = 23;
+    unsigned long exponent_length = 8;
+
+    vector<double> new_matrix{ 1, 2, 3, 4, 5, 6, 7, 8, 9};
+
+    ira IRA(3);
+    IRA.setMatrix(mantissa_length, exponent_length, new_matrix);
+
+    bool test = false;
+    try
+    {
+        IRA.PLU_decomposition(0, exponent_length);
+    }
+    catch (std::invalid_argument& e)
+    {
+        test = true;
+    }
+
+    EXPECT_EQ(true, test);
+}
+
+TEST(PLU, exception_exponent_too_small) {
+
+    unsigned long mantissa_length = 23;
+    unsigned long exponent_length = 8;
+
+    vector<double> new_matrix{ 1, 2, 3, 4, 5, 6, 7, 8, 9};
+
+    ira IRA(3);
+    IRA.setMatrix(mantissa_length, exponent_length, new_matrix);
+
+    bool test = false;
+    try
+    {
+        IRA.PLU_decomposition(mantissa_length, 1);
+    }
+    catch (std::invalid_argument& e)
+    {
+        test = true;
+    }
+
+    EXPECT_EQ(true, test);
+}
+
 TEST(PLU, simple_3x3_float_1) {
 
     unsigned long mantissa_length = 23;
@@ -294,6 +340,57 @@ TEST(PLU, simple_4x4_double_2) {
 
 
 
+TEST(FS, exception_L_empty) {
+
+    unsigned long mantissa_length = 23;
+    unsigned long exponent_length = 8;
+
+    ira IRA(4);
+
+    vector<mps> b;
+    b.emplace_back(mantissa_length, exponent_length, 4);
+    b.emplace_back(mantissa_length, exponent_length, 2);
+    b.emplace_back(mantissa_length, exponent_length, 4);
+    b.emplace_back(mantissa_length, exponent_length, 2);
+
+    bool test = false;
+    try
+    {
+        auto x = IRA.forwardSubstitution(b);
+    }
+    catch (std::invalid_argument& e)
+    {
+        test = true;
+    }
+
+    EXPECT_EQ(true, test);
+}
+
+TEST(FS, exception_b_empty) {
+
+    unsigned long mantissa_length = 23;
+    unsigned long exponent_length = 8;
+
+    ira IRA(4);
+
+    vector<double> new_L{ 3, 0, 0, 0, 2, 1, 0, 0, 1, 0, 1, 0, 1, 1, 1, 1};
+    IRA.setL(mantissa_length, exponent_length, new_L);
+
+    vector<mps> b;
+
+    bool test = false;
+    try
+    {
+        auto x = IRA.forwardSubstitution(b);
+    }
+    catch (std::invalid_argument& e)
+    {
+        test = true;
+    }
+
+    EXPECT_EQ(true, test);
+}
+
 TEST(FS, simple_4x4_float_1){
 
     unsigned long mantissa_length = 23;
@@ -526,6 +623,57 @@ TEST(FS, simple_5x5_double_2){
 }
 
 
+
+TEST(BS, exception_L_empty) {
+
+    unsigned long mantissa_length = 23;
+    unsigned long exponent_length = 8;
+
+    ira IRA(4);
+
+    vector<mps> b;
+    b.emplace_back(mantissa_length, exponent_length, 4);
+    b.emplace_back(mantissa_length, exponent_length, 2);
+    b.emplace_back(mantissa_length, exponent_length, 4);
+    b.emplace_back(mantissa_length, exponent_length, 2);
+
+    bool test = false;
+    try
+    {
+        auto x = IRA.backwardSubstitution(b);
+    }
+    catch (std::invalid_argument& e)
+    {
+        test = true;
+    }
+
+    EXPECT_EQ(true, test);
+}
+
+TEST(BS, exception_b_empty) {
+
+    unsigned long mantissa_length = 23;
+    unsigned long exponent_length = 8;
+
+    ira IRA(4);
+
+    vector<double> new_U{ 1, 1, 2, 1, 0, 4, 1, 1, 0, 0, 2, 1, 0, 0, 0, 3};
+    IRA.setU(mantissa_length, exponent_length, new_U);
+
+    vector<mps> b;
+
+    bool test = false;
+    try
+    {
+        auto x = IRA.backwardSubstitution(b);
+    }
+    catch (std::invalid_argument& e)
+    {
+        test = true;
+    }
+
+    EXPECT_EQ(true, test);
+}
 
 TEST(BS, simple_4x4_float_1){
 

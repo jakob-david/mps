@@ -126,6 +126,7 @@ void ira::setU(unsigned long mantissa_length, unsigned long exponent_length, vec
 }
 //-------------------------------
 
+
 // getter
 //-------------------------------
 /**
@@ -220,6 +221,7 @@ void ira::setU(unsigned long mantissa_length, unsigned long exponent_length, vec
 }
 //-------------------------------
 
+
 // converters
 //-------------------------------
 /**
@@ -281,6 +283,7 @@ void ira::castVectorElements(unsigned long mantissa_length, unsigned long expone
     }
 }
 //-------------------------------
+
 
 // operators
 //-------------------------------
@@ -431,14 +434,17 @@ void ira::castVectorElements(unsigned long mantissa_length, unsigned long expone
  */
 void ira::PLU_decomposition(unsigned long mantissa_precision, unsigned long exponent_precision) {
 
-    //unsigned long matrix_1D_size = this->n * this->n;
+    if (mantissa_precision <= 0) {
+        throw std::invalid_argument("ERROR: in PLU_decomposition : mantissa size too small");
+    }
+    if (mantissa_precision <= 1) {
+        throw std::invalid_argument("ERROR: in PLU_decomposition : exponent size too small");
+    }
+
     unsigned long idx;
 
     // set up L and P
     //-------------------------------
-    //this->L = new mps[matrix_1D_size];
-    //this->P = new mps[matrix_1D_size];
-
     mps mps_zero(mantissa_precision, exponent_precision, 0);
     mps mps_one(mantissa_precision, exponent_precision, 1);
 
@@ -461,7 +467,6 @@ void ira::PLU_decomposition(unsigned long mantissa_precision, unsigned long expo
 
     // set up U
     //-------------------------------
-    //this->U = new mps[matrix_1D_size];
     for(unsigned long i = 0; i <  this->n; i++){
         for(unsigned long j = 0; j < this->n; j++){
 
@@ -472,6 +477,7 @@ void ira::PLU_decomposition(unsigned long mantissa_precision, unsigned long expo
         }
     }
     //-------------------------------
+
 
     // algorithm
     //-------------------------------
@@ -507,7 +513,13 @@ void ira::PLU_decomposition(unsigned long mantissa_precision, unsigned long expo
  */
 [[nodiscard]] vector<mps> ira::forwardSubstitution(const vector<mps>& b) const {
 
-    // TODO: make sure that L is not empty
+    if (this->L.empty()) {
+        throw std::invalid_argument("ERROR: in forwardSubstitution: L is empty");
+    }
+    if (b.empty()) {
+        throw std::invalid_argument("ERROR: in forwardSubstitution: b is empty");
+    }
+
     vector<mps> x(b.size(), mps(this->L[0].mantissa_length, this->L[0].exponent_length));
 
     x[0] = b[0]/L[get_idx(0, 0)];
@@ -538,7 +550,13 @@ void ira::PLU_decomposition(unsigned long mantissa_precision, unsigned long expo
  */
 [[nodiscard]] vector<mps> ira::backwardSubstitution(const vector<mps>& b) const {
 
-    // TODO: check that U is not null
+    if (this->U.empty()) {
+        throw std::invalid_argument("ERROR: in backwardSubstitution: U is empty");
+    }
+    if (b.empty()) {
+        throw std::invalid_argument("ERROR: in backwardSubstitution: b is empty");
+    }
+
     vector<mps> x(b.size(), mps(this->U[0].mantissa_length, this->U[0].exponent_length));
 
     x[this->n-1] = b[this->n-1]/U[get_idx(this->n-1, this->n-1)];
