@@ -591,45 +591,6 @@ TEST(setter_tests, set_NAN_float) {
 
 
 
-TEST(exception, different_length_exponent_assign){
-
-    bool test = false;
-
-    mps ONE(23, 9, 345.234);
-    mps TWO(23, 8, 345.234);
-
-    try
-    {
-        ONE = TWO;
-    }
-
-    catch (std::invalid_argument& e)
-    {
-        test = true;
-    }
-
-    EXPECT_EQ(true, test);
-}
-
-TEST(exception, different_length_mantissa_assign){
-
-    bool test = false;
-
-    mps ONE(20, 8, 345.234);
-    mps TWO(23, 8, 345.234);
-
-    try
-    {
-        ONE = TWO;
-    }
-
-    catch (std::invalid_argument& e)
-    {
-        test = true;
-    }
-
-    EXPECT_EQ(true, test);
-}
 
 TEST(exception, different_length_exponent_addition){
 

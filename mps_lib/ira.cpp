@@ -283,6 +283,7 @@ void ira::castVectorElements(unsigned long mantissa_length, unsigned long expone
     }
 
     auto ret = a[0];
+    ret.setSign(false);
 
     for(unsigned long i = 1; i < a.size(); i++){
 
@@ -591,7 +592,7 @@ void ira::PLU_decomposition(unsigned long mantissa_precision, unsigned long expo
     //vector<mps> d(b.size(), mps(mant_precision, exp_precision));
     //-------------------------------
 
-    for(unsigned long i = 0; i < 1; i++){
+    for(unsigned long i = 0; i < 10; i++){
 
         // calculate: r_i = b − A * x_i
         // in precision: ur
