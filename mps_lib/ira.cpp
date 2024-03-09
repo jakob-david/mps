@@ -236,7 +236,7 @@ void ira::setU(unsigned long mantissa_length, unsigned long exponent_length, vec
 [[nodiscard]] vector<mps> ira::double_to_mps(unsigned long mantissa_length, unsigned long exponent_length, vector<double> double_vector){
 
     if (double_vector.empty()) {
-        throw std::invalid_argument("ERROR: in vectorNorm: a is empty");
+        throw std::invalid_argument("ERROR: in vectorNorm: double_vector is empty");
     }
     if (mantissa_length <= 0) {
         throw std::invalid_argument("ERROR: in double_to_mps : mantissa size too small");
@@ -249,6 +249,36 @@ void ira::setU(unsigned long mantissa_length, unsigned long exponent_length, vec
 
     for(unsigned long i = 0; i < double_vector.size(); i++){
         ret[i] = double_vector[i];
+    }
+
+    return ret;
+}
+
+[[nodiscard]] vector<double> ira::mps_to_double(vector<mps> mps_vector){
+
+    if (mps_vector.empty()) {
+        throw std::invalid_argument("ERROR: in mps_to_double: a is mps_vector");
+    }
+
+    vector<double> ret(mps_vector.size(), 0.0);
+
+    for(unsigned long i = 0; i < mps_vector.size(); i++){
+        ret[i] = mps_vector[i].getValue();
+    }
+
+    return ret;
+}
+
+[[nodiscard]] vector<float> ira::mps_to_float(vector<mps> mps_vector){
+
+    if (mps_vector.empty()) {
+        throw std::invalid_argument("ERROR: in mps_to_float: a is mps_vector");
+    }
+
+    vector<float> ret(mps_vector.size(), 0.0);
+
+    for(unsigned long i = 0; i < mps_vector.size(); i++){
+        ret[i] = (float) mps_vector[i].getValue();
     }
 
     return ret;

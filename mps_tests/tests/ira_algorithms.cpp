@@ -1,6 +1,7 @@
 #include "gtest/gtest.h"
 
 #include "ira.h"
+#include "../functions/functions.h"
 
 
 
@@ -907,6 +908,188 @@ TEST(BS, simple_5x5_double_2){
 
     EXPECT_EQ(solution, "-17.52297946, -3.37140356, -0.86724477, 5.10549922, 1.56701031");
 
+}
+
+
+
+TEST(solve_LU, simple_3x3_float_1){
+
+    //------------------------------------------------------------------------------------------------------
+    unsigned long precision = 3;    // the extra mantissa bits which are needed to achieve double precision.
+    //------------------------------------------------------------------------------------------------------
+
+    unsigned long u[2] = {23 + precision, 8};
+
+    ira IRA(3);
+
+    vector<double> new_A{5, 1 ,3, 1, 1 ,1, 1, 2 ,1};
+    IRA.setMatrix(u[0], u[1], new_A);
+
+    vector<mps> b;
+    b.emplace_back(u[0], u[1], 16);
+    b.emplace_back(u[0], u[1], 6);
+    b.emplace_back(u[0], u[1], 8);
+
+    auto x = IRA.solve_LU(b, u);
+    auto x_result = ira::mps_to_float(x);
+
+    vector<float> x_should{1.0f, 2.0f, 3.0f};
+
+    EXPECT_EQ(x_should, x_result);
+    EXPECT_EQ(should_value(x_should[0]), should_value((float) x_result[0]));
+    EXPECT_EQ(should_value(x_should[1]), should_value((float) x_result[1]));
+    EXPECT_EQ(should_value(x_should[2]), should_value((float) x_result[2]));
+}
+
+TEST(solve_LU, simple_3x3_double_1){
+
+    //------------------------------------------------------------------------------------------------------
+    unsigned long precision = 3;    // the extra mantissa bits which are needed to achieve double precision.
+    //------------------------------------------------------------------------------------------------------
+
+    unsigned long u[2] = {52 + precision, 11};
+
+    ira IRA(3);
+
+    vector<double> new_A{5, 1 ,3, 1, 1 ,1, 1, 2 ,1};
+    IRA.setMatrix(u[0], u[1], new_A);
+
+    vector<mps> b;
+    b.emplace_back(u[0], u[1], 16);
+    b.emplace_back(u[0], u[1], 6);
+    b.emplace_back(u[0], u[1], 8);
+
+    auto x = IRA.solve_LU(b, u);
+    auto x_result = ira::mps_to_double(x);
+
+    vector<double> x_should{1, 2, 3};
+
+    EXPECT_EQ(x_should, x_result);
+    EXPECT_EQ(should_value(x_should[0]), should_value(x_result[0]));
+    EXPECT_EQ(should_value(x_should[1]), should_value(x_result[1]));
+    EXPECT_EQ(should_value(x_should[2]), should_value(x_result[2]));
+}
+
+TEST(solve_LU, simple_3x3_float_2){
+
+    //------------------------------------------------------------------------------------------------------
+    unsigned long precision = 1;    // the extra mantissa bits which are needed to achieve double precision.
+    //------------------------------------------------------------------------------------------------------
+
+    unsigned long u[2] = {23 + precision, 8};
+
+    ira IRA(3);
+
+
+    vector<double> new_A{-34.23, 4.2 ,0.43, 3.2, 8.45 ,12.45, -7, 2.45 ,-4.35};
+    IRA.setMatrix(u[0], u[1], new_A);
+
+    vector<mps> b;
+    b.emplace_back(u[0], u[1], -62.92316);
+    b.emplace_back(u[0], u[1], 194.1884);
+    b.emplace_back(u[0], u[1], -21.37);
+
+    auto x = IRA.solve_LU(b, u);
+    auto x_result = ira::mps_to_float(x);
+
+    vector<float> x_should{3.432f, 12.34f, 6.34f};
+
+    EXPECT_EQ(x_should, x_result);
+    EXPECT_EQ(should_value(x_should[0]), should_value((float) x_result[0]));
+    EXPECT_EQ(should_value(x_should[1]), should_value((float) x_result[1]));
+    EXPECT_EQ(should_value(x_should[2]), should_value((float) x_result[2]));
+}
+
+TEST(solve_LU, simple_3x3_double_2){
+
+    //------------------------------------------------------------------------------------------------------
+    unsigned long precision = 4;    // the extra mantissa bits which are needed to achieve double precision.
+    // one value (3.432) needed to be fitted.
+    //------------------------------------------------------------------------------------------------------
+
+    unsigned long u[2] = {52 + precision, 11};
+
+    ira IRA(3);
+
+    vector<double> new_A{-34.23, 4.2 ,0.43, 3.2, 8.45 ,12.45, -7, 2.45 ,-4.35};
+    IRA.setMatrix(u[0], u[1], new_A);
+
+    vector<mps> b;
+    b.emplace_back(u[0], u[1], -62.92316);
+    b.emplace_back(u[0], u[1], 194.1884);
+    b.emplace_back(u[0], u[1], -21.37);
+
+    auto x = IRA.solve_LU(b, u);
+    auto x_result = ira::mps_to_double(x);
+
+    vector<double> x_should{3.4320000000000004, 12.34, 6.34};
+
+    EXPECT_EQ(x_should, x_result);
+    EXPECT_EQ(should_value(x_should[0]), should_value(x_result[0]));
+    EXPECT_EQ(should_value(x_should[1]), should_value(x_result[1]));
+    EXPECT_EQ(should_value(x_should[2]), should_value(x_result[2]));
+}
+
+TEST(solve_LU, simple_4x4_float_1){
+
+    //------------------------------------------------------------------------------------------------------
+    unsigned long precision = 7;    // the extra mantissa bits which are needed to achieve double precision.
+    //------------------------------------------------------------------------------------------------------
+
+    unsigned long u[2] = {23 + precision, 8};
+
+    ira IRA(4);
+
+    vector<double> new_A{5, 1 ,3, 4, 1, 1 ,1, 2, 1, 2 ,1, 3, 4, 2 ,-1, 3};
+    IRA.setMatrix(u[0], u[1], new_A);
+
+    vector<mps> b;
+    b.emplace_back(u[0], u[1], 32);
+    b.emplace_back(u[0], u[1], 14);
+    b.emplace_back(u[0], u[1], 20);
+    b.emplace_back(u[0], u[1], 17);
+
+    auto x = IRA.solve_LU(b, u);
+    auto x_result = ira::mps_to_float(x);
+
+    vector<float> x_should{1.0f, 2.0f, 3.0f, 4.0f};
+
+    EXPECT_EQ(x_should, x_result);
+    EXPECT_EQ(should_value(x_should[0]), should_value((float) x_result[0]));
+    EXPECT_EQ(should_value(x_should[1]), should_value((float) x_result[1]));
+    EXPECT_EQ(should_value(x_should[2]), should_value((float) x_result[2]));
+    EXPECT_EQ(should_value(x_should[3]), should_value((float) x_result[3]));
+}
+
+TEST(solve_LU, simple_4x4_double_1){
+
+    //------------------------------------------------------------------------------------------------------
+    unsigned long precision = 6;    // the extra mantissa bits which are needed to achieve double precision.
+    //------------------------------------------------------------------------------------------------------
+
+    unsigned long u[2] = {52 + precision, 11};
+
+    ira IRA(4);
+
+    vector<double> new_A{5, 1 ,3, 4, 1, 1 ,1, 2, 1, 2 ,1, 3, 4, 2 ,-1, 3};
+    IRA.setMatrix(u[0], u[1], new_A);
+
+    vector<mps> b;
+    b.emplace_back(u[0], u[1], 32);
+    b.emplace_back(u[0], u[1], 14);
+    b.emplace_back(u[0], u[1], 20);
+    b.emplace_back(u[0], u[1], 17);
+
+    auto x = IRA.solve_LU(b, u);
+    auto x_result = ira::mps_to_double(x);
+
+    vector<double> x_should{1, 2, 3, 4};
+
+    EXPECT_EQ(x_should, x_result);
+    EXPECT_EQ(should_value(x_should[0]), should_value(x_result[0]));
+    EXPECT_EQ(should_value(x_should[1]), should_value(x_result[1]));
+    EXPECT_EQ(should_value(x_should[2]), should_value(x_result[2]));
+    EXPECT_EQ(should_value(x_should[3]), should_value(x_result[3]));
 }
 
 
