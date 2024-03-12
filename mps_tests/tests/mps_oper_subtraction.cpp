@@ -1022,3 +1022,34 @@ TEST(subtraction_tests, spezial_2) {
     EXPECT_EQ(should_value(two.getValue()-one.getValue()), is_mps(result.getBitArray()));
 }
 
+TEST(subtraction_tests, subtractio_to_zero_double) {
+
+    double value_1 = 2;
+    double value_2 = 2;
+
+    mps MPS(52,11,value_1);
+    mps MPS_2(52,11,value_2);
+
+    auto test = MPS - MPS_2;
+
+    EXPECT_EQ(value_1-value_2, test.getValue());
+    EXPECT_EQ(should_value(value_1 - value_2), is_mps(test.getBitArray()));
+    EXPECT_EQ(value_1, MPS.getValue());
+    EXPECT_EQ(value_2, MPS_2.getValue());
+}
+
+TEST(subtraction_tests, subtractio_to_zero_float) {
+
+    float value_1 = 2.0f;
+    float value_2 = 2.0f;
+
+    mps MPS(23,8,value_1);
+    mps MPS_2(23,8,value_2);
+
+    auto test = MPS - MPS_2;
+
+    EXPECT_EQ(value_1-value_2, test.getValue());
+    EXPECT_EQ(should_value(value_1 - value_2), is_mps(test.getBitArray()));
+    EXPECT_EQ(value_1, MPS.getValue());
+    EXPECT_EQ(value_2, MPS_2.getValue());
+}

@@ -51,6 +51,11 @@ public:
     [[nodiscard]] std::string print() const;
     [[nodiscard]] std::string to_string(int precision = -1) const;
 
+    // check precision
+    //-------------------------------
+    // TODO: test
+    [[nodiscard]] bool check_precision(const mps& compare, unsigned long precision) const;
+
     // setter methods
     //-------------------------------
     void setInf(bool negative = false);

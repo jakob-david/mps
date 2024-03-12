@@ -512,6 +512,7 @@ void ira::PLU_decomposition(unsigned long mantissa_precision, unsigned long expo
     // algorithm
     //-------------------------------
     for(unsigned long k = 0; k < this->n; k++){
+        // cout << "iteration: " << k << "/" << this->n << endl;
 
         auto max_row = get_max_U_idx(k, k);
 

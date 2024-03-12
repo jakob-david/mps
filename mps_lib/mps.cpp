@@ -315,6 +315,34 @@ std::string mps::to_string(const int precision) const {
 //-------------------------------
 
 
+// get precision
+//-------------------------------
+[[nodiscard]] bool mps::check_precision(const mps& compare, unsigned long precision) const {
+
+    auto tmp_1 = compare;
+    tmp_1.setSign(false);
+    auto tmp_2 = tmp_1;
+
+    vector<bool> mant(compare.mantissa_length, false);
+    tmp_1.setMantissa(mant);
+    mant[precision-1] = true;
+    tmp_2.setMantissa(mant);
+
+    auto max_error = tmp_2 - tmp_1;
+    max_error.setSign(false);
+
+    auto diff = *this - compare;
+    diff.setSign(false);
+
+    if(diff <= max_error){
+        return true;
+    } else {
+        return false;
+    }
+}
+//-------------------------------
+
+
 // setter methods
 //-------------------------------
 
@@ -352,9 +380,9 @@ void mps::setInf(bool negative) {
  */
 void mps::setZero(bool negative){
 
-    if( exponent.empty() || mantissa.empty()){
+    if( (exponent.size() != this->exponent_length) || (mantissa.size() != this->mantissa_length)){
         exponent.resize(exponent_length);
-        mantissa.resize(exponent_length);
+        mantissa.resize(mantissa_length);
     }
 
     sign = negative;
@@ -1257,7 +1285,6 @@ void mps::setValue(const double value) {
     }
 
     ret.mantissa.erase(ret.mantissa.begin(), ret.mantissa.begin() + (long) exponent_shift + 1);
-
 
     vector<bool> exponent_shift_binary = intToBinary(exponent_shift);
     exponent_shift_binary.insert(exponent_shift_binary.begin(), ret.exponent_length - exponent_shift_binary.size(), false);
