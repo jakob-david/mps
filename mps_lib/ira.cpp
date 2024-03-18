@@ -720,8 +720,6 @@ void ira::PLU_decomposition(unsigned long mantissa_precision, unsigned long expo
 //-------------------------------
 
 
-
-
 // helper functions
 //-------------------------------
 /**

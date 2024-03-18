@@ -9,6 +9,9 @@
 #define MPS_IRA_H
 
 
+// TODO: write random matrix generator.
+
+
 class ira {
 
 private:
@@ -70,7 +73,6 @@ public:
     void PLU_decomposition(unsigned long mantissa_precision, unsigned long exponent_precision);
     [[nodiscard]] vector<mps> forwardSubstitution(const vector<mps>& b) const;
     [[nodiscard]] vector<mps> backwardSubstitution(const vector<mps>& b) const;
-
     // TODO: test
     [[nodiscard]] vector<mps> iterativeRefinementLU(const vector<mps>& b, unsigned long u[2], unsigned long uf[2]);
     // TODO: test
