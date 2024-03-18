@@ -20,6 +20,7 @@ add_executable(mps_tests tests/mps_general.cpp
         tests/mps_comp_larger.cpp
         tests/mps_comp_smaller.cpp
         tests/ira_algorithms_auto.cpp
+        tests/mps_evaluation.cpp
 )
 
 target_link_libraries(mps_tests mps_lib)

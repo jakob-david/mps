@@ -590,8 +590,9 @@ TEST(setter_tests, set_NAN_float) {
 
 
 
-
-
+// ######################
+// Exception Tests
+// ######################
 TEST(exception, different_length_exponent_addition){
 
     bool test = false;

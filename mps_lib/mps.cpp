@@ -325,7 +325,7 @@ std::string mps::to_string(const int precision) const {
 
     vector<bool> mant(compare.mantissa_length, false);
     tmp_1.setMantissa(mant);
-    mant[precision-1] = true;
+    mant[precision] = true;
     tmp_2.setMantissa(mant);
 
     auto max_error = tmp_2 - tmp_1;

@@ -284,7 +284,7 @@ void ira::setU(unsigned long mantissa_length, unsigned long exponent_length, vec
 [[nodiscard]] vector<float> ira::mps_to_float(vector<mps> mps_vector){
 
     if (mps_vector.empty()) {
-        throw std::invalid_argument("ERROR: in mps_to_float: a is mps_vector");
+        throw std::invalid_argument("ERROR: in mps_to_float: mps_vector is empty");
     }
 
     vector<float> ret(mps_vector.size(), 0.0);
