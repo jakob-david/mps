@@ -10,6 +10,7 @@
 
 
 // TODO: write random matrix generator.
+// TODO: rewrite random mps tests
 
 
 class ira {
@@ -39,8 +40,9 @@ public:
 
     // setter
     //-------------------------------
-    void unitary(unsigned long mantissa_length, unsigned long exponent_length);
+    void setUnitaryMatrix(unsigned long mantissa_length, unsigned long exponent_length);
     void setMatrix(unsigned long mantissa_length, unsigned long exponent_length, vector<double> new_matrix);
+    void setRandomMatrix(unsigned long mantissa_length, unsigned long exponent_length);
     void setL(unsigned long mantissa_length, unsigned long exponent_length, vector<double> new_L);
     void setU(unsigned long mantissa_length, unsigned long exponent_length, vector<double> new_U);
     //-------------------------------

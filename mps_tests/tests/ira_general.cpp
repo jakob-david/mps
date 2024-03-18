@@ -12,7 +12,7 @@ TEST(unitary_matrix, init_2x2) {
     unsigned long exponent_length = 11;
 
     ira IRA(2);
-    IRA.unitary(mantissa_length, exponent_length);
+    IRA.setUnitaryMatrix(mantissa_length, exponent_length);
 
     EXPECT_EQ(IRA.to_string('A'), "1.000000, 0.000000, 0.000000, 1.000000");
     EXPECT_EQ(mantissa_length, IRA.getMatrixElement(0).mantissa_length);
@@ -25,7 +25,7 @@ TEST(unitary_matrix, init_3x3) {
     unsigned long exponent_length = 11;
 
     ira IRA(3);
-    IRA.unitary(mantissa_length, exponent_length);
+    IRA.setUnitaryMatrix(mantissa_length, exponent_length);
 
     EXPECT_EQ(IRA.to_string('A'), "1.000000, 0.000000, 0.000000, 0.000000, 1.000000, 0.000000, 0.000000, 0.000000, 1.000000");
     EXPECT_EQ(mantissa_length, IRA.getMatrixElement(0).mantissa_length);
@@ -108,6 +108,87 @@ TEST(custom_matrix, new_matrix_too_small) {
     }
 
     EXPECT_EQ(true, test);
+}
+
+TEST(setRandomMatrix, exception_exponent_too_small) {
+
+    unsigned long n = 3;
+
+    unsigned long mantissa_length = 52;
+    unsigned long exponent_length = 0;
+
+    ira IRA(n);
+
+    bool test = false;
+    try
+    {
+        IRA.setRandomMatrix(mantissa_length, exponent_length);
+    }
+
+    catch (std::invalid_argument& e)
+    {
+        test = true;
+    }
+
+    EXPECT_TRUE(test);
+}
+
+TEST(setRandomMatrix, simple_1) {
+
+    unsigned long n = 3;
+
+    unsigned long mantissa_length = 52;
+    unsigned long exponent_length = 11;
+
+    ira IRA(n);
+    IRA.setRandomMatrix(mantissa_length, exponent_length);
+
+    for(unsigned long i = 0; i < n * n; i++){
+        EXPECT_TRUE(IRA.getMatrixElement(i).getValue() <= 10);
+        EXPECT_TRUE(IRA.getMatrixElement(i).getValue() >= -10);
+    }
+
+    bool test = false;
+    try
+    {
+        auto tmp = IRA.getMatrixElement(n*n+1);
+    }
+
+    catch (std::invalid_argument& e)
+    {
+        test = true;
+    }
+
+    EXPECT_TRUE(test);
+}
+
+TEST(setRandomMatrix, simple_2) {
+
+    unsigned long n = 6;
+
+    unsigned long mantissa_length = 23;
+    unsigned long exponent_length = 8;
+
+    ira IRA(n);
+    IRA.setRandomMatrix(mantissa_length, exponent_length);
+
+    for(unsigned long i = 0; i < n * n; i++){
+        EXPECT_TRUE(IRA.getMatrixElement(i).getValue() <= 10);
+        EXPECT_TRUE(IRA.getMatrixElement(i).getValue() >= -10);
+    }
+
+    bool test = false;
+    try
+    {
+        auto tmp = IRA.getMatrixElement(n*n+1);
+    }
+
+    catch (std::invalid_argument& e)
+    {
+        test = true;
+    }
+
+    EXPECT_TRUE(test);
 }
 
 TEST(getMatrixElement, idx_too_large) {

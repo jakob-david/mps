@@ -4,6 +4,7 @@
 
 #include "ira.h"
 #include <iostream>
+#include <random>
 
 using namespace std;
 
@@ -47,7 +48,7 @@ ira::~ira() = default;
  * @param mantissa_length the size of the mantissa of the elements of the matrix
  * @param exponent_length the size of the exponent of the elements of the matrix
  */
-void ira::unitary(unsigned long mantissa_length, unsigned long exponent_length) {
+void ira::setUnitaryMatrix(unsigned long mantissa_length, unsigned long exponent_length) {
 
     for(unsigned long i = 0; i <  this->n; i++){
         for(unsigned long j = 0; j < this->n; j++){
@@ -78,6 +79,22 @@ void ira::setMatrix(unsigned long mantissa_length, unsigned long exponent_length
 
     for(unsigned i = 0; i < new_matrix.size(); i++){
         this->A[i] = mps(mantissa_length, exponent_length, new_matrix[i]);
+    }
+}
+
+void ira::setRandomMatrix(unsigned long mantissa_length, unsigned long exponent_length){
+
+    if (exponent_length < 1) {
+        throw std::invalid_argument("ERROR: setRandomMatrix: exponent too small");
+    }
+
+    std::random_device rd;
+    std::mt19937 mt(rd());
+    std::uniform_real_distribution<double> dist(-10.0, 10.0);
+
+
+    for(unsigned i = 0; i < (this->n * this->n); i++){
+        this->A[i] = mps(mantissa_length, exponent_length, dist(mt));
     }
 }
 
@@ -138,7 +155,7 @@ void ira::setU(unsigned long mantissa_length, unsigned long exponent_length, vec
 [[nodiscard]] mps ira::getMatrixElement(unsigned long idx){
 
     if (idx >= (this->n * this->n)) {
-        throw std::invalid_argument("ERROR: to_string (vector): a is empty");
+        throw std::invalid_argument("ERROR: getMatrixElement: idx too large");
     }
 
     return this->A[idx];
