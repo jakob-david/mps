@@ -321,6 +321,7 @@ std::string mps::to_string(const int precision) const {
  * Compares the mantissa of two mps objects up to a specified precision.
  * So if the two mantissas are different of a magnitude smaller than the precision specified the function returns true.
  *
+ *
  * The two mps objects must have the same mantissa length and exponent length.
  *
  * @param compare the mps object to which "this" mps object should be compared.
