@@ -254,10 +254,16 @@ void ira::setU(unsigned long mantissa_length, unsigned long exponent_length, vec
     return ret;
 }
 
+/**
+ * Converts a vector of mps objects to a vector consisting of doubles.
+ *
+ * @param mps_vector the vector of mps objects which should be converted.
+ * @return a vector consisting of doubles.
+ */
 [[nodiscard]] vector<double> ira::mps_to_double(vector<mps> mps_vector){
 
     if (mps_vector.empty()) {
-        throw std::invalid_argument("ERROR: in mps_to_double: a is mps_vector");
+        throw std::invalid_argument("ERROR: in mps_to_double: mps_vector is empty");
     }
 
     vector<double> ret(mps_vector.size(), 0.0);
@@ -269,6 +275,12 @@ void ira::setU(unsigned long mantissa_length, unsigned long exponent_length, vec
     return ret;
 }
 
+/**
+ * Converts a vector of mps objects to a vector consisting of floats.
+ *
+ * @param mps_vector the vector of mps objects which should be converted.
+ * @return a vector consisting of floats.
+ */
 [[nodiscard]] vector<float> ira::mps_to_float(vector<mps> mps_vector){
 
     if (mps_vector.empty()) {

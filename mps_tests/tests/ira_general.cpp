@@ -2,6 +2,10 @@
 
 #include "ira.h"
 
+
+
+// setter and getter
+// -------------------------------------
 TEST(unitary_matrix, init_2x2) {
 
     unsigned long mantissa_length = 53;
@@ -273,6 +277,9 @@ TEST(setL, exception_U_too_small) {
 }
 
 
+
+// casts
+// -------------------------------------
 TEST(double_to_mps, exception_vector_empty) {
 
     unsigned long mantissa_length = 52;
@@ -375,7 +382,87 @@ TEST(double_to_mps, simple_double) {
     EXPECT_EQ(exponent_length, mps_vector[0].exponent_length);
 }
 
+TEST(mps_to_double, exception_vector_empty) {
 
+    vector<mps> mps_vector;
+
+
+    bool test = false;
+
+    try
+    {
+        auto double_vector = ira::mps_to_double(mps_vector);
+    }
+
+    catch (std::invalid_argument& e)
+    {
+        test = true;
+    }
+
+    EXPECT_TRUE(test);
+}
+
+TEST(mps_to_double, simple_1) {
+
+    unsigned long mantissa_length = 52;
+    unsigned long exponent_length = 11;
+    vector<double> should_vector{45.34, -32, 3463246, -0.34345};
+
+    vector<mps> mps_vector;
+    mps_vector.emplace_back(mantissa_length, exponent_length, should_vector[0]);
+    mps_vector.emplace_back(mantissa_length, exponent_length, should_vector[1]);
+    mps_vector.emplace_back(mantissa_length, exponent_length, should_vector[2]);
+    mps_vector.emplace_back(mantissa_length, exponent_length, should_vector[3]);
+
+    auto double_vector = ira::mps_to_double(mps_vector);
+
+
+    std::string tmp = "";
+    for(unsigned long i = 0; i < should_vector.size(); i++){
+        EXPECT_EQ(should_vector[i], double_vector[i]);
+    }
+}
+
+TEST(mps_to_float, exception_vector_empty) {
+
+    vector<mps> mps_vector;
+
+
+    bool test = false;
+
+    try
+    {
+        auto double_vector = ira::mps_to_float(mps_vector);
+    }
+
+    catch (std::invalid_argument& e)
+    {
+        test = true;
+    }
+
+    EXPECT_TRUE(test);
+}
+
+TEST(mps_to_float, simple_1) {
+
+    unsigned long mantissa_length = 52;
+    unsigned long exponent_length = 11;
+    vector<float> should_vector{45.34f, -32, 3463246, -0.34345f};
+
+    vector<mps> mps_vector;
+    mps_vector.emplace_back(mantissa_length, exponent_length, should_vector[0]);
+    mps_vector.emplace_back(mantissa_length, exponent_length, should_vector[1]);
+    mps_vector.emplace_back(mantissa_length, exponent_length, should_vector[2]);
+    mps_vector.emplace_back(mantissa_length, exponent_length, should_vector[3]);
+
+    auto float_vector = ira::mps_to_float(mps_vector);
+
+
+    std::string tmp = "";
+    for(unsigned long i = 0; i < should_vector.size(); i++){
+        EXPECT_EQ(should_vector[i], float_vector[i]);
+    }
+}
 
 TEST(castVectorElements, exception_vector_empty) {
 
@@ -480,6 +567,8 @@ TEST(castVectorElements, double_to_float_1) {
 
 
 
+// printing
+// -------------------------------------
 TEST(to_string, exception_L_nullptr) {
 
     unsigned long mantissa_length = 52;
