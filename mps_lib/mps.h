@@ -53,7 +53,6 @@ public:
 
     // check precision
     //-------------------------------
-    // TODO: test
     [[nodiscard]] bool check_precision(const mps& compare, unsigned long precision) const;
 
     // setter methods
