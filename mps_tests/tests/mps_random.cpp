@@ -8,15 +8,15 @@ unsigned long number_of_tests = 10000;
 
 TEST(random, double_pp){
 
+    std::random_device rd;
+    std::mt19937 mt(rd());
+    std::uniform_real_distribution<double> dist(0, DBL_MAX);
+
     for(unsigned long i = 0; i < number_of_tests; i++){
 
-        double lower_bound = 0;
-        double upper_bound = numeric_limits<double>::max();
-        std::uniform_real_distribution<double> unif(lower_bound,upper_bound);
-        std::default_random_engine re((unsigned int) rand());
+        double one = dist(mt);
+        double two = dist(mt);
 
-        double one = unif(re);
-        double two = unif(re);
 
         if(one < numeric_limits<double>::min() || two < numeric_limits<double>::min()){
             continue;
@@ -63,15 +63,15 @@ TEST(random, double_pp){
 
 TEST(random, double_nn){
 
+
+    std::random_device rd;
+    std::mt19937 mt(rd());
+    std::uniform_real_distribution<double> dist(0, DBL_MAX);
+
     for(unsigned long i = 0; i < number_of_tests; i++){
 
-        double lower_bound = 0;
-        double upper_bound = numeric_limits<double>::max();
-        std::uniform_real_distribution<double> unif(lower_bound,upper_bound);
-        std::default_random_engine re((unsigned int) rand());
-
-        double one = unif(re) * -1;
-        double two = unif(re) * -1;
+        double one = dist(mt) * -1;
+        double two = dist(mt) * -1;
 
         if(one < numeric_limits<double>::min() || two < numeric_limits<double>::min()){
             continue;
@@ -120,15 +120,14 @@ TEST(random, double_nn){
 
 TEST(random, double_pn){
 
+    std::random_device rd;
+    std::mt19937 mt(rd());
+    std::uniform_real_distribution<double> dist(0, DBL_MAX);
+
     for(unsigned long i = 0; i < number_of_tests; i++){
 
-        double lower_bound = 0;
-        double upper_bound = numeric_limits<double>::max();
-        std::uniform_real_distribution<double> unif(lower_bound,upper_bound);
-        std::default_random_engine re((unsigned int) rand());
-
-        double one = unif(re);
-        double two = unif(re) * -1;
+        double one = dist(mt);
+        double two = dist(mt) * -1;
 
         if(one < numeric_limits<double>::min() || two < numeric_limits<double>::min()){
             continue;
@@ -175,15 +174,14 @@ TEST(random, double_pn){
 
 TEST(random, double_np){
 
+    std::random_device rd;
+    std::mt19937 mt(rd());
+    std::uniform_real_distribution<double> dist(0, DBL_MAX);
+
     for(unsigned long i = 0; i < number_of_tests; i++){
 
-        double lower_bound = 0;
-        double upper_bound = numeric_limits<double>::max();
-        std::uniform_real_distribution<double> unif(lower_bound,upper_bound);
-        std::default_random_engine re((unsigned int) rand());
-
-        double one = unif(re) * -1;
-        double two = unif(re);
+        double one = dist(mt) * -1;
+        double two = dist(mt);
 
         if(one < numeric_limits<double>::min() || two < numeric_limits<double>::min()){
             continue;
@@ -231,15 +229,14 @@ TEST(random, double_np){
 
 TEST(random, float_pp){
 
+    std::random_device rd;
+    std::mt19937 mt(rd());
+    std::uniform_real_distribution<float> dist(0, FLT_MAX);
+
     for(unsigned long i = 0; i < number_of_tests; i++){
 
-        float lower_bound = 0.0f;
-        float upper_bound = numeric_limits<float>::max();
-        std::uniform_real_distribution<float> unif(lower_bound,upper_bound);
-        std::default_random_engine re((unsigned int) rand());
-
-        float one = unif(re);
-        float two = unif(re);
+        float one = dist(mt);
+        float two = dist(mt);
 
         if(one < numeric_limits<float>::min() || two < numeric_limits<float>::min()){
             continue;
@@ -286,15 +283,14 @@ TEST(random, float_pp){
 
 TEST(random, float_nn){
 
+    std::random_device rd;
+    std::mt19937 mt(rd());
+    std::uniform_real_distribution<float> dist(0, FLT_MAX);
+
     for(unsigned long i = 0; i < number_of_tests; i++){
 
-        float lower_bound = 0.0f;
-        float upper_bound = numeric_limits<float>::max();
-        std::uniform_real_distribution<float> unif(lower_bound,upper_bound);
-        std::default_random_engine re((unsigned int) rand());
-
-        float one = unif(re) * -1;
-        float two = unif(re) * -1;
+        float one = dist(mt) * -1;
+        float two = dist(mt) * -1;
 
         if(one < numeric_limits<float>::min() || two < numeric_limits<float>::min()){
             continue;
@@ -341,15 +337,14 @@ TEST(random, float_nn){
 
 TEST(random, float_pn){
 
+    std::random_device rd;
+    std::mt19937 mt(rd());
+    std::uniform_real_distribution<float> dist(0, FLT_MAX);
+
     for(unsigned long i = 0; i < number_of_tests; i++){
 
-        float lower_bound = 0.0f;
-        float upper_bound = numeric_limits<float>::max();
-        std::uniform_real_distribution<float> unif(lower_bound,upper_bound);
-        std::default_random_engine re((unsigned int) rand());
-
-        float one = unif(re);
-        float two = unif(re) * -1;
+        float one = dist(mt);
+        float two = dist(mt) * -1;
 
         if(one < numeric_limits<float>::min() || two < numeric_limits<float>::min()){
             continue;
@@ -396,15 +391,14 @@ TEST(random, float_pn){
 
 TEST(random, float_np){
 
+    std::random_device rd;
+    std::mt19937 mt(rd());
+    std::uniform_real_distribution<float> dist(0, FLT_MAX);
+
     for(unsigned long i = 0; i < number_of_tests; i++){
 
-        float lower_bound = 0.0f;
-        float upper_bound = numeric_limits<float>::max();
-        std::uniform_real_distribution<float> unif(lower_bound,upper_bound);
-        std::default_random_engine re((unsigned int) rand());
-
-        float one = unif(re) * -1;
-        float two = unif(re);
+        float one = dist(mt) * -1;
+        float two = dist(mt);
 
         if(one < numeric_limits<float>::min() || two < numeric_limits<float>::min()){
             continue;

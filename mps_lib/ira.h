@@ -9,10 +9,6 @@
 #define MPS_IRA_H
 
 
-// TODO: write random matrix generator.
-// TODO: rewrite random mps tests
-
-
 class ira {
 
 private:

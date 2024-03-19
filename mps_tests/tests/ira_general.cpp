@@ -191,6 +191,41 @@ TEST(setRandomMatrix, simple_2) {
     EXPECT_TRUE(test);
 }
 
+TEST(setRandomMatrix, uniqueness_1) {
+
+    unsigned long n = 6;
+
+    unsigned long mantissa_length = 23;
+    unsigned long exponent_length = 8;
+
+    ira IRA_1(n);
+    ira IRA_2(n);
+    IRA_1.setRandomMatrix(mantissa_length, exponent_length);
+    IRA_2.setRandomMatrix(mantissa_length, exponent_length);
+
+    for(unsigned long i = 0; i < n * n; i++){
+        EXPECT_TRUE(IRA_1.getMatrixElement(i).getValue() <= 10);
+        EXPECT_TRUE(IRA_1.getMatrixElement(i).getValue() >= -10);
+        EXPECT_TRUE(IRA_2.getMatrixElement(i).getValue() <= 10);
+        EXPECT_TRUE(IRA_2.getMatrixElement(i).getValue() >= -10);
+        EXPECT_TRUE(IRA_2.getMatrixElement(i).getValue() != IRA_1.getMatrixElement(i).getValue());
+    }
+
+    bool test = false;
+    try
+    {
+        auto tmp = IRA_1.getMatrixElement(n*n+1);
+        tmp = IRA_2.getMatrixElement(n*n+1);
+    }
+
+    catch (std::invalid_argument& e)
+    {
+        test = true;
+    }
+
+    EXPECT_TRUE(test);
+}
+
 TEST(getMatrixElement, idx_too_large) {
 
     unsigned long mantissa_length = 52;
