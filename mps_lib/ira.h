@@ -8,6 +8,11 @@
 #ifndef MPS_IRA_H
 #define MPS_IRA_H
 
+// TODO: make random tests for solve_LU
+// TODO: make tests for iterative refinement
+// TODO: rewrite iterative refinement
+// TODO: write minimisation algorithm.
+
 
 class ira {
 
