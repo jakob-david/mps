@@ -82,6 +82,13 @@ void ira::setMatrix(unsigned long mantissa_length, unsigned long exponent_length
     }
 }
 
+/**
+ * Sets the system matrix of the ira object to a random generated matrix.
+ * All randomly generated variables are between -10 and 10.
+ *
+ * @param mantissa_length the size of the mantissa of the elements of the matrix
+ * @param exponent_length the size of the exponent of the elements of the matrix
+ */
 void ira::setRandomMatrix(unsigned long mantissa_length, unsigned long exponent_length){
 
     if (exponent_length < 1) {
@@ -641,11 +648,12 @@ void ira::PLU_decomposition(unsigned long mantissa_precision, unsigned long expo
 }
 
 /**
- * Solves a system of equation using a LU-Factorisation.
- * The system matrix needs not to be added since it must set beforehand.
+ * Solves a system of equation using a PLU-Factorisation.
+ * The system matrix needs not to be a parameter since it must set beforehand.
  *
  * @param b the solution vector of the system.
- * @return u the precision in which the system should be solved.
+ * @param u the precision in which the system should be solved.
+ * @return the solution of the system as an mps object.
  */
 [[nodiscard]] vector<mps> ira::solve_LU(const vector<mps>& b, unsigned long u[2]){
 
@@ -737,8 +745,15 @@ void ira::PLU_decomposition(unsigned long mantissa_precision, unsigned long expo
 //-------------------------------
 
 
-// algorithms
+// algorithms which use "normal" double
 //-------------------------------
+/**
+ * Solves a system of equation using a PLU-Factorisation and "normal" double variables.
+ * The system matrix needs not to be a parameter since it must set beforehand.
+ *
+ * @param b the solution vector of the system.
+ * @return the solution of the system.
+ */
 [[nodiscard]] vector<double> ira::solve_LU_double(const vector<double>& b){
 
     // operators   (to avoid subnormal numbers)

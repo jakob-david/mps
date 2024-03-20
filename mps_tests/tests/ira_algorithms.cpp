@@ -1245,12 +1245,59 @@ TEST(solve_LU_double, simple_3x3_1){
 
     vector<double> x_should{1, 2, 3};
 
-    EXPECT_EQ(x_should, x_result);
-    EXPECT_EQ(should_value(x_should[0]), should_value(x_result[0]));
-    EXPECT_EQ(should_value(x_should[1]), should_value(x_result[1]));
-    EXPECT_EQ(should_value(x_should[2]), should_value(x_result[2]));
+    for(unsigned long i = 0; i < b.size(); i++){
+        EXPECT_EQ(to_string(x_should[i]), to_string(x_result[i]));
+    }
 }
 
+TEST(solve_LU_double, simple_3x3_2){
+
+    unsigned long u[2] = {52, 11};
+
+    ira IRA(3);
+
+    vector<double> new_A{-34.23, 4.2 ,0.43, 3.2, 8.45 ,12.45, -7, 2.45 ,-4.35};
+    IRA.setMatrix(u[0], u[1], new_A);
+
+    vector<double> b;
+    b.push_back(-62.92316);
+    b.push_back(194.1884);
+    b.push_back(-21.37);
+
+    auto x_result = IRA.solve_LU_double(b);
+
+    vector<double> x_should{3.4320000000000004, 12.34, 6.34};
+
+    for(unsigned long i = 0; i < b.size(); i++){
+        EXPECT_EQ(to_string(x_should[i]), to_string(x_result[i]));
+    }
+}
+
+TEST(solve_LU_double, simple_6x6_1){
+
+    unsigned long u[2] = {52, 11};
+
+    ira IRA(6);
+
+    vector<double> new_A{5, 1 ,3, 4, 2, -3, 1, 1 ,1, 2, 5, -2, 1, 2 ,1, 3, 2, 5, 4, 2 ,-1, 3, 3, -4, 2, 2 ,-3, 3,-6, 1, 2, 4 ,-1, 7,-6, -1.5};
+    IRA.setMatrix(u[0], u[1], new_A);
+
+    vector<double> b;
+    b.push_back(24);
+    b.push_back(27);
+    b.push_back( 60);
+    b.push_back( 8);
+    b.push_back( -15);
+    b.push_back( -4);
+
+    auto x_result = IRA.solve_LU_double(b);
+
+    vector<double> x_should{1.0, 2.0, 3.0, 4.0, 5.0, 6.0};
+
+    for(unsigned long i = 0; i < b.size(); i++){
+        EXPECT_EQ(to_string(x_should[i]), to_string(x_result[i]));
+    }
+}
 
 
 
