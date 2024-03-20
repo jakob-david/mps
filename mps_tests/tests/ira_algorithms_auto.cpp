@@ -3,11 +3,13 @@
 //
 
 #include "gtest/gtest.h"
+#include <random>
 
 #include "ira.h"
 #include "../functions/functions.h"
 
-TEST(solve_LU, auto_1_double){
+
+TEST(solve_LU, auto_overprecision_double){
 
     //------------------------------------------------------------------------------------------------------
     unsigned long precision = 14;        // the extra mantissa bits which are needed to achieve double precision.
@@ -71,7 +73,7 @@ TEST(solve_LU, auto_1_double){
     }
 }
 
-TEST(solve_LU, auto_1_float){
+TEST(solve_LU, auto_pverprecision_float){
 
     //------------------------------------------------------------------------------------------------------
     unsigned long precision = 13;        // the extra mantissa bits which are needed to achieve double precision.
@@ -135,8 +137,7 @@ TEST(solve_LU, auto_1_float){
     }
 }
 
-
-TEST(solve_LU, auto_2_double){
+TEST(solve_LU, auto_double){
 
     //------------------------------------------------------------------------------------------------------
     unsigned long precision = 43;           // the number of  mantissa bits which should be checked.
@@ -207,7 +208,7 @@ TEST(solve_LU, auto_2_double){
     }
 }
 
-TEST(solve_LU, auto_2_float){
+TEST(solve_LU, auto_float){
 
     //------------------------------------------------------------------------------------------------------
     unsigned long precision = 15;           // the number of  mantissa bits which should be checked.
@@ -278,3 +279,292 @@ TEST(solve_LU, auto_2_float){
     }
 }
 
+
+
+TEST(solve_LU, random_float){
+
+    //------------------------------------------------------------------------------------------------------
+    unsigned long precision = 9;           // The number of  mantissa bits which should be checked.
+    unsigned long number_of_tests = 2;     // The number of test runs.
+    unsigned long matrix_size = 30;         // The size of the system-matrix.
+    unsigned long u[2] = {23, 8};  // The precision of the mps objects.
+    //------------------------------------------------------------------------------------------------------
+
+    for(unsigned long m = 0; m <= number_of_tests; m++){
+
+        ira IRA(matrix_size);
+
+        // Set up A
+        //--------------------------------
+        IRA.setRandomMatrix(u[0], u[1]);
+        //--------------------------------
+
+        // Set up x_should;
+        // Set up x_should;
+        //--------------------------------
+        std::random_device rd;
+        std::mt19937 mt(rd());
+        std::uniform_real_distribution<double> dist(-10.0, 10.0);
+
+        vector<mps> x_should;
+        for(unsigned long i = 0 + 1; i <= matrix_size; i++){
+            x_should.emplace_back(u[0], u[1], dist(mt));
+        }
+        //--------------------------------
+
+        // Set up b
+        //--------------------------------
+        vector<mps> b;
+        double tmp;
+        for(unsigned long i = 0; i < matrix_size; i++){
+            tmp = 0;
+            for(unsigned long j = 0; j < matrix_size; j++){
+                tmp += x_should[j].getValue() * IRA.getMatrixElement((matrix_size * i) + j).getValue();
+            }
+            b.emplace_back(u[0], u[1], tmp);
+        }
+        //--------------------------------
+
+        // solve system
+        //--------------------------------
+        auto x = IRA.solve_LU(b, u);
+        //--------------------------------
+
+        // perform tests
+        //--------------------------------
+        vector<unsigned long> precision_dist;
+        for(unsigned long i = 0; i < matrix_size; i++){
+
+            auto result = x[i].check_precision(x_should[i], precision);
+
+            EXPECT_TRUE(result);
+
+            if(!result){
+                cout << "x_i:   " << x[i].print() << endl;
+                cout << "x_i_s  " << x_should[i].print() << endl;
+            }
+        }
+        //--------------------------------
+
+    }
+}
+
+TEST(solve_LU, random_double){
+
+    //------------------------------------------------------------------------------------------------------
+    unsigned long precision = 39;           // The number of  mantissa bits which should be checked.
+    unsigned long number_of_tests = 2;     // The number of test runs.
+    unsigned long matrix_size = 30;         // The size of the system-matrix.
+    unsigned long u[2] = {52, 11};  // The precision of the mps objects.
+    //------------------------------------------------------------------------------------------------------
+
+    for(unsigned long m = 0; m <= number_of_tests; m++){
+
+        ira IRA(matrix_size);
+
+        // Set up A
+        //--------------------------------
+        IRA.setRandomMatrix(u[0], u[1]);
+        //--------------------------------
+
+        // Set up x_should;
+        // Set up x_should;
+        //--------------------------------
+        std::random_device rd;
+        std::mt19937 mt(rd());
+        std::uniform_real_distribution<double> dist(-10.0, 10.0);
+
+        vector<mps> x_should;
+        for(unsigned long i = 0 + 1; i <= matrix_size; i++){
+            x_should.emplace_back(u[0], u[1], dist(mt));
+        }
+        //--------------------------------
+
+        // Set up b
+        //--------------------------------
+        vector<mps> b;
+        double tmp;
+        for(unsigned long i = 0; i < matrix_size; i++){
+            tmp = 0;
+            for(unsigned long j = 0; j < matrix_size; j++){
+                tmp += x_should[j].getValue() * IRA.getMatrixElement((matrix_size * i) + j).getValue();
+            }
+            b.emplace_back(u[0], u[1], tmp);
+        }
+        //--------------------------------
+
+        // solve system
+        //--------------------------------
+        auto x = IRA.solve_LU(b, u);
+        //--------------------------------
+
+        // perform tests
+        //--------------------------------
+        vector<unsigned long> precision_dist;
+        for(unsigned long i = 0; i < matrix_size; i++){
+
+            auto result = x[i].check_precision(x_should[i], precision);
+
+            EXPECT_TRUE(result);
+
+            if(!result){
+                cout << "x_i:   " << x[i].print() << endl;
+                cout << "x_i_s  " << x_should[i].print() << endl;
+            }
+        }
+        //--------------------------------
+
+    }
+}
+
+TEST(solve_LU, random_distana_float){
+
+    //------------------------------------------------------------------------------------------------------
+    unsigned long number_of_tests = 10;     // The number of test runs.
+    unsigned long matrix_size = 20;         // The size of the system-matrix.
+    unsigned long u[2] = {23, 8};  // The precision of the mps objects.
+    //------------------------------------------------------------------------------------------------------
+
+    vector<unsigned long> precision_dist(u[0], 0);
+
+    for(unsigned long m = 0; m <= number_of_tests; m++){
+
+        ira IRA(matrix_size);
+
+        // Set up A
+        //--------------------------------
+        IRA.setRandomMatrix(u[0], u[1]);
+        //--------------------------------
+
+        // Set up x_should;
+        //--------------------------------
+        std::random_device rd;
+        std::mt19937 mt(rd());
+        std::uniform_real_distribution<double> dist(-10.0, 10.0);
+
+        vector<mps> x_should;
+        for(unsigned long i = 0 + 1; i <= matrix_size; i++){
+            x_should.emplace_back(u[0], u[1], dist(mt));
+        }
+        //--------------------------------
+
+        // Set up b
+        //--------------------------------
+        vector<mps> b;
+        double tmp;
+        for(unsigned long i = 0; i < matrix_size; i++){
+            tmp = 0;
+            for(unsigned long j = 0; j < matrix_size; j++){
+                tmp += x_should[j].getValue() * IRA.getMatrixElement((matrix_size * i) + j).getValue();
+            }
+            b.emplace_back(u[0], u[1], tmp);
+        }
+        //--------------------------------
+
+        // solve system
+        //--------------------------------
+        auto x = IRA.solve_LU(b, u);
+        //--------------------------------
+
+        // perform tests
+        //--------------------------------
+        for(unsigned long i = 0; i < matrix_size; i++){
+
+            for(unsigned long p = u[0]; p > 0; p--){
+                if(x[i].check_precision(x_should[i], p)){
+                    precision_dist[u[0]-p]++;
+                    break;
+                }
+            }
+        }
+        //--------------------------------
+
+    }
+
+    for(unsigned long i = 0; i < precision_dist.size(); i++){
+        if(precision_dist[i] != 0){
+            if(i < 10){
+                cout << "precision  " << i << ": " << precision_dist[i] << endl;
+            } else {
+                cout << "precision " << i << ": " << precision_dist[i] << endl;
+            }
+
+        }
+    }
+}
+
+TEST(solve_LU, random_distana_double){
+
+    //------------------------------------------------------------------------------------------------------
+    unsigned long number_of_tests = 10;     // The number of test runs.
+    unsigned long matrix_size = 20;         // The size of the system-matrix.
+    unsigned long u[2] = {52, 11};  // The precision of the mps objects.
+    //------------------------------------------------------------------------------------------------------
+
+    vector<unsigned long> precision_dist(u[0], 0);
+
+    for(unsigned long m = 0; m <= number_of_tests; m++){
+
+        ira IRA(matrix_size);
+
+        // Set up A
+        //--------------------------------
+        IRA.setRandomMatrix(u[0], u[1]);
+        //--------------------------------
+
+        // Set up x_should;
+        //--------------------------------
+        std::random_device rd;
+        std::mt19937 mt(rd());
+        std::uniform_real_distribution<double> dist(-10.0, 10.0);
+
+        vector<mps> x_should;
+        for(unsigned long i = 0 + 1; i <= matrix_size; i++){
+            x_should.emplace_back(u[0], u[1], dist(mt));
+        }
+        //--------------------------------
+
+        // Set up b
+        //--------------------------------
+        vector<mps> b;
+        double tmp;
+        for(unsigned long i = 0; i < matrix_size; i++){
+            tmp = 0;
+            for(unsigned long j = 0; j < matrix_size; j++){
+                tmp += x_should[j].getValue() * IRA.getMatrixElement((matrix_size * i) + j).getValue();
+            }
+            b.emplace_back(u[0], u[1], tmp);
+        }
+        //--------------------------------
+
+        // solve system
+        //--------------------------------
+        auto x = IRA.solve_LU(b, u);
+        //--------------------------------
+
+        // perform tests
+        //--------------------------------
+        for(unsigned long i = 0; i < matrix_size; i++){
+
+            for(unsigned long p = u[0]; p > 0; p--){
+                if(x[i].check_precision(x_should[i], p)){
+                    precision_dist[u[0]-p]++;
+                    break;
+                }
+            }
+        }
+        //--------------------------------
+
+    }
+
+    for(unsigned long i = 0; i < precision_dist.size(); i++){
+        if(precision_dist[i] != 0){
+            if(i < 10){
+                cout << "precision  " << i << ": " << precision_dist[i] << endl;
+            } else {
+                cout << "precision " << i << ": " << precision_dist[i] << endl;
+            }
+
+        }
+    }
+}

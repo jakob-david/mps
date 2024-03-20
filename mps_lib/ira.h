@@ -8,7 +8,6 @@
 #ifndef MPS_IRA_H
 #define MPS_IRA_H
 
-// TODO: make random tests for solve_LU
 // TODO: make tests for iterative refinement
 // TODO: rewrite iterative refinement
 // TODO: write minimisation algorithm.
@@ -78,7 +77,6 @@ public:
     [[nodiscard]] vector<mps> backwardSubstitution(const vector<mps>& b) const;
     // TODO: test
     [[nodiscard]] vector<mps> iterativeRefinementLU(const vector<mps>& b, unsigned long u[2], unsigned long uf[2]);
-    // TODO: test
     [[nodiscard]] vector<mps> solve_LU(const vector<mps>& b, unsigned long u[2]);
     //-------------------------------
 
