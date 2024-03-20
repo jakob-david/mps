@@ -737,6 +737,203 @@ void ira::PLU_decomposition(unsigned long mantissa_precision, unsigned long expo
 //-------------------------------
 
 
+// algorithms
+//-------------------------------
+[[nodiscard]] vector<double> ira::solve_LU_double(const vector<double>& b){
+
+    // operators   (to avoid subnormal numbers)
+    //-------------------------------
+    auto add = [](double a, double b) {
+
+        auto result = a + b;
+
+        if(abs(result) < std::numeric_limits<double>::min()){
+            return 0.0;
+        } else {
+            return result;
+        }
+    };
+
+    auto sub = [](double a, double b) {
+
+        auto result = a - b;
+
+        if(abs(result) < std::numeric_limits<double>::min()){
+            return 0.0;
+        } else {
+            return result;
+        }
+    };
+
+    auto mul = [](double a, double b) {
+
+        auto result = a * b;
+
+        if(abs(result) < std::numeric_limits<double>::min()){
+            return 0.0;
+        } else {
+            return result;
+        }
+    };
+
+    auto div = [](double a, double b) {
+
+        auto result = a / b;
+
+        if(abs(result) < std::numeric_limits<double>::min()){
+            return 0.0;
+        } else {
+            return result;
+        }
+    };
+    //-------------------------------
+
+    // functions
+    //-------------------------------
+    auto interchange = [](vector<vector<double>>* matrix, unsigned long row_one, unsigned long row_two, unsigned long start, unsigned long end) {
+        for(auto i = start; i < end; i++){
+            auto tmp = (*matrix)[row_one][i];
+            (*matrix)[row_one][i] = (*matrix)[row_two][i];
+            (*matrix)[row_two][i] = tmp;
+        }
+    };
+
+    auto get_max_U = [](const vector<vector<double>>& UU, unsigned long nn, unsigned long column, unsigned long start) {
+
+        unsigned long max_row = start;
+        double value = UU[start][column];
+
+        for(unsigned long i = start; i < nn; i++){
+
+            if(abs(UU[i][column]) > value){
+                max_row = i;
+                value = abs(UU[i][column]);
+            }
+        }
+
+        return max_row;
+    };
+    //-------------------------------
+
+
+    // set up L and P
+    //-------------------------------
+    vector<vector<double>> L_;
+    vector<vector<double>> P_;
+
+    for(unsigned long i = 0; i <  this->n; i++){
+
+        vector<double> row;
+
+        for(unsigned long j = 0; j < this->n; j++){
+
+            if(i == j){
+                row.push_back(1);
+            } else {
+                row.push_back(0);
+            }
+        }
+
+        L_.push_back(row);
+        P_.push_back(row);
+    }
+    //-------------------------------
+
+    // set up U
+    //-------------------------------
+    vector<vector<double>> U_;
+
+    for(unsigned long i = 0; i <  this->n; i++){
+
+        vector<double> row;
+
+        for(unsigned long j = 0; j < this->n; j++){
+
+            auto idx = get_idx(i, j);
+
+            row.push_back(this->A[idx].getValue());
+        }
+
+        U_.push_back(row);
+    }
+    //-------------------------------
+
+
+    // PLU decomposition algorithm
+    //-------------------------------
+    for(unsigned long k = 0; k < this->n; k++){
+
+        auto max_row = get_max_U(U_, this->n, k, k);
+
+        interchange(&U_, k, max_row, k, n);
+        interchange(&L_, k, max_row, 0, k);
+        interchange(&P_, k, max_row, 0, n);
+
+        for(unsigned long j = k+1; j < n; j++){
+
+            L_[j][k] = div(U_[j][k], U_[k][k]);
+
+            for(unsigned long i = k; i < n; i++){
+                U_[j][i]  = sub(U_[j][i], mul(L_[j][k], U_[k][i]));
+            }
+        }
+
+    }
+    //-------------------------------
+
+
+    // matrix multiplication
+    //-------------------------------
+    vector<double> permut_b(b.size(), 0);
+
+    for(unsigned long i = 0; i < permut_b.size(); i++){
+        for(unsigned long j = 0; j < permut_b.size(); j++){
+            permut_b[i] = add(permut_b[i], mul(b[j], P_[i][j]));
+        }
+    }
+    //-------------------------------
+
+
+    // forward substitution algorithm
+    //-------------------------------
+    vector<double> xf;
+
+    xf.push_back(div(permut_b[0], L_[0][0]));
+    for(unsigned long i = 1; i < this->n; i++){
+
+        double tmp_sum = 0;
+        for(unsigned long j = 0; j < i; j++){
+            tmp_sum =  add(tmp_sum, mul(L_[i][j], xf[j]));
+        }
+
+        xf.push_back(div(sub(permut_b[i], tmp_sum), L_[i][i]));
+    }
+    //-------------------------------
+
+    // backward substitution algorithm
+    //-------------------------------
+    vector<double> xb(xf.size(), 0);
+
+    xb[this->n-1] = div(xf[this->n-1], U_[this->n-1][this->n-1]);
+    for(unsigned long i = this->n-1; i > 0;){
+
+        i--;
+
+        double tmp_sum = 0;
+        for(unsigned long j = this->n-1; j > i; j--){
+
+            tmp_sum =  add(tmp_sum, mul(U_[i][j], xb[j]));
+        }
+
+        xb[i] = div(sub(xf[i], tmp_sum), U_[i][i]);
+    }
+    //-------------------------------
+
+    return xb;
+}
+//-------------------------------
+
+
 // helper functions
 //-------------------------------
 /**

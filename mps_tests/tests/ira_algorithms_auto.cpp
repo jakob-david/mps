@@ -568,3 +568,63 @@ TEST(solve_LU, DISABLED_random_distana_double){
         }
     }
 }
+
+TEST(solve_LU, random_LUcompare_double){
+
+    //------------------------------------------------------------------------------------------------------
+    unsigned long number_of_tests = 1;      // The number of test runs.
+    unsigned long matrix_size = 30;             // The size of the system-matrix.
+    //------------------------------------------------------------------------------------------------------
+
+    for(unsigned long m = 0; m <= number_of_tests; m++){
+
+        ira IRA(matrix_size);
+
+        // Set up A
+        //--------------------------------
+        IRA.setRandomMatrix(52, 11);
+        //--------------------------------
+
+        // Set up x_should
+        //--------------------------------
+        std::random_device rd;
+        std::mt19937 mt(rd());
+        std::uniform_real_distribution<double> dist(-10.0, 10.0);
+
+        vector<mps> x_should;
+        for(unsigned long i = 0 + 1; i <= matrix_size; i++){
+            x_should.emplace_back(52, 11, dist(mt));
+        }
+
+        //--------------------------------
+
+        // Set up b
+        //--------------------------------
+        vector<mps> b;
+        double tmp;
+        for(unsigned long i = 0; i < matrix_size; i++){
+            tmp = 0;
+            for(unsigned long j = 0; j < matrix_size; j++){
+                tmp += x_should[j].getValue() * IRA.getMatrixElement((matrix_size * i) + j).getValue();
+            }
+            b.emplace_back(52, 11, tmp);
+        }
+        //--------------------------------
+
+        // solve system
+        //--------------------------------
+        unsigned long u[2] = {52, 11};
+        auto x_result = IRA.solve_LU(b, u);
+        auto x_should_double = IRA.solve_LU_double(ira::mps_to_double(b));
+        //--------------------------------
+
+        // perform tests
+        //--------------------------------
+        vector<unsigned long> precision_dist;
+        for(unsigned long i = 0; i < matrix_size; i++){
+            EXPECT_EQ(x_should_double[i], x_result[i].getValue());
+            EXPECT_EQ(should_value(x_should_double[i]), x_result[i].print());
+        }
+        //--------------------------------
+    }
+}

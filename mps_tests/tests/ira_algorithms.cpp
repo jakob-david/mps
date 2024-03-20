@@ -1227,6 +1227,31 @@ TEST(solve_LU, simple_6x6_double_1){
 }
 
 
+TEST(solve_LU_double, simple_3x3_1){
+
+    unsigned long u[2] = {52, 11};
+
+    ira IRA(3);
+
+    vector<double> new_A{5, 1 ,3, 1, 1 ,1, 1, 2 ,1};
+    IRA.setMatrix(u[0], u[1], new_A);
+
+    vector<double> b;
+    b.push_back(16);
+    b.push_back(6);
+    b.push_back(8);
+
+    auto x_result = IRA.solve_LU_double(b);
+
+    vector<double> x_should{1, 2, 3};
+
+    EXPECT_EQ(x_should, x_result);
+    EXPECT_EQ(should_value(x_should[0]), should_value(x_result[0]));
+    EXPECT_EQ(should_value(x_should[1]), should_value(x_result[1]));
+    EXPECT_EQ(should_value(x_should[2]), should_value(x_result[2]));
+}
+
+
 
 
 TEST(IR, simple_3x3_double_1){

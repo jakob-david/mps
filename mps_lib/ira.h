@@ -80,6 +80,11 @@ public:
     [[nodiscard]] vector<mps> solve_LU(const vector<mps>& b, unsigned long u[2]);
     //-------------------------------
 
+    // "double" algorithms
+    //-------------------------------
+    [[nodiscard]] vector<double> solve_LU_double(const vector<double>& b);
+    //-------------------------------
+
 
 private:
 
