@@ -678,7 +678,7 @@ mps& mps::operator=(const mps& other) {
     }
 
     // TODO: maybe change to |=
-    if(0 == this->exponent_length && 0 == this->mantissa_length && false){
+    if(0 == this->exponent_length && 0 == this->mantissa_length){
         this->exponent_length = other.exponent_length;
         this->mantissa_length = other.mantissa_length;
 
