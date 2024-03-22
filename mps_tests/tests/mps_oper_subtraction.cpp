@@ -976,16 +976,16 @@ TEST(subtraction_tests, spezial_1) {
 
     mps one(52,11);
     one.setSign(false);
-    vector<bool> exponent_one{0, 1,1,1,1,1,1,1,1,1,1};
-    vector<bool> mantissa_one{0,0,0,1,0,0,1,0,0,0,0,0,0,1,0,0,1,1,0,1,0,1,0,0,0,0,1,1,1,0,0,1,0,0,0,1,1,1,1,1,1,1,0,0,1,0,0,0,1,1,0,0};
+    vector<bool> exponent_one{0, 1,1,1,1,1,1,1,1,1,1}; // NOLINT(*-use-bool-literals)
+    vector<bool> mantissa_one{0,0,0,1,0,0,1,0,0,0,0,0,0,1,0,0,1,1,0,1,0,1,0,0,0,0,1,1,1,0,0,1,0,0,0,1,1,1,1,1,1,1,0,0,1,0,0,0,1,1,0,0}; // NOLINT(*-use-bool-literals)
     one.setSign(false);
     one.setExponent(exponent_one);
     one.setMantissa(mantissa_one);
 
     mps two(52,11);
     two.setSign(false);
-    vector<bool> exponent_two{0,1,1,1,1,0,0,1,0,1,0};
-    vector<bool> mantissa_two{1,0,1,0,1,1,0,1,0,0,0,0,1,1,0,0,0,1,1,1,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0};
+    vector<bool> exponent_two{0,1,1,1,1,0,0,1,0,1,0}; // NOLINT(*-use-bool-literals)
+    vector<bool> mantissa_two{1,0,1,0,1,1,0,1,0,0,0,0,1,1,0,0,0,1,1,1,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0}; // NOLINT(*-use-bool-literals)
     two.setSign(false);
     two.setExponent(exponent_two);
     two.setMantissa(mantissa_two);
@@ -1001,16 +1001,16 @@ TEST(subtraction_tests, spezial_2) {
 
     mps one(52,11);
     one.setSign(false);
-    vector<bool> exponent_one{0, 1,1,1,1,1,1,1,1,1,1};
-    vector<bool> mantissa_one{0,0,0,1,0,0,1,0,0,0,0,0,0,1,0,0,1,1,0,1,0,1,0,0,0,0,1,1,1,0,0,1,0,0,0,1,1,1,1,1,1,1,0,0,1,0,0,0,1,1,0,0};
+    vector<bool> exponent_one{0, 1,1,1,1,1,1,1,1,1,1}; // NOLINT(*-use-bool-literals)
+    vector<bool> mantissa_one{0,0,0,1,0,0,1,0,0,0,0,0,0,1,0,0,1,1,0,1,0,1,0,0,0,0,1,1,1,0,0,1,0,0,0,1,1,1,1,1,1,1,0,0,1,0,0,0,1,1,0,0}; // NOLINT(*-use-bool-literals)
     one.setSign(false);
     one.setExponent(exponent_one);
     one.setMantissa(mantissa_one);
 
     mps two(52,11);
     two.setSign(false);
-    vector<bool> exponent_two{0,1,1,1,1,0,0,1,0,1,0};
-    vector<bool> mantissa_two{1,0,1,0,1,1,0,1,0,0,0,0,1,1,0,0,0,1,1,1,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0};
+    vector<bool> exponent_two{0,1,1,1,1,0,0,1,0,1,0}; // NOLINT(*-use-bool-literals)
+    vector<bool> mantissa_two{1,0,1,0,1,1,0,1,0,0,0,0,1,1,0,0,0,1,1,1,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0}; // NOLINT(*-use-bool-literals)
     two.setSign(false);
     two.setExponent(exponent_two);
     two.setMantissa(mantissa_two);
@@ -1052,4 +1052,27 @@ TEST(subtraction_tests, subtractio_to_zero_float) {
     EXPECT_EQ(should_value(value_1 - value_2), is_mps(test.getBitArray()));
     EXPECT_EQ(value_1, MPS.getValue());
     EXPECT_EQ(value_2, MPS_2.getValue());
+}
+
+
+TEST(subtraction, rounding_float) {
+
+    vector<bool> exponent_one{1, 1, 1, 1, 1, 1, 1, 0}; // NOLINT(*-use-bool-literals)
+    vector<bool> mantissa_one{0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 1}; // NOLINT(*-use-bool-literals)
+    mps MPS_one(23,8);
+    MPS_one.setSign(false);
+    MPS_one.setExponent(exponent_one);
+    MPS_one.setMantissa(mantissa_one);
+
+    vector<bool> exponent_two{1, 1, 1, 0, 0, 1, 1, 1}; // NOLINT(*-use-bool-literals)
+    vector<bool> mantissa_two{0, 1, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0}; // NOLINT(*-use-bool-literals)
+    mps MPS_two(23,8);
+    MPS_two.setSign(false);
+    MPS_two.setExponent(exponent_two);
+    MPS_two.setMantissa(mantissa_two);
+
+    auto MPS_result = MPS_one - MPS_two;
+
+    EXPECT_EQ(((float) MPS_one.getValue()) - ((float) MPS_two.getValue()), (float) MPS_result.getValue());
+    EXPECT_EQ(should_value( ((float) MPS_one.getValue()) - ((float) MPS_two.getValue())), MPS_result.print());
 }

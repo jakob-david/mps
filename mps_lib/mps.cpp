@@ -678,7 +678,7 @@ mps& mps::operator=(const mps& other) {
     }
 
     // TODO: maybe change to |=
-    if(0 == this->exponent_length && 0 == this->mantissa_length){
+    if(0 == this->exponent_length && 0 == this->mantissa_length && false){
         this->exponent_length = other.exponent_length;
         this->mantissa_length = other.mantissa_length;
 
@@ -1177,7 +1177,7 @@ void mps::setValue(const double value) {
     //-------------------------------
 
 
-    // adjusting the mantissa   // TODO: maybe move further down.
+    // adjusting the mantissa
     //-------------------------------
     ret.mantissa.erase(ret.mantissa.begin(), ret.mantissa.begin()+1);
     if(round(&ret.mantissa, ret.mantissa_length)){
@@ -1326,10 +1326,9 @@ void mps::setValue(const double value) {
     //-------------------------------
 
 
-    // TODO: Maybe check if it is necessary to check if exponent overflows.
-    // TODO: Maybe find test case...
     if(round(&ret.mantissa, ret.mantissa_length)){
         addOneToBinary(&ret.exponent);
+        // cannot overflow since it is a subtraction.
     }
 
     return ret;
@@ -1456,9 +1455,9 @@ void mps::setValue(const double value) {
 
     // rounding
     //-------------------------------
-    // TODO: Maybe check if it is necessary to check if exponent overflows.
     if(round(&P, ret.mantissa_length)){
         addOneToBinary(&ret.exponent);
+        // Cannot overflow. Same reasoning as for addition.
     }
 
     if(count <= 1){
@@ -1500,7 +1499,6 @@ void mps::setValue(const double value) {
 
         ret.exponent = binarySubtraction(dividend.exponent, subtrahend);
 
-        // TODO: is there a more intelligent way
         if(1 == larger(ret.exponent, dividend.exponent)){
             ret.mantissa.resize(ret.mantissa_length, false);
             ret.exponent.resize(ret.exponent_length, false);
@@ -2184,8 +2182,6 @@ bool mps::round(vector<bool> *mantissa, unsigned long mantissa_len) {
         if((*mantissa)[mantissa_len] && tmp){
             mantissa->erase(mantissa->end()- (long) (mantissa->size()- mantissa_len), mantissa->end());
             if(addOneToBinary(mantissa)){
-                // TODO: Find test case
-                // addOneToBinary(mantissa);
                 ret = true;
             }
         } else if((*mantissa)[mantissa_len]){
