@@ -1029,7 +1029,6 @@ unsigned long ira::get_max_U_idx(unsigned long column, unsigned long start) cons
  * @param start the index of the ending column
  */
 void ira::interchangeRow(vector<mps>* matrix, unsigned long row_one, unsigned long row_two, unsigned long start, unsigned long end){
-// TODO: smartpointer....?
 
     for(auto i = start; i < end; i++){
         auto tmp = (*matrix)[get_idx(row_one, i)];

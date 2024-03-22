@@ -1136,6 +1136,14 @@ void mps::setValue(const double value) {
 
         if(exponent_diff <= one.mantissa.size()){
             ret.mantissa = add(two.mantissa, one.mantissa, exponent_diff, &carrier);
+        } else if(one.mantissa.back() && (exponent_diff == one.mantissa.size()+1) && allFalse(two.mantissa)){
+            // special case where the rounding distance is the same, and the rounded number therefore must be even.
+            ret.mantissa = one.mantissa;
+            if(addOneToBinary(&ret.mantissa)){
+                addOneToBinary(&ret.exponent);
+                // Checking the carrier bit can be omitted since it (conveniently) does this by default.
+            }
+            return ret;
         } else {
             ret.mantissa = one.mantissa;
             return ret;
@@ -1148,6 +1156,14 @@ void mps::setValue(const double value) {
 
         if(exponent_diff <= one.mantissa.size()){
             ret.mantissa = add(one.mantissa, two.mantissa, exponent_diff, &carrier);
+        } else if(two.mantissa.back() && (exponent_diff == two.mantissa.size()+1) && allFalse(one.mantissa)){
+            // special case where the rounding distance is the same, and the rounded number therefore must be even.
+            ret.mantissa = two.mantissa;
+            if(addOneToBinary(&ret.mantissa)){
+                addOneToBinary(&ret.exponent);
+                // Checking the carrier bit can be omitted since it (conveniently) does this by default.
+            }
+            return ret;
         } else {
             ret.mantissa = two.mantissa;
             return ret;
@@ -1164,9 +1180,9 @@ void mps::setValue(const double value) {
     // adjusting the mantissa   // TODO: maybe move further down.
     //-------------------------------
     ret.mantissa.erase(ret.mantissa.begin(), ret.mantissa.begin()+1);
-    // TODO: Maybe check if it is necessary to check if exponent overflows.
     if(round(&ret.mantissa, ret.mantissa_length)){
         addOneToBinary(&ret.exponent);
+        // checking is not needed since it is (conveniently) correct by default
     }
     //-------------------------------
 
@@ -2302,8 +2318,6 @@ bool mps::addOneToBinary(vector<bool>* vector){
         }
     }
 
-    //vector->insert(vector->begin(), true);
-    //vector->pop_back();   // TODO: maybe check if remove is justified everywhere.
     return true;
 }
 

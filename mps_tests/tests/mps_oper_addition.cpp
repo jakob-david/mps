@@ -1142,18 +1142,162 @@ TEST(addition_tests, addition_special_float) {
     EXPECT_EQ(value_2, MPS_2.getValue());
 }
 
-TEST(addition_tests, addition_special_double) {
 
-    double value_1 = 2.0 / 3.0;
-    double value_2 = 3.0 + (1.0/3.0);
 
-    mps MPS(52,11,value_1);
-    mps MPS_2(52,11,value_2);
+TEST(addition, rounding_exponent_overflow_float) {
 
-    auto test = MPS + MPS_2;
+vector<bool> exponent_one{1, 1, 1, 1, 1, 1, 1, 0}; // NOLINT(*-use-bool-literals)
+vector<bool> mantissa_one{1, 0, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1}; // NOLINT(*-use-bool-literals)
+mps MPS_one(23,8);
+MPS_one.setSign(false);
+MPS_one.setExponent(exponent_one);
+MPS_one.setMantissa(mantissa_one);
 
-    EXPECT_EQ(value_2+value_1, test.getValue());
-    EXPECT_EQ(should_value(value_1 + value_2), is_mps(test.getBitArray()));
-    EXPECT_EQ(value_1, MPS.getValue());
-    EXPECT_EQ(value_2, MPS_2.getValue());
+vector<bool> exponent_two{1, 1, 1, 1, 1, 1, 0, 0}; // NOLINT(*-use-bool-literals)
+vector<bool> mantissa_two{0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 1}; // NOLINT(*-use-bool-literals)
+mps MPS_two(23,8);
+MPS_two.setSign(false);
+MPS_two.setExponent(exponent_two);
+MPS_two.setMantissa(mantissa_two);
+
+auto MPS_result = MPS_one + MPS_two;
+    cout << MPS_result.print() << endl;
+
+EXPECT_EQ(((float) MPS_one.getValue()) + ((float) MPS_two.getValue()), (float) MPS_result.getValue());
+EXPECT_EQ(should_value( ((float) MPS_one.getValue()) + ((float) MPS_two.getValue())), MPS_result.print());
 }
+
+// rounding when the exponent_diff is equal than mantissa.size() +1
+TEST(addition, special_left_float) {
+
+    vector<bool> exponent_one{0, 1, 1, 1, 1, 1, 1, 1}; // NOLINT(*-use-bool-literals)
+    vector<bool> mantissa_one{0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 1}; // NOLINT(*-use-bool-literals)
+    mps MPS_one(23,8);
+    MPS_one.setSign(false);
+    MPS_one.setExponent(exponent_one);
+    MPS_one.setMantissa(mantissa_one);
+
+    vector<bool> exponent_two{0, 1, 1, 0, 0, 1, 1, 1}; // NOLINT(*-use-bool-literals)
+    vector<bool> mantissa_two{0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0}; // NOLINT(*-use-bool-literals)
+    mps MPS_two(23,8);
+    MPS_two.setSign(false);
+    MPS_two.setExponent(exponent_two);
+    MPS_two.setMantissa(mantissa_two);
+
+    auto MPS_result = MPS_one + MPS_two;
+
+    EXPECT_EQ(((float) MPS_one.getValue()) + ((float) MPS_two.getValue()), (float) MPS_result.getValue());
+    EXPECT_EQ(should_value( ((float) MPS_one.getValue()) + ((float) MPS_two.getValue())), MPS_result.print());
+}
+
+TEST(addition, special_left_overflow_float) {
+
+    vector<bool> exponent_one{0, 1, 1, 1, 1, 1, 1, 1}; // NOLINT(*-use-bool-literals)
+    vector<bool> mantissa_one{1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1}; // NOLINT(*-use-bool-literals)
+    mps MPS_one(23,8);
+    MPS_one.setSign(false);
+    MPS_one.setExponent(exponent_one);
+    MPS_one.setMantissa(mantissa_one);
+
+    vector<bool> exponent_two{0, 1, 1, 0, 0, 1, 1, 1}; // NOLINT(*-use-bool-literals)
+    vector<bool> mantissa_two{0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0}; // NOLINT(*-use-bool-literals)
+    mps MPS_two(23,8);
+    MPS_two.setSign(false);
+    MPS_two.setExponent(exponent_two);
+    MPS_two.setMantissa(mantissa_two);
+
+    auto MPS_result = MPS_one + MPS_two;
+
+    EXPECT_EQ(((float) MPS_one.getValue()) + ((float) MPS_two.getValue()), (float) MPS_result.getValue());
+    EXPECT_EQ(should_value( ((float) MPS_one.getValue()) + ((float) MPS_two.getValue())), MPS_result.print());
+}
+
+TEST(addition, special_left_overflow_overflow_float) {
+
+    vector<bool> exponent_one{1, 1, 1, 1, 1, 1, 1, 0}; // NOLINT(*-use-bool-literals)
+    vector<bool> mantissa_one{1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1}; // NOLINT(*-use-bool-literals)
+    mps MPS_one(23,8);
+    MPS_one.setSign(false);
+    MPS_one.setExponent(exponent_one);
+    MPS_one.setMantissa(mantissa_one);
+
+    vector<bool> exponent_two{1, 1, 1, 0, 0, 1, 1, 0};
+    vector<bool> mantissa_two{0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0};
+    mps MPS_two(23,8);
+    MPS_two.setSign(false);
+    MPS_two.setExponent(exponent_two);
+    MPS_two.setMantissa(mantissa_two);
+
+    auto MPS_result = MPS_one + MPS_two;
+
+    EXPECT_EQ(((float) MPS_one.getValue()) + ((float) MPS_two.getValue()), (float) MPS_result.getValue());
+    EXPECT_EQ(should_value( ((float) MPS_one.getValue()) + ((float) MPS_two.getValue())), MPS_result.print());
+}
+
+TEST(addition, special_right_float) {
+
+    vector<bool> exponent_one{0, 1, 1, 1, 1, 1, 1, 1}; // NOLINT(*-use-bool-literals)
+    vector<bool> mantissa_one{0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 1}; // NOLINT(*-use-bool-literals)
+    mps MPS_one(23,8);
+    MPS_one.setSign(false);
+    MPS_one.setExponent(exponent_one);
+    MPS_one.setMantissa(mantissa_one);
+
+    vector<bool> exponent_two{0, 1, 1, 0, 0, 1, 1, 1};
+    vector<bool> mantissa_two{0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0};
+    mps MPS_two(23,8);
+    MPS_two.setSign(false);
+    MPS_two.setExponent(exponent_two);
+    MPS_two.setMantissa(mantissa_two);
+
+    auto MPS_result = MPS_two + MPS_one;
+
+    EXPECT_EQ(((float) MPS_one.getValue()) + ((float) MPS_two.getValue()), (float) MPS_result.getValue());
+    EXPECT_EQ(should_value( ((float) MPS_one.getValue()) + ((float) MPS_two.getValue())), MPS_result.print());
+}
+
+TEST(addition, special_right_overflow_float) {
+
+    vector<bool> exponent_one{0, 1, 1, 1, 1, 1, 1, 1}; // NOLINT(*-use-bool-literals)
+    vector<bool> mantissa_one{1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1}; // NOLINT(*-use-bool-literals)
+    mps MPS_one(23,8);
+    MPS_one.setSign(false);
+    MPS_one.setExponent(exponent_one);
+    MPS_one.setMantissa(mantissa_one);
+
+    vector<bool> exponent_two{0, 1, 1, 0, 0, 1, 1, 1}; // NOLINT(*-use-bool-literals)
+    vector<bool> mantissa_two{0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0}; // NOLINT(*-use-bool-literals)
+    mps MPS_two(23,8);
+    MPS_two.setSign(false);
+    MPS_two.setExponent(exponent_two);
+    MPS_two.setMantissa(mantissa_two);
+
+    auto MPS_result = MPS_two + MPS_one;
+
+    EXPECT_EQ(((float) MPS_one.getValue()) + ((float) MPS_two.getValue()), (float) MPS_result.getValue());
+    EXPECT_EQ(should_value( ((float) MPS_one.getValue()) + ((float) MPS_two.getValue())), MPS_result.print());
+}
+
+TEST(addition, special_right_overflow_overflow_float) {
+
+    vector<bool> exponent_one{1, 1, 1, 1, 1, 1, 1, 0}; // NOLINT(*-use-bool-literals)
+    vector<bool> mantissa_one{1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1}; // NOLINT(*-use-bool-literals)
+    mps MPS_one(23,8);
+    MPS_one.setSign(false);
+    MPS_one.setExponent(exponent_one);
+    MPS_one.setMantissa(mantissa_one);
+
+    vector<bool> exponent_two{1, 1, 1, 0, 0, 1, 1, 0};
+    vector<bool> mantissa_two{0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0};
+    mps MPS_two(23,8);
+    MPS_two.setSign(false);
+    MPS_two.setExponent(exponent_two);
+    MPS_two.setMantissa(mantissa_two);
+
+    auto MPS_result = MPS_two + MPS_one;
+
+    EXPECT_EQ(((float) MPS_one.getValue()) + ((float) MPS_two.getValue()), (float) MPS_result.getValue());
+    EXPECT_EQ(should_value( ((float) MPS_one.getValue()) + ((float) MPS_two.getValue())), MPS_result.print());
+}
+
+
