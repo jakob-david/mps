@@ -1,7 +1,7 @@
 #include "gtest/gtest.h"
 
-#include "../../ira_lib/ira.h"
-#include "../functions/functions.h"
+#include "ira.h"
+#include "../../functions/functions.h"
 
 
 

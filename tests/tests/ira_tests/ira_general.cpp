@@ -1,6 +1,6 @@
 #include "gtest/gtest.h"
 
-#include "../../ira_lib/ira.h"
+#include "ira.h"
 
 
 

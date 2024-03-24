@@ -1,6 +1,6 @@
 #include "gtest/gtest.h"
 
-#include "../functions/functions.h"
+#include "../../functions/functions.h"
 #include "mps.h"
 
 

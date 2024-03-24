@@ -5,8 +5,8 @@
 #include "gtest/gtest.h"
 #include <random>
 
-#include "../../ira_lib/ira.h"
-#include "../functions/functions.h"
+#include "ira.h"
+#include "../../functions/functions.h"
 
 
 TEST(solve_LU, auto_overprecision_double){

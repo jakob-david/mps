@@ -5,22 +5,22 @@ project(Google_tests)
 add_subdirectory(lib)
 include_directories(./lib/googletest/include ./lib/googletest)
 
-add_executable(all_tests tests/mps_general.cpp
+add_executable(all_tests tests/mps_tests/mps_general.cpp
         functions/functions.h
-        tests/mps_random.cpp
-        tests/ira_general.cpp
-        tests/ira_algorithms.cpp
-        tests/ira_operators.cpp
-        tests/mps_oper_assign.cpp
-        tests/mps_oper_addition.cpp
-        tests/mps_oper_subtraction.cpp
-        tests/mps_oper_multiplication.cpp
-        tests/mps_oper_division.cpp
-        tests/mps_comp_equal.cpp
-        tests/mps_comp_larger.cpp
-        tests/mps_comp_smaller.cpp
-        tests/ira_algorithms_auto.cpp
-        tests/mps_evaluation.cpp
+        tests/mps_tests/mps_random.cpp
+        tests/ira_tests/ira_general.cpp
+        tests/ira_tests/ira_algorithms.cpp
+        tests/ira_tests/ira_operators.cpp
+        tests/mps_tests/mps_oper_assign.cpp
+        tests/mps_tests/mps_oper_addition.cpp
+        tests/mps_tests/mps_oper_subtraction.cpp
+        tests/mps_tests/mps_oper_multiplication.cpp
+        tests/mps_tests/mps_oper_division.cpp
+        tests/mps_tests/mps_comp_equal.cpp
+        tests/mps_tests/mps_comp_larger.cpp
+        tests/mps_tests/mps_comp_smaller.cpp
+        tests/ira_tests/ira_algorithms_auto.cpp
+        tests/mps_tests/mps_evaluation.cpp
 )
 
 target_link_libraries(all_tests mps_lib)
