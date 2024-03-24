@@ -677,22 +677,12 @@ mps& mps::operator=(const mps& other) {
         return *this;
     }
 
-    // TODO: maybe change to |=
-    if(0 == this->exponent_length && 0 == this->mantissa_length){
-        this->exponent_length = other.exponent_length;
-        this->mantissa_length = other.mantissa_length;
-
-        this->exponent.resize(this->exponent_length);
-        this->mantissa.resize(this->mantissa_length);
-    } else {
-        if (this->exponent_length != other.exponent_length) {
-            throw std::invalid_argument("ERROR: in = : Exponents do not match");
-        }
-        if (this->mantissa_length != other.mantissa_length) {
-            throw std::invalid_argument("ERROR: in = : Mantissas do not match");
-        }
+    if (this->exponent_length != other.exponent_length) {
+        throw std::invalid_argument("ERROR: in = : Exponents do not match");
     }
-
+    if (this->mantissa_length != other.mantissa_length) {
+        throw std::invalid_argument("ERROR: in = : Mantissas do not match");
+    }
 
     this->sign = other.sign;
     for(unsigned long i = 0; i < this->mantissa_length; i++){

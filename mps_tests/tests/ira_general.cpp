@@ -533,7 +533,6 @@ TEST(mps_to_double, simple_1) {
     auto double_vector = ira::mps_to_double(mps_vector);
 
 
-    std::string tmp = "";
     for(unsigned long i = 0; i < should_vector.size(); i++){
         EXPECT_EQ(should_vector[i], double_vector[i]);
     }
@@ -574,7 +573,6 @@ TEST(mps_to_float, simple_1) {
     auto float_vector = ira::mps_to_float(mps_vector);
 
 
-    std::string tmp = "";
     for(unsigned long i = 0; i < should_vector.size(); i++){
         EXPECT_EQ(should_vector[i], float_vector[i]);
     }

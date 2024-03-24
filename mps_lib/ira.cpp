@@ -53,9 +53,9 @@ void ira::setUnitaryMatrix(unsigned long mantissa_length, unsigned long exponent
     for(unsigned long i = 0; i <  this->n; i++){
         for(unsigned long j = 0; j < this->n; j++){
             if(i == j){
-                this->A[get_idx(i, j)] = mps(mantissa_length, exponent_length, 1);
+                this->A[get_idx(i, j)] |= mps(mantissa_length, exponent_length, 1);
             } else {
-                this->A[get_idx(i, j)] = mps(mantissa_length, exponent_length, 0);
+                this->A[get_idx(i, j)] |= mps(mantissa_length, exponent_length, 0);
             }
         }
     }
@@ -70,6 +70,8 @@ void ira::setUnitaryMatrix(unsigned long mantissa_length, unsigned long exponent
  */
 void ira::setMatrix(unsigned long mantissa_length, unsigned long exponent_length, vector<double> new_matrix) {
 
+    // TODO: make boolean for LU
+
     if (new_matrix.size() > this->n * this->n) {
         throw std::invalid_argument("ERROR: in setMatrix: new_matrix too large");
     }
@@ -78,7 +80,7 @@ void ira::setMatrix(unsigned long mantissa_length, unsigned long exponent_length
     }
 
     for(unsigned i = 0; i < new_matrix.size(); i++){
-        this->A[i] = mps(mantissa_length, exponent_length, new_matrix[i]);
+        this->A[i] |= mps(mantissa_length, exponent_length, new_matrix[i]);
     }
 }
 
@@ -101,7 +103,7 @@ void ira::setRandomMatrix(unsigned long mantissa_length, unsigned long exponent_
 
 
     for(unsigned i = 0; i < (this->n * this->n); i++){
-        this->A[i] = mps(mantissa_length, exponent_length, dist(mt));
+        this->A[i] |= mps(mantissa_length, exponent_length, dist(mt));
     }
 }
 
@@ -123,7 +125,7 @@ void ira::setL(unsigned long mantissa_length, unsigned long exponent_length, vec
     }
 
     for(unsigned long i = 0; i < new_L.size(); i++){
-        this->L[i] = mps(mantissa_length, exponent_length, new_L[i]);
+        this->L[i] |= mps(mantissa_length, exponent_length, new_L[i]);
     }
 }
 
@@ -145,7 +147,7 @@ void ira::setU(unsigned long mantissa_length, unsigned long exponent_length, vec
     }
 
     for(unsigned long i = 0; i < new_U.size(); i++){
-        this->U[i] = mps(mantissa_length, exponent_length, new_U[i]);
+        this->U[i] |= mps(mantissa_length, exponent_length, new_U[i]);
     }
 }
 //-------------------------------

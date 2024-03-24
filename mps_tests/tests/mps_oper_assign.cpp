@@ -172,7 +172,8 @@ TEST(equal, pos_double){
     double test_value = 234536.34634;
     mps MPS(52, 11, test_value);
 
-    mps MPS_copy;
+
+    mps MPS_copy(52, 11);
     MPS_copy = MPS;
 
 
@@ -212,7 +213,7 @@ TEST(equal, pos_float){
     float test_value = 234536.34634f;
     mps MPS(23, 8, test_value);
 
-    mps MPS_copy;
+    mps MPS_copy(23, 8);
     MPS_copy = MPS;
 
 
@@ -252,7 +253,7 @@ TEST(equal, neg_double){
     double test_value = 234536.34634;
     mps MPS(52, 11, test_value);
 
-    mps MPS_copy;
+    mps MPS_copy(52, 11);
     MPS_copy = MPS;
 
 
@@ -292,7 +293,7 @@ TEST(equal, neg_float){
     float test_value = -234536.34634f;
     mps MPS(23, 8, test_value);
 
-    mps MPS_copy;
+    mps MPS_copy(23, 8);
     MPS_copy = MPS;
 
 
