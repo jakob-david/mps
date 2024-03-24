@@ -24,4 +24,5 @@ add_executable(mps_tests tests/mps_general.cpp
 )
 
 target_link_libraries(mps_tests mps_lib)
+target_link_libraries(mps_tests ira_lib)
 target_link_libraries(mps_tests gtest gtest_main)

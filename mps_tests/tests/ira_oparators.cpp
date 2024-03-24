@@ -1,5 +1,5 @@
 #include "gtest/gtest.h"
-#include "ira.h"
+#include "../../ira_lib/ira.h"
 
 TEST(vectorNorm_L1, exception_vector_empty) {
 

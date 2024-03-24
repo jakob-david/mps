@@ -5,7 +5,7 @@
 #include "gtest/gtest.h"
 #include <random>
 
-#include "ira.h"
+#include "../../ira_lib/ira.h"
 #include "../functions/functions.h"
 
 

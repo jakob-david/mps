@@ -20,4 +20,8 @@ include_directories(mps_lib)
 add_subdirectory(mps_lib)
 target_link_libraries(mps_run mps_lib)
 
+include_directories(ira_lib)
+add_subdirectory(ira_lib)
+target_link_libraries(mps_run ira_lib)
+
 add_subdirectory(mps_tests)
