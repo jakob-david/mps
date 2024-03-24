@@ -5,12 +5,12 @@ project(Google_tests)
 add_subdirectory(lib)
 include_directories(./lib/googletest/include ./lib/googletest)
 
-add_executable(mps_tests tests/mps_general.cpp
+add_executable(all_tests tests/mps_general.cpp
         functions/functions.h
         tests/mps_random.cpp
         tests/ira_general.cpp
         tests/ira_algorithms.cpp
-        tests/ira_oparators.cpp
+        tests/ira_operators.cpp
         tests/mps_oper_assign.cpp
         tests/mps_oper_addition.cpp
         tests/mps_oper_subtraction.cpp
@@ -23,6 +23,6 @@ add_executable(mps_tests tests/mps_general.cpp
         tests/mps_evaluation.cpp
 )
 
-target_link_libraries(mps_tests mps_lib)
-target_link_libraries(mps_tests ira_lib)
-target_link_libraries(mps_tests gtest gtest_main)
+target_link_libraries(all_tests mps_lib)
+target_link_libraries(all_tests ira_lib)
+target_link_libraries(all_tests gtest gtest_main)
