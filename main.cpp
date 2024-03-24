@@ -31,8 +31,8 @@ void func(vector<bool> test_1, vector<bool> test_2, vector<bool> test_3, unsigne
 int main() {
 
 for (unsigned long mant = 53; mant <= 53; mant++) {
-    mps one(10, 1, 1.8);
-    mps two(10, 1, 1.8);
+    mps one(10, 10, 1.8);
+    mps two(10, 10, 1.8);
 
     //mps one(mant, 11, 3.90034);
     //mps two(mant, 11, 35.2365786);
