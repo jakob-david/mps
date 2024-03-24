@@ -618,5 +618,3 @@ TEST(to_string_vector, simple_double) {
     EXPECT_EQ(exponent_length, mps_vector[0].exponent_length);
 }
 
-
-

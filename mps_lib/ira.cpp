@@ -70,8 +70,6 @@ void ira::setUnitaryMatrix(unsigned long mantissa_length, unsigned long exponent
  */
 void ira::setMatrix(unsigned long mantissa_length, unsigned long exponent_length, vector<double> new_matrix) {
 
-    // TODO: make boolean for LU
-
     if (new_matrix.size() > this->n * this->n) {
         throw std::invalid_argument("ERROR: in setMatrix: new_matrix too large");
     }
