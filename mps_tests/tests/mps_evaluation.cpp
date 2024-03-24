@@ -15,19 +15,9 @@ TEST(check_precision, exception_mantissa_does_not_match){
     vector<bool> is_mantissa{1, 1, 1, 1, 1, 0}; // NOLINT(*-use-bool-literals)
     MPS_is.setMantissa(is_mantissa);
 
-    bool test = false;
     bool nix = false;
-    try
-    {
-        nix = MPS_is.check_precision(MPS_should, 6);
-    }
-    catch (std::invalid_argument& e)
-    {
-        test = true;
-    }
-
+    EXPECT_ANY_THROW(nix = MPS_is.check_precision(MPS_should, 6));
     EXPECT_FALSE(nix);
-    EXPECT_TRUE(test);
 }
 
 TEST(check_precision, exception_exponent_does_not_match){
@@ -38,19 +28,9 @@ TEST(check_precision, exception_exponent_does_not_match){
     vector<bool> is_mantissa{1, 1, 1, 1, 1, 0}; // NOLINT(*-use-bool-literals)
     MPS_is.setMantissa(is_mantissa);
 
-    bool test = false;
     bool nix = false;
-    try
-    {
-        nix = MPS_is.check_precision(MPS_should, 6);
-    }
-    catch (std::invalid_argument& e)
-    {
-        test = true;
-    }
-
+    EXPECT_ANY_THROW(nix = MPS_is.check_precision(MPS_should, 6));
     EXPECT_FALSE(nix);
-    EXPECT_TRUE(test);
 }
 
 TEST(check_precision, simple_1){

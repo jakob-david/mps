@@ -187,6 +187,10 @@ void ira::setU(unsigned long mantissa_length, unsigned long exponent_length, vec
 
     if('A' == matrix){
 
+        if(this->A.empty() || (this->A[0].exponent_length == 0 && this->A[0].mantissa_length == 0)){
+            throw std::invalid_argument("ERROR: to_string: A is empty");
+        }
+
         ret += this->A[0].to_string(precision);
         for(unsigned long i = 1; i < n*n; i++){
             ret.append(", ");
@@ -194,6 +198,10 @@ void ira::setU(unsigned long mantissa_length, unsigned long exponent_length, vec
         }
 
     } else if('L' == matrix){
+
+        if(this->L.empty() || (this->L[0].exponent_length == 0 && this->L[0].mantissa_length == 0)){
+            throw std::invalid_argument("ERROR: to_string: L is empty");
+        }
 
         ret += this->L[0].to_string(precision);
         for(unsigned long i = 1; i < n*n; i++){
@@ -203,6 +211,10 @@ void ira::setU(unsigned long mantissa_length, unsigned long exponent_length, vec
 
     } else if('U' == matrix) {
 
+        if(this->U.empty() || (this->U[0].exponent_length == 0 && this->U[0].mantissa_length == 0)){
+            throw std::invalid_argument("ERROR: to_string: U is empty");
+        }
+
         ret += this->U[0].to_string(precision);
         for(unsigned long i = 1; i < n*n; i++){
             ret.append(", ");
@@ -210,6 +222,10 @@ void ira::setU(unsigned long mantissa_length, unsigned long exponent_length, vec
         }
 
     } else if('P' == matrix) {
+
+        if(this->P.empty() || (this->P[0].exponent_length == 0 && this->P[0].mantissa_length == 0)){
+            throw std::invalid_argument("ERROR: to_string: P is empty");
+        }
 
         ret += this->P[0].to_string(precision);
         for(unsigned long i = 1; i < n*n; i++){

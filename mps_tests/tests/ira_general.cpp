@@ -119,18 +119,7 @@ TEST(setRandomMatrix, exception_exponent_too_small) {
 
     ira IRA(n);
 
-    bool test = false;
-    try
-    {
-        IRA.setRandomMatrix(mantissa_length, exponent_length);
-    }
-
-    catch (std::invalid_argument& e)
-    {
-        test = true;
-    }
-
-    EXPECT_TRUE(test);
+    EXPECT_ANY_THROW(IRA.setRandomMatrix(mantissa_length, exponent_length));
 }
 
 TEST(setRandomMatrix, simple_1) {
@@ -290,19 +279,7 @@ TEST(setL, exception_L_too_large) {
 
     ira IRA(3);
 
-    bool test = false;
-
-    try
-    {
-        IRA.setL(mantissa_length, exponent_length, new_L);
-    }
-
-    catch (std::invalid_argument& e)
-    {
-        test = true;
-    }
-
-    EXPECT_EQ(true, test);
+    EXPECT_ANY_THROW(IRA.setL(mantissa_length, exponent_length, new_L));
 }
 
 TEST(setL, exception_L_too_small) {
@@ -314,19 +291,7 @@ TEST(setL, exception_L_too_small) {
 
     ira IRA(3);
 
-    bool test = false;
-
-    try
-    {
-        IRA.setL(mantissa_length, exponent_length, new_L);
-    }
-
-    catch (std::invalid_argument& e)
-    {
-        test = true;
-    }
-
-    EXPECT_EQ(true, test);
+    EXPECT_ANY_THROW(IRA.setL(mantissa_length, exponent_length, new_L));
 }
 
 TEST(setU, simple_1) {
@@ -353,19 +318,7 @@ TEST(setL, exception_U_too_large) {
 
     ira IRA(3);
 
-    bool test = false;
-
-    try
-    {
-        IRA.setU(mantissa_length, exponent_length, new_U);
-    }
-
-    catch (std::invalid_argument& e)
-    {
-        test = true;
-    }
-
-    EXPECT_EQ(true, test);
+    EXPECT_ANY_THROW(IRA.setU(mantissa_length, exponent_length, new_U));
 }
 
 TEST(setL, exception_U_too_small) {
@@ -377,19 +330,7 @@ TEST(setL, exception_U_too_small) {
 
     ira IRA(3);
 
-    bool test = false;
-
-    try
-    {
-        IRA.setU(mantissa_length, exponent_length, new_U);
-    }
-
-    catch (std::invalid_argument& e)
-    {
-        test = true;
-    }
-
-    EXPECT_EQ(true, test);
+    EXPECT_ANY_THROW(IRA.setU(mantissa_length, exponent_length, new_U));
 }
 
 
@@ -403,19 +344,7 @@ TEST(double_to_mps, exception_vector_empty) {
 
     vector<double> double_vector;
 
-    bool test = false;
-
-    try
-    {
-        auto ret = ira::double_to_mps(mantissa_length, exponent_length, double_vector);
-    }
-
-    catch (std::invalid_argument& e)
-    {
-        test = true;
-    }
-
-    EXPECT_EQ(true, test);
+    EXPECT_ANY_THROW(auto ret = ira::double_to_mps(mantissa_length, exponent_length, double_vector));
 }
 
 TEST(double_to_mps, exception_mantissa_too_small) {
@@ -425,19 +354,7 @@ TEST(double_to_mps, exception_mantissa_too_small) {
 
     vector<double> double_vector;
 
-    bool test = false;
-
-    try
-    {
-        auto ret = ira::double_to_mps(mantissa_length, exponent_length, double_vector);
-    }
-
-    catch (std::invalid_argument& e)
-    {
-        test = true;
-    }
-
-    EXPECT_EQ(true, test);
+    EXPECT_ANY_THROW(auto ret = ira::double_to_mps(mantissa_length, exponent_length, double_vector));
 }
 
 TEST(double_to_mps, exception_exponent_too_small) {
@@ -447,19 +364,7 @@ TEST(double_to_mps, exception_exponent_too_small) {
 
     vector<double> double_vector;
 
-    bool test = false;
-
-    try
-    {
-        auto ret = ira::double_to_mps(mantissa_length, exponent_length, double_vector);
-    }
-
-    catch (std::invalid_argument& e)
-    {
-        test = true;
-    }
-
-    EXPECT_EQ(true, test);
+    EXPECT_ANY_THROW(auto ret = ira::double_to_mps(mantissa_length, exponent_length, double_vector));
 }
 
 TEST(double_to_mps, simple_float) {
@@ -502,20 +407,7 @@ TEST(mps_to_double, exception_vector_empty) {
 
     vector<mps> mps_vector;
 
-
-    bool test = false;
-
-    try
-    {
-        auto double_vector = ira::mps_to_double(mps_vector);
-    }
-
-    catch (std::invalid_argument& e)
-    {
-        test = true;
-    }
-
-    EXPECT_TRUE(test);
+    EXPECT_ANY_THROW(auto double_vector = ira::mps_to_double(mps_vector));
 }
 
 TEST(mps_to_double, simple_1) {
@@ -542,20 +434,7 @@ TEST(mps_to_float, exception_vector_empty) {
 
     vector<mps> mps_vector;
 
-
-    bool test = false;
-
-    try
-    {
-        auto double_vector = ira::mps_to_float(mps_vector);
-    }
-
-    catch (std::invalid_argument& e)
-    {
-        test = true;
-    }
-
-    EXPECT_TRUE(test);
+    EXPECT_ANY_THROW(auto double_vector = ira::mps_to_float(mps_vector));
 }
 
 TEST(mps_to_float, simple_1) {
@@ -582,19 +461,7 @@ TEST(castVectorElements, exception_vector_empty) {
 
     vector<mps> mps_vector;
 
-    bool test = false;
-
-    try
-    {
-        ira::castVectorElements(52, 11, &mps_vector);
-    }
-
-    catch (std::invalid_argument& e)
-    {
-        test = true;
-    }
-
-    EXPECT_EQ(true, test);
+    EXPECT_ANY_THROW(ira::castVectorElements(52, 11, &mps_vector));
 }
 
 TEST(castVectorElements, exception_mantissa_too_small) {
@@ -607,19 +474,7 @@ TEST(castVectorElements, exception_mantissa_too_small) {
 
     auto mps_vector = ira::double_to_mps(23, 8, double_vector);
 
-    bool test = false;
-
-    try
-    {
-        ira::castVectorElements(0, 11, &mps_vector);
-    }
-
-    catch (std::invalid_argument& e)
-    {
-        test = true;
-    }
-
-    EXPECT_EQ(true, test);
+    EXPECT_ANY_THROW(ira::castVectorElements(0, 11, &mps_vector));
 }
 
 TEST(castVectorElements, exception_exponent_too_small) {
@@ -632,19 +487,7 @@ TEST(castVectorElements, exception_exponent_too_small) {
 
     auto mps_vector = ira::double_to_mps(23, 8, double_vector);
 
-    bool test = false;
-
-    try
-    {
-        ira::castVectorElements(52, 1, &mps_vector);
-    }
-
-    catch (std::invalid_argument& e)
-    {
-        test = true;
-    }
-
-    EXPECT_EQ(true, test);
+    EXPECT_ANY_THROW(ira::castVectorElements(52, 1, &mps_vector));
 }
 
 TEST(castVectorElements, float_to_double_1) {
@@ -683,79 +526,14 @@ TEST(castVectorElements, double_to_float_1) {
 
 // printing
 // -------------------------------------
-TEST(to_string, exception_L_nullptr) {
-
-    unsigned long mantissa_length = 52;
-    unsigned long exponent_length = 11;
-
-    vector<double> new_matrix{ 10, 20, 30, 40, 50, 60, 70, 80, 90};
+TEST(to_string, exception_nullptr) {
 
     ira IRA(3);
-    IRA.setMatrix(mantissa_length, exponent_length, new_matrix);
 
-    bool test = true;
-
-    try
-    {
-        auto tmp = IRA.to_string('L');
-    }
-
-    catch (std::invalid_argument& e)
-    {
-        test = false;
-    }
-
-    EXPECT_EQ(true, test);
-}
-
-TEST(to_string, exception_U_nullptr) {
-
-    unsigned long mantissa_length = 53;
-    unsigned long exponent_length = 11;
-
-    vector<double> new_matrix{ 10, 20, 30, 40, 50, 60, 70, 80, 90};
-
-    ira IRA(3);
-    IRA.setMatrix(mantissa_length, exponent_length, new_matrix);
-
-    bool test = true;
-
-    try
-    {
-        auto tmp = IRA.to_string('U');
-    }
-
-    catch (std::invalid_argument& e)
-    {
-        test = false;
-    }
-
-    EXPECT_EQ(true, test);
-}
-
-TEST(to_string, exception_P_nullptr) {
-
-    unsigned long mantissa_length = 53;
-    unsigned long exponent_length = 11;
-
-    vector<double> new_matrix{ 10, 20, 30, 40, 50, 60, 70, 80, 90};
-
-    ira IRA(3);
-    IRA.setMatrix(mantissa_length, exponent_length, new_matrix);
-
-    bool test = true;
-
-    try
-    {
-        auto tmp = IRA.to_string('P');
-    }
-
-    catch (std::invalid_argument& e)
-    {
-        test = false;
-    }
-
-    EXPECT_EQ(true, test);
+    EXPECT_ANY_THROW(auto tmp = IRA.to_string('A'));
+    EXPECT_ANY_THROW(auto tmp = IRA.to_string('L'));
+    EXPECT_ANY_THROW(auto tmp = IRA.to_string('U'));
+    EXPECT_ANY_THROW(auto tmp = IRA.to_string('P'));
 }
 
 TEST(to_string, exception_invalid_argument) {
@@ -768,19 +546,7 @@ TEST(to_string, exception_invalid_argument) {
     ira IRA(3);
     IRA.setMatrix(mantissa_length, exponent_length, new_matrix);
 
-    bool test = false;
-
-    try
-    {
-        auto tmp = IRA.to_string('Z');
-    }
-
-    catch (std::invalid_argument& e)
-    {
-        test = true;
-    }
-
-    EXPECT_EQ(true, test);
+    EXPECT_ANY_THROW(auto tmp = IRA.to_string('Z'));
 }
 
 TEST(to_string, round_to_precision_zero) {
@@ -817,19 +583,7 @@ TEST(to_string_vector, exception_vector_empty) {
 
     vector<mps> mps_vector;
 
-    bool test = false;
-
-    try
-    {
-        auto ret = ira::to_string(mps_vector);
-    }
-
-    catch (std::invalid_argument& e)
-    {
-        test = true;
-    }
-
-    EXPECT_EQ(true, test);
+    EXPECT_ANY_THROW(auto ret = ira::to_string(mps_vector));
 }
 
 TEST(to_string_vector, simple_float) {

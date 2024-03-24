@@ -330,42 +330,19 @@ TEST(equal, neg_float){
 
 TEST(equal, exception_exponent_length){
 
-    bool test = false;
 
     mps ONE(23, 9, 345.234);
     mps TWO(23, 8, 345.234);
 
-    try
-    {
-        ONE = TWO;
-    }
-
-    catch (std::invalid_argument& e)
-    {
-        test = true;
-    }
-
-    EXPECT_EQ(true, test);
+    EXPECT_ANY_THROW(ONE = TWO);
 }
 
 TEST(equal, exception_mantissa_length){
 
-    bool test = false;
-
     mps ONE(20, 8, 345.234);
     mps TWO(23, 8, 345.234);
 
-    try
-    {
-        ONE = TWO;
-    }
-
-    catch (std::invalid_argument& e)
-    {
-        test = true;
-    }
-
-    EXPECT_EQ(true, test);
+    EXPECT_ANY_THROW(ONE = TWO);
 }
 
 

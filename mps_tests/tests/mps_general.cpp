@@ -593,535 +593,76 @@ TEST(setter_tests, set_NAN_float) {
 // ######################
 // Exception Tests
 // ######################
-TEST(exception, different_length_exponent_addition){
+TEST(exception, different_length_exponent){
 
-    bool test = false;
-
-    mps ONE(23, 9, 345.234);
-    mps TWO(23, 8, 345.234);
-
-    try
-    {
-        ONE + TWO;
-    }
-
-    catch (std::invalid_argument& e)
-    {
-        test = true;
-    }
-
-    EXPECT_EQ(true, test);
-}
-
-TEST(exception, different_length_mantissa_addition){
-
-    bool test = false;
-
-    mps ONE(20, 8, 345.234);
-    mps TWO(23, 8, 345.234);
-
-    try
-    {
-        ONE + TWO;
-    }
-
-    catch (std::invalid_argument& e)
-    {
-        test = true;
-    }
-
-    EXPECT_EQ(true, test);
-}
-
-TEST(exception, different_length_exponent_subtraction){
-
-    bool test = false;
 
     mps ONE(23, 9, 345.234);
     mps TWO(23, 8, 345.234);
 
-    try
-    {
-        ONE - TWO;
-    }
+    EXPECT_ANY_THROW(ONE + TWO);
+    EXPECT_ANY_THROW(ONE - TWO);
+    EXPECT_ANY_THROW(ONE * TWO);
+    EXPECT_ANY_THROW(ONE / TWO);
 
-    catch (std::invalid_argument& e)
-    {
-        test = true;
-    }
+    bool useless = true;
+    EXPECT_ANY_THROW(useless = (ONE == TWO));
+    EXPECT_ANY_THROW(useless = (ONE != TWO));
+    EXPECT_ANY_THROW(useless = (ONE > TWO));
+    EXPECT_ANY_THROW(useless = (ONE < TWO));
+    EXPECT_ANY_THROW(useless = (ONE >= TWO));
+    EXPECT_ANY_THROW(useless = (ONE <= TWO));
 
-    EXPECT_EQ(true, test);
+    EXPECT_TRUE(useless);
 }
 
-TEST(exception, different_length_mantissa_subtraction){
-
-    bool test = false;
+TEST(exception, different_length_mantissa){
 
     mps ONE(20, 8, 345.234);
     mps TWO(23, 8, 345.234);
 
-    try
-    {
-        ONE - TWO;
-    }
+    EXPECT_ANY_THROW(ONE + TWO);
+    EXPECT_ANY_THROW(ONE - TWO);
+    EXPECT_ANY_THROW(ONE * TWO);
+    EXPECT_ANY_THROW(ONE / TWO);
 
-    catch (std::invalid_argument& e)
-    {
-        test = true;
-    }
+    bool useless = true;
+    EXPECT_ANY_THROW(useless = (ONE == TWO));
+    EXPECT_ANY_THROW(useless = (ONE != TWO));
+    EXPECT_ANY_THROW(useless = (ONE > TWO));
+    EXPECT_ANY_THROW(useless = (ONE < TWO));
+    EXPECT_ANY_THROW(useless = (ONE >= TWO));
+    EXPECT_ANY_THROW(useless = (ONE <= TWO));
 
-    EXPECT_EQ(true, test);
+    EXPECT_TRUE(useless);
 }
 
-TEST(exception, different_length_exponent_multiplication){
-
-    bool test = false;
-
-    mps ONE(23, 9, 345.234);
-    mps TWO(23, 8, 345.234);
-
-    try
-    {
-        ONE * TWO;
-    }
-
-    catch (std::invalid_argument& e)
-    {
-        test = true;
-    }
-
-    EXPECT_EQ(true, test);
-}
-
-TEST(exception, different_length_mantissa_multiplication){
-
-    bool test = false;
-
-    mps ONE(20, 8, 345.234);
-    mps TWO(23, 8, 345.234);
-
-    try
-    {
-        ONE * TWO;
-    }
-
-    catch (std::invalid_argument& e)
-    {
-        test = true;
-    }
-
-    EXPECT_EQ(true, test);
-}
-
-TEST(exception, different_length_exponent_division){
-
-    bool test = false;
-
-    mps ONE(23, 9, 345.234);
-    mps TWO(23, 8, 345.234);
-
-    try
-    {
-        ONE / TWO;
-    }
-
-    catch (std::invalid_argument& e)
-    {
-        test = true;
-    }
-
-    EXPECT_EQ(true, test);
-}
-
-TEST(exception, different_length_mantissa_division){
-
-    bool test = false;
-
-    mps ONE(20, 8, 345.234);
-    mps TWO(23, 8, 345.234);
-
-    try
-    {
-        ONE / TWO;
-    }
-
-    catch (std::invalid_argument& e)
-    {
-        test = true;
-    }
-
-    EXPECT_EQ(true, test);
-}
-
-TEST(exception, different_length_exponent_equal){
-
-    bool test = false;
-
-    mps ONE(23, 9, 345.234);
-    mps TWO(23, 8, 345.234);
-
-    try
-    {
-        if(ONE == TWO){
-            test = false;
-        }
-    }
-
-    catch (std::invalid_argument& e)
-    {
-        test = true;
-    }
-
-    EXPECT_EQ(true, test);
-}
-
-TEST(exception, different_length_mantissa_equal){
-
-    bool test = false;
-
-    mps ONE(20, 8, 345.234);
-    mps TWO(23, 8, 345.234);
-
-    try
-    {
-        if(ONE == TWO){
-            test = false;
-        }
-    }
-
-    catch (std::invalid_argument& e)
-    {
-        test = true;
-    }
-
-    EXPECT_EQ(true, test);
-}
-
-TEST(exception, different_length_exponent_notequal){
-
-    bool test = false;
-
-    mps ONE(23, 9, 345.234);
-    mps TWO(23, 8, 345.234);
-
-    try
-    {
-        if(ONE != TWO){
-            test = false;
-        }
-    }
-
-    catch (std::invalid_argument& e)
-    {
-        test = true;
-    }
-
-    EXPECT_EQ(true, test);
-}
-
-TEST(exception, different_length_mantissa_notequal){
-
-    bool test = false;
-
-    mps ONE(20, 8, 345.234);
-    mps TWO(23, 8, 345.234);
-
-    try
-    {
-        if(ONE != TWO){
-            test = false;
-        }
-    }
-
-    catch (std::invalid_argument& e)
-    {
-        test = true;
-    }
-
-    EXPECT_EQ(true, test);
-}
-
-TEST(exception, different_length_exponent_larger){
-
-    bool test = false;
-
-    mps ONE(23, 9, 345.234);
-    mps TWO(23, 8, 345.234);
-
-    try
-    {
-        if(ONE > TWO){
-            test = false;
-        }
-    }
-
-    catch (std::invalid_argument& e)
-    {
-        test = true;
-    }
-
-    EXPECT_EQ(true, test);
-}
-
-TEST(exception, different_length_mantissa_larger){
-
-    bool test = false;
-
-    mps ONE(20, 8, 345.234);
-    mps TWO(23, 8, 345.234);
-
-    try
-    {
-        if(ONE > TWO){
-            test = false;
-        }
-    }
-
-    catch (std::invalid_argument& e)
-    {
-        test = true;
-    }
-
-    EXPECT_EQ(true, test);
-}
-
-TEST(exception, different_length_exponent_smaller){
-
-    bool test = false;
-
-    mps ONE(23, 9, 345.234);
-    mps TWO(23, 8, 345.234);
-
-    try
-    {
-        if(ONE < TWO){
-            test = false;
-        }
-    }
-
-    catch (std::invalid_argument& e)
-    {
-        test = true;
-    }
-
-    EXPECT_EQ(true, test);
-}
-
-TEST(exception, different_length_mantissa_smaller){
-
-    bool test = false;
-
-    mps ONE(20, 8, 345.234);
-    mps TWO(23, 8, 345.234);
-
-    try
-    {
-        if(ONE < TWO){
-            test = false;
-        }
-    }
-
-    catch (std::invalid_argument& e)
-    {
-        test = true;
-    }
-
-    EXPECT_EQ(true, test);
-}
-
-TEST(exception, different_length_exponent_larger_equal){
-
-    bool test = false;
-
-    mps ONE(23, 9, 345.234);
-    mps TWO(23, 8, 345.234);
-
-    try
-    {
-        if(ONE >= TWO){
-            test = false;
-        }
-    }
-
-    catch (std::invalid_argument& e)
-    {
-        test = true;
-    }
-
-    EXPECT_EQ(true, test);
-}
-
-TEST(exception, different_length_mantissa_larger_equal){
-
-    bool test = false;
-
-    mps ONE(20, 8, 345.234);
-    mps TWO(23, 8, 345.234);
-
-    try
-    {
-        if(ONE >= TWO){
-            test = false;
-        }
-    }
-
-    catch (std::invalid_argument& e)
-    {
-        test = true;
-    }
-
-    EXPECT_EQ(true, test);
-}
-
-TEST(exception, different_length_exponent_smaller_equal){
-
-    bool test = false;
-
-    mps ONE(23, 9, 345.234);
-    mps TWO(23, 8, 345.234);
-
-    try
-    {
-        if(ONE <= TWO){
-            test = false;
-        }
-    }
-
-    catch (std::invalid_argument& e)
-    {
-        test = true;
-    }
-
-    EXPECT_EQ(true, test);
-}
-
-TEST(exception, different_length_mantissa_smaller_equal){
-
-    bool test = false;
-
-    mps ONE(20, 8, 345.234);
-    mps TWO(23, 8, 345.234);
-
-    try
-    {
-        if(ONE <= TWO){
-            test = false;
-        }
-    }
-
-    catch (std::invalid_argument& e)
-    {
-        test = true;
-    }
-
-    EXPECT_EQ(true, test);
-}
 
 TEST(exception, cast_too_small_mantissa){
 
-    bool test = false;
-
     mps ONE(20, 8, 345.234);
 
-    try
-    {
-        ONE.cast(0, 13);
-    }
-
-    catch (std::invalid_argument& e)
-    {
-        test = true;
-    }
-
-    EXPECT_EQ(true, test);
+    EXPECT_ANY_THROW(ONE.cast(0, 13));
 }
 
 TEST(exception, cast_too_small_exponent){
 
-    bool test = false;
-
     mps ONE(20, 8, 345.234);
 
-    try
-    {
-        ONE.cast(13, 1);
-    }
-
-    catch (std::invalid_argument& e)
-    {
-        test = true;
-    }
-
-    EXPECT_EQ(true, test);
+    EXPECT_ANY_THROW(ONE.cast(13, 1));
 }
 
 TEST(exception, constructor_too_small_mantissa){
 
-    bool test = false;
-
-    try
-    {
-        mps ONE(0, 8);
-    }
-
-    catch (std::invalid_argument& e)
-    {
-        test = true;
-    }
-
-    EXPECT_EQ(true, test);
+    EXPECT_ANY_THROW(mps ONE(0, 8));
+    EXPECT_ANY_THROW(mps ONE(0, 8, 345.234));
 }
 
 TEST(exception, constructor_too_small_exponent){
 
-    bool test = false;
-
-    try
-    {
-        mps ONE(20, 1);
-    }
-
-    catch (std::invalid_argument& e)
-    {
-        test = true;
-    }
-
-    EXPECT_EQ(true, test);
+    EXPECT_ANY_THROW(mps ONE(20, 1));
+    EXPECT_ANY_THROW(mps ONE(20, 1, 345.234));
 }
 
-TEST(exception, constructor_too_small_mantissa_with_value){
-
-    bool test = false;
-
-    try
-    {
-        mps ONE(0, 8, 345.234);
-    }
-
-    catch (std::invalid_argument& e)
-    {
-        test = true;
-    }
-
-    EXPECT_EQ(true, test);
-}
-
-TEST(exception, constructor_too_small_exponent_with_value){
-
-    bool test = false;
-
-    try
-    {
-        mps ONE(20, 1, 345.234);
-    }
-
-    catch (std::invalid_argument& e)
-    {
-        test = true;
-    }
-
-    EXPECT_EQ(true, test);
-}
 
 
 
@@ -1713,19 +1254,7 @@ TEST(setCustom, mantissa_too_small_flaot){
     MPS.setSign(sign);
     MPS.setExponent(exp);
 
-    bool test = false;
-
-    try
-    {
-        MPS.setMantissa(mant);
-    }
-
-    catch (std::invalid_argument& e)
-    {
-        test = true;
-    }
-
-    EXPECT_EQ(true, test);
+    EXPECT_ANY_THROW(MPS.setMantissa(mant));
 }
 
 TEST(setCustom, mantissa_too_large_flaot){
@@ -1739,19 +1268,7 @@ TEST(setCustom, mantissa_too_large_flaot){
     MPS.setSign(sign);
     MPS.setExponent(exp);
 
-    bool test = false;
-
-    try
-    {
-        MPS.setMantissa(mant);
-    }
-
-    catch (std::invalid_argument& e)
-    {
-        test = true;
-    }
-
-    EXPECT_EQ(true, test);
+    EXPECT_ANY_THROW(MPS.setMantissa(mant));
 }
 
 TEST(setCustom, exponent_too_small_flaot){
@@ -1765,19 +1282,7 @@ TEST(setCustom, exponent_too_small_flaot){
     MPS.setSign(sign);
     MPS.setMantissa(mant);
 
-    bool test = false;
-
-    try
-    {
-        MPS.setExponent(exp);
-    }
-
-    catch (std::invalid_argument& e)
-    {
-        test = true;
-    }
-
-    EXPECT_EQ(true, test);
+    EXPECT_ANY_THROW(MPS.setExponent(exp));
 }
 
 TEST(setCustom, exponent_too_large_flaot){
@@ -1787,22 +1292,11 @@ TEST(setCustom, exponent_too_large_flaot){
     bool sign = false;
     vector<bool> exp{1,0,0,0,0,0,0,0,0};
     vector<bool> mant{1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1};
-
-    bool test = false;
+    
     MPS.setSign(sign);
     MPS.setMantissa(mant);
 
-    try
-    {
-        MPS.setExponent(exp);
-    }
-
-    catch (std::invalid_argument& e)
-    {
-        test = true;
-    }
-
-    EXPECT_EQ(true, test);
+    EXPECT_ANY_THROW(MPS.setExponent(exp));
 }
 
 

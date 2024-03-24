@@ -3,23 +3,9 @@
 
 TEST(vectorNorm_L1, exception_vector_empty) {
 
-    bool should = true;
-
     vector<mps> mps_vector;
 
-    bool test = false;
-
-    try
-    {
-        auto ret = ira::vectorNorm_L1(mps_vector);
-    }
-
-    catch (std::invalid_argument& e)
-    {
-        test = true;
-    }
-
-    EXPECT_EQ(should, test);
+    EXPECT_ANY_THROW(auto ret = ira::vectorNorm_L1(mps_vector));
 }
 
 TEST(vectorNorm_L1, simple_1_float) {
@@ -55,8 +41,6 @@ TEST(vectorNorm_L1, simple_1_double) {
 
 TEST(vectorAddition, exception_first_vector_empty) {
 
-    bool should = true;
-
     unsigned long mantissa_length = 23;
     unsigned long exponent_length = 8;
 
@@ -64,24 +48,10 @@ TEST(vectorAddition, exception_first_vector_empty) {
     vector<double> second_double{2, 2, 2, 2};
     auto second = ira::double_to_mps(mantissa_length, exponent_length, second_double);
 
-    bool test = false;
-
-    try
-    {
-        auto tmp = ira::vectorAddition(first, second);
-    }
-
-    catch (std::invalid_argument& e)
-    {
-        test = true;
-    }
-
-    EXPECT_EQ(should, test);
+    EXPECT_ANY_THROW(auto tmp = ira::vectorAddition(first, second));
 }
 
 TEST(vectorAddition, exception_second_vector_empty) {
-
-    bool should = true;
 
     unsigned long mantissa_length = 23;
     unsigned long exponent_length = 8;
@@ -91,24 +61,10 @@ TEST(vectorAddition, exception_second_vector_empty) {
 
     vector<mps> second;
 
-    bool test = false;
-
-    try
-    {
-        auto tmp = ira::vectorAddition(first, second);
-    }
-
-    catch (std::invalid_argument& e)
-    {
-        test = true;
-    }
-
-    EXPECT_EQ(should, test);
+    EXPECT_ANY_THROW(auto tmp = ira::vectorAddition(first, second));
 }
 
 TEST(vectorAddition, exception_not_same_size) {
-
-    bool should = true;
 
     unsigned long mantissa_length = 23;
     unsigned long exponent_length = 8;
@@ -118,24 +74,10 @@ TEST(vectorAddition, exception_not_same_size) {
     vector<double> second_double{2, 2, 2, 2};
     auto second = ira::double_to_mps(mantissa_length, exponent_length, second_double);
 
-    bool test = false;
-
-    try
-    {
-        auto tmp = ira::vectorAddition(first, second);
-    }
-
-    catch (std::invalid_argument& e)
-    {
-        test = true;
-    }
-
-    EXPECT_EQ(should, test);
+    EXPECT_ANY_THROW(auto tmp = ira::vectorAddition(first, second));
 }
 
 TEST(vectorAddition, exception_exponent_not_same_size) {
-
-    bool should = true;
 
     unsigned long mantissa_length = 23;
     unsigned long exponent_length = 8;
@@ -145,24 +87,10 @@ TEST(vectorAddition, exception_exponent_not_same_size) {
     vector<double> second_double{2, 2, 2, 2};
     auto second = ira::double_to_mps(mantissa_length, exponent_length, second_double);
 
-    bool test = false;
-
-    try
-    {
-        auto tmp = ira::vectorAddition(first, second);
-    }
-
-    catch (std::invalid_argument& e)
-    {
-        test = true;
-    }
-
-    EXPECT_EQ(should, test);
+    EXPECT_ANY_THROW(auto tmp = ira::vectorAddition(first, second));
 }
 
 TEST(vectorAddition, exception_mantissa_not_same_size) {
-
-    bool should = true;
 
     unsigned long mantissa_length = 23;
     unsigned long exponent_length = 8;
@@ -172,19 +100,7 @@ TEST(vectorAddition, exception_mantissa_not_same_size) {
     vector<double> second_double{2, 2, 2, 2};
     auto second = ira::double_to_mps(mantissa_length-1, exponent_length, second_double);
 
-    bool test = false;
-
-    try
-    {
-        auto tmp = ira::vectorAddition(first, second);
-    }
-
-    catch (std::invalid_argument& e)
-    {
-        test = true;
-    }
-
-    EXPECT_EQ(should, test);
+    EXPECT_ANY_THROW(auto tmp = ira::vectorAddition(first, second));
 }
 
 TEST(vectorAddition, simple_1_float) {
@@ -228,8 +144,6 @@ TEST(vectorAddition, simple_1_double) {
 
 TEST(vectorSubtraction, exception_first_vector_empty) {
 
-    bool should = true;
-
     unsigned long mantissa_length = 23;
     unsigned long exponent_length = 8;
 
@@ -237,24 +151,10 @@ TEST(vectorSubtraction, exception_first_vector_empty) {
     vector<double> second_double{2, 2, 2, 2};
     auto second = ira::double_to_mps(mantissa_length, exponent_length, second_double);
 
-    bool test = false;
-
-    try
-    {
-        auto tmp = ira::vectorSubtraction(first, second);
-    }
-
-    catch (std::invalid_argument& e)
-    {
-        test = true;
-    }
-
-    EXPECT_EQ(should, test);
+    EXPECT_ANY_THROW(auto tmp = ira::vectorSubtraction(first, second));
 }
 
 TEST(vectorSubtraction, exception_second_vector_empty) {
-
-    bool should = true;
 
     unsigned long mantissa_length = 23;
     unsigned long exponent_length = 8;
@@ -264,24 +164,10 @@ TEST(vectorSubtraction, exception_second_vector_empty) {
 
     vector<mps> second;
 
-    bool test = false;
-
-    try
-    {
-        auto tmp = ira::vectorSubtraction(first, second);
-    }
-
-    catch (std::invalid_argument& e)
-    {
-        test = true;
-    }
-
-    EXPECT_EQ(should, test);
+    EXPECT_ANY_THROW(auto tmp = ira::vectorSubtraction(first, second));
 }
 
 TEST(vectorSubtraction, exception_not_same_size) {
-
-    bool should = true;
 
     unsigned long mantissa_length = 23;
     unsigned long exponent_length = 8;
@@ -291,24 +177,10 @@ TEST(vectorSubtraction, exception_not_same_size) {
     vector<double> second_double{2, 2, 2, 2};
     auto second = ira::double_to_mps(mantissa_length, exponent_length, second_double);
 
-    bool test = false;
-
-    try
-    {
-        auto tmp = ira::vectorSubtraction(first, second);
-    }
-
-    catch (std::invalid_argument& e)
-    {
-        test = true;
-    }
-
-    EXPECT_EQ(should, test);
+    EXPECT_ANY_THROW(auto tmp = ira::vectorSubtraction(first, second));
 }
 
 TEST(vectorSubtraction, exception_exponent_not_same_size) {
-
-    bool should = true;
 
     unsigned long mantissa_length = 23;
     unsigned long exponent_length = 8;
@@ -318,24 +190,10 @@ TEST(vectorSubtraction, exception_exponent_not_same_size) {
     vector<double> second_double{2, 2, 2, 2};
     auto second = ira::double_to_mps(mantissa_length, exponent_length, second_double);
 
-    bool test = false;
-
-    try
-    {
-        auto tmp = ira::vectorSubtraction(first, second);
-    }
-
-    catch (std::invalid_argument& e)
-    {
-        test = true;
-    }
-
-    EXPECT_EQ(should, test);
+    EXPECT_ANY_THROW(auto tmp = ira::vectorSubtraction(first, second));
 }
 
 TEST(vectorSubtraction, exception_mantissa_not_same_size) {
-
-    bool should = true;
 
     unsigned long mantissa_length = 23;
     unsigned long exponent_length = 8;
@@ -345,19 +203,7 @@ TEST(vectorSubtraction, exception_mantissa_not_same_size) {
     vector<double> second_double{2, 2, 2, 2};
     auto second = ira::double_to_mps(mantissa_length-1, exponent_length, second_double);
 
-    bool test = false;
-
-    try
-    {
-        auto tmp = ira::vectorSubtraction(first, second);
-    }
-
-    catch (std::invalid_argument& e)
-    {
-        test = true;
-    }
-
-    EXPECT_EQ(should, test);
+    EXPECT_ANY_THROW(auto tmp = ira::vectorSubtraction(first, second));
 }
 
 TEST(vectorSubtraction, simple_1_float) {
@@ -401,8 +247,6 @@ TEST(vectorSubtraction, simple_1_double) {
 
 TEST(matrixVectorProduct, exception_D_empty) {
 
-    bool should = true;
-
     unsigned long mantissa_length = 23;
     unsigned long exponent_length = 8;
 
@@ -410,24 +254,10 @@ TEST(matrixVectorProduct, exception_D_empty) {
     vector<double> x_double{2, 2, 2, 2};
     auto x = ira::double_to_mps(mantissa_length, exponent_length, x_double);
 
-    bool test = false;
-
-    try
-    {
-        auto tmp = ira::matrixVectorProduct(D, x);
-    }
-
-    catch (std::invalid_argument& e)
-    {
-        test = true;
-    }
-
-    EXPECT_EQ(should, test);
+    EXPECT_ANY_THROW(auto tmp = ira::matrixVectorProduct(D, x));
 }
 
 TEST(matrixVectorProduct, exception_x_empty) {
-
-    bool should = true;
 
     unsigned long mantissa_length = 23;
     unsigned long exponent_length = 8;
@@ -437,24 +267,10 @@ TEST(matrixVectorProduct, exception_x_empty) {
 
     vector<mps> x;
 
-    bool test = false;
-
-    try
-    {
-        auto tmp = ira::matrixVectorProduct(D, x);
-    }
-
-    catch (std::invalid_argument& e)
-    {
-        test = true;
-    }
-
-    EXPECT_EQ(should, test);
+    EXPECT_ANY_THROW(auto tmp = ira::matrixVectorProduct(D, x));
 }
 
 TEST(matrixVectorProduct, exception_dimensions_not_the_same) {
-
-    bool should = true;
 
     unsigned long mantissa_length = 23;
     unsigned long exponent_length = 8;
@@ -464,24 +280,10 @@ TEST(matrixVectorProduct, exception_dimensions_not_the_same) {
     vector<double> x_double{2, 2, 2, 2};
     auto x = ira::double_to_mps(mantissa_length, exponent_length, x_double);
 
-    bool test = false;
-
-    try
-    {
-        auto tmp = ira::matrixVectorProduct(D, x);
-    }
-
-    catch (std::invalid_argument& e)
-    {
-        test = true;
-    }
-
-    EXPECT_EQ(should, test);
+    EXPECT_ANY_THROW(auto tmp = ira::matrixVectorProduct(D, x));
 }
 
 TEST(matrixVectorProduct, exception_mantissas_not_the_same) {
-
-    bool should = true;
 
     unsigned long mantissa_length = 23;
     unsigned long exponent_length = 8;
@@ -491,24 +293,10 @@ TEST(matrixVectorProduct, exception_mantissas_not_the_same) {
     vector<double> x_double{2, 2};
     auto x = ira::double_to_mps(mantissa_length, exponent_length, x_double);
 
-    bool test = false;
-
-    try
-    {
-        auto tmp = ira::matrixVectorProduct(D, x);
-    }
-
-    catch (std::invalid_argument& e)
-    {
-        test = true;
-    }
-
-    EXPECT_EQ(should, test);
+    EXPECT_ANY_THROW(auto tmp = ira::matrixVectorProduct(D, x));
 }
 
 TEST(matrixVectorProduct, exception_exponents_not_the_same) {
-
-    bool should = true;
 
     unsigned long mantissa_length = 23;
     unsigned long exponent_length = 8;
@@ -518,19 +306,7 @@ TEST(matrixVectorProduct, exception_exponents_not_the_same) {
     vector<double> x_double{2, 2};
     auto x = ira::double_to_mps(mantissa_length, exponent_length-1, x_double);
 
-    bool test = false;
-
-    try
-    {
-        auto tmp = ira::matrixVectorProduct(D, x);
-    }
-
-    catch (std::invalid_argument& e)
-    {
-        test = true;
-    }
-
-    EXPECT_EQ(should, test);
+    EXPECT_ANY_THROW(auto tmp = ira::matrixVectorProduct(D, x));
 }
 
 TEST(matrixVectorProduct, simple_1_float) {

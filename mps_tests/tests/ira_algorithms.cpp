@@ -15,17 +15,7 @@ TEST(PLU, exception_mantissa_too_small) {
     ira IRA(3);
     IRA.setMatrix(mantissa_length, exponent_length, new_matrix);
 
-    bool test = false;
-    try
-    {
-        IRA.PLU_decomposition(0, exponent_length);
-    }
-    catch (std::invalid_argument& e)
-    {
-        test = true;
-    }
-
-    EXPECT_EQ(true, test);
+    EXPECT_ANY_THROW(IRA.PLU_decomposition(0, exponent_length));
 }
 
 TEST(PLU, exception_exponent_too_small) {
@@ -38,17 +28,7 @@ TEST(PLU, exception_exponent_too_small) {
     ira IRA(3);
     IRA.setMatrix(mantissa_length, exponent_length, new_matrix);
 
-    bool test = false;
-    try
-    {
-        IRA.PLU_decomposition(mantissa_length, 1);
-    }
-    catch (std::invalid_argument& e)
-    {
-        test = true;
-    }
-
-    EXPECT_EQ(true, test);
+    EXPECT_ANY_THROW(IRA.PLU_decomposition(mantissa_length, 1));
 }
 
 TEST(PLU, simple_3x3_float_1) {
@@ -354,17 +334,7 @@ TEST(FS, exception_L_empty) {
     b.emplace_back(mantissa_length, exponent_length, 4);
     b.emplace_back(mantissa_length, exponent_length, 2);
 
-    bool test = false;
-    try
-    {
-        auto x = IRA.forwardSubstitution(b);
-    }
-    catch (std::invalid_argument& e)
-    {
-        test = true;
-    }
-
-    EXPECT_EQ(true, test);
+    EXPECT_ANY_THROW(auto x = IRA.forwardSubstitution(b));
 }
 
 TEST(FS, exception_b_empty) {
@@ -379,17 +349,7 @@ TEST(FS, exception_b_empty) {
 
     vector<mps> b;
 
-    bool test = false;
-    try
-    {
-        auto x = IRA.forwardSubstitution(b);
-    }
-    catch (std::invalid_argument& e)
-    {
-        test = true;
-    }
-
-    EXPECT_EQ(true, test);
+    EXPECT_ANY_THROW(auto x = IRA.forwardSubstitution(b));
 }
 
 TEST(FS, simple_4x4_float_1){
@@ -638,17 +598,7 @@ TEST(BS, exception_L_empty) {
     b.emplace_back(mantissa_length, exponent_length, 4);
     b.emplace_back(mantissa_length, exponent_length, 2);
 
-    bool test = false;
-    try
-    {
-        auto x = IRA.backwardSubstitution(b);
-    }
-    catch (std::invalid_argument& e)
-    {
-        test = true;
-    }
-
-    EXPECT_EQ(true, test);
+    EXPECT_ANY_THROW(auto x = IRA.backwardSubstitution(b));
 }
 
 TEST(BS, exception_b_empty) {
@@ -663,17 +613,7 @@ TEST(BS, exception_b_empty) {
 
     vector<mps> b;
 
-    bool test = false;
-    try
-    {
-        auto x = IRA.backwardSubstitution(b);
-    }
-    catch (std::invalid_argument& e)
-    {
-        test = true;
-    }
-
-    EXPECT_EQ(true, test);
+    EXPECT_ANY_THROW(auto x = IRA.backwardSubstitution(b));
 }
 
 TEST(BS, simple_4x4_float_1){
