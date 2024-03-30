@@ -211,7 +211,7 @@ class GTEST_API_ FilePath {
   // - [Windows] "\Windows" => 1
   // - [Windows] "C:/Windows\Notepad.exe" => 3
   // - [Windows] "\\Host\Share\C$/Windows" => 13
-  // - [UNIX] "/bin" => 1
+  // - [UNIX] "/python_tests" => 1
   size_t CalculateRootLength() const;
 
   std::string pathname_;

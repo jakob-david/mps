@@ -1,4 +1,4 @@
-#!/usr/bin/env python
+#!/usr/python_tests/env python
 #
 # Copyright 2018 Google LLC. All rights reserved.
 #

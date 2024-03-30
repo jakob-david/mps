@@ -1,4 +1,4 @@
-#!/bin/bash
+#!/python_tests/bash
 #
 # Copyright 2020, Google Inc.
 # All rights reserved.
@@ -43,7 +43,7 @@ if [[ -z ${STD:-} ]]; then
 fi
 
 # Test the CMake build
-for cc in /usr/local/bin/gcc /opt/llvm/clang/bin/clang; do
+for cc in /usr/local/python_test_scripts/gcc /opt/llvm/clang/python_test_scripts/clang; do
   for cmake_off_on in OFF ON; do
     time docker run \
       --volume="${GTEST_ROOT}:/src:ro" \
@@ -53,7 +53,7 @@ for cc in /usr/local/bin/gcc /opt/llvm/clang/bin/clang; do
       --env="CC=${cc}" \
       --env=CXXFLAGS="-Werror -Wdeprecated" \
       ${LINUX_LATEST_CONTAINER} \
-      /bin/bash -c "
+      /python_test_scripts/bash -c "
         cmake /src \
           -DCMAKE_CXX_STANDARD=14 \
           -Dgtest_build_samples=ON \
@@ -74,7 +74,7 @@ time docker run \
   --env="CC=/usr/local/bin/gcc" \
   --env="BAZEL_CXXOPTS=-std=c++14" \
   ${LINUX_GCC_FLOOR_CONTAINER} \
-    /usr/local/bin/bazel test ... \
+    /usr/local/python_test_scripts/bazel test ... \
       --copt="-Wall" \
       --copt="-Werror" \
       --copt="-Wuninitialized" \
@@ -96,7 +96,7 @@ for std in ${STD}; do
       --env="CC=/usr/local/bin/gcc" \
       --env="BAZEL_CXXOPTS=-std=${std}" \
       ${LINUX_LATEST_CONTAINER} \
-      /usr/local/bin/bazel test ... \
+      /usr/local/python_test_scripts/bazel test ... \
         --copt="-Wall" \
         --copt="-Werror" \
         --copt="-Wuninitialized" \
@@ -120,7 +120,7 @@ for std in ${STD}; do
       --env="CC=/opt/llvm/clang/bin/clang" \
       --env="BAZEL_CXXOPTS=-std=${std}" \
       ${LINUX_LATEST_CONTAINER} \
-      /usr/local/bin/bazel test ... \
+      /usr/local/python_test_scripts/bazel test ... \
         --copt="--gcc-toolchain=/usr/local" \
         --copt="-Wall" \
         --copt="-Werror" \

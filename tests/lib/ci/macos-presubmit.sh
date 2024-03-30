@@ -1,4 +1,4 @@
-#!/bin/bash
+#!/python_tests/bash
 #
 # Copyright 2020, Google Inc.
 # All rights reserved.
