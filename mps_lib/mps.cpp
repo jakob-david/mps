@@ -337,17 +337,27 @@ std::string mps::to_string(const int precision) const {
         throw std::invalid_argument("ERROR: in check_precision: exponent does not match");
     }
 
-    auto tmp_1 = compare;
-    tmp_1.setSign(false);
-    auto tmp_2 = tmp_1;
 
-    vector<bool> mant(compare.mantissa_length, false);
-    tmp_1.setMantissa(mant);
-    mant[precision] = true;
-    tmp_2.setMantissa(mant);
+    vector<bool> max_error_exponent;
+    max_error_exponent.reserve(this->exponent_length);
+    for(auto i = precision; i > 0; i /= 2){
+        //max_error_exponent.push_back(i % 2);
+        max_error_exponent.insert(max_error_exponent.begin(), i % 2);
+    }
+    for(auto i = max_error_exponent.size(); i < this->exponent_length; i++){
+        max_error_exponent.insert(max_error_exponent.begin(), false);
+    }
 
-    auto max_error = tmp_2 - tmp_1;
-    max_error.setSign(false);
+    addOneToBinary(&max_error_exponent);
+    max_error_exponent = binarySubtraction(compare.exponent, max_error_exponent);
+
+
+    mps max_error = mps(this->mantissa_length, this->exponent_length);
+    max_error.setZero(false);
+
+    if(not max_error_exponent[0]){ // if overflow happened TODO: check
+        max_error.setExponent(max_error_exponent);
+    }
 
     auto diff = *this - compare;
     diff.setSign(false);

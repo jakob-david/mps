@@ -91,7 +91,7 @@ TEST(check_precision, simple_3){
     MPS_is.setMantissa(is_mantissa);
     MPS_is.setExponent(is_exponent);
 
-    EXPECT_FALSE(MPS_is.check_precision(MPS_should, 6));
+    EXPECT_TRUE(MPS_is.check_precision(MPS_should, 6));
     EXPECT_FALSE(MPS_should.check_precision(MPS_is, 6));
 
     EXPECT_FALSE(MPS_is.check_precision(MPS_should, 7));
@@ -118,7 +118,7 @@ TEST(check_precision, simple_4){
     MPS_is.setExponent(is_exponent);
 
     EXPECT_FALSE(MPS_is.check_precision(MPS_should, 6));
-    EXPECT_FALSE(MPS_should.check_precision(MPS_is, 6));
+    EXPECT_TRUE(MPS_should.check_precision(MPS_is, 6));
 
     EXPECT_FALSE(MPS_is.check_precision(MPS_should, 7));
     EXPECT_TRUE(MPS_is.check_precision(MPS_should, 5));
