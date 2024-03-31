@@ -53,7 +53,7 @@ PYBIND11_MODULE(mps_library, handle) {
             .def("setExponent", &mps::setExponent)
 
             .def("cast", &mps::cast)
-            .def("check_precision", &mps::check_precision)
+            .def("checkPrecision", &mps::checkPrecision)
 
             .def("getValue", &mps::getValue)
             .def("print", &mps::print)

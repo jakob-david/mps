@@ -51,9 +51,13 @@ public:
     [[nodiscard]] std::string print() const;
     [[nodiscard]] std::string to_string(int precision = -1) const;
 
-    // check precision
+    // precision
     //-------------------------------
-    [[nodiscard]] bool check_precision(const mps& compare, unsigned long precision) const;
+    [[nodiscard]] bool checkPrecision(const mps& compare, unsigned long precision) const;
+    [[nodiscard]] mps getAbsoluteError(const mps& compare) const;
+    [[nodiscard]] mps getRelativeError(const mps& compare) const;
+    [[nodiscard]] double getAbsoluteError_double(const mps& compare) const;
+    [[nodiscard]] double getRelativeError_double(const mps& compare) const;
 
     // setter methods
     //-------------------------------

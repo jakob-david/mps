@@ -13,8 +13,8 @@ using namespace std;
 int main() {
 
 for (unsigned long mant = 53; mant <= 53; mant++) {
-    mps one(25, 11, 1.8);
-    mps two(25, 11, 1.8000001);
+    mps one(52, 11, 1.8);
+    mps two(52, 11, 1.8000001);
 
     //mps one(mant, 11, 3.90034);
     //mps two(mant, 11, 35.2365786);
@@ -23,7 +23,7 @@ for (unsigned long mant = 53; mant <= 53; mant++) {
             std::chrono::system_clock::now().time_since_epoch()
     );
 
-    auto sum = 0;
+    auto sum = 0.0;
     //cout << "Mant: " << mant << endl;
     //one * two;
     for (long int i = 0; i < 500000; i++) {
@@ -32,11 +32,8 @@ for (unsigned long mant = 53; mant <= 53; mant++) {
         //one.setValue(4);
         //one = 4;
         //auto three = two;
-        auto ret = one.check_precision(two, 20);
-        if(ret){
-            sum++;
-        }
-        //c = b*a;
+        auto ret = one.getRelativeError_double(two);
+        sum += ret;
     }
 
     cout << sum << endl;

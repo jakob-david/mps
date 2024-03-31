@@ -195,7 +195,7 @@ TEST(solve_LU, auto_double){
         //--------------------------------
         for(unsigned long i = 0; i < n; i++){
 
-            auto result = x[i].check_precision(x_should_mps[i], precision);
+            auto result = x[i].checkPrecision(x_should_mps[i], precision);
             EXPECT_TRUE(result);
 
             if(!result){
@@ -266,7 +266,7 @@ TEST(solve_LU, auto_float){
         //--------------------------------
         for(unsigned long i = 0; i < n; i++){
 
-            auto result = x[i].check_precision(x_should_mps[i], precision);
+            auto result = x[i].checkPrecision(x_should_mps[i], precision);
             EXPECT_TRUE(result);
 
             if(!result){
@@ -335,7 +335,7 @@ TEST(solve_LU, random_float){
         vector<unsigned long> precision_dist;
         for(unsigned long i = 0; i < matrix_size; i++){
 
-            auto result = x[i].check_precision(x_should[i], precision);
+            auto result = x[i].checkPrecision(x_should[i], precision);
 
             EXPECT_TRUE(result);
 
@@ -403,7 +403,7 @@ TEST(solve_LU, random_double){
         vector<unsigned long> precision_dist;
         for(unsigned long i = 0; i < matrix_size; i++){
 
-            auto result = x[i].check_precision(x_should[i], precision);
+            auto result = x[i].checkPrecision(x_should[i], precision);
 
             EXPECT_TRUE(result);
 
@@ -471,7 +471,7 @@ TEST(solve_LU, DISABLED_random_distana_float){
         for(unsigned long i = 0; i < matrix_size; i++){
 
             for(unsigned long p = u[0]; p > 0; p--){
-                if(x[i].check_precision(x_should[i], p)){
+                if(x[i].checkPrecision(x_should[i], p)){
                     precision_dist[u[0]-p]++;
                     break;
                 }
@@ -547,7 +547,7 @@ TEST(solve_LU, DISABLED_random_distana_double){
         for(unsigned long i = 0; i < matrix_size; i++){
 
             for(unsigned long p = u[0]; p > 0; p--){
-                if(x[i].check_precision(x_should[i], p)){
+                if(x[i].checkPrecision(x_should[i], p)){
                     precision_dist[u[0]-p]++;
                     break;
                 }

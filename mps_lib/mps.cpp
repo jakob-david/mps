@@ -82,7 +82,6 @@ mps::mps(){
  * Destructor for a multiprecision simulator object.
  */
 mps::~mps() = default;
-
 //-------------------------------
 
 
@@ -187,6 +186,7 @@ double mps::getValue() const {
 
     return ret * pow(2, exp);
 }
+
 
 /**
  * Returns true if the mps object is zero.
@@ -315,7 +315,7 @@ std::string mps::to_string(const int precision) const {
 //-------------------------------
 
 
-// get precision
+// precision
 //-------------------------------
 /**
  * Compares the mantissa of two mps objects up to a specified precision.
@@ -328,20 +328,20 @@ std::string mps::to_string(const int precision) const {
  * @param precision up to which precision the mps objects should be compared.
  * @return true if the mps objects are the same up to the given accuracy.
  */
-[[nodiscard]] bool mps::check_precision(const mps& compare, unsigned long precision) const {
+[[nodiscard]] bool mps::checkPrecision(const mps& compare, unsigned long precision) const {
 
     if (compare.mantissa_length != this->mantissa_length) {
-        throw std::invalid_argument("ERROR: in check_precision: mantissa does not match");
+        throw std::invalid_argument("ERROR: in checkPrecision: mantissa does not match");
     }
     if (compare.exponent_length != this->exponent_length) {
-        throw std::invalid_argument("ERROR: in check_precision: exponent does not match");
+        throw std::invalid_argument("ERROR: in checkPrecision: exponent does not match");
     }
 
 
     vector<bool> max_error_exponent;
     max_error_exponent.reserve(this->exponent_length);
     for(auto i = precision; i > 0; i /= 2){
-        //max_error_exponent.push_back(i % 2);
+        //max_error_exponent.push_back(i % 2);  // TODO: check if it is better if reversed
         max_error_exponent.insert(max_error_exponent.begin(), i % 2);
     }
     for(auto i = max_error_exponent.size(); i < this->exponent_length; i++){
@@ -367,6 +367,33 @@ std::string mps::to_string(const int precision) const {
     } else {
         return false;
     }
+}
+
+[[nodiscard]] mps mps::getAbsoluteError(const mps& compare) const{
+    auto ret = compare - *this;
+    ret.setSign(false);
+    return ret;
+}
+
+[[nodiscard]] mps mps::getRelativeError(const mps& compare) const {
+
+    return this->getAbsoluteError(compare) / compare;
+}
+
+[[nodiscard]] double mps::getAbsoluteError_double(const mps& compare) const {
+
+    auto is = this->getValue();
+    auto should = compare.getValue();
+
+    return abs(is-should);
+}
+
+[[nodiscard]] double mps::getRelativeError_double(const mps& compare) const {
+
+    auto is = this->getValue();
+    auto should = compare.getValue();
+
+    return abs(is-should) / should;
 }
 //-------------------------------
 
@@ -453,7 +480,6 @@ void mps::setNaN(bool negative){
     }
 }
 
-
 /**
  * Sets the sign bit of the mps object to a new value.
  *
@@ -462,7 +488,6 @@ void mps::setNaN(bool negative){
 void mps::setSign(bool negative){
     this->sign = negative;
 }
-
 
 /**
  * Sets the Mantissa to a new Mantissa.
@@ -981,7 +1006,6 @@ mps mps::operator/(const mps& other) const {
 
     return division(*this, other, this->sign != other.sign);
 }
-
 
 
 /**
@@ -1789,7 +1813,6 @@ bool mps::operator<=(const mps& other) const {
 }
 
 
-
 /**
  * Performs the actual check whether two mps objects are the same.
  * Info: Does not check for correct input or special values.
@@ -2158,8 +2181,6 @@ vector<bool> mps::binaryOffsetAddition(const vector<bool>& lp, const vector<bool
     return ret;
 }
 
-
-
 /**
  * Performs the rounding of the mantissa according to IEEE754.
  *
@@ -2204,7 +2225,6 @@ bool mps::round(vector<bool> *mantissa, unsigned long mantissa_len) {
     return ret;
 }
 
-
 /**
  * Converts a binary number to an integer.
  * The binary number is stored in a vector of booleans.
@@ -2243,7 +2263,6 @@ vector<bool> mps::intToBinary(unsigned long value) {
 
     return ret;
 }
-
 
 /**
  * Returns the bias of the exponent.
