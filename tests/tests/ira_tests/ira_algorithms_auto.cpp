@@ -9,7 +9,7 @@
 #include "../../functions/functions.h"
 
 
-TEST(solve_LU, auto_overprecision_double){
+TEST(solveLU, auto_overprecision_double){
 
     //------------------------------------------------------------------------------------------------------
     unsigned long precision = 14;        // the extra mantissa bits which are needed to achieve double precision.
@@ -58,7 +58,7 @@ TEST(solve_LU, auto_overprecision_double){
 
         // solve system
         //--------------------------------
-        auto x = IRA.solve_LU(b, u);
+        auto x = IRA.solveLU(b, u);
         auto x_result = ira::mps_to_double(x);
         //--------------------------------
 
@@ -73,7 +73,7 @@ TEST(solve_LU, auto_overprecision_double){
     }
 }
 
-TEST(solve_LU, auto_overprecision_float){
+TEST(solveLU, auto_overprecision_float){
 
     //------------------------------------------------------------------------------------------------------
     unsigned long precision = 13;        // the extra mantissa bits which are needed to achieve double precision.
@@ -122,7 +122,7 @@ TEST(solve_LU, auto_overprecision_float){
 
         // solve system
         //--------------------------------
-        auto x = IRA.solve_LU(b, u);
+        auto x = IRA.solveLU(b, u);
         auto x_result = ira::mps_to_float(x);
         //--------------------------------
 
@@ -137,7 +137,7 @@ TEST(solve_LU, auto_overprecision_float){
     }
 }
 
-TEST(solve_LU, auto_double){
+TEST(solveLU, auto_double){
 
     //------------------------------------------------------------------------------------------------------
     unsigned long precision = 43;           // the number of  mantissa bits which should be checked.
@@ -187,7 +187,7 @@ TEST(solve_LU, auto_double){
 
         // solve system
         //--------------------------------
-        auto x = IRA.solve_LU(b, u);
+        auto x = IRA.solveLU(b, u);
         //auto x_result = ira::mps_to_double(x);
         //--------------------------------
 
@@ -208,7 +208,7 @@ TEST(solve_LU, auto_double){
     }
 }
 
-TEST(solve_LU, auto_float){
+TEST(solveLU, auto_float){
 
     //------------------------------------------------------------------------------------------------------
     unsigned long precision = 15;           // the number of  mantissa bits which should be checked.
@@ -258,7 +258,7 @@ TEST(solve_LU, auto_float){
 
         // solve system
         //--------------------------------
-        auto x = IRA.solve_LU(b, u);
+        auto x = IRA.solveLU(b, u);
         //auto x_result = ira::mps_to_double(x);
         //--------------------------------
 
@@ -279,7 +279,7 @@ TEST(solve_LU, auto_float){
     }
 }
 
-TEST(solve_LU, random_float){
+TEST(solveLU, random_float){
 
     //------------------------------------------------------------------------------------------------------
     unsigned long precision = 5;           // The number of  mantissa bits which should be checked.
@@ -325,7 +325,7 @@ TEST(solve_LU, random_float){
 
         // solve system
         //--------------------------------
-        auto x = IRA.solve_LU(b, u);
+        auto x = IRA.solveLU(b, u);
         //--------------------------------
 
         // perform tests
@@ -347,7 +347,7 @@ TEST(solve_LU, random_float){
     }
 }
 
-TEST(solve_LU, random_double){
+TEST(solveLU, random_double){
 
     //------------------------------------------------------------------------------------------------------
     unsigned long precision = 35;           // The number of  mantissa bits which should be checked.
@@ -392,7 +392,7 @@ TEST(solve_LU, random_double){
 
         // solve system
         //--------------------------------
-        auto x = IRA.solve_LU(b, u);
+        auto x = IRA.solveLU(b, u);
         //--------------------------------
 
         // perform tests
@@ -414,7 +414,7 @@ TEST(solve_LU, random_double){
     }
 }
 
-TEST(solve_LU, DISABLED_random_distana_float){
+TEST(solveLU, DISABLED_random_distana_float){
 
     //------------------------------------------------------------------------------------------------------
     unsigned long number_of_tests = 10;     // The number of test runs.
@@ -460,7 +460,7 @@ TEST(solve_LU, DISABLED_random_distana_float){
 
         // solve system
         //--------------------------------
-        auto x = IRA.solve_LU(b, u);
+        auto x = IRA.solveLU(b, u);
         //--------------------------------
 
         // perform tests
@@ -490,7 +490,7 @@ TEST(solve_LU, DISABLED_random_distana_float){
     }
 }
 
-TEST(solve_LU, DISABLED_random_distana_double){
+TEST(solveLU, DISABLED_random_distana_double){
 
     //------------------------------------------------------------------------------------------------------
     unsigned long number_of_tests = 10;     // The number of test runs.
@@ -536,7 +536,7 @@ TEST(solve_LU, DISABLED_random_distana_double){
 
         // solve system
         //--------------------------------
-        auto x = IRA.solve_LU(b, u);
+        auto x = IRA.solveLU(b, u);
         //--------------------------------
 
         // perform tests
@@ -566,7 +566,7 @@ TEST(solve_LU, DISABLED_random_distana_double){
     }
 }
 
-TEST(solve_LU, random_LUcompare_double){
+TEST(solveLU, random_LUcompare_double){
 
     //------------------------------------------------------------------------------------------------------
     unsigned long number_of_tests = 1;      // The number of test runs.
@@ -611,8 +611,8 @@ TEST(solve_LU, random_LUcompare_double){
         // solve system
         //--------------------------------
         unsigned long u[2] = {52, 11};
-        auto x_result = IRA.solve_LU(b, u);
-        auto x_should_double = IRA.solve_LU_double(ira::mps_to_double(b));
+        auto x_result = IRA.solveLU(b, u);
+        auto x_should_double = IRA.solveLU_double(ira::mps_to_double(b));
         //--------------------------------
 
         // perform tests

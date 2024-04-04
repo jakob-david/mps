@@ -671,7 +671,7 @@ void ira::PLU_decomposition(unsigned long mantissa_precision, unsigned long expo
  * @param u the precision in which the system should be solved.
  * @return the solution of the system as an mps object.
  */
-[[nodiscard]] vector<mps> ira::solve_LU(const vector<mps>& b, unsigned long u[2]){
+[[nodiscard]] vector<mps> ira::solveLU(const vector<mps>& b, unsigned long u[2]){
 
 
     this->PLU_decomposition(u[0], u[1]);
@@ -759,7 +759,7 @@ void ira::PLU_decomposition(unsigned long mantissa_precision, unsigned long expo
  * @param b the solution vector of the system.
  * @return the solution of the system.
  */
-[[nodiscard]] vector<double> ira::solve_LU_double(const vector<double>& b){
+[[nodiscard]] vector<double> ira::solveLU_double(const vector<double>& b){
 
     // operators   (to avoid subnormal numbers)
     //-------------------------------

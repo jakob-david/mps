@@ -87,12 +87,12 @@ public:
     [[nodiscard]] vector<mps> forwardSubstitution(const vector<mps>& b) const;
     [[nodiscard]] vector<mps> backwardSubstitution(const vector<mps>& b) const;
     [[nodiscard]] vector<mps> iterativeRefinementLU(const vector<mps>& b, unsigned long u[2], unsigned long ul[2], unsigned long n_max);
-    [[nodiscard]] vector<mps> solve_LU(const vector<mps>& b, unsigned long u[2]);
+    [[nodiscard]] vector<mps> solveLU(const vector<mps>& b, unsigned long u[2]);
     //-------------------------------
 
     // "double" algorithms
     //-------------------------------
-    [[nodiscard]] vector<double> solve_LU_double(const vector<double>& b);
+    [[nodiscard]] vector<double> solveLU_double(const vector<double>& b);
     //-------------------------------
 
 
