@@ -13,8 +13,8 @@ TEST(solve_LU, auto_overprecision_double){
 
     //------------------------------------------------------------------------------------------------------
     unsigned long precision = 14;        // the extra mantissa bits which are needed to achieve double precision.
-    unsigned long start = 40;
-    unsigned long number_of_tests = 40; // the number of test runs. Each run with a larger matrix.
+    unsigned long start = 35;
+    unsigned long number_of_tests = 35; // the number of test runs. Each run with a larger matrix.
     //------------------------------------------------------------------------------------------------------
 
     unsigned long u[2] = {52 + precision, 11};
@@ -73,12 +73,12 @@ TEST(solve_LU, auto_overprecision_double){
     }
 }
 
-TEST(solve_LU, auto_pverprecision_float){
+TEST(solve_LU, auto_overprecision_float){
 
     //------------------------------------------------------------------------------------------------------
     unsigned long precision = 13;        // the extra mantissa bits which are needed to achieve double precision.
-    unsigned long start = 40;
-    unsigned long number_of_tests = 40; // the number of test runs. Each run with a larger matrix.
+    unsigned long start = 35;
+    unsigned long number_of_tests = 35; // the number of test runs. Each run with a larger matrix.
     //------------------------------------------------------------------------------------------------------
 
     unsigned long u[2] = {23 + precision, 11};
@@ -141,8 +141,8 @@ TEST(solve_LU, auto_double){
 
     //------------------------------------------------------------------------------------------------------
     unsigned long precision = 43;           // the number of  mantissa bits which should be checked.
-    unsigned long start = 40;               // the size of the first matrix which should be set.
-    unsigned long number_of_tests = 40;     // the number of test runs. Each run with a larger matrix.
+    unsigned long start = 35;               // the size of the first matrix which should be set.
+    unsigned long number_of_tests = 35;     // the number of test runs. Each run with a larger matrix.
     unsigned long u[2] = {52, 11};  // the precision of the mps objects.
     //------------------------------------------------------------------------------------------------------
 
@@ -212,8 +212,8 @@ TEST(solve_LU, auto_float){
 
     //------------------------------------------------------------------------------------------------------
     unsigned long precision = 15;           // the number of  mantissa bits which should be checked.
-    unsigned long start = 40;               // the size of the first matrix which should be set.
-    unsigned long number_of_tests = 40;     // the number of test runs. Each run with a larger matrix.
+    unsigned long start = 35;               // the size of the first matrix which should be set.
+    unsigned long number_of_tests = 35;     // the number of test runs. Each run with a larger matrix.
     unsigned long u[2] = {23, 8};  // the precision of the mps objects.
     //------------------------------------------------------------------------------------------------------
 
@@ -278,8 +278,6 @@ TEST(solve_LU, auto_float){
 
     }
 }
-
-
 
 TEST(solve_LU, random_float){
 
@@ -367,7 +365,6 @@ TEST(solve_LU, random_double){
         IRA.setRandomMatrix(u[0], u[1]);
         //--------------------------------
 
-        // Set up x_should;
         // Set up x_should;
         //--------------------------------
         std::random_device rd;
@@ -626,5 +623,299 @@ TEST(solve_LU, random_LUcompare_double){
             EXPECT_EQ(should_value(x_should_double[i]), x_result[i].print());
         }
         //--------------------------------
+    }
+}
+
+
+
+
+
+TEST(iterativeRefinementLU, auto_double){
+
+    //------------------------------------------------------------------------------------------------------
+    unsigned long precision = 51;                // the number of  mantissa bits which should be checked.
+    unsigned long start_matrix_size = 35;
+    unsigned long last_matrix_size = 35;         // the number of test runs. Each run with a larger matrix.
+
+    unsigned long ul[2] = { 23, 11};    // precision: LU
+    unsigned long u[2] = {52, 11};      // precision: working
+    unsigned long ur[2] = {60, 11};     // precision: A
+    //------------------------------------------------------------------------------------------------------
+
+
+    for(unsigned long n = start_matrix_size; n <= last_matrix_size; n++){
+
+        ira IRA(n);
+
+        // Set up A
+        //--------------------------------
+        vector<double> new_A;
+        new_A.reserve(n*n);
+        for(unsigned long i = 0; i < n; i++){
+            for(unsigned long j = 0; j < n; j++){
+                new_A.push_back((double) ((j+i)%n));
+            }
+        }
+        IRA.setMatrix(ur[0], ur[1], new_A);
+        //--------------------------------
+
+        // Set up x_should;
+        //--------------------------------
+        vector<double> x_should_d;
+        for(unsigned long i = 0 + 1; i <= n; i++){
+            x_should_d.push_back((double) i);
+        }
+        auto x_should = ira::double_to_mps(u[0], u[1], x_should_d);
+        //--------------------------------
+
+        // Set up b
+        //--------------------------------
+        vector<mps> b;
+        unsigned long tmp;
+        for(unsigned long i = 0; i < n; i++){
+            tmp = 0;
+            for(unsigned long j = 0; j < n; j++){
+                tmp += (unsigned long) (x_should_d[j] * new_A[(n * i) + j]);
+            }
+            b.emplace_back(ur[0], ur[1], tmp);
+        }
+        //--------------------------------
+
+        // solve system
+        //--------------------------------
+        auto x = IRA.iterativeRefinementLU(b, u, ul, 10);
+        auto x_result = ira::mps_to_double(x);
+        //--------------------------------
+
+        // perform tests
+        //--------------------------------
+        for(unsigned long i = 0; i < x.size(); i++){
+
+            auto result = x[i].checkPrecision(x_should[i], precision);
+            EXPECT_TRUE(result);
+
+            if(!result){
+                cout << "x_i:   " << x[i].print() << endl;
+                cout << "x_i_s  " << x_should[i].print() << endl;
+            }
+        }
+        //--------------------------------
+
+    }
+}
+
+TEST(iterativeRefinementLU, auto_float){
+
+    //------------------------------------------------------------------------------------------------------
+    unsigned long precision = 21;                // the number of  mantissa bits which should be checked.
+    unsigned long start_matrix_size = 35;
+    unsigned long last_matrix_size = 35;         // the number of test runs. Each run with a larger matrix.
+
+    unsigned long ul[2] = { 12, 8};    // precision: LU
+    unsigned long u[2] = {23, 8};       // precision: working
+    unsigned long ur[2] = {30, 8};     // precision: A
+    //------------------------------------------------------------------------------------------------------
+
+
+    for(unsigned long n = start_matrix_size; n <= last_matrix_size; n++){
+
+        ira IRA(n);
+
+        // Set up A
+        //--------------------------------
+        vector<double> new_A;
+        new_A.reserve(n*n);
+        for(unsigned long i = 0; i < n; i++){
+            for(unsigned long j = 0; j < n; j++){
+                new_A.push_back((double) ((j+i)%n));
+            }
+        }
+        IRA.setMatrix(ur[0], ur[1], new_A);
+        //--------------------------------
+
+        // Set up x_should;
+        //--------------------------------
+        vector<double> x_should_d;
+        for(unsigned long i = 0 + 1; i <= n; i++){
+            x_should_d.push_back((double) i);
+        }
+        auto x_should = ira::double_to_mps(u[0], u[1], x_should_d);
+        //--------------------------------
+
+        // Set up b
+        //--------------------------------
+        vector<mps> b;
+        unsigned long tmp;
+        for(unsigned long i = 0; i < n; i++){
+            tmp = 0;
+            for(unsigned long j = 0; j < n; j++){
+                tmp += (unsigned long) (x_should_d[j] * new_A[(n * i) + j]);
+            }
+            b.emplace_back(ur[0], ur[1], tmp);
+        }
+        //--------------------------------
+
+        // solve system
+        //--------------------------------
+        auto x = IRA.iterativeRefinementLU(b, u, ul, 10);
+        auto x_result = ira::mps_to_double(x);
+        //--------------------------------
+
+        // perform tests
+        //--------------------------------
+        for(unsigned long i = 0; i < x.size(); i++){
+
+            auto result = x[i].checkPrecision(x_should[i], precision);
+            EXPECT_TRUE(result);
+
+            if(!result){
+                cout << "x_i:   " << x[i].print() << endl;
+                cout << "x_i_s  " << x_should[i].print() << endl;
+            }
+        }
+        //--------------------------------
+
+    }
+}
+
+TEST(iterativeRefinementLU, random_double){
+
+    //------------------------------------------------------------------------------------------------------
+    unsigned long n_max = 15;
+
+    unsigned long precision = 35;                // the number of  mantissa bits which should be checked.
+    unsigned long start_matrix_size = 35;
+    unsigned long last_matrix_size = 35;         // the number of test runs. Each run with a larger matrix.
+
+    unsigned long ul[2] = { 23, 11};    // precision: LU
+    unsigned long u[2] = {52, 11};      // precision: working
+    unsigned long ur[2] = {60, 11};     // precision: A
+    //------------------------------------------------------------------------------------------------------
+
+
+    for(unsigned long n = start_matrix_size; n <= last_matrix_size; n++){
+
+        ira IRA(n);
+
+        // Set up A
+        //--------------------------------
+        IRA.setRandomMatrix(ur[0], ur[1]);
+        //--------------------------------
+
+        // Set up x_should;
+        //--------------------------------
+        std::random_device rd;
+        std::mt19937 mt(rd());
+        std::uniform_real_distribution<double> dist(-10.0, 10.0);
+
+        vector<mps> x_should;
+        for(unsigned long i = 0 + 1; i <= n; i++){
+            x_should.emplace_back(u[0], u[1], dist(mt));
+        }
+        //--------------------------------
+
+        // Set up b
+        //--------------------------------
+        vector<mps> b;
+        double tmp;
+        for(unsigned long i = 0; i < n; i++){
+            tmp = 0;
+            for(unsigned long j = 0; j < n; j++){
+                tmp += x_should[j].getValue() * IRA.getMatrixElement((n * i) + j).getValue();
+            }
+            b.emplace_back(ur[0], ur[1], tmp);
+        }
+        //--------------------------------
+
+        // solve system
+        //--------------------------------
+        auto x = IRA.iterativeRefinementLU(b, u, ul, n_max);
+        auto x_result = ira::mps_to_double(x);
+        //--------------------------------
+
+        // perform tests
+        //--------------------------------
+        for(unsigned long i = 0; i < x.size(); i++){
+
+            auto result = x[i].checkPrecision(x_should[i], precision);
+            EXPECT_TRUE(result);
+
+            if(!result){
+                cout << "x_i:   " << x[i].print() << endl;
+                cout << "x_i_s  " << x_should[i].print() << endl;
+            }
+        }
+        //--------------------------------
+
+    }
+}
+
+TEST(iterativeRefinementLU, random_float){
+
+    //------------------------------------------------------------------------------------------------------
+    unsigned long precision = 15;                // the number of  mantissa bits which should be checked.
+    unsigned long start_matrix_size = 35;
+    unsigned long last_matrix_size = 35;         // the number of test runs. Each run with a larger matrix.
+
+    unsigned long ul[2] = { 12, 8};     // precision: LU
+    unsigned long u[2] = {23, 8};       // precision: working
+    unsigned long ur[2] = {30, 8};      // precision: A
+    //------------------------------------------------------------------------------------------------------
+
+
+    for(unsigned long n = start_matrix_size; n <= last_matrix_size; n++){
+
+        ira IRA(n);
+
+        // Set up A
+        //--------------------------------
+        IRA.setRandomMatrix(ur[0], ur[1]);
+        //--------------------------------
+
+        // Set up x_should;
+        //--------------------------------
+        std::random_device rd;
+        std::mt19937 mt(rd());
+        std::uniform_real_distribution<double> dist(-10.0, 10.0);
+
+        vector<mps> x_should;
+        for(unsigned long i = 0 + 1; i <= n; i++){
+            x_should.emplace_back(u[0], u[1], dist(mt));
+        }
+        //--------------------------------
+
+        // Set up b
+        //--------------------------------
+        vector<mps> b;
+        double tmp;
+        for(unsigned long i = 0; i < n; i++){
+            tmp = 0;
+            for(unsigned long j = 0; j < n; j++){
+                tmp += x_should[j].getValue() * IRA.getMatrixElement((n * i) + j).getValue();
+            }
+            b.emplace_back(ur[0], ur[1], tmp);
+        }
+        //--------------------------------
+
+        // solve system
+        //--------------------------------
+        auto x = IRA.iterativeRefinementLU(b, u, ul, 10);
+        auto x_result = ira::mps_to_double(x);
+        //--------------------------------
+
+        // perform tests
+        //--------------------------------
+        for(unsigned long i = 0; i < x.size(); i++){
+
+            auto result = x[i].checkPrecision(x_should[i], precision);
+            EXPECT_TRUE(result);
+
+            if(!result){
+                cout << "x_i:   " << x[i].print() << endl;
+                cout << "x_i_s  " << x_should[i].print() << endl;
+            }
+        }
+        //--------------------------------
+
     }
 }

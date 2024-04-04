@@ -8,12 +8,23 @@
 #ifndef MPS_IRA_H
 #define MPS_IRA_H
 
-// TODO: make tests for iterative refinement
-// TODO: rewrite iterative refinement
+// TODO: collect data for iterative refinement.
 // TODO: write minimisation algorithm.
 
 
 class ira {
+
+public:
+
+    // evaluation struct
+    //-------------------------------
+    struct {
+
+        long double IR_area;
+        std::chrono::milliseconds IR_time_needed;
+
+    } evaluation;
+    //-------------------------------
 
 private:
 
@@ -75,8 +86,7 @@ public:
     void PLU_decomposition(unsigned long mantissa_precision, unsigned long exponent_precision);
     [[nodiscard]] vector<mps> forwardSubstitution(const vector<mps>& b) const;
     [[nodiscard]] vector<mps> backwardSubstitution(const vector<mps>& b) const;
-    // TODO: test
-    [[nodiscard]] vector<mps> iterativeRefinementLU(const vector<mps>& b, unsigned long u[2], unsigned long uf[2]);
+    [[nodiscard]] vector<mps> iterativeRefinementLU(const vector<mps>& b, unsigned long u[2], unsigned long ul[2], unsigned long n_max);
     [[nodiscard]] vector<mps> solve_LU(const vector<mps>& b, unsigned long u[2]);
     //-------------------------------
 

@@ -687,34 +687,34 @@ void ira::PLU_decomposition(unsigned long mantissa_precision, unsigned long expo
     return x;
 }
 
-[[nodiscard]] vector<mps> ira::iterativeRefinementLU(const vector<mps>& b, unsigned long u[2], unsigned long uf[2]){
+/**
+ * Solves a system of equation using a iterative refinement with LU-decomposition.
+ * The system matrix needs not to be a parameter since it must set beforehand.
+ *
+ * @param b the solution vector of the system. Needs to be same precision as A
+ * @param u the precision in which the system should be solved.
+ * @param ul the precision in which the LU-decomposition should be performed.
+ * @return the approximate solution of the system as an mps object.
+ */
+[[nodiscard]] vector<mps> ira::iterativeRefinementLU(const vector<mps>& b, unsigned long u[2], unsigned long ul[2], unsigned long n_max){
 
-    //unsigned long exp_precision = b[0].exponent_length;
-    //unsigned long mant_precision = b[0].mantissa_length;
 
     vector<unsigned long> ur{A[0].mantissa_length, A[0].exponent_length};
 
-    this->PLU_decomposition(uf[0], uf[1]);
+    this->PLU_decomposition(ul[0], ul[1]);
 
-    // initialize x vector
-    // calculate in precision: uf
-    // save in precision: u
+    // initialize x vector AND calculate in precision: ul AND save in precision: u
     //-------------------------------
     auto tmp_b = b;
-    ira::castVectorElements(uf[0], uf[1], &tmp_b);
+    ira::castVectorElements(ul[0], ul[1], &tmp_b);
     auto x = ira::matrixVectorProduct(this->P, tmp_b);
     x = this->forwardSubstitution(x);
     x = this->backwardSubstitution(x);
     ira::castVectorElements(u[0], u[1], &x);
     //-------------------------------
 
-    // initialize r and d vector
-    //-------------------------------
-    //vector<mps> r(b.size(), mps(mant_precision, exp_precision));
-    //vector<mps> d(b.size(), mps(mant_precision, exp_precision));
-    //-------------------------------
 
-    for(unsigned long i = 0; i < 10; i++){
+    for(unsigned long i = 0; i < n_max; i++){
 
         // calculate: r_i = b − A * x_i
         // in precision: ur
@@ -724,36 +724,24 @@ void ira::PLU_decomposition(unsigned long mantissa_precision, unsigned long expo
         auto r = vectorSubtraction(b, ira::matrixVectorProduct(this->A, tmp_x));
         //-------------------------------
 
-        //cout << "------------------------" << endl;
-        //cout << i << ": Ax: " << ira::to_string(ira::matrixVectorProduct(this->A, tmp_x), 30) << endl;
-        //cout << i << ": r: " << ira::to_string(r, 30) << endl;
-        cout << i << ": r: " << vectorNorm_L1(r).to_string(30)<< endl;
 
         // solve: A * d_i = r_i
-        // in precision: uf
+        // in precision: ul
         //-------------------------------
-        ira::castVectorElements(uf[0], uf[1], &r);
+        ira::castVectorElements(ul[0], ul[1], &r);
         r = ira::matrixVectorProduct(this->P, r);
         auto d = this->forwardSubstitution(r);
         d = this->backwardSubstitution(d);
         //-------------------------------
 
-        // cout << i << ": d: " << ira::to_string(d, 30) << endl;
 
         // calculate: x_i+1 = x_i + d_i i
         // n precision u.
         //-------------------------------
         ira::castVectorElements(u[0], u[1], &d);
-        //cout << i << ": d: " << ira::to_string(d, 30) << endl;
-        //auto tmp = x[1] + d[1];
-        //cout << i << ": x_1: " << x[1].print() << endl;
-        //cout << i << ": d_1: " << d[1].print() << endl;
-        //cout << i << ": tmp: " << tmp.to_string(30) << endl;
-        //cout << i << ": tmp: " << tmp.print() << endl;
         x = vectorAddition(x, d);
         //-------------------------------
 
-        // cout << i << ": x: " << ira::to_string(x, 30) << endl;
     }
 
     return x;
@@ -763,6 +751,7 @@ void ira::PLU_decomposition(unsigned long mantissa_precision, unsigned long expo
 
 // algorithms which use "normal" double
 //-------------------------------
+
 /**
  * Solves a system of equation using a PLU-Factorisation and "normal" double variables.
  * The system matrix needs not to be a parameter since it must set beforehand.

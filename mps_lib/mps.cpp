@@ -330,14 +330,6 @@ std::string mps::to_string(const int precision) const {
  */
 [[nodiscard]] bool mps::checkPrecision(const mps& compare, unsigned long precision) const {
 
-    if (compare.mantissa_length != this->mantissa_length) {
-        throw std::invalid_argument("ERROR: in checkPrecision: mantissa does not match");
-    }
-    if (compare.exponent_length != this->exponent_length) {
-        throw std::invalid_argument("ERROR: in checkPrecision: exponent does not match");
-    }
-
-
     vector<bool> max_error_exponent;
     max_error_exponent.reserve(this->exponent_length);
     for(auto i = precision; i > 0; i /= 2){
@@ -370,8 +362,10 @@ std::string mps::to_string(const int precision) const {
 }
 
 [[nodiscard]] mps mps::getAbsoluteError(const mps& compare) const{
+
     auto ret = compare - *this;
     ret.setSign(false);
+
     return ret;
 }
 

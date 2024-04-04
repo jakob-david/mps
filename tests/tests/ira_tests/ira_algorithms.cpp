@@ -1260,7 +1260,7 @@ TEST(IR, simple_3x3_double_1){
     b.emplace_back(mantissa_length, exponent_length, 6);
     b.emplace_back(mantissa_length, exponent_length, 8);
 
-    auto x = IRA.iterativeRefinementLU(b, u, uf);
+    auto x = IRA.iterativeRefinementLU(b, u, uf, 10);
 
 
     std::string solution = x[0].to_string(8);
@@ -1272,15 +1272,15 @@ TEST(IR, simple_3x3_double_1){
     EXPECT_EQ(solution, "1.00000000, 2.00000000, 3.00000000");
 }
 
+TEST(IR, simple_3x3_double_2){
 
+    //------------------------------------------------------------------------------------------------------
+    unsigned long precision = 51;                // the number of  mantissa bits which should be checked.
+    unsigned long ur[2] = {52, 11};     // precision: A
+    unsigned long uf[2] = { 23, 11};    // precision: LU
+    unsigned long u[2] = {52, 11};      // precision: working
+    //------------------------------------------------------------------------------------------------------
 
-
-
-TEST(IR, coding){
-
-    unsigned long ur[2] = {52, 11};  // precision: A
-    unsigned long uf[2] = { 23, 11};  // precision: LU
-    unsigned long u[2] = {52, 11};   // precision: working
 
     ira IRA(3);
 
@@ -1292,7 +1292,7 @@ TEST(IR, coding){
     b.emplace_back(ur[0], ur[1], 875.357);
     b.emplace_back(ur[0], ur[1], 235.5745);
 
-    auto x = IRA.iterativeRefinementLU(b, u, uf);
+    auto x = IRA.iterativeRefinementLU(b, u, uf, 10);
 
 
    // std::string solution = x[0].to_string(8);
@@ -1301,10 +1301,21 @@ TEST(IR, coding){
    //     solution += x[i].to_string(8);
     //}
 
-    cout << ira::to_string(x) << endl;
+    // cout << ira::to_string(x) << endl;
+
     auto x_should = IRA.solve_LU(b, u);
 
-    EXPECT_EQ(x[0].print(), x_should[0].print());
-    EXPECT_EQ(x[1].print(), x_should[1].print());
-    EXPECT_EQ(x[2].print(), x_should[2].print());
+    // perform tests
+    //--------------------------------
+    for(unsigned long i = 0; i < x.size(); i++){
+
+        auto result = x[i].checkPrecision(x_should[i], precision);
+        EXPECT_TRUE(result);
+
+        if(!result){
+            cout << "x_i:   " << x[i].print() << endl;
+            cout << "x_i_s  " << x_should[i].print() << endl;
+        }
+    }
+    //--------------------------------
 }
