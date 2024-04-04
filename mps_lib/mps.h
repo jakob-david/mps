@@ -57,6 +57,8 @@ public:
     [[nodiscard]] mps getRelativeError(const mps& compare) const;
     [[nodiscard]] double getAbsoluteError_double(const mps& compare) const;
     [[nodiscard]] double getRelativeError_double(const mps& compare) const;
+    [[nodiscard]] double getAbsoluteError_double(const double& compare) const;
+    [[nodiscard]] double getRelativeError_double(const double& compare) const;
 
     // setter methods
     //-------------------------------

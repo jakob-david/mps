@@ -1294,15 +1294,6 @@ TEST(IR, simple_3x3_double_2){
 
     auto x = IRA.iterativeRefinementLU(b, u, uf, 10);
 
-
-   // std::string solution = x[0].to_string(8);
-   // for(unsigned long i = 1; i < b.size(); i++){
-   //     solution += ", ";
-   //     solution += x[i].to_string(8);
-    //}
-
-    // cout << ira::to_string(x) << endl;
-
     auto x_should = IRA.solveLU(b, u);
 
     // perform tests
@@ -1318,4 +1309,91 @@ TEST(IR, simple_3x3_double_2){
         }
     }
     //--------------------------------
+}
+
+TEST(IR, get_evaluation_value_IR_area){
+
+    //------------------------------------------------------------------------------------------------------
+    unsigned long precision = 51;                // the number of  mantissa bits which should be checked.
+    unsigned long ur[2] = {52, 11};     // precision: A
+    unsigned long uf[2] = { 23, 11};    // precision: LU
+    unsigned long u[2] = {52, 11};      // precision: working
+    //------------------------------------------------------------------------------------------------------
+
+
+    ira IRA(3);
+
+    vector<double> new_A{563.46, 634.346, 575.346, 694.3453, 573.234, 4638.67, 985.456, 575.56, 978.56};
+    IRA.setMatrix(ur[0], ur[1], new_A);
+
+    vector<mps> b;
+    b.emplace_back(ur[0], ur[1], 463.56);
+    b.emplace_back(ur[0], ur[1], 875.357);
+    b.emplace_back(ur[0], ur[1], 235.5745);
+
+    auto x_should = IRA.solveLU(b, u);
+    auto x_should_d = ira::mps_to_double(x_should);
+
+    auto x = IRA.iterativeRefinementLU(b, u, uf, 10, x_should_d);
+
+    // perform tests
+    //--------------------------------
+    for(unsigned long i = 0; i < x.size(); i++){
+
+        auto result = x[i].checkPrecision(x_should[i], precision);
+        EXPECT_TRUE(result);
+
+        if(!result){
+            cout << "x_i:   " << x[i].print() << endl;
+            cout << "x_i_s  " << x_should[i].print() << endl;
+        }
+    }
+    //--------------------------------
+
+    EXPECT_TRUE(IRA.evaluation.IR_area > 0);
+
+}
+
+TEST(IR, get_evaluation_value_microseconds){
+
+    //------------------------------------------------------------------------------------------------------
+    unsigned long precision = 51;                // the number of  mantissa bits which should be checked.
+    unsigned long ur[2] = {52, 11};     // precision: A
+    unsigned long uf[2] = { 23, 11};    // precision: LU
+    unsigned long u[2] = {52, 11};      // precision: working
+    //------------------------------------------------------------------------------------------------------
+
+
+    ira IRA(3);
+
+    vector<double> new_A{563.46, 634.346, 575.346, 694.3453, 573.234, 4638.67, 985.456, 575.56, 978.56};
+    IRA.setMatrix(ur[0], ur[1], new_A);
+
+    vector<mps> b;
+    b.emplace_back(ur[0], ur[1], 463.56);
+    b.emplace_back(ur[0], ur[1], 875.357);
+    b.emplace_back(ur[0], ur[1], 235.5745);
+
+    auto x_should = IRA.solveLU(b, u);
+    auto x_should_d = ira::mps_to_double(x_should);
+
+    auto x = IRA.iterativeRefinementLU(b, u, uf, 10, x_should_d);
+
+    // perform tests
+    //--------------------------------
+    for(unsigned long i = 0; i < x.size(); i++){
+
+        auto result = x[i].checkPrecision(x_should[i], precision);
+        EXPECT_TRUE(result);
+
+        if(!result){
+            cout << "x_i:   " << x[i].print() << endl;
+            cout << "x_i_s  " << x_should[i].print() << endl;
+        }
+    }
+    //--------------------------------
+
+    EXPECT_TRUE(IRA.evaluation.microseconds > 0);
+
+    cout << IRA.evaluation.microseconds << endl;
 }

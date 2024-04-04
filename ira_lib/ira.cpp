@@ -31,6 +31,8 @@ ira::ira(unsigned long n){
     this->L.resize(matrix_1D_size);
     this->U.resize(matrix_1D_size);
     this->P.resize(matrix_1D_size);
+
+    this->evaluation = {0.0, 0};
 }
 
 /**
@@ -696,14 +698,21 @@ void ira::PLU_decomposition(unsigned long mantissa_precision, unsigned long expo
  * @param ul the precision in which the LU-decomposition should be performed.
  * @return the approximate solution of the system as an mps object.
  */
-[[nodiscard]] vector<mps> ira::iterativeRefinementLU(const vector<mps>& b, unsigned long u[2], unsigned long ul[2], unsigned long n_max){
+[[nodiscard]] vector<mps> ira::iterativeRefinementLU(const vector<mps>& b, unsigned long u[2], unsigned long ul[2], unsigned long n_max, const vector<double>& x_expected){
 
-
+    // set some initial variables
+    //-------------------------------
+    this->evaluation.IR_area = 0;
     vector<unsigned long> ur{A[0].mantissa_length, A[0].exponent_length};
+    const auto start = std::chrono::high_resolution_clock::now();
+    //-------------------------------
 
+    // perform PLU decomposition
+    //-------------------------------
     this->PLU_decomposition(ul[0], ul[1]);
+    //-------------------------------
 
-    // initialize x vector AND calculate in precision: ul AND save in precision: u
+    // perform substitution to gain x_0
     //-------------------------------
     auto tmp_b = b;
     ira::castVectorElements(ul[0], ul[1], &tmp_b);
@@ -712,6 +721,7 @@ void ira::PLU_decomposition(unsigned long mantissa_precision, unsigned long expo
     x = this->backwardSubstitution(x);
     ira::castVectorElements(u[0], u[1], &x);
     //-------------------------------
+
 
 
     for(unsigned long i = 0; i < n_max; i++){
@@ -742,7 +752,18 @@ void ira::PLU_decomposition(unsigned long mantissa_precision, unsigned long expo
         x = vectorAddition(x, d);
         //-------------------------------
 
+
+        // evaluation
+        //-------------------------------
+        for(unsigned long element_id = 0; element_id < x_expected.size(); element_id++){
+            this->evaluation.IR_area += abs(x[element_id].getRelativeError_double(x_expected[element_id]));
+        }
+        //-------------------------------
+
     }
+
+    const auto finish = std::chrono::high_resolution_clock::now();
+    this->evaluation.microseconds = std::chrono::duration_cast<std::chrono::microseconds>(finish-start).count();
 
     return x;
 }

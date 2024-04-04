@@ -495,3 +495,142 @@ TEST(getAbsoluteError_double, simple_4){
     EXPECT_EQ(expected_result, (float) actual_result);
     EXPECT_EQ(should_value(expected_result), should_value(actual_result));
 }
+
+
+
+TEST(getRelativeError_all_double, simple_1){
+
+    unsigned long exponent_length = 11;
+    unsigned long mantissa_length = 52;
+
+    double should_d = 2;
+    double is_d = 1;
+
+    auto is = mps(mantissa_length, exponent_length, is_d);
+
+    auto expected_result = abs(should_d-is_d) / should_d;
+    auto actual_result = is.getRelativeError_double(should_d);
+
+    EXPECT_EQ(expected_result, actual_result);
+    EXPECT_EQ(should_value(expected_result), should_value(actual_result));
+}
+
+TEST(getRelativeError_all_double, simple_2){
+
+    unsigned long exponent_length = 8;
+    unsigned long mantissa_length = 23;
+
+    float should_d = 10;
+    float is_d = 20;
+
+    auto is = mps(mantissa_length, exponent_length, is_d);
+
+    auto expected_result = abs(should_d-is_d) / should_d;
+    auto actual_result = (float) is.getRelativeError_double(should_d);
+
+    EXPECT_EQ(expected_result, (float) actual_result);
+    EXPECT_EQ(should_value(expected_result), should_value(actual_result));
+}
+
+TEST(getRelativeError_all_double, simple_3){
+
+    unsigned long exponent_length = 11;
+    unsigned long mantissa_length = 52;
+
+    double should_d = 0.0032;
+    double is_d = 0.334;
+
+    auto is = mps(mantissa_length, exponent_length, is_d);
+
+    auto expected_result = abs(should_d-is_d) / should_d;
+    auto actual_result = is.getRelativeError_double(should_d);
+
+    EXPECT_EQ(expected_result, actual_result);
+    EXPECT_EQ(should_value(expected_result), should_value(actual_result));
+}
+
+TEST(getRelativeError_all_double, simple_4){
+
+    unsigned long exponent_length = 8;
+    unsigned long mantissa_length = 23;
+
+    float should_d = 0.0003f;
+    float is_d = 0.00032f;
+
+    auto is = mps(mantissa_length, exponent_length, is_d);
+
+    auto expected_result = abs(should_d-is_d) / should_d;
+    auto actual_result = (float) is.getRelativeError_double(should_d);
+
+    EXPECT_EQ(expected_result, (float) actual_result);
+    EXPECT_EQ(should_value(expected_result), should_value(actual_result));
+}
+
+
+TEST(getAbsoluteError_all_double, simple_1){
+
+    unsigned long exponent_length = 11;
+    unsigned long mantissa_length = 52;
+
+    double should_d = 2;
+    double is_d = 1;
+
+    auto is = mps(mantissa_length, exponent_length, is_d);
+
+    auto expected_result = abs(should_d-is_d);
+    auto actual_result = is.getAbsoluteError_double(should_d);
+
+    EXPECT_EQ(expected_result, actual_result);
+    EXPECT_EQ(should_value(expected_result), should_value(actual_result));
+}
+
+TEST(getAbsoluteError_all_double, simple_2){
+
+    unsigned long exponent_length = 8;
+    unsigned long mantissa_length = 23;
+
+    float should_d = 10;
+    float is_d = 20;
+
+    auto is = mps(mantissa_length, exponent_length, is_d);
+
+    auto expected_result = abs(should_d-is_d);
+    auto actual_result = (float) is.getAbsoluteError_double(should_d);
+
+    EXPECT_EQ(expected_result, (float) actual_result);
+    EXPECT_EQ(should_value(expected_result), should_value(actual_result));
+}
+
+TEST(getAbsoluteError_all_double, simple_3){
+
+    unsigned long exponent_length = 11;
+    unsigned long mantissa_length = 52;
+
+    double should_d = 0.0032;
+    double is_d = 0.334;
+
+    auto is = mps(mantissa_length, exponent_length, is_d);
+
+    auto expected_result = abs(should_d-is_d);
+    auto actual_result = is.getAbsoluteError_double(should_d);
+
+    EXPECT_EQ(expected_result, actual_result);
+    EXPECT_EQ(should_value(expected_result), should_value(actual_result));
+}
+
+TEST(getAbsoluteError_all_double, simple_4){
+
+    unsigned long exponent_length = 8;
+    unsigned long mantissa_length = 23;
+
+    float should_d = 0.0003f;
+    float is_d = 0.00032f;
+
+    auto is = mps(mantissa_length, exponent_length, is_d);
+
+    auto expected_result = abs(should_d-is_d);
+    auto actual_result = (float) is.getAbsoluteError_double(should_d);
+
+    EXPECT_EQ(expected_result, (float) actual_result);
+    EXPECT_EQ(should_value(expected_result), should_value(actual_result));
+}

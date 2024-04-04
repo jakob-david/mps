@@ -1161,7 +1161,6 @@ MPS_two.setExponent(exponent_two);
 MPS_two.setMantissa(mantissa_two);
 
 auto MPS_result = MPS_one + MPS_two;
-    cout << MPS_result.print() << endl;
 
 EXPECT_EQ(((float) MPS_one.getValue()) + ((float) MPS_two.getValue()), (float) MPS_result.getValue());
 EXPECT_EQ(should_value( ((float) MPS_one.getValue()) + ((float) MPS_two.getValue())), MPS_result.print());

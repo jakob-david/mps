@@ -324,7 +324,7 @@ std::string mps::to_string(const int precision) const {
  *
  * The two mps objects must have the same mantissa length and exponent length.
  *
- * @param compare the mps object to which "this" mps object should be compared.
+ * @param compare the mps object to which "this" mps object should be compared to.
  * @param precision up to which precision the mps objects should be compared.
  * @return true if the mps objects are the same up to the given accuracy.
  */
@@ -361,6 +361,12 @@ std::string mps::to_string(const int precision) const {
     }
 }
 
+/**
+ * Calculates the absolute error between two mps objects using operators from the mps class.
+ *
+ * @param compare the mps object to which "this" mps object should be compared to.
+ * @return the absolute error.
+ */
 [[nodiscard]] mps mps::getAbsoluteError(const mps& compare) const{
 
     auto ret = compare - *this;
@@ -369,11 +375,23 @@ std::string mps::to_string(const int precision) const {
     return ret;
 }
 
+/**
+ * Calculates the relative error between two mps objects using operators from the mps class.
+ *
+ * @param compare the mps object to which "this" mps object should be compared to.
+ * @return the relative error.
+ */
 [[nodiscard]] mps mps::getRelativeError(const mps& compare) const {
 
     return this->getAbsoluteError(compare) / compare;
 }
 
+/**
+ * Calculates the absolute error between two mps objects using the built in operators for double.
+ *
+ * @param compare the mps object to which "this" mps object should be compared to.
+ * @return the absolute error.
+ */
 [[nodiscard]] double mps::getAbsoluteError_double(const mps& compare) const {
 
     auto is = this->getValue();
@@ -382,12 +400,43 @@ std::string mps::to_string(const int precision) const {
     return abs(is-should);
 }
 
+/**
+ * Calculates the relative error between two mps objects using the built in operators for double.
+ *
+ * @param compare the mps object to which "this" mps object should be compared to.
+ * @return the relative error.
+ */
 [[nodiscard]] double mps::getRelativeError_double(const mps& compare) const {
 
     auto is = this->getValue();
     auto should = compare.getValue();
 
     return abs(is-should) / should;
+}
+
+/**
+ * Calculates the absolute error between one mps object and a double value using the built in operators for double.
+ *
+ * @param compare the mps object to which "this" mps object should be compared to.
+ * @return the absolute error.
+ */
+[[nodiscard]] double mps::getAbsoluteError_double(const double& compare) const {
+
+    auto is = this->getValue();
+    return abs(is-compare);
+}
+
+/**
+ * Calculates the relative error between one mps object and a double value using the built in operators for double.
+ *
+ * @param compare the mps object to which "this" mps object should be compared to.
+ * @return the relative error.
+ */
+[[nodiscard]] double mps::getRelativeError_double(const double& compare) const {
+
+    auto is = this->getValue();
+
+    return abs(is-compare) / compare;
 }
 //-------------------------------
 
