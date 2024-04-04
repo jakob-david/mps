@@ -1,5 +1,6 @@
 #include <iostream>
 #include "mps_lib/mps.h"
+#include "ira_lib/ira.h"
 #include <chrono>
 #include <random>
 
@@ -12,41 +13,28 @@ using namespace std;
 
 int main() {
 
-for (unsigned long mant = 53; mant <= 53; mant++) {
-    mps one(52, 11, 1.8);
-    mps two(52, 11, 1.8000001);
+    // old: 7750
 
-    //mps one(mant, 11, 3.90034);
-    //mps two(mant, 11, 35.2365786);
+    auto IRA = ira(50);
+    IRA.setRandomMatrix(53, 11);
 
     std::chrono::milliseconds t_1 = chrono::duration_cast<chrono::milliseconds>(
             std::chrono::system_clock::now().time_since_epoch()
     );
 
-    auto sum = 0.0;
-    //cout << "Mant: " << mant << endl;
-    //one * two;
-    for (long int i = 0; i < 500000; i++) {
 
-
-        //one.setValue(4);
-        //one = 4;
-        //auto three = two;
-        auto ret = one.getRelativeError_double(two);
-        sum += ret;
+    for(unsigned long i = 0; i < 20; i++){
+        IRA.PLU_decomposition(53, 11);
     }
 
-    cout << sum << endl;
     std::chrono::milliseconds t_2 = chrono::duration_cast<chrono::milliseconds>(
             std::chrono::system_clock::now().time_since_epoch()
     );
 
-
     std::chrono::milliseconds t = t_2 - t_1;
     std::cout << t.count() << std::endl;
+
 }
 
-    // std::cout << c << std::endl;
-}
 
 
