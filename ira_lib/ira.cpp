@@ -340,6 +340,7 @@ void ira::setU(unsigned long mantissa_length, unsigned long exponent_length, vec
 
 /**
  * Given a vector of mps objects this function casts all of its elements to new mantissa and exponent sizes.
+ * This works also for the matrices in the ira object since they are internally saved as vectors.
  *
  * @param mantissa_length the new mantissa length of the mps objects
  * @param exponent_length the new exponent length of the mps objects

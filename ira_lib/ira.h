@@ -10,16 +10,6 @@
 
 // TODO: write minimisation algorithm.
 
-// evaluation struct
-//-------------------------------
-struct evaluation_data_format{
-
-    long double IR_area;
-    std::chrono::milliseconds IR_time_needed;
-
-};
-//-------------------------------
-
 
 class ira {
 
