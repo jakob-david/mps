@@ -643,8 +643,6 @@ void ira::PLU_decomposition(unsigned long mantissa_precision, unsigned long expo
 
     x[0] = b[0]/L[get_idx(0, 0)];
 
-
-    // TODO: maybe do a performance test if summation is needed
     mps tmp_sum(this->L[0].mantissa_length, this->L[0].exponent_length);
 
     for(unsigned long i = 1; i < this->n; i++){
@@ -680,7 +678,6 @@ void ira::PLU_decomposition(unsigned long mantissa_precision, unsigned long expo
 
     x[this->n-1] = b[this->n-1]/U[get_idx(this->n-1, this->n-1)];
 
-    // TODO: maybe do a performance test if summation is needed
     mps tmp_sum(this->U[0].mantissa_length, this->U[0].exponent_length);
 
     for(unsigned long i = this->n-1; i > 0;){

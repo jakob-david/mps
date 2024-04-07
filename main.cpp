@@ -13,14 +13,11 @@ using namespace std;
 
 int main() {
 
-    // old: 7750
-    // old: 69153
 
     unsigned long n = 50;
-    //unsigned long n = 5;
     auto IRA = ira(n);
     IRA.setRandomMatrix(53, 11);
-    IRA.PLU_decomposition(53, 11);
+    IRA.PLU_decomposition(53,11);
 
     // Set up x_should;
     //--------------------------------
@@ -34,18 +31,6 @@ int main() {
     }
     //--------------------------------
 
-    // Set up b
-    //--------------------------------
-    vector<mps> b;
-    double tmp;
-    for(unsigned long i = 0; i < n; i++){
-        tmp = 0;
-        for(unsigned long j = 0; j < n; j++){
-            tmp += x_should[j].getValue() * IRA.getMatrixElement((n * i) + j).getValue();
-        }
-        b.emplace_back(53, 11, tmp);
-    }
-    //--------------------------------
 
     //unsigned long ul[2] = { 53, 11};    // precision: LU
     //unsigned long u[2] = {52, 11};      // precision: working
@@ -54,33 +39,18 @@ int main() {
             std::chrono::system_clock::now().time_since_epoch()
     );
 
-    //17807
-    // i = 20
-    for(unsigned long i = 0; i < 1000; i++){
-        //auto x = ira::matrixVectorProduct(IRA.P, b);
-        auto x = ira::permuteVector(b, IRA.P_new);
-        //auto x = ira::permuteVector(tmp_b, this->P_new);
+
+    // Put code here
+    for(unsigned long i = 0; i < 200; i++){
+        auto tmp = IRA.forwardSubstitution(x_should);
     }
+
 
     std::chrono::milliseconds t_2 = chrono::duration_cast<chrono::milliseconds>(
             std::chrono::system_clock::now().time_since_epoch()
     );
 
-    /*
-    for(unsigned long i = 0; i < n; i++){
-        for(unsigned long j = 0; j < n; j++){
-            cout << IRA.P[i * n + j].getValue() << " ";
-        }
-        cout << endl;
-    }
 
-    cout << endl;
-
-
-    for(unsigned long i = 0; i < n; i++){
-        cout << IRA.P_new[i].getValue() << " ";
-    }
-*/
     cout << endl << endl;
     std::chrono::milliseconds t = t_2 - t_1;
     std::cout << t.count() << std::endl;
