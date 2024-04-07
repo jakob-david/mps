@@ -42,7 +42,11 @@ int main() {
 
 
     mpe MPE;
-    cout << MPE.getA() << endl;
+    auto result = MPE.evaluateAddition(10, 53, 11, 100000);
+
+    for(unsigned long i = 0; i < result.size(); i++){
+        cout << result[i] << endl;
+    }
 
 
     std::chrono::milliseconds t_2 = chrono::duration_cast<chrono::milliseconds>(

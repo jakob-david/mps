@@ -5,11 +5,18 @@
 #ifndef MPS_MPE_H
 #define MPS_MPE_H
 
+#include <vector>
+#include <random>
+#include <iostream>
+
+#include "../mps_lib/mps.h"
+
 
 class mpe {
 
 private:
-    int A;
+    double random_lower_bound;
+    double random_upper_bound;
 
 public:
 
@@ -19,10 +26,16 @@ public:
     ~mpe();
     //-------------------------------
 
-    // getter
+    // operator evaluation
     //-------------------------------
-    [[nodiscard]] int getA();
+    [[nodiscard]]  std::vector<long long int>
+    evaluateAddition(unsigned long m_start, unsigned long m_last, unsigned long e_size, unsigned long n_tests);
     //-------------------------------
+
+private:
+    // helper functions
+    //-------------------------------
+    [[nodiscard]] double getPositiveRandomDouble() const;
 };
 
 
