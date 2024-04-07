@@ -23,17 +23,18 @@ ira::ira(unsigned long n){
     this->n = n;
     unsigned long matrix_1D_size = this->n * this->n;
 
-
     // set up matrices
     //-------------------------------
     this->A.resize(matrix_1D_size);
-
     this->L.resize(matrix_1D_size);
     this->U.resize(matrix_1D_size);
-    this->P.resize(matrix_1D_size);
 
+    // set up permutation vector
+    //-------------------------------
     this->P_new.resize(this->n);
 
+    // set up evaluation struct
+    //-------------------------------
     this->evaluation = {0.0, 0};
 }
 
@@ -225,15 +226,39 @@ void ira::setU(unsigned long mantissa_length, unsigned long exponent_length, vec
 
     } else if('P' == matrix) {
 
-        if(this->P.empty() || (this->P[0].exponent_length == 0 && this->P[0].mantissa_length == 0)){
+        if(this->P_new.empty() || (this->P_new[0].exponent_length == 0 && this->P_new[0].mantissa_length == 0)){
             throw std::invalid_argument("ERROR: to_string: P is empty");
         }
 
-        ret += this->P[0].to_string(precision);
-        for(unsigned long i = 1; i < n*n; i++){
-            ret.append(", ");
-            ret.append(this->P[i].to_string(precision));
+
+        vector<unsigned long> P_int;
+        for(const auto & i : P_new){
+            P_int.push_back((unsigned long) i.getValue());
         }
+
+        string tmp_zero = "0.";
+        string tmp_one = "1.";
+
+        for(int i = 0; i < precision; i++){
+            tmp_zero.append("0");
+            tmp_one.append("0");
+        }
+
+        for(unsigned long i = 0; i < P_int.size(); i++){
+            for(unsigned long j = 0; j < P_int.size(); j++){
+
+                if(j == P_int[i]){
+                    ret.append(tmp_one);
+                } else {
+                    ret.append(tmp_zero);
+                }
+
+                if(i < P_int.size()-1 || j < P_int.size()-1){
+                    ret.append(", ");
+                }
+            }
+        }
+
 
     } else {
         throw std::invalid_argument("ERROR: in to_string : invalid matrix parameter");
@@ -530,7 +555,7 @@ void ira::PLU_decomposition(unsigned long mantissa_precision, unsigned long expo
 
     unsigned long idx;
 
-    // set up L and P
+    // set up L
     //-------------------------------
     mps mps_zero(mantissa_precision, exponent_precision, 0);
     mps mps_one(mantissa_precision, exponent_precision, 1);
@@ -542,20 +567,19 @@ void ira::PLU_decomposition(unsigned long mantissa_precision, unsigned long expo
 
             if(i == j){
                 this->L[idx] |= mps_one;
-                this->P[idx] |= mps_one;
             } else {
                 this->L[idx] |= mps_zero;
-                this->P[idx] |= mps_zero;
             }
         }
     }
     //-------------------------------
 
-    // set up P_new
+    // set up P
     //-------------------------------
     for(unsigned long i = 0; i < this->n; i++){
         P_new[i] |= mps(mantissa_precision, exponent_precision, (double) i);
     }
+    //-------------------------------
 
 
     // set up U
@@ -581,7 +605,6 @@ void ira::PLU_decomposition(unsigned long mantissa_precision, unsigned long expo
 
         interchangeRow(&this->U, k, max_row, k, n);
         interchangeRow(&this->L, k, max_row, 0, k);
-        interchangeRow(&this->P, k, max_row, 0, n);
 
         auto tmp = P_new[k]; P_new[k] = P_new[max_row]; P_new[max_row] = tmp;
 
@@ -693,7 +716,7 @@ void ira::PLU_decomposition(unsigned long mantissa_precision, unsigned long expo
 
 
 
-    auto x = ira::matrixVectorProduct(this->P, tmp_b);
+    auto x = ira::permuteVector(tmp_b, this->P_new);
     x = this->forwardSubstitution(x);
     x = this->backwardSubstitution(x);
 
@@ -727,8 +750,7 @@ void ira::PLU_decomposition(unsigned long mantissa_precision, unsigned long expo
     //-------------------------------
     auto tmp_b = b;
     ira::castVectorElements(ul[0], ul[1], &tmp_b);
-    auto x = ira::matrixVectorProduct(this->P, tmp_b);
-    //auto x = ira::permuteVector(tmp_b, this->P_new);
+    auto x = ira::permuteVector(tmp_b, this->P_new);
 
     x = this->forwardSubstitution(x);
     x = this->backwardSubstitution(x);
@@ -752,8 +774,7 @@ void ira::PLU_decomposition(unsigned long mantissa_precision, unsigned long expo
         // in precision: ul
         //-------------------------------
         ira::castVectorElements(ul[0], ul[1], &r);
-        r = ira::matrixVectorProduct(this->P, r);
-        //r = ira::permuteVector(r, this->P_new);
+        r = ira::permuteVector(r, this->P_new);
         auto d = this->forwardSubstitution(r);
         d = this->backwardSubstitution(d);
         //-------------------------------
@@ -1068,7 +1089,7 @@ unsigned long ira::get_max_U_idx(unsigned long column, unsigned long start) cons
  * @param start the index of the starting column
  * @param start the index of the ending column
  */
-void ira::interchangeRow(vector<mps>* matrix, unsigned long row_one, unsigned long row_two, unsigned long start, unsigned long end){
+void ira::interchangeRow(vector<mps>* matrix, unsigned long row_one, unsigned long row_two, unsigned long start, unsigned long end) const{
 
     for(auto i = start; i < end; i++){
         auto tmp = (*matrix)[get_idx(row_one, i)];
@@ -1084,7 +1105,7 @@ vector<mps> ira::permuteVector(const vector<mps>& input_vector, const vector<mps
 
     for(unsigned long i = 0; i < permutation_matrix.size(); i++){
         auto idx = (unsigned long) permutation_matrix[i].getValue();
-        ret[idx] |= input_vector[i];
+        ret[i] |= input_vector[idx];
     }
 
     return ret;
