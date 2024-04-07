@@ -713,7 +713,7 @@ void ira::PLU_decomposition(unsigned long mantissa_precision, unsigned long expo
 
 
 
-    auto x = ira::permuteVector(tmp_b, this->P);
+    auto x = ira::permuteVector(this->P, tmp_b);
     x = this->forwardSubstitution(x);
     x = this->backwardSubstitution(x);
 
@@ -747,7 +747,7 @@ void ira::PLU_decomposition(unsigned long mantissa_precision, unsigned long expo
     //-------------------------------
     auto tmp_b = b;
     ira::castVectorElements(ul[0], ul[1], &tmp_b);
-    auto x = ira::permuteVector(tmp_b, this->P);
+    auto x = ira::permuteVector(this->P, tmp_b);
 
     x = this->forwardSubstitution(x);
     x = this->backwardSubstitution(x);
@@ -771,7 +771,7 @@ void ira::PLU_decomposition(unsigned long mantissa_precision, unsigned long expo
         // in precision: ul
         //-------------------------------
         ira::castVectorElements(ul[0], ul[1], &r);
-        r = ira::permuteVector(r, this->P);
+        r = ira::permuteVector(this->P, r);
         auto d = this->forwardSubstitution(r);
         d = this->backwardSubstitution(d);
         //-------------------------------
@@ -1102,7 +1102,7 @@ void ira::interchangeRow(vector<mps>* matrix, unsigned long row_one, unsigned lo
  * @param permutation_vector the permutation vector.
  * @return the permuted vector.
  */
-vector<mps> ira::permuteVector(const vector<mps>& input_vector, const vector<mps>& permutation_vector){
+vector<mps> ira::permuteVector(const vector<mps>& permutation_vector, const vector<mps>& input_vector) {
 
     vector<mps> ret;
     ret.resize(input_vector.size(), mps());
