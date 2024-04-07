@@ -31,7 +31,7 @@ ira::ira(unsigned long n){
 
     // set up permutation vector
     //-------------------------------
-    this->P_new.resize(this->n);
+    this->P.resize(this->n);
 
     // set up evaluation struct
     //-------------------------------
@@ -226,13 +226,13 @@ void ira::setU(unsigned long mantissa_length, unsigned long exponent_length, vec
 
     } else if('P' == matrix) {
 
-        if(this->P_new.empty() || (this->P_new[0].exponent_length == 0 && this->P_new[0].mantissa_length == 0)){
+        if(this->P.empty() || (this->P[0].exponent_length == 0 && this->P[0].mantissa_length == 0)){
             throw std::invalid_argument("ERROR: to_string: P is empty");
         }
 
 
         vector<unsigned long> P_int;
-        for(const auto & i : P_new){
+        for(const auto & i : P){
             P_int.push_back((unsigned long) i.getValue());
         }
 
@@ -577,7 +577,7 @@ void ira::PLU_decomposition(unsigned long mantissa_precision, unsigned long expo
     // set up P
     //-------------------------------
     for(unsigned long i = 0; i < this->n; i++){
-        P_new[i] |= mps(mantissa_precision, exponent_precision, (double) i);
+        P[i] |= mps(mantissa_precision, exponent_precision, (double) i);
     }
     //-------------------------------
 
@@ -606,7 +606,7 @@ void ira::PLU_decomposition(unsigned long mantissa_precision, unsigned long expo
         interchangeRow(&this->U, k, max_row, k, n);
         interchangeRow(&this->L, k, max_row, 0, k);
 
-        auto tmp = P_new[k]; P_new[k] = P_new[max_row]; P_new[max_row] = tmp;
+        auto tmp = P[k]; P[k] = P[max_row]; P[max_row] = tmp;
 
         for(unsigned long j = k+1; j < n; j++){
 
@@ -713,7 +713,7 @@ void ira::PLU_decomposition(unsigned long mantissa_precision, unsigned long expo
 
 
 
-    auto x = ira::permuteVector(tmp_b, this->P_new);
+    auto x = ira::permuteVector(tmp_b, this->P);
     x = this->forwardSubstitution(x);
     x = this->backwardSubstitution(x);
 
@@ -747,7 +747,7 @@ void ira::PLU_decomposition(unsigned long mantissa_precision, unsigned long expo
     //-------------------------------
     auto tmp_b = b;
     ira::castVectorElements(ul[0], ul[1], &tmp_b);
-    auto x = ira::permuteVector(tmp_b, this->P_new);
+    auto x = ira::permuteVector(tmp_b, this->P);
 
     x = this->forwardSubstitution(x);
     x = this->backwardSubstitution(x);
@@ -771,7 +771,7 @@ void ira::PLU_decomposition(unsigned long mantissa_precision, unsigned long expo
         // in precision: ul
         //-------------------------------
         ira::castVectorElements(ul[0], ul[1], &r);
-        r = ira::permuteVector(r, this->P_new);
+        r = ira::permuteVector(r, this->P);
         auto d = this->forwardSubstitution(r);
         d = this->backwardSubstitution(d);
         //-------------------------------
@@ -1095,6 +1095,13 @@ void ira::interchangeRow(vector<mps>* matrix, unsigned long row_one, unsigned lo
     }
 }
 
+/**
+ * Permutes a vector according to a permutation vector.
+ *
+ * @param input_vector the vector that should be permuted.
+ * @param permutation_vector the permutation vector.
+ * @return the permuted vector.
+ */
 vector<mps> ira::permuteVector(const vector<mps>& input_vector, const vector<mps>& permutation_matrix){
 
     vector<mps> ret;

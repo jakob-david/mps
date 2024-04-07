@@ -36,9 +36,7 @@ public:
     //-------------------------------
     vector<mps> L;             // The resulting lower triangular Matrix after PLU decomposition.
     vector<mps> U;             // The resulting upper triangular Matrix after PLU decomposition.
-
-public:
-    vector<mps> P_new;         // The resulting permutation A after PLU decomposition.
+    vector<mps> P;             // The resulting permutation vector P after PLU decomposition.
     //-------------------------------
 
 public:
