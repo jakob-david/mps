@@ -32,6 +32,8 @@ ira::ira(unsigned long n){
     this->U.resize(matrix_1D_size);
     this->P.resize(matrix_1D_size);
 
+    this->P_new.resize(this->n);
+
     this->evaluation = {0.0, 0};
 }
 
@@ -549,6 +551,12 @@ void ira::PLU_decomposition(unsigned long mantissa_precision, unsigned long expo
     }
     //-------------------------------
 
+    // set up P_new
+    //-------------------------------
+    for(unsigned long i = 0; i < this->n; i++){
+        P_new[i] |= mps(mantissa_precision, exponent_precision, (double) i);
+    }
+
 
     // set up U
     //-------------------------------
@@ -574,6 +582,8 @@ void ira::PLU_decomposition(unsigned long mantissa_precision, unsigned long expo
         interchangeRow(&this->U, k, max_row, k, n);
         interchangeRow(&this->L, k, max_row, 0, k);
         interchangeRow(&this->P, k, max_row, 0, n);
+
+        auto tmp = P_new[k]; P_new[k] = P_new[max_row]; P_new[max_row] = tmp;
 
         for(unsigned long j = k+1; j < n; j++){
 
@@ -718,6 +728,8 @@ void ira::PLU_decomposition(unsigned long mantissa_precision, unsigned long expo
     auto tmp_b = b;
     ira::castVectorElements(ul[0], ul[1], &tmp_b);
     auto x = ira::matrixVectorProduct(this->P, tmp_b);
+    //auto x = ira::permuteVector(tmp_b, this->P_new);
+
     x = this->forwardSubstitution(x);
     x = this->backwardSubstitution(x);
     ira::castVectorElements(u[0], u[1], &x);
@@ -741,6 +753,7 @@ void ira::PLU_decomposition(unsigned long mantissa_precision, unsigned long expo
         //-------------------------------
         ira::castVectorElements(ul[0], ul[1], &r);
         r = ira::matrixVectorProduct(this->P, r);
+        //r = ira::permuteVector(r, this->P_new);
         auto d = this->forwardSubstitution(r);
         d = this->backwardSubstitution(d);
         //-------------------------------
@@ -1062,5 +1075,18 @@ void ira::interchangeRow(vector<mps>* matrix, unsigned long row_one, unsigned lo
         (*matrix)[get_idx(row_one, i)] = (*matrix)[get_idx(row_two, i)];
         (*matrix)[get_idx(row_two, i)] = tmp;
     }
+}
+
+vector<mps> ira::permuteVector(const vector<mps>& input_vector, const vector<mps>& permutation_matrix){
+
+    vector<mps> ret;
+    ret.resize(input_vector.size(), mps());
+
+    for(unsigned long i = 0; i < permutation_matrix.size(); i++){
+        auto idx = (unsigned long) permutation_matrix[i].getValue();
+        ret[idx] |= input_vector[i];
+    }
+
+    return ret;
 }
 //-------------------------------

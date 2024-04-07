@@ -24,6 +24,7 @@ public:
     //-------------------------------
 
 private:
+public:
 
     // general_properties
     //-------------------------------
@@ -35,7 +36,11 @@ private:
     //-------------------------------
     vector<mps> L;             // The resulting lower triangular Matrix after PLU decomposition.
     vector<mps> U;             // The resulting upper triangular Matrix after PLU decomposition.
+
+public:
     vector<mps> P;             // The resulting permutation A after PLU decomposition.
+
+    vector<mps> P_new;         // The resulting permutation A after PLU decomposition.
     //-------------------------------
 
 public:
@@ -94,6 +99,7 @@ public:
 
 
 private:
+public:
 
     // helper functions
     //-------------------------------
@@ -101,6 +107,7 @@ private:
     [[nodiscard]] static unsigned long get_idx(unsigned long row, unsigned long column, unsigned long n);
     [[nodiscard]] unsigned long get_max_U_idx(unsigned long column, unsigned long start) const;
     void interchangeRow(vector<mps>* matrix, unsigned long row_one, unsigned long row_two, unsigned long start, unsigned long end);
+    static vector<mps> permuteVector(const vector<mps>& matrix, const vector<mps>& permutation_matrix);
     //-------------------------------
 
 };
