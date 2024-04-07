@@ -1,6 +1,7 @@
 #include <iostream>
 #include "mps_lib/mps.h"
 #include "ira_lib/ira.h"
+#include "mpe_lib/mpe.h"
 #include <chrono>
 #include <random>
 
@@ -40,10 +41,8 @@ int main() {
     );
 
 
-    // Put code here
-    for(unsigned long i = 0; i < 200; i++){
-        auto tmp = IRA.forwardSubstitution(x_should);
-    }
+    mpe MPE;
+    cout << MPE.getA() << endl;
 
 
     std::chrono::milliseconds t_2 = chrono::duration_cast<chrono::milliseconds>(

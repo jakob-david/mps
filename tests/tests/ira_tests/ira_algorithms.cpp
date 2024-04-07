@@ -1394,6 +1394,4 @@ TEST(IR, get_evaluation_value_microseconds){
     //--------------------------------
 
     EXPECT_TRUE(IRA.evaluation.microseconds > 0);
-
-    cout << IRA.evaluation.microseconds << endl;
 }

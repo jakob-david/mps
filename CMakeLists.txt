@@ -29,6 +29,10 @@ target_link_libraries(mps_run mps_lib)
 include_directories(ira_lib)
 add_subdirectory(ira_lib)
 target_link_libraries(mps_run ira_lib)
+
+include_directories(mpe_lib)
+add_subdirectory(mpe_lib)
+target_link_libraries(mps_run mpe_lib)
 ######################################
 
 # Google Tests
