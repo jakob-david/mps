@@ -8,8 +8,55 @@
 #include <pybind11/operators.h>
 
 #include "mps_lib/mps.h"
+#include "mpe_lib/mpe.h"
 
 namespace py = pybind11;
+
+
+
+PYBIND11_MODULE(mpe_library, mpe_handle) {
+    mpe_handle.doc() = "Class to evaluate the multiprecision simulator";
+
+    py::class_<mpe>(mpe_handle, "mpe")
+            .def(py::init<>())
+
+            .def("setRandomLimits", &mpe::setRandomLimits)
+            .def("setUpperRandomLimit", &mpe::setUpperRandomLimit)
+            .def("setFormatRange", &mpe::setFormatRange)
+
+            .def("getMantissaAxis", [](mpe &self){
+                py::array out = py::cast(self.getMantissaAxis());
+                return out;
+            })
+
+            .def("evaluateAddition", [](mpe &self, unsigned long n_tests){
+                py::array out = py::cast(self.evaluateAddition(n_tests));
+                return out;
+            })
+            .def("evaluateSubtraction", [](mpe &self, unsigned long n_tests){
+                py::array out = py::cast(self.evaluateSubtraction(n_tests));
+                return out;
+            })
+            ;
+}
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
 PYBIND11_MODULE(mps_library, handle) {
     handle.doc() = "Framework for mixed precision floating point simulation.";
 

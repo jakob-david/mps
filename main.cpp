@@ -42,7 +42,7 @@ int main() {
 
 
     mpe MPE;
-    auto result = MPE.evaluateAddition(10, 53, 11, 100000);
+    auto result = MPE.evaluateAddition(10000);
 
     for(unsigned long i = 0; i < result.size(); i++){
         cout << result[i] << endl;
