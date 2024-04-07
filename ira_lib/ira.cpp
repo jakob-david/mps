@@ -1102,13 +1102,13 @@ void ira::interchangeRow(vector<mps>* matrix, unsigned long row_one, unsigned lo
  * @param permutation_vector the permutation vector.
  * @return the permuted vector.
  */
-vector<mps> ira::permuteVector(const vector<mps>& input_vector, const vector<mps>& permutation_matrix){
+vector<mps> ira::permuteVector(const vector<mps>& input_vector, const vector<mps>& permutation_vector){
 
     vector<mps> ret;
     ret.resize(input_vector.size(), mps());
 
-    for(unsigned long i = 0; i < permutation_matrix.size(); i++){
-        auto idx = (unsigned long) permutation_matrix[i].getValue();
+    for(unsigned long i = 0; i < permutation_vector.size(); i++){
+        auto idx = (unsigned long) permutation_vector[i].getValue();
         ret[i] |= input_vector[idx];
     }
 
