@@ -47,6 +47,8 @@ public:
     //-------------------------------
     [[nodiscard]]  std::vector<long long int> evaluateAddition(unsigned long n_tests);
     [[nodiscard]]  std::vector<long long int> evaluateSubtraction(unsigned long n_tests);
+    [[nodiscard]]  std::vector<long long int> evaluateMultiplication(unsigned long n_tests);
+    [[nodiscard]]  std::vector<long long int> evaluateDivision(unsigned long n_tests);
     //-------------------------------
 
 private:

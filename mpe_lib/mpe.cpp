@@ -129,6 +129,68 @@ std::vector<long long int> mpe::evaluateSubtraction(unsigned long n_tests) {
 
     return ret;
 }
+
+std::vector<long long int> mpe::evaluateMultiplication(unsigned long n_tests) {
+
+    // variable for python multithreading.
+
+    py::gil_scoped_release release;
+
+    std::vector<long long> ret;
+
+    double a = getPositiveRandomDouble();
+    double b = getPositiveRandomDouble();
+
+    for(unsigned long m_size = this->first_mantissa_size; m_size <= this->last_mantissa_size; m_size++){
+
+        mps A(m_size, this->exponent_size, a);
+        mps B(m_size, this->exponent_size, b);
+
+        const auto start = std::chrono::high_resolution_clock::now();
+
+        for(unsigned long test = 0; test < n_tests; test++){
+            A * B;
+        }
+
+        const auto finish = std::chrono::high_resolution_clock::now();
+        ret.push_back(std::chrono::duration_cast<std::chrono::microseconds>(finish-start).count());
+    }
+
+    pybind11::gil_scoped_acquire acquire;
+
+    return ret;
+}
+
+std::vector<long long int> mpe::evaluateDivision(unsigned long n_tests) {
+
+    // variable for python multithreading.
+
+    py::gil_scoped_release release;
+
+    std::vector<long long> ret;
+
+    double a = getPositiveRandomDouble();
+    double b = getPositiveRandomDouble();
+
+    for(unsigned long m_size = this->first_mantissa_size; m_size <= this->last_mantissa_size; m_size++){
+
+        mps A(m_size, this->exponent_size, a);
+        mps B(m_size, this->exponent_size, b);
+
+        const auto start = std::chrono::high_resolution_clock::now();
+
+        for(unsigned long test = 0; test < n_tests; test++){
+            A / B;
+        }
+
+        const auto finish = std::chrono::high_resolution_clock::now();
+        ret.push_back(std::chrono::duration_cast<std::chrono::microseconds>(finish-start).count());
+    }
+
+    pybind11::gil_scoped_acquire acquire;
+
+    return ret;
+}
 //-------------------------------
 
 

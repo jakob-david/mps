@@ -37,6 +37,14 @@ PYBIND11_MODULE(mpe_library, mpe_handle) {
                 py::array out = py::cast(self.evaluateSubtraction(n_tests));
                 return out;
             })
+            .def("evaluateMultiplication", [](mpe &self, unsigned long n_tests){
+                py::array out = py::cast(self.evaluateMultiplication(n_tests));
+                return out;
+            })
+            .def("evaluateDivision", [](mpe &self, unsigned long n_tests){
+                py::array out = py::cast(self.evaluateDivision(n_tests));
+                return out;
+            })
             ;
 }
 
