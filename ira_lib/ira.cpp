@@ -1098,8 +1098,8 @@ void ira::interchangeRow(vector<mps>* matrix, unsigned long row_one, unsigned lo
 /**
  * Permutes a vector according to a permutation vector.
  *
- * @param input_vector the vector that should be permuted.
  * @param permutation_vector the permutation vector.
+ * @param input_vector the vector that should be permuted.
  * @return the permuted vector.
  */
 vector<mps> ira::permuteVector(const vector<mps>& permutation_vector, const vector<mps>& input_vector) {
