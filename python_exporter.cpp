@@ -23,9 +23,21 @@ PYBIND11_MODULE(mpe_library, mpe_handle) {
             .def("setRandomLimits", &mpe::setRandomLimits)
             .def("setUpperRandomLimit", &mpe::setUpperRandomLimit)
             .def("setFormatRange", &mpe::setFormatRange)
+            .def("setBasicParameters_irm", &mpe::setBasicParameters_irm)
+            .def("setWorkingPrecision_irm", &mpe::setWorkingPrecision_irm)
+            .def("setRange_ul_irm", &mpe::setRange_ul_irm)
+            .def("setRange_ur_irm", &mpe::setRange_ur_irm)
 
             .def("getMantissaAxis", [](mpe &self){
                 py::array out = py::cast(self.getMantissaAxis());
+                return out;
+            })
+            .def("getAxis_ul_irm", [](mpe &self){
+                py::array out = py::cast(self.getAxis_ul_irm());
+                return out;
+            })
+            .def("getAxis_ur_irm", [](mpe &self){
+                py::array out = py::cast(self.getAxis_ur_irm());
                 return out;
             })
 

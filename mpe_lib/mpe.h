@@ -22,6 +22,19 @@ private:
     unsigned long last_mantissa_size;
     unsigned long exponent_size;
 
+    struct {
+        unsigned long n;
+        unsigned long iter_max;
+
+        unsigned long u_exponent_size;
+        unsigned long u_mantissa_size;
+
+        unsigned long ul_first_mantissa_size;
+        unsigned long ul_last_mantissa_size;
+        unsigned long ur_first_mantissa_size;
+        unsigned long ur_last_mantissa_size;
+    } irm;
+
 public:
 
     // constructors and destructor
@@ -32,15 +45,28 @@ public:
 
     // setter
     //-------------------------------
+
+    // randomness parameter
     void setRandomLimits(double lower_bound, double upper_bound);
     void setUpperRandomLimit(double upper_bound);
 
+    // operator evaluation
     void setFormatRange(unsigned long new_first_mantissa_size, unsigned long new_last_mantissa_size, unsigned long new_exponent_size);
+
+    // irm setter
+    void setBasicParameters_irm(unsigned long new_n, unsigned long new_iter_max);
+    void setWorkingPrecision_irm(unsigned long new_u_exponent_size, unsigned long new_u_mantissa_size);
+    void setRange_ul_irm(unsigned long new_ul_first_mantissa_size, unsigned long new_ul_last_mantissa_size);
+    void setRange_ur_irm(unsigned long new_ur_first_mantissa_size, unsigned long new_ur_last_mantissa_size);
     //-------------------------------
 
     // getter
     //-------------------------------
     [[nodiscard]] std::vector<unsigned long int> getMantissaAxis() const;
+
+    // irm getter
+    [[nodiscard]] std::vector<unsigned long int> getAxis_ul_irm() const;
+    [[nodiscard]] std::vector<unsigned long int> getAxis_ur_irm() const;
     //-------------------------------
 
     // operator evaluation

@@ -49,6 +49,31 @@ void mpe::setFormatRange(unsigned long new_first_mantissa_size, unsigned long ne
     this->last_mantissa_size = new_last_mantissa_size;
     this->exponent_size = new_exponent_size;
 }
+
+// irm setter
+void mpe::setBasicParameters_irm(unsigned long new_n, unsigned long new_iter_max) {
+
+    this->irm.n = new_n;
+    this->irm.iter_max = new_iter_max;
+}
+
+void mpe::setWorkingPrecision_irm(unsigned long new_u_exponent_size, unsigned long new_u_mantissa_size){
+
+    this->irm.u_mantissa_size = new_u_mantissa_size;
+    this->irm.u_exponent_size = new_u_exponent_size;
+}
+
+void mpe::setRange_ul_irm(unsigned long new_ul_first_mantissa_size, unsigned long new_ul_last_mantissa_size){
+
+    this->irm.ul_first_mantissa_size = new_ul_first_mantissa_size;
+    this->irm.ul_last_mantissa_size = new_ul_last_mantissa_size;
+}
+
+void mpe::setRange_ur_irm(unsigned long new_ur_first_mantissa_size, unsigned long new_ur_last_mantissa_size){
+
+    this->irm.ur_first_mantissa_size = new_ur_first_mantissa_size;
+    this->irm.ur_last_mantissa_size = new_ur_last_mantissa_size;
+}
 //-------------------------------
 
 // getter
@@ -57,6 +82,29 @@ std::vector<unsigned long int> mpe::getMantissaAxis() const {
     std::vector<unsigned long> ret;
 
     for(unsigned long m_size = this->first_mantissa_size; m_size <= this->last_mantissa_size; m_size++){
+        ret.push_back(m_size);
+    }
+
+    return ret;
+}
+
+// irm getter
+std::vector<unsigned long int> mpe::getAxis_ul_irm() const {
+
+    std::vector<unsigned long> ret;
+
+    for(unsigned long m_size = this->irm.ul_first_mantissa_size; m_size <= this->irm.ul_last_mantissa_size; m_size++){
+        ret.push_back(m_size);
+    }
+
+    return ret;
+}
+
+std::vector<unsigned long int> mpe::getAxis_ur_irm() const {
+
+    std::vector<unsigned long> ret;
+
+    for(unsigned long m_size = this->irm.ur_first_mantissa_size; m_size <= this->irm.ur_last_mantissa_size; m_size++){
         ret.push_back(m_size);
     }
 
