@@ -15,6 +15,14 @@ class ira {
 
 public:
 
+    // randomness range struct
+    //-------------------------------
+    struct {
+        double random_lower_bound;
+        double random_upper_bound;
+    } random_range;
+    //-------------------------------
+
     // evaluation struct
     //-------------------------------
     struct {
@@ -63,12 +71,22 @@ public:
     [[nodiscard]] static std::string to_string(vector<mps> vec, int precision = -1);
     //-------------------------------
 
+    // calculators and static getters
+    //-------------------------------
+    // TODO: test
+    [[nodiscard]] vector<mps> getRandomVector(unsigned long mantissa_length, unsigned long exponent_length, unsigned long size) const;
+    // TODO: test
+    [[nodiscard]] vector<mps> getBVector(vector<mps> x) const;
+    //-------------------------------
+
     // converters
     //-------------------------------
     [[nodiscard]] static vector<mps> double_to_mps(unsigned long mantissa_length, unsigned long exponent_length, vector<double> double_vector);
     [[nodiscard]] static vector<double> mps_to_double(vector<mps> mps_vector);
     [[nodiscard]] static vector<float> mps_to_float(vector<mps> mps_vector);
     static void castVectorElements(unsigned long mantissa_length, unsigned long exponent_length, vector<mps>* vec);
+    // TODO: Test
+    void castSystemMatrix(unsigned long mantissa_length, unsigned long exponent_length);
     //-------------------------------
 
     // operators
@@ -84,7 +102,7 @@ public:
     void PLU_decomposition(unsigned long mantissa_precision, unsigned long exponent_precision);
     [[nodiscard]] vector<mps> forwardSubstitution(const vector<mps>& b) const;
     [[nodiscard]] vector<mps> backwardSubstitution(const vector<mps>& b) const;
-    [[nodiscard]] vector<mps> iterativeRefinementLU(const vector<mps>& b, unsigned long u[2], unsigned long ul[2], unsigned long n_max, const vector<double>& x_expected = vector<double>());
+    vector<mps> iterativeRefinementLU(const vector<mps>& b, unsigned long u[2], unsigned long ul[2], unsigned long n_max, const vector<double>& x_expected = vector<double>());
     [[nodiscard]] vector<mps> solveLU(const vector<mps>& b, unsigned long u[2]);
     //-------------------------------
 

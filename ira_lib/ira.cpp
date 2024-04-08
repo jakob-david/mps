@@ -23,6 +23,9 @@ ira::ira(unsigned long n){
     this->n = n;
     unsigned long matrix_1D_size = this->n * this->n;
 
+    this->random_range.random_lower_bound = -10;
+    this->random_range.random_upper_bound = 10;
+
     // set up matrices
     //-------------------------------
     this->A.resize(matrix_1D_size);
@@ -102,7 +105,7 @@ void ira::setRandomMatrix(unsigned long mantissa_length, unsigned long exponent_
 
     std::random_device rd;
     std::mt19937 mt(rd());
-    std::uniform_real_distribution<double> dist(-10.0, 10.0);
+    std::uniform_real_distribution<double> dist(this->random_range.random_lower_bound, this->random_range.random_upper_bound);
 
 
     for(unsigned i = 0; i < (this->n * this->n); i++){
@@ -291,6 +294,51 @@ void ira::setU(unsigned long mantissa_length, unsigned long exponent_length, vec
 //-------------------------------
 
 
+// static getters
+//-------------------------------
+[[nodiscard]] vector<mps> ira::getRandomVector(unsigned long mantissa_length, unsigned long exponent_length, unsigned long size) const {
+
+    vector<mps> ret;
+
+    if (exponent_length < 1) {
+        throw std::invalid_argument("ERROR: getRandomVector: exponent too small");
+    }
+
+    std::random_device rd;
+    std::mt19937 mt(rd());
+    std::uniform_real_distribution<double> dist(this->random_range.random_lower_bound, this->random_range.random_upper_bound);
+
+    for(unsigned i = 0; i < size; i++){
+        ret.emplace_back(mantissa_length, exponent_length, dist(mt));
+    }
+
+    return ret;
+}
+
+[[nodiscard]] vector<mps> ira::getBVector(vector<mps> x) const {
+
+    if (this->A.empty()) {
+        throw std::invalid_argument("ERROR: in getBVector: system matrix is empty");
+    }
+    if (x.empty()) {
+        throw std::invalid_argument("ERROR: in getBVector: x is empty");
+    }
+    if (this->A.size() != (x.size() * x.size())) {
+        throw std::invalid_argument("ERROR: in getBVector: dimensions of A and x do not match");
+    }
+    if (this->A[0].exponent_length != x[0].exponent_length) {
+        throw std::invalid_argument("ERROR: in getBVector: exponents do not match");
+    }
+    if (this->A[0].mantissa_length != x[0].mantissa_length) {
+        throw std::invalid_argument("ERROR: in getBVector: mantissas do not match");
+    }
+
+    // TODO: test this function (use emplace_back)
+    return matrixVectorProduct(this->A, x);
+}
+//-------------------------------
+
+
 // converters
 //-------------------------------
 /**
@@ -393,6 +441,28 @@ void ira::castVectorElements(unsigned long mantissa_length, unsigned long expone
     for(auto & i : *vec){
         i.cast(mantissa_length, exponent_length);
     }
+}
+
+void ira::castSystemMatrix(unsigned long mantissa_length, unsigned long exponent_length){
+
+    if (this->A.empty()) {
+        throw std::invalid_argument("ERROR: in castSystemMatrix: system matrix is empty");
+    }
+    if (mantissa_length <= 0) {
+        throw std::invalid_argument("ERROR: in castSystemMatrix : mantissa size too small");
+    }
+    if (exponent_length <= 1) {
+        throw std::invalid_argument("ERROR: in castSystemMatrix : exponent size too small");
+    }
+
+    if(mantissa_length == this->A[0].mantissa_length && exponent_length == this->A[0].exponent_length){
+        return;
+    }
+
+    for(auto & element : this->A){
+        element.cast(mantissa_length, exponent_length);
+    }
+
 }
 //-------------------------------
 

@@ -22,6 +22,15 @@ mpe::mpe() {
     this->first_mantissa_size = 10;
     this->last_mantissa_size = 52;
     this->exponent_size = 11;
+
+    this->irm.n = 10;
+    this->irm.iter_max = 10;
+    this->irm.u_mantissa_size = 23;
+    this->irm.u_exponent_size = 8;
+    this->irm.ul_first_mantissa_size = 10;
+    this->irm.ul_last_mantissa_size = 22;
+    this->irm.ur_first_mantissa_size = 24;
+    this->irm.ur_last_mantissa_size = 40;
 }
 
 /**
@@ -115,7 +124,7 @@ std::vector<unsigned long int> mpe::getAxis_ur_irm() const {
 
 // operator evaluation
 //-------------------------------
-std::vector<long long int> mpe::evaluateAddition(unsigned long n_tests) {
+std::vector<long long int> mpe::evaluateAddition(unsigned long n_tests) const {
 
     // variable for python multithreading.
 
@@ -146,7 +155,7 @@ std::vector<long long int> mpe::evaluateAddition(unsigned long n_tests) {
     return ret;
 }
 
-std::vector<long long int> mpe::evaluateSubtraction(unsigned long n_tests) {
+std::vector<long long int> mpe::evaluateSubtraction(unsigned long n_tests) const {
 
     // variable for python multithreading.
 
@@ -178,7 +187,7 @@ std::vector<long long int> mpe::evaluateSubtraction(unsigned long n_tests) {
     return ret;
 }
 
-std::vector<long long int> mpe::evaluateMultiplication(unsigned long n_tests) {
+std::vector<long long int> mpe::evaluateMultiplication(unsigned long n_tests) const {
 
     // variable for python multithreading.
 
@@ -209,7 +218,7 @@ std::vector<long long int> mpe::evaluateMultiplication(unsigned long n_tests) {
     return ret;
 }
 
-std::vector<long long int> mpe::evaluateDivision(unsigned long n_tests) {
+std::vector<long long int> mpe::evaluateDivision(unsigned long n_tests) const {
 
     // variable for python multithreading.
 
@@ -238,6 +247,76 @@ std::vector<long long int> mpe::evaluateDivision(unsigned long n_tests) {
     pybind11::gil_scoped_acquire acquire;
 
     return ret;
+}
+//-------------------------------
+
+// iterative refinement evaluation
+//-------------------------------
+std::vector<std::vector<long double>> mpe::irmGetWholePlane(bool output) const {
+
+    std::vector<std::vector<long double>> result;
+
+    if(output){
+        cout << "STARTING: irmGetWholePlane" << endl;
+    }
+
+    // init FP precision objects
+    unsigned long u[2] = {this->irm.u_mantissa_size, this->irm.u_exponent_size};
+    unsigned long ul[2] = {0, this->irm.u_exponent_size};
+
+    // release GIL
+    py::gil_scoped_release release;
+
+    // init ira object.
+    ira IRA(this->irm.n);
+
+    // set up linear system
+    IRA.setRandomMatrix(this->irm.ur_last_mantissa_size, this->irm.u_exponent_size);
+    auto x_mps = IRA.getRandomVector(this->irm.ur_last_mantissa_size, this->irm.u_exponent_size, this->irm.n);
+    auto b = IRA.getBVector(x_mps);
+
+    // set x_mps to working precision and convert to double
+    ira::castVectorElements(this->irm.u_mantissa_size, this->irm.u_mantissa_size, &x_mps);
+    auto x_double = ira::mps_to_double(x_mps);
+
+    // loop over all different mantissa sizes of u_r
+    for(unsigned long ur_mantissa_size = this->irm.ur_last_mantissa_size; ur_mantissa_size >= this->irm.ur_first_mantissa_size; ur_mantissa_size--){
+
+        if(output){
+            cout << "\t ur_mantissa_size: " << ur_mantissa_size;
+        }
+
+        std::vector<long double> tmp;
+
+        // convert the system into the new precision
+        IRA.castSystemMatrix(ur_mantissa_size, this->irm.u_exponent_size);
+        ira::castVectorElements(ur_mantissa_size, this->irm.u_exponent_size, &b);
+
+        // loop over all different mantissa sizes of u_l
+        for(unsigned long ul_mantissa_size = this->irm.ul_first_mantissa_size; ul_mantissa_size <= this->irm.ul_last_mantissa_size; ul_mantissa_size++){
+
+            // set new u_l mantissa size
+            ul[0] = ul_mantissa_size;
+
+            // perform iterative refinement algorithm
+            IRA.iterativeRefinementLU(b, u, ul, this->irm.iter_max, x_double);
+
+            // save data
+            auto tmp_result = IRA.evaluation.IR_area * (double) IRA.evaluation.microseconds;
+            tmp.push_back(tmp_result);
+        }
+
+        result.insert(result.begin(), tmp);
+
+        if(output){
+            cout << "done\t\tlast: " << this->irm.ur_first_mantissa_size << endl;
+        }
+    }
+
+    // acquire GIL
+    pybind11::gil_scoped_acquire acquire;
+
+    return result;
 }
 //-------------------------------
 

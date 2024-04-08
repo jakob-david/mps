@@ -10,6 +10,7 @@
 #include <iostream>
 
 #include "../mps_lib/mps.h"
+#include "../ira_lib/ira.h"
 
 
 class mpe {
@@ -33,7 +34,7 @@ private:
         unsigned long ul_last_mantissa_size;
         unsigned long ur_first_mantissa_size;
         unsigned long ur_last_mantissa_size;
-    } irm;
+    } irm{};
 
 public:
 
@@ -71,10 +72,15 @@ public:
 
     // operator evaluation
     //-------------------------------
-    [[nodiscard]]  std::vector<long long int> evaluateAddition(unsigned long n_tests);
-    [[nodiscard]]  std::vector<long long int> evaluateSubtraction(unsigned long n_tests);
-    [[nodiscard]]  std::vector<long long int> evaluateMultiplication(unsigned long n_tests);
-    [[nodiscard]]  std::vector<long long int> evaluateDivision(unsigned long n_tests);
+    [[nodiscard]] std::vector<long long int> evaluateAddition(unsigned long n_tests) const ;
+    [[nodiscard]] std::vector<long long int> evaluateSubtraction(unsigned long n_tests) const ;
+    [[nodiscard]] std::vector<long long int> evaluateMultiplication(unsigned long n_tests) const ;
+    [[nodiscard]] std::vector<long long int> evaluateDivision(unsigned long n_tests) const ;
+    //-------------------------------
+
+    // iterative refinement evaluation
+    //-------------------------------
+    [[nodiscard]] std::vector<std::vector<long double>> irmGetWholePlane(bool output) const;
     //-------------------------------
 
 private:

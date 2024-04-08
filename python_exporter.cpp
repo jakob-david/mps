@@ -57,6 +57,11 @@ PYBIND11_MODULE(mpe_library, mpe_handle) {
                 py::array out = py::cast(self.evaluateDivision(n_tests));
                 return out;
             })
+
+            .def("irmGetWholePlane", [](mpe &self, bool output = false){
+                py::array out = py::cast(self.irmGetWholePlane(output));
+                return out;
+            })
             ;
 }
 
