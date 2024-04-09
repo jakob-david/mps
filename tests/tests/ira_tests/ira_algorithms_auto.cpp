@@ -659,7 +659,7 @@ TEST(iterativeRefinementLU, auto_double){
         IRA.setMatrix(ur[0], ur[1], new_A);
         //--------------------------------
 
-        // Set up x_should;
+         // Set up x_should;
         //--------------------------------
         vector<double> x_should_d;
         for(unsigned long i = 0 + 1; i <= n; i++){

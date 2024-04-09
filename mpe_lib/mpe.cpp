@@ -319,8 +319,74 @@ std::vector<std::vector<long double>> mpe::irmGetWholePlane(bool output) const {
     return result;
 }
 
-std::vector<std::vector<long double>> mpe::irmGetWholePlane_convergence(bool output) const {
+std::vector<std::vector<long double>> mpe::irmGetWholePlane_convergence(double precision, unsigned long max_iter, bool output) const {
 
+    std::vector<std::vector<long double>> result;
+
+    if(output){
+        cout << "STARTING: irmGetWholePlane_convergence" << endl;
+    }
+
+    // init FP precision objects
+    unsigned long u[2] = {this->irm.u_mantissa_size, this->irm.u_exponent_size};
+    unsigned long ul[2] = {0, this->irm.u_exponent_size};
+
+    // init target precision
+    mps target_precision(this->irm.u_mantissa_size, this->irm.u_exponent_size, precision);
+
+    // release GIL
+    py::gil_scoped_release release;
+
+    // init ira object.
+    ira IRA(this->irm.n);
+    // TODO: set randomness
+
+    // set up linear system
+    IRA.setRandomMatrix(this->irm.ur_last_mantissa_size, this->irm.u_exponent_size);
+    auto x_mps = IRA.getRandomVector(this->irm.ur_last_mantissa_size, this->irm.u_exponent_size, this->irm.n);
+    auto b = IRA.getBVector(x_mps);
+
+    // set x_mps to working precision
+    ira::castVectorElements(this->irm.u_mantissa_size, this->irm.u_exponent_size, &x_mps);
+
+    // loop over all different mantissa sizes of u_r
+    for(unsigned long ur_mantissa_size = this->irm.ur_last_mantissa_size; ur_mantissa_size >= this->irm.ur_first_mantissa_size; ur_mantissa_size--){
+
+        if(output){
+            cout << "\t ur_mantissa_size: " << ur_mantissa_size;
+        }
+
+        std::vector<long double> tmp;
+
+        // convert the system into the new precision
+        IRA.castSystemMatrix(ur_mantissa_size, this->irm.u_exponent_size);
+        ira::castVectorElements(ur_mantissa_size, this->irm.u_exponent_size, &b);
+
+        // loop over all different mantissa sizes of u_l
+        for(unsigned long ul_mantissa_size = this->irm.ul_first_mantissa_size; ul_mantissa_size <= this->irm.ul_last_mantissa_size; ul_mantissa_size++){
+
+            // set new u_l mantissa size
+            ul[0] = ul_mantissa_size;
+
+            // perform iterative refinement algorithm
+            IRA.iterativeRefinementLU(b, u, ul, max_iter, x_mps, target_precision);
+
+            // save data
+            auto tmp_result = (double) IRA.evaluation.iterations_needed;
+            tmp.push_back(tmp_result);
+        }
+
+        result.insert(result.begin(), tmp);
+
+        if(output){
+            cout << "\tdone\t\tlast: " << this->irm.ur_first_mantissa_size << endl;
+        }
+    }
+
+    // acquire GIL
+    pybind11::gil_scoped_acquire acquire;
+
+    return result;
 }
 //-------------------------------
 

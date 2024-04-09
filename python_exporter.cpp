@@ -62,6 +62,12 @@ PYBIND11_MODULE(mpe_library, mpe_handle) {
                 py::array out = py::cast(self.irmGetWholePlane(output));
                 return out;
             })
+
+            .def("irmGetWholePlane_convergence", [](mpe &self, double precision, unsigned long max_iter, bool output = false){
+                py::array out = py::cast(self.irmGetWholePlane_convergence(precision, max_iter, output));
+                return out;
+            })
+
             ;
 }
 

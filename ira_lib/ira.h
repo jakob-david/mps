@@ -30,6 +30,7 @@ public:
         long double IR_area_relativeError;
         long double IR_area_precision;
         long long milliseconds;
+        unsigned long iterations_needed;
     } evaluation{};
     //-------------------------------
 
@@ -104,7 +105,7 @@ public:
     void PLU_decomposition(unsigned long mantissa_precision, unsigned long exponent_precision);
     [[nodiscard]] vector<mps> forwardSubstitution(const vector<mps>& b) const;
     [[nodiscard]] vector<mps> backwardSubstitution(const vector<mps>& b) const;
-    vector<mps> iterativeRefinementLU(const vector<mps> &b, unsigned long u[2], unsigned long ul[2], unsigned long n_max, const vector<mps> &x_expected_mps = vector<mps>());
+    vector<mps> iterativeRefinementLU(const vector<mps> &b, unsigned long u[2], unsigned long ul[2], unsigned long n_max, const vector<mps> &x_expected_mps = vector<mps>(), const mps& precision = mps(10, 3));
     [[nodiscard]] vector<mps> solveLU(const vector<mps>& b, unsigned long u[2]);
     //-------------------------------
 

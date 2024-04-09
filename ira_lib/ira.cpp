@@ -42,6 +42,8 @@ ira::ira(unsigned long n){
     this->evaluation.IR_area_relativeError = 0.0;
     this->evaluation.IR_area_precision = 0.0;
     this->evaluation.milliseconds = 0;
+
+    this->evaluation.iterations_needed = 0;
 }
 
 /**
@@ -803,7 +805,7 @@ void ira::PLU_decomposition(unsigned long mantissa_precision, unsigned long expo
  * @return the approximate solution of the system as an mps object.
  */
 [[nodiscard]] vector<mps>
-ira::iterativeRefinementLU(const vector<mps> &b, unsigned long u[2], unsigned long ul[2], unsigned long n_max, const vector<mps> &x_expected_mps) {
+ira::iterativeRefinementLU(const vector<mps> &b, unsigned long u[2], unsigned long ul[2], unsigned long n_max, const vector<mps> &x_expected_mps, const mps& precision) {
 
     // set some initial variables
     //-------------------------------
@@ -814,8 +816,14 @@ ira::iterativeRefinementLU(const vector<mps> &b, unsigned long u[2], unsigned lo
     if(not x_expected_mps.empty()){
         auto x_expected_d = mps_to_double(x_expected_mps);
     }
-    //-------------------------------
 
+    mps target_precision;
+    bool check_for_precision = not precision.isNaN();
+    if(check_for_precision){
+        target_precision |= precision;
+        target_precision.cast(ur[0], ur[1]);
+    }
+    //-------------------------------
 
     // start timer
     //-------------------------------
@@ -851,6 +859,19 @@ ira::iterativeRefinementLU(const vector<mps> &b, unsigned long u[2], unsigned lo
         //-------------------------------
 
 
+        // check convergence
+        //-------------------------------
+        if(check_for_precision){
+            auto norm = vectorNorm_L1(r);
+            if(norm < target_precision){
+                cout << "Iteration " << i << ":     " << norm.getValue() << " < " << target_precision.getValue() << endl;
+                this->evaluation.iterations_needed = i;
+                break;
+            }
+        }
+        //-------------------------------
+
+
         // solve: A * d_i = r_i
         // in precision: ul
         //-------------------------------
@@ -876,6 +897,7 @@ ira::iterativeRefinementLU(const vector<mps> &b, unsigned long u[2], unsigned lo
             this->evaluation.IR_area_relativeError += this->evaluation.IR_relativeError.back();
         }
         //-------------------------------
+
 
     }
 

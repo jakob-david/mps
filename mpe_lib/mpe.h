@@ -24,7 +24,7 @@ private:
     unsigned long exponent_size;
 
     struct {
-        unsigned long n;
+        unsigned long n; // TODO: remove n
         unsigned long iter_max;
 
         unsigned long u_exponent_size;
@@ -80,8 +80,8 @@ public:
 
     // iterative refinement evaluation
     //-------------------------------
-    [[nodiscard]] std::vector<std::vector<long double>> irmGetWholePlane(bool output) const;
-    [[nodiscard]] std::vector<std::vector<long double>> irmGetWholePlane_convergence(bool output) const;
+    [[nodiscard]] std::vector<std::vector<long double>> irmGetWholePlane(bool output = false) const;
+    [[nodiscard]] std::vector<std::vector<long double>> irmGetWholePlane_convergence(double precision, unsigned long max_iter, bool output = false) const;
     //-------------------------------
 
 private:
