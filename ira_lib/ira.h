@@ -26,7 +26,8 @@ public:
     // evaluation struct
     //-------------------------------
     struct {
-        long double IR_area;
+        long double IR_area_relativeError;
+        long double IR_area_precision;
         long long microseconds;
     } evaluation{};
     //-------------------------------
@@ -102,7 +103,8 @@ public:
     void PLU_decomposition(unsigned long mantissa_precision, unsigned long exponent_precision);
     [[nodiscard]] vector<mps> forwardSubstitution(const vector<mps>& b) const;
     [[nodiscard]] vector<mps> backwardSubstitution(const vector<mps>& b) const;
-    vector<mps> iterativeRefinementLU(const vector<mps>& b, unsigned long u[2], unsigned long ul[2], unsigned long n_max, const vector<double>& x_expected = vector<double>());
+    vector<mps>
+    iterativeRefinementLU(const vector<mps> &b, unsigned long u[2], unsigned long ul[2], unsigned long n_max, const vector<mps> &x_expected_mps = vector<mps>());
     [[nodiscard]] vector<mps> solveLU(const vector<mps>& b, unsigned long u[2]);
     //-------------------------------
 

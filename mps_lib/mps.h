@@ -53,6 +53,8 @@ public:
     // precision
     //-------------------------------
     [[nodiscard]] bool checkPrecision(const mps& compare, unsigned long precision) const;
+    // TODO: test
+    [[nodiscard]] long long int getPrecision(const mps& compare) const;
     [[nodiscard]] mps getAbsoluteError(const mps& compare) const;
     [[nodiscard]] mps getRelativeError(const mps& compare) const;
     [[nodiscard]] double getAbsoluteError_double(const mps& compare) const;

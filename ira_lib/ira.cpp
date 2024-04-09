@@ -38,7 +38,7 @@ ira::ira(unsigned long n){
 
     // set up evaluation struct
     //-------------------------------
-    this->evaluation = {0.0, 0};
+    this->evaluation = {0.0, 0.0, 0};
 }
 
 /**
@@ -799,12 +799,23 @@ void ira::PLU_decomposition(unsigned long mantissa_precision, unsigned long expo
  * @param ul the precision in which the LU-decomposition should be performed.
  * @return the approximate solution of the system as an mps object.
  */
-[[nodiscard]] vector<mps> ira::iterativeRefinementLU(const vector<mps>& b, unsigned long u[2], unsigned long ul[2], unsigned long n_max, const vector<double>& x_expected){
+[[nodiscard]] vector<mps>
+ira::iterativeRefinementLU(const vector<mps> &b, unsigned long u[2], unsigned long ul[2], unsigned long n_max, const vector<mps> &x_expected_mps) {
 
     // set some initial variables
     //-------------------------------
-    this->evaluation.IR_area = 0;
+    this->evaluation.IR_area_relativeError = 0;
+    this->evaluation.IR_area_precision = 0;
     vector<unsigned long> ur{A[0].mantissa_length, A[0].exponent_length};
+
+    if(not x_expected_mps.empty()){
+        auto x_expected_d = mps_to_double(x_expected_mps);
+    }
+    //-------------------------------
+
+
+    // start timer
+    //-------------------------------
     const auto start = std::chrono::high_resolution_clock::now();
     //-------------------------------
 
@@ -857,8 +868,8 @@ void ira::PLU_decomposition(unsigned long mantissa_precision, unsigned long expo
 
         // evaluation
         //-------------------------------
-        for(unsigned long element_id = 0; element_id < x_expected.size(); element_id++){
-            this->evaluation.IR_area += abs(x[element_id].getRelativeError_double(x_expected[element_id]));
+        for(unsigned long element_id = 0; element_id < x_expected_mps.size(); element_id++){
+            this->evaluation.IR_area_relativeError += x[element_id].getRelativeError_double(x_expected_mps[element_id]);
         }
         //-------------------------------
 

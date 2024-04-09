@@ -1332,9 +1332,8 @@ TEST(IR, get_evaluation_value_IR_area){
     b.emplace_back(ur[0], ur[1], 235.5745);
 
     auto x_should = IRA.solveLU(b, u);
-    auto x_should_d = ira::mps_to_double(x_should);
 
-    auto x = IRA.iterativeRefinementLU(b, u, uf, 10, x_should_d);
+    auto x = IRA.iterativeRefinementLU(b, u, uf, 10, x_should);
 
     // perform tests
     //--------------------------------
@@ -1350,7 +1349,7 @@ TEST(IR, get_evaluation_value_IR_area){
     }
     //--------------------------------
 
-    EXPECT_TRUE(IRA.evaluation.IR_area > 0);
+    EXPECT_TRUE(IRA.evaluation.IR_area_relativeError > 0);
 
 }
 
@@ -1375,9 +1374,8 @@ TEST(IR, get_evaluation_value_microseconds){
     b.emplace_back(ur[0], ur[1], 235.5745);
 
     auto x_should = IRA.solveLU(b, u);
-    auto x_should_d = ira::mps_to_double(x_should);
 
-    auto x = IRA.iterativeRefinementLU(b, u, uf, 10, x_should_d);
+    auto x = IRA.iterativeRefinementLU(b, u, uf, 10, x_should);
 
     // perform tests
     //--------------------------------

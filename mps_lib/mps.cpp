@@ -361,6 +361,107 @@ std::string mps::to_string(const int precision) const {
     }
 }
 
+[[nodiscard]] long long int mps::getPrecision(const mps& compare) const {
+
+    // TODO: add error handling
+
+    long long precision = 0;
+    unsigned long exponent_precision_id = 0;
+
+    bool last_bit_of_larger_exponent = true;
+
+    for(unsigned long exponent_idx = 0; exponent_idx < this->exponent.size(); exponent_idx++){
+        if(this->exponent[exponent_idx] != compare.exponent[exponent_idx]){
+
+            exponent_idx++;
+
+            for(;exponent_idx < this->exponent_length; exponent_idx++){
+                if(this->exponent[exponent_idx] == compare.exponent[exponent_idx]){
+                    //for_loop_did_not_brake = false;
+                    break;
+                } else {
+                    exponent_precision_id++;
+                    last_bit_of_larger_exponent = false;
+                }
+            }
+
+            break;
+
+        } else {
+            exponent_precision_id++;
+        }
+    }
+
+    if(exponent_precision_id < this->exponent_length - 1){
+        auto tmp = (this->exponent_length-exponent_precision_id);
+        return (long) (pow(2, tmp) * -1); // TODO: test
+    } else if(exponent_precision_id < this->exponent_length){
+
+        if(this->exponent[exponent_precision_id] == last_bit_of_larger_exponent){   // the exponent of "this" is larger
+
+            if(this->mantissa[0]){          // match of first mantissa bit with "hidden" bit of compare
+                return precision;
+
+            } else {
+
+                for(unsigned long mantissa_idx = 1; mantissa_idx < this->mantissa_length; mantissa_idx++){
+                    if(this->mantissa[mantissa_idx-1] == compare.mantissa[mantissa_idx-1]){
+                        return precision;
+                    } else {
+                        precision++;
+                    }
+                }
+
+            }
+
+        } else {                            // the exponent of "compare" is larger
+
+            if(compare.mantissa[0]){        // match of first mantissa bit with "hidden" bit of compare
+                return precision;
+            } else {
+
+                precision++;
+
+                for(unsigned long mantissa_idx = 1; mantissa_idx < compare.mantissa_length; mantissa_idx++){
+                    if(this->mantissa[mantissa_idx-1] == compare.mantissa[mantissa_idx]){
+                        return precision;
+                    } else {
+                        precision++;
+                    }
+                }
+            }
+        }
+
+    } else {
+
+        precision++;
+
+        for(unsigned long idx = 0; idx < this->mantissa_length; idx++){
+
+            if(this->mantissa[idx] != compare.mantissa[idx]){
+
+                precision--;
+
+                idx++;
+                precision++;
+
+                for(;idx < this->mantissa_length; idx++){
+                    if(this->mantissa[idx] == compare.mantissa[idx]){
+                        return precision;
+                    } else {
+                        precision++;
+                    }
+                }
+
+            } else {
+                precision++;
+            }
+        }
+    }
+
+    return precision;
+}
+
 /**
  * Calculates the absolute error between two mps objects using operators from the mps class.
  *
@@ -383,7 +484,10 @@ std::string mps::to_string(const int precision) const {
  */
 [[nodiscard]] mps mps::getRelativeError(const mps& compare) const {
 
-    return this->getAbsoluteError(compare) / compare;
+    auto ret = this->getAbsoluteError(compare) / compare;
+    ret.setSign(false);
+
+    return ret;
 }
 
 /**
@@ -409,7 +513,7 @@ std::string mps::to_string(const int precision) const {
 [[nodiscard]] double mps::getRelativeError_double(const mps& compare) const {
 
     auto is = this->getValue();
-    auto should = compare.getValue();
+    auto should = abs(compare.getValue());
 
     return abs(is-should) / should;
 }
@@ -435,8 +539,7 @@ std::string mps::to_string(const int precision) const {
 [[nodiscard]] double mps::getRelativeError_double(const double& compare) const {
 
     auto is = this->getValue();
-
-    return abs(is-compare) / compare;
+    return abs(is-compare) / abs(compare);
 }
 //-------------------------------
 

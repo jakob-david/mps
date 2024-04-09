@@ -66,7 +66,7 @@ void mpe::setBasicParameters_irm(unsigned long new_n, unsigned long new_iter_max
     this->irm.iter_max = new_iter_max;
 }
 
-void mpe::setWorkingPrecision_irm(unsigned long new_u_exponent_size, unsigned long new_u_mantissa_size){
+void mpe::setWorkingPrecision_irm(unsigned long new_u_mantissa_size, unsigned long new_u_exponent_size){
 
     this->irm.u_mantissa_size = new_u_mantissa_size;
     this->irm.u_exponent_size = new_u_exponent_size;
@@ -269,15 +269,15 @@ std::vector<std::vector<long double>> mpe::irmGetWholePlane(bool output) const {
 
     // init ira object.
     ira IRA(this->irm.n);
+    // TODO: set randomness
 
     // set up linear system
     IRA.setRandomMatrix(this->irm.ur_last_mantissa_size, this->irm.u_exponent_size);
     auto x_mps = IRA.getRandomVector(this->irm.ur_last_mantissa_size, this->irm.u_exponent_size, this->irm.n);
     auto b = IRA.getBVector(x_mps);
 
-    // set x_mps to working precision and convert to double
-    ira::castVectorElements(this->irm.u_mantissa_size, this->irm.u_mantissa_size, &x_mps);
-    auto x_double = ira::mps_to_double(x_mps);
+    // set x_mps to working precision
+    ira::castVectorElements(this->irm.u_mantissa_size, this->irm.u_exponent_size, &x_mps);
 
     // loop over all different mantissa sizes of u_r
     for(unsigned long ur_mantissa_size = this->irm.ur_last_mantissa_size; ur_mantissa_size >= this->irm.ur_first_mantissa_size; ur_mantissa_size--){
@@ -299,17 +299,17 @@ std::vector<std::vector<long double>> mpe::irmGetWholePlane(bool output) const {
             ul[0] = ul_mantissa_size;
 
             // perform iterative refinement algorithm
-            IRA.iterativeRefinementLU(b, u, ul, this->irm.iter_max, x_double);
+            IRA.iterativeRefinementLU(b, u, ul, this->irm.iter_max, x_mps);
 
             // save data
-            auto tmp_result = IRA.evaluation.IR_area * (double) IRA.evaluation.microseconds;
-            tmp.push_back(tmp_result);
+            auto tmp_result = IRA.evaluation.IR_area_relativeError * (double) IRA.evaluation.microseconds;
+             tmp.push_back(tmp_result);
         }
 
         result.insert(result.begin(), tmp);
 
         if(output){
-            cout << "done\t\tlast: " << this->irm.ur_first_mantissa_size << endl;
+            cout << "\tdone\t\tlast: " << this->irm.ur_first_mantissa_size << endl;
         }
     }
 
