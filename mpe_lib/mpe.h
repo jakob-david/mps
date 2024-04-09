@@ -81,6 +81,7 @@ public:
     // iterative refinement evaluation
     //-------------------------------
     [[nodiscard]] std::vector<std::vector<long double>> irmGetWholePlane(bool output) const;
+    [[nodiscard]] std::vector<std::vector<long double>> irmGetWholePlane_convergence(bool output) const;
     //-------------------------------
 
 private:

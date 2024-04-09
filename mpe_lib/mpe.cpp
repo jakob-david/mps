@@ -302,7 +302,7 @@ std::vector<std::vector<long double>> mpe::irmGetWholePlane(bool output) const {
             IRA.iterativeRefinementLU(b, u, ul, this->irm.iter_max, x_mps);
 
             // save data
-            auto tmp_result = IRA.evaluation.IR_area_relativeError * (double) IRA.evaluation.microseconds;
+            auto tmp_result = IRA.evaluation.IR_area_relativeError * (double) IRA.evaluation.milliseconds;
              tmp.push_back(tmp_result);
         }
 
@@ -317,6 +317,10 @@ std::vector<std::vector<long double>> mpe::irmGetWholePlane(bool output) const {
     pybind11::gil_scoped_acquire acquire;
 
     return result;
+}
+
+std::vector<std::vector<long double>> mpe::irmGetWholePlane_convergence(bool output) const {
+
 }
 //-------------------------------
 

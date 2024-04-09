@@ -38,7 +38,10 @@ ira::ira(unsigned long n){
 
     // set up evaluation struct
     //-------------------------------
-    this->evaluation = {0.0, 0.0, 0};
+    this->evaluation.IR_relativeError.resize(0);
+    this->evaluation.IR_area_relativeError = 0.0;
+    this->evaluation.IR_area_precision = 0.0;
+    this->evaluation.milliseconds = 0;
 }
 
 /**
@@ -235,6 +238,7 @@ void ira::setU(unsigned long mantissa_length, unsigned long exponent_length, vec
 
 
         vector<unsigned long> P_int;
+        P_int.reserve(P.size());
         for(const auto & i : P){
             P_int.push_back((unsigned long) i.getValue());
         }
@@ -333,7 +337,6 @@ void ira::setU(unsigned long mantissa_length, unsigned long exponent_length, vec
         throw std::invalid_argument("ERROR: in getBVector: mantissas do not match");
     }
 
-    // TODO: test this function (use emplace_back)
     return matrixVectorProduct(this->A, x);
 }
 //-------------------------------
@@ -869,14 +872,15 @@ ira::iterativeRefinementLU(const vector<mps> &b, unsigned long u[2], unsigned lo
         // evaluation
         //-------------------------------
         for(unsigned long element_id = 0; element_id < x_expected_mps.size(); element_id++){
-            this->evaluation.IR_area_relativeError += x[element_id].getRelativeError_double(x_expected_mps[element_id]);
+            this->evaluation.IR_relativeError.push_back(x[element_id].getRelativeError_double(x_expected_mps[element_id]));
+            this->evaluation.IR_area_relativeError += this->evaluation.IR_relativeError.back();
         }
         //-------------------------------
 
     }
 
     const auto finish = std::chrono::high_resolution_clock::now();
-    this->evaluation.microseconds = std::chrono::duration_cast<std::chrono::microseconds>(finish-start).count();
+    this->evaluation.milliseconds = (std::chrono::duration_cast<std::chrono::microseconds>(finish - start).count()) / 1000;
 
     return x;
 }

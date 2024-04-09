@@ -1391,5 +1391,5 @@ TEST(IR, get_evaluation_value_microseconds){
     }
     //--------------------------------
 
-    EXPECT_TRUE(IRA.evaluation.microseconds > 0);
+    EXPECT_TRUE(IRA.evaluation.milliseconds > 0);
 }
