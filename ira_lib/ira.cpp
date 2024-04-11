@@ -66,7 +66,7 @@ ira::~ira() = default;
 //-------------------------------
 
 
-// setter
+// parameter setter
 //-------------------------------
 /**
  * Sets the lower and upper bound for random value generators.
@@ -75,7 +75,6 @@ ira::~ira() = default;
  *
  * @param lower_bound the lower bound for the random number generator.
  * @param upper_bound the upper bound for the random number generator.
- * @param new_L the new matrix to which the lower triangular matrix should be set.
  */
 void ira::setRandomRange(double lower_bound, double upper_bound){
 
@@ -87,11 +86,19 @@ void ira::setRandomRange(double lower_bound, double upper_bound){
     this->parameters.random_upper_bound = upper_bound;
 }
 
-
+/**
+ * Sets the maximal iteration.
+ *
+ * @param max_iter the new maximal iteration.
+ */
 void ira::setMaxIter(unsigned long new_max_iter){
 
     this->parameters.max_iter = new_max_iter;
 }
+//-------------------------------
+
+
+
 void ira::setLowerPrecision(unsigned long mantissa_length, unsigned long exponent_length){
 
     // TODO: add error handling
@@ -255,7 +262,7 @@ void ira::setU(vector<double> new_U) {
  *
  * @return vector containing lower and upper bound.
  */
-[[nodiscard]] vector<double> ira::getRandomRange() const{
+vector<double> ira::getRandomRange() const{
 
     vector<double> ret;
 
@@ -264,6 +271,19 @@ void ira::setU(vector<double> new_U) {
 
     return ret;
 }
+
+/**
+ * Gets the maximal iteration.
+ *
+ * @return the maximal iteration.
+ */
+unsigned long ira::getMaxIter() const {
+
+    return this->parameters.max_iter;
+}
+
+
+
 
 
 /**

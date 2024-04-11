@@ -30,6 +30,18 @@ TEST(RandomRange, exception_1) {
     EXPECT_ANY_THROW(IRA.setRandomRange(lower_bound, upper_bound));
 }
 
+TEST(MaxIter, simple_1) {
+
+    unsigned long max_iter = 24;
+
+    ira IRA(2, 23, 8);
+    IRA.setMaxIter(max_iter);
+
+    auto result = IRA.getMaxIter();
+
+    EXPECT_EQ(max_iter, result);
+}
+
 // setter and getter
 // -------------------------------------
 TEST(unitary_matrix, init_2x2) {

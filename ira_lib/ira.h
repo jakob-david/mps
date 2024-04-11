@@ -85,6 +85,8 @@ public:
 
     // TODO: Test
     void setMaxIter(unsigned long new_max_iter);
+
+
     // TODO: Test
     void setLowerPrecision(unsigned long mantissa_length, unsigned long exponent_length);
     // TODO: Test
@@ -106,6 +108,7 @@ public:
     // getter
     //-------------------------------
     [[nodiscard]] vector<double> getRandomRange() const;
+    [[nodiscard]] unsigned long getMaxIter() const;
 
     [[nodiscard]] mps getMatrixElement(unsigned long idx);
     [[nodiscard]] std::string to_string(const char& matrix, int precision = -1) const;
