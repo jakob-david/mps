@@ -768,22 +768,22 @@ vector<mps> ira::getRandomVector(unsigned long mantissa_length, unsigned long ex
     return ret;
 }
 
-vector<mps> ira::getBVector(vector<mps> x) const {
+vector<mps> ira::multiplyWithSystemMatrix(vector<mps> x) const {
 
     if (this->A.empty()) {
-        throw std::invalid_argument("ERROR: in getBVector: system matrix is empty");
+        throw std::invalid_argument("ERROR: in multiplyWithSystemMatrix: system matrix is empty");
     }
     if (x.empty()) {
-        throw std::invalid_argument("ERROR: in getBVector: x is empty");
+        throw std::invalid_argument("ERROR: in multiplyWithSystemMatrix: x is empty");
     }
     if (this->A.size() != (x.size() * x.size())) {
-        throw std::invalid_argument("ERROR: in getBVector: dimensions of A and x do not match");
+        throw std::invalid_argument("ERROR: in multiplyWithSystemMatrix: dimensions of A and x do not match");
     }
     if (this->A[0].exponent_length != x[0].exponent_length) {
-        throw std::invalid_argument("ERROR: in getBVector: exponents do not match");
+        throw std::invalid_argument("ERROR: in multiplyWithSystemMatrix: exponents do not match");
     }
     if (this->A[0].mantissa_length != x[0].mantissa_length) {
-        throw std::invalid_argument("ERROR: in getBVector: mantissas do not match");
+        throw std::invalid_argument("ERROR: in multiplyWithSystemMatrix: mantissas do not match");
     }
 
     return matrixVectorProduct(this->A, x);

@@ -128,7 +128,7 @@ public:
     // TODO: test
     [[nodiscard]] vector<mps> getRandomVector(unsigned long mantissa_length, unsigned long exponent_length, unsigned long size) const;
     // TODO: test
-    [[nodiscard]] vector<mps> getBVector(vector<mps> x) const;
+    [[nodiscard]] vector<mps> multiplyWithSystemMatrix(vector<mps> x) const;
     //-------------------------------
 
     // operators
