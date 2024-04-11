@@ -12,8 +12,8 @@ TEST(PLU, exception_mantissa_too_small) {
 
     vector<double> new_matrix{ 1, 2, 3, 4, 5, 6, 7, 8, 9};
 
-    ira IRA(3);
-    IRA.setMatrix(mantissa_length, exponent_length, new_matrix);
+    ira IRA(3, mantissa_length, exponent_length);
+    IRA.setMatrix(new_matrix);
 
     EXPECT_ANY_THROW(IRA.PLU_decomposition(0, exponent_length));
 }
@@ -25,8 +25,8 @@ TEST(PLU, exception_exponent_too_small) {
 
     vector<double> new_matrix{ 1, 2, 3, 4, 5, 6, 7, 8, 9};
 
-    ira IRA(3);
-    IRA.setMatrix(mantissa_length, exponent_length, new_matrix);
+    ira IRA(3, mantissa_length, exponent_length);
+    IRA.setMatrix(new_matrix);
 
     EXPECT_ANY_THROW(IRA.PLU_decomposition(mantissa_length, 1));
 }
@@ -38,8 +38,8 @@ TEST(PLU, simple_3x3_float_1) {
 
     vector<double> new_matrix{ 1, 2, 3, 4, 5, 6, 7, 8, 9};
 
-    ira IRA(3);
-    IRA.setMatrix(mantissa_length, exponent_length, new_matrix);
+    ira IRA(3, mantissa_length, exponent_length);
+    IRA.setMatrix(new_matrix);
     IRA.PLU_decomposition(mantissa_length, exponent_length);
 
 
@@ -74,8 +74,8 @@ TEST(PLU, simple_3x3_float_2) {
 
     vector<double> new_matrix{ 4, -7, 2, -3, 1, -6, 3.5, 3, -8.4};
 
-    ira IRA(3);
-    IRA.setMatrix(mantissa_length, exponent_length, new_matrix);
+    ira IRA(3, mantissa_length, exponent_length);
+    IRA.setMatrix(new_matrix);
     IRA.PLU_decomposition(mantissa_length, exponent_length);
 
 
@@ -110,8 +110,8 @@ TEST(PLU, simple_3x3_double_1) {
 
     vector<double> new_matrix{ 1, 2, 3, 4, 5, 6, 7, 8, 9};
 
-    ira IRA(3);
-    IRA.setMatrix(mantissa_length, exponent_length, new_matrix);
+    ira IRA(3, mantissa_length, exponent_length);
+    IRA.setMatrix(new_matrix);
     IRA.PLU_decomposition(mantissa_length, exponent_length);
 
 
@@ -146,8 +146,8 @@ TEST(PLU, simple_3x3_double_2) {
 
     vector<double> new_matrix{ 4, -7, 2, -3, 1, -6, 3.5, 3, -8.4};
 
-    ira IRA(3);
-    IRA.setMatrix(mantissa_length, exponent_length, new_matrix);
+    ira IRA(3, mantissa_length, exponent_length);
+    IRA.setMatrix(new_matrix);
     IRA.PLU_decomposition(mantissa_length, exponent_length);
 
 
@@ -182,8 +182,8 @@ TEST(PLU, simple_4x4_float_1) {
 
     vector<double> new_matrix{ 2, 5, 8, 7, 5, 2, 2, 8, 7, 5, 6, 6, 5, 4, 4, 8};
 
-    ira IRA(4);
-    IRA.setMatrix(mantissa_length, exponent_length, new_matrix);
+    ira IRA(4, mantissa_length, exponent_length);
+    IRA.setMatrix(new_matrix);
     IRA.PLU_decomposition(mantissa_length, exponent_length);
 
 
@@ -218,8 +218,8 @@ TEST(PLU, simple_4x4_float_2) {
 
     vector<double> new_matrix{ 5, -2, 0, -6, 2, 8, 2, -4, 2, 12, 3, 5, 2, 33, -32, 3};
 
-    ira IRA(4);
-    IRA.setMatrix(mantissa_length, exponent_length, new_matrix);
+    ira IRA(4, mantissa_length, exponent_length);
+    IRA.setMatrix(new_matrix);
     IRA.PLU_decomposition(mantissa_length, exponent_length);
 
 
@@ -254,8 +254,8 @@ TEST(PLU, simple_4x4_double_1) {
 
     vector<double> new_matrix{ 2, 5, 8, 7, 5, 2, 2, 8, 7, 5, 6, 6, 5, 4, 4, 8};
 
-    ira IRA(4);
-    IRA.setMatrix(mantissa_length, exponent_length, new_matrix);
+    ira IRA(4, mantissa_length, exponent_length);
+    IRA.setMatrix(new_matrix);
     IRA.PLU_decomposition(mantissa_length, exponent_length);
 
 
@@ -290,8 +290,8 @@ TEST(PLU, simple_4x4_double_2) {
 
     vector<double> new_matrix{ 5, -2, 0, -6, 2, 8, 2, -4, 2, 12, 3, 5, 2, 33, -32, 3};
 
-    ira IRA(4);
-    IRA.setMatrix(mantissa_length, exponent_length, new_matrix);
+    ira IRA(4, mantissa_length, exponent_length);
+    IRA.setMatrix(new_matrix);
     IRA.PLU_decomposition(mantissa_length, exponent_length);
 
 
@@ -326,7 +326,7 @@ TEST(FS, exception_L_empty) {
     unsigned long mantissa_length = 23;
     unsigned long exponent_length = 8;
 
-    ira IRA(4);
+    ira IRA(4, mantissa_length, exponent_length);
 
     vector<mps> b;
     b.emplace_back(mantissa_length, exponent_length, 4);
@@ -342,7 +342,7 @@ TEST(FS, exception_b_empty) {
     unsigned long mantissa_length = 23;
     unsigned long exponent_length = 8;
 
-    ira IRA(4);
+    ira IRA(4, mantissa_length, exponent_length);
 
     vector<double> new_L{ 3, 0, 0, 0, 2, 1, 0, 0, 1, 0, 1, 0, 1, 1, 1, 1};
     IRA.setL(mantissa_length, exponent_length, new_L);
@@ -357,7 +357,7 @@ TEST(FS, simple_4x4_float_1){
     unsigned long mantissa_length = 23;
     unsigned long exponent_length = 8;
 
-    ira IRA(4);
+    ira IRA(4, mantissa_length, exponent_length);
 
 
     vector<double> new_L{ 3, 0, 0, 0, 2, 1, 0, 0, 1, 0, 1, 0, 1, 1, 1, 1};
@@ -386,7 +386,7 @@ TEST(FS, simple_4x4_float_2) {
     unsigned long mantissa_length = 23;
     unsigned long exponent_length = 8;
 
-    ira IRA(4);
+    ira IRA(4, mantissa_length, exponent_length);
 
 
     vector<double> new_L{-4.3, 0, 0, 0, 2, -5.2, 0, 0, -18, 7.4, -1, 0, 3, -0.34, 4.2321, 1.98};
@@ -415,7 +415,7 @@ TEST(FS, simple_4x4_double_1){
     unsigned long mantissa_length = 52;
     unsigned long exponent_length = 11;
 
-    ira IRA(4);
+    ira IRA(4, mantissa_length, exponent_length);
 
 
     vector<double> new_L{ 3, 0, 0, 0, 2, 1, 0, 0, 1, 0, 1, 0, 1, 1, 1, 1};
@@ -445,7 +445,7 @@ TEST(FS, simple_4x4_double_2){
     unsigned long mantissa_length = 52;
     unsigned long exponent_length = 11;
 
-    ira IRA(4);
+    ira IRA(4, mantissa_length, exponent_length);
 
 
     vector<double> new_L{-4.3, 0, 0, 0, 2, -5.2, 0, 0, -18, 7.4, -1, 0, 3, -0.34, 4.2321, 1.98};
@@ -474,7 +474,7 @@ TEST(FS, simple_5x5_float_1){
     unsigned long mantissa_length = 23;
     unsigned long exponent_length = 8;
 
-    ira IRA(5);
+    ira IRA(5, mantissa_length, exponent_length);
 
     vector<double> new_L{3, 0, 0, 0, 0, 2, 1, 0, 0, 0, 1, 0, 1, 0, 0, 1, 1, 1, 1, 0, 3, 5, 1, 3, 2};
     IRA.setL(mantissa_length, exponent_length, new_L);
@@ -503,7 +503,7 @@ TEST(FS, simple_5x5_float_2){
     unsigned long mantissa_length = 23;
     unsigned long exponent_length = 8;
 
-    ira IRA(5);
+    ira IRA(5, mantissa_length, exponent_length);
 
     vector<double> new_L{-4.3, 0, 0, 0, 0, 2, -5.2, 0, 0, 0, -18, 7.4, -1, 0, 0, 3, -0.34, 4.2321, 1.98, 0, 3.64, -2.4, -14.7, 2, 9.3};
     IRA.setL(mantissa_length, exponent_length, new_L);
@@ -531,7 +531,7 @@ TEST(FS, simple_5x5_double_1){
     unsigned long mantissa_length = 52;
     unsigned long exponent_length = 11;
 
-    ira IRA(5);
+    ira IRA(5, mantissa_length, exponent_length);
 
     vector<double> new_L{3, 0, 0, 0, 0, 2, 1, 0, 0, 0, 1, 0, 1, 0, 0, 1, 1, 1, 1, 0, 3, 5, 1, 3, 2};
     IRA.setL(mantissa_length, exponent_length, new_L);
@@ -560,7 +560,7 @@ TEST(FS, simple_5x5_double_2){
     unsigned long mantissa_length = 52;
     unsigned long exponent_length = 11;
 
-    ira IRA(5);
+    ira IRA(5, mantissa_length, exponent_length);
 
     vector<double> new_L{-4.3, 0, 0, 0, 0, 2, -5.2, 0, 0, 0, -18, 7.4, -1, 0, 0, 3, -0.34, 4.2321, 1.98, 0, 3.64, -2.4, -14.7, 2, 9.3};
     IRA.setL(mantissa_length, exponent_length, new_L);
@@ -590,7 +590,7 @@ TEST(BS, exception_L_empty) {
     unsigned long mantissa_length = 23;
     unsigned long exponent_length = 8;
 
-    ira IRA(4);
+    ira IRA(4, mantissa_length, exponent_length);
 
     vector<mps> b;
     b.emplace_back(mantissa_length, exponent_length, 4);
@@ -606,7 +606,7 @@ TEST(BS, exception_b_empty) {
     unsigned long mantissa_length = 23;
     unsigned long exponent_length = 8;
 
-    ira IRA(4);
+    ira IRA(4, mantissa_length, exponent_length);
 
     vector<double> new_U{ 1, 1, 2, 1, 0, 4, 1, 1, 0, 0, 2, 1, 0, 0, 0, 3};
     IRA.setU(mantissa_length, exponent_length, new_U);
@@ -621,7 +621,7 @@ TEST(BS, simple_4x4_float_1){
     unsigned long mantissa_length = 23;
     unsigned long exponent_length = 8;
 
-    ira IRA(4);
+    ira IRA(4, mantissa_length, exponent_length);
 
     vector<double> new_U{ 1, 1, 2, 1, 0, 4, 1, 1, 0, 0, 2, 1, 0, 0, 0, 3};
     IRA.setU(mantissa_length, exponent_length, new_U);
@@ -650,7 +650,7 @@ TEST(BS, simple_4x4_float_2){
     unsigned long mantissa_length = 23;
     unsigned long exponent_length = 8;
 
-    ira IRA(4);
+    ira IRA(4, mantissa_length, exponent_length);
 
     vector<double> new_U{3, -0.34, 4.2321, 1.98, 0, 7.4, -1, -18, 0, 0, -5.2, 2, 0, 0, 0, -4.3};
     IRA.setU(mantissa_length, exponent_length, new_U);
@@ -679,7 +679,7 @@ TEST(BS, simple_4x4_double_1){
     unsigned long mantissa_length = 52;
     unsigned long exponent_length = 11;
 
-    ira IRA(4);
+    ira IRA(4, mantissa_length, exponent_length);
 
     vector<double> new_U{ 1, 1, 2, 1, 0, 4, 1, 1, 0, 0, 2, 1, 0, 0, 0, 3};
     IRA.setU(mantissa_length, exponent_length, new_U);
@@ -708,7 +708,7 @@ TEST(BS, simple_4x4_double_2){
     unsigned long mantissa_length = 52;
     unsigned long exponent_length = 11;
 
-    ira IRA(4);
+    ira IRA(4, mantissa_length, exponent_length);
 
     vector<double> new_U{3, -0.34, 4.2321, 1.98, 0, 7.4, -1, -18, 0, 0, -5.2, 2, 0, 0, 0, -4.3};
     IRA.setU(mantissa_length, exponent_length, new_U);
@@ -737,7 +737,7 @@ TEST(BS, simple_5x5_float_1){
     unsigned long mantissa_length = 23;
     unsigned long exponent_length = 8;
 
-    ira IRA(5);
+    ira IRA(5, mantissa_length, exponent_length);
 
     vector<double> new_U{3, 0.5, 1, 3, 2, 0, 1, -1, 1, 3, 0, 0, 1, 0.1, -3, 0, 0, 0, 3, -1, 0, 0, 0, 0, -4};
     IRA.setU(mantissa_length, exponent_length, new_U);
@@ -767,7 +767,7 @@ TEST(BS, simple_5x5_float_2){
     unsigned long mantissa_length = 23;
     unsigned long exponent_length = 8;
 
-    ira IRA(5);
+    ira IRA(5, mantissa_length, exponent_length);
 
     vector<double> new_U{2.4, 0.5, 3.253, 7, 9.23, 0, 3.2, -1.53, 2.21, 4.23, 0, 0, 7.8, 0.64, -0.321, 0, 0, 0, 7.3, -14, 0, 0, 0, 0, -4.85};
     IRA.setU(mantissa_length, exponent_length, new_U);
@@ -796,7 +796,7 @@ TEST(BS, simple_5x5_double_1){
     unsigned long mantissa_length = 52;
     unsigned long exponent_length = 11;
 
-    ira IRA(5);
+    ira IRA(5, mantissa_length, exponent_length);
 
     vector<double> new_U{3, 0.5, 1, 3, 2, 0, 1, -1, 1, 3, 0, 0, 1, 0.1, -3, 0, 0, 0, 3, -1, 0, 0, 0, 0, -4};
     IRA.setU(mantissa_length, exponent_length, new_U);
@@ -826,7 +826,7 @@ TEST(BS, simple_5x5_double_2){
     unsigned long mantissa_length = 52;
     unsigned long exponent_length = 11;
 
-    ira IRA(5);
+    ira IRA(5, mantissa_length, exponent_length);
 
     vector<double> new_U{2.4, 0.5, 3.253, 7, 9.23, 0, 3.2, -1.53, 2.21, 4.23, 0, 0, 7.8, 0.64, -0.321, 0, 0, 0, 7.3, -14, 0, 0, 0, 0, -4.85};
     IRA.setU(mantissa_length, exponent_length, new_U);
@@ -860,10 +860,10 @@ TEST(solve_LU, simple_3x3_float_1){
 
     unsigned long u[2] = {23 + precision, 8};
 
-    ira IRA(3);
+    ira IRA(3, u[0], u[1]);
 
     vector<double> new_A{5, 1 ,3, 1, 1 ,1, 1, 2 ,1};
-    IRA.setMatrix(u[0], u[1], new_A);
+    IRA.setMatrix(new_A);
 
     vector<mps> b;
     b.emplace_back(u[0], u[1], 16);
@@ -889,10 +889,10 @@ TEST(solve_LU, simple_3x3_double_1){
 
     unsigned long u[2] = {52 + precision, 11};
 
-    ira IRA(3);
+    ira IRA(3, u[0], u[1]);
 
     vector<double> new_A{5, 1 ,3, 1, 1 ,1, 1, 2 ,1};
-    IRA.setMatrix(u[0], u[1], new_A);
+    IRA.setMatrix(new_A);
 
     vector<mps> b;
     b.emplace_back(u[0], u[1], 16);
@@ -918,11 +918,11 @@ TEST(solve_LU, simple_3x3_float_2){
 
     unsigned long u[2] = {23 + precision, 8};
 
-    ira IRA(3);
+    ira IRA(3, u[0], u[1]);
 
 
     vector<double> new_A{-34.23, 4.2 ,0.43, 3.2, 8.45 ,12.45, -7, 2.45 ,-4.35};
-    IRA.setMatrix(u[0], u[1], new_A);
+    IRA.setMatrix(new_A);
 
     vector<mps> b;
     b.emplace_back(u[0], u[1], -62.92316);
@@ -949,10 +949,10 @@ TEST(solve_LU, simple_3x3_double_2){
 
     unsigned long u[2] = {52 + precision, 11};
 
-    ira IRA(3);
+    ira IRA(3, u[0], u[1]);
 
     vector<double> new_A{-34.23, 4.2 ,0.43, 3.2, 8.45 ,12.45, -7, 2.45 ,-4.35};
-    IRA.setMatrix(u[0], u[1], new_A);
+    IRA.setMatrix(new_A);
 
     vector<mps> b;
     b.emplace_back(u[0], u[1], -62.92316);
@@ -978,10 +978,10 @@ TEST(solve_LU, simple_4x4_float_1){
 
     unsigned long u[2] = {23 + precision, 8};
 
-    ira IRA(4);
+    ira IRA(4, u[0], u[1]);
 
     vector<double> new_A{5, 1 ,3, 4, 1, 1 ,1, 2, 1, 2 ,1, 3, 4, 2 ,-1, 3};
-    IRA.setMatrix(u[0], u[1], new_A);
+    IRA.setMatrix(new_A);
 
     vector<mps> b;
     b.emplace_back(u[0], u[1], 32);
@@ -1009,10 +1009,10 @@ TEST(solve_LU, simple_4x4_double_1){
 
     unsigned long u[2] = {52 + precision, 11};
 
-    ira IRA(4);
+    ira IRA(4, u[0], u[1]);
 
     vector<double> new_A{5, 1 ,3, 4, 1, 1 ,1, 2, 1, 2 ,1, 3, 4, 2 ,-1, 3};
-    IRA.setMatrix(u[0], u[1], new_A);
+    IRA.setMatrix(new_A);
 
     vector<mps> b;
     b.emplace_back(u[0], u[1], 32);
@@ -1040,10 +1040,10 @@ TEST(solve_LU, simple_5x5_float_1){
 
     unsigned long u[2] = {23 + precision, 8};
 
-    ira IRA(5);
+    ira IRA(5, u[0], u[1]);
 
     vector<double> new_A{5, 1 ,3, 4,2, 1, 1 ,1, 2,5, 1, 2 ,1, 3,2, 4, 2 ,-1, 3, 3, 2, 2 ,-3, 3,-6};
-    IRA.setMatrix(u[0], u[1], new_A);
+    IRA.setMatrix(new_A);
 
     vector<mps> b;
     b.emplace_back(u[0], u[1], 42);
@@ -1073,10 +1073,10 @@ TEST(solve_LU, simple_5x5_double_1){
 
     unsigned long u[2] = {52 + precision, 11};
 
-    ira IRA(5);
+    ira IRA(5, u[0], u[1]);
 
     vector<double> new_A{5, 1 ,3, 4,2, 1, 1 ,1, 2,5, 1, 2 ,1, 3,2, 4, 2 ,-1, 3, 3, 2, 2 ,-3, 3,-6};
-    IRA.setMatrix(u[0], u[1], new_A);
+    IRA.setMatrix(new_A);
 
     vector<mps> b;
     b.emplace_back(u[0], u[1], 42);
@@ -1106,10 +1106,10 @@ TEST(solve_LU, simple_6x6_float_1){
 
     unsigned long u[2] = {23 + precision, 8};
 
-    ira IRA(6);
+    ira IRA(6, u[0], u[1]);
 
     vector<double> new_A{5, 1 ,3, 4, 2, -3, 1, 1 ,1, 2, 5, -2, 1, 2 ,1, 3, 2, 5, 4, 2 ,-1, 3, 3, -4, 2, 2 ,-3, 3,-6, 1, 2, 4 ,-1, 7,-6, -1.5};
-    IRA.setMatrix(u[0], u[1], new_A);
+    IRA.setMatrix(new_A);
 
     vector<mps> b;
     b.emplace_back(u[0], u[1], 24);
@@ -1140,10 +1140,10 @@ TEST(solve_LU, simple_6x6_double_1){
 
     unsigned long u[2] = {52 + precision, 11};
 
-    ira IRA(6);
+    ira IRA(6, u[0], u[1]);
 
     vector<double> new_A{5, 1 ,3, 4, 2, -3, 1, 1 ,1, 2, 5, -2, 1, 2 ,1, 3, 2, 5, 4, 2 ,-1, 3, 3, -4, 2, 2 ,-3, 3,-6, 1, 2, 4 ,-1, 7,-6, -1.5};
-    IRA.setMatrix(u[0], u[1], new_A);
+    IRA.setMatrix(new_A);
 
     vector<mps> b;
     b.emplace_back(u[0], u[1], 24);
@@ -1171,10 +1171,10 @@ TEST(solve_LU_double, simple_3x3_1){
 
     unsigned long u[2] = {52, 11};
 
-    ira IRA(3);
+    ira IRA(3, u[0], u[1]);
 
     vector<double> new_A{5, 1 ,3, 1, 1 ,1, 1, 2 ,1};
-    IRA.setMatrix(u[0], u[1], new_A);
+    IRA.setMatrix(new_A);
 
     vector<double> b;
     b.push_back(16);
@@ -1194,10 +1194,10 @@ TEST(solve_LU_double, simple_3x3_2){
 
     unsigned long u[2] = {52, 11};
 
-    ira IRA(3);
+    ira IRA(3, u[0], u[1]);
 
     vector<double> new_A{-34.23, 4.2 ,0.43, 3.2, 8.45 ,12.45, -7, 2.45 ,-4.35};
-    IRA.setMatrix(u[0], u[1], new_A);
+    IRA.setMatrix(new_A);
 
     vector<double> b;
     b.push_back(-62.92316);
@@ -1217,10 +1217,10 @@ TEST(solve_LU_double, simple_6x6_1){
 
     unsigned long u[2] = {52, 11};
 
-    ira IRA(6);
+    ira IRA(6, u[0], u[1]);
 
     vector<double> new_A{5, 1 ,3, 4, 2, -3, 1, 1 ,1, 2, 5, -2, 1, 2 ,1, 3, 2, 5, 4, 2 ,-1, 3, 3, -4, 2, 2 ,-3, 3,-6, 1, 2, 4 ,-1, 7,-6, -1.5};
-    IRA.setMatrix(u[0], u[1], new_A);
+    IRA.setMatrix(new_A);
 
     vector<double> b;
     b.push_back(24);
@@ -1247,20 +1247,22 @@ TEST(IR, simple_3x3_double_1){
     unsigned long mantissa_length = 52;
     unsigned long exponent_length = 11;
 
-    unsigned long uf[2] = {52, 11};
+    unsigned long ul[2] = {52, 11};
     unsigned long u[2] = {52, 11};
 
-    ira IRA(3);
+    ira IRA(3, mantissa_length, exponent_length);
 
     vector<double> new_A{5, 1 ,3, 1, 1 ,1, 1, 2 ,1};
-    IRA.setMatrix(mantissa_length, exponent_length, new_A);
+    IRA.setMatrix(new_A);
+    IRA.setWorkingPrecision(u[0], u[1]);
+    IRA.setUL(ul[0], ul[1]);
 
     vector<mps> b;
     b.emplace_back(mantissa_length, exponent_length, 16);
     b.emplace_back(mantissa_length, exponent_length, 6);
     b.emplace_back(mantissa_length, exponent_length, 8);
 
-    auto x = IRA.iterativeRefinementLU(b, u, uf, 10);
+    auto x = IRA.iterativeRefinementLU(b, 10);
 
 
     std::string solution = x[0].to_string(8);
@@ -1277,22 +1279,24 @@ TEST(IR, simple_3x3_double_2){
     //------------------------------------------------------------------------------------------------------
     unsigned long precision = 51;                // the number of  mantissa bits which should be checked.
     unsigned long ur[2] = {52, 11};     // precision: A
-    unsigned long uf[2] = { 23, 11};    // precision: LU
+    unsigned long ul[2] = { 23, 11};    // precision: LU
     unsigned long u[2] = {52, 11};      // precision: working
     //------------------------------------------------------------------------------------------------------
 
 
-    ira IRA(3);
+    ira IRA(3, ur[0], ur[1]);
 
     vector<double> new_A{563.46, 634.346, 575.346, 694.3453, 573.234, 4638.67, 985.456, 575.56, 978.56};
-    IRA.setMatrix(ur[0], ur[1], new_A);
+    IRA.setMatrix(new_A);
+    IRA.setWorkingPrecision(u[0], u[1]);
+    IRA.setUL(ul[0], ul[1]);
 
     vector<mps> b;
     b.emplace_back(ur[0], ur[1], 463.56);
     b.emplace_back(ur[0], ur[1], 875.357);
     b.emplace_back(ur[0], ur[1], 235.5745);
 
-    auto x = IRA.iterativeRefinementLU(b, u, uf, 10);
+    auto x = IRA.iterativeRefinementLU(b, 10);
 
     auto x_should = IRA.solveLU(b, u);
 
@@ -1316,15 +1320,17 @@ TEST(IR, get_evaluation_value_IR_area){
     //------------------------------------------------------------------------------------------------------
     unsigned long precision = 51;                // the number of  mantissa bits which should be checked.
     unsigned long ur[2] = {52, 11};     // precision: A
-    unsigned long uf[2] = { 23, 11};    // precision: LU
+    unsigned long ul[2] = { 23, 11};    // precision: LU
     unsigned long u[2] = {52, 11};      // precision: working
     //------------------------------------------------------------------------------------------------------
 
 
-    ira IRA(3);
+    ira IRA(3, ur[0], ur[1]);
 
     vector<double> new_A{563.46, 634.346, 575.346, 694.3453, 573.234, 4638.67, 985.456, 575.56, 978.56};
-    IRA.setMatrix(ur[0], ur[1], new_A);
+    IRA.setMatrix(new_A);
+    IRA.setWorkingPrecision(u[0], u[1]);
+    IRA.setUL(ul[0], ul[1]);
 
     vector<mps> b;
     b.emplace_back(ur[0], ur[1], 463.56);
@@ -1333,7 +1339,7 @@ TEST(IR, get_evaluation_value_IR_area){
 
     auto x_should = IRA.solveLU(b, u);
 
-    auto x = IRA.iterativeRefinementLU(b, u, uf, 10, x_should);
+    auto x = IRA.iterativeRefinementLU(b, 10, x_should);
 
     // perform tests
     //--------------------------------
@@ -1358,15 +1364,17 @@ TEST(IR, get_evaluation_value_microseconds){
     //------------------------------------------------------------------------------------------------------
     unsigned long precision = 51;                // the number of  mantissa bits which should be checked.
     unsigned long ur[2] = {52, 11};     // precision: A
-    unsigned long uf[2] = { 23, 11};    // precision: LU
+    unsigned long ul[2] = { 23, 11};    // precision: LU
     unsigned long u[2] = {52, 11};      // precision: working
     //------------------------------------------------------------------------------------------------------
 
 
-    ira IRA(3);
+    ira IRA(3, ur[0], ur[1]);
 
     vector<double> new_A{563.46, 634.346, 575.346, 694.3453, 573.234, 4638.67, 985.456, 575.56, 978.56};
-    IRA.setMatrix(ur[0], ur[1], new_A);
+    IRA.setMatrix(new_A);
+    IRA.setWorkingPrecision(u[0], u[1]);
+    IRA.setUL(ul[0], ul[1]);
 
     vector<mps> b;
     b.emplace_back(ur[0], ur[1], 463.56);
@@ -1375,7 +1383,7 @@ TEST(IR, get_evaluation_value_microseconds){
 
     auto x_should = IRA.solveLU(b, u);
 
-    auto x = IRA.iterativeRefinementLU(b, u, uf, 10, x_should);
+    auto x = IRA.iterativeRefinementLU(b, 10, x_should);
 
     // perform tests
     //--------------------------------

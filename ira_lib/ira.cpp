@@ -18,13 +18,20 @@ using namespace std;
  *
  * @param n the size of the system matrix.
  */
-ira::ira(unsigned long n){
+ira::ira(unsigned long n, unsigned long u_mantissa_length, unsigned long u_exponent_length){
+
+    // TODO: do error handling
 
     this->n = n;
     unsigned long matrix_1D_size = this->n * this->n;
 
-    this->random_range.random_lower_bound = -10;
-    this->random_range.random_upper_bound = 10;
+    // set up parameters
+    //-------------------------------
+    this->parameters.random_lower_bound = -10;
+    this->parameters.random_upper_bound = 10;
+    this->parameters.ur_m_l = u_mantissa_length;
+    this->parameters.ur_e_l = u_exponent_length;
+
 
     // set up matrices
     //-------------------------------
@@ -55,20 +62,51 @@ ira::~ira() = default;
 
 // setter
 //-------------------------------
+
+void ira::setRandomRange(double lower_bound, double upper_bound){
+
+    // TODO: add error handling
+
+    this->parameters.random_lower_bound = lower_bound;
+    this->parameters.random_upper_bound = upper_bound;
+}
+void ira::setUL(unsigned long mantissa_length, unsigned long exponent_length){
+
+    // TODO: add error handling
+
+    this->parameters.ul_m_l = mantissa_length;
+    this->parameters.ul_e_l = exponent_length;
+}
+void ira::setUR(unsigned long mantissa_length, unsigned long exponent_length){
+
+    // TODO: add error handling
+
+    this->parameters.ur_m_l = mantissa_length;
+    this->parameters.ur_e_l = exponent_length;
+}
+void ira::setWorkingPrecision(unsigned long mantissa_length, unsigned long exponent_length){
+
+    // TODO: add error handling
+
+    this->parameters.u_m_l = mantissa_length;
+    this->parameters.u_e_l = exponent_length;
+}
+
 /**
  * Sets the system matrix of the ira object to an identity matrix of a custom size.
  *
  * @param mantissa_length the size of the mantissa of the elements of the matrix
  * @param exponent_length the size of the exponent of the elements of the matrix
  */
-void ira::setUnitaryMatrix(unsigned long mantissa_length, unsigned long exponent_length) {
+void ira::setUnitaryMatrix() {
 
+    // TODO: previously declear one and zero
     for(unsigned long i = 0; i <  this->n; i++){
         for(unsigned long j = 0; j < this->n; j++){
             if(i == j){
-                this->A[get_idx(i, j)] |= mps(mantissa_length, exponent_length, 1);
+                this->A[get_idx(i, j)] |= mps(this->parameters.ur_m_l, this->parameters.ur_e_l, 1);
             } else {
-                this->A[get_idx(i, j)] |= mps(mantissa_length, exponent_length, 0);
+                this->A[get_idx(i, j)] |= mps(this->parameters.ur_m_l, this->parameters.ur_e_l, 0);
             }
         }
     }
@@ -81,7 +119,7 @@ void ira::setUnitaryMatrix(unsigned long mantissa_length, unsigned long exponent
  * @param exponent_length the size of the exponent of the elements of the matrix
  * @param new_matrix the new matrix to which the system matrix should be set.
  */
-void ira::setMatrix(unsigned long mantissa_length, unsigned long exponent_length, vector<double> new_matrix) {
+void ira::setMatrix(vector<double> new_matrix) {
 
     if (new_matrix.size() > this->n * this->n) {
         throw std::invalid_argument("ERROR: in setMatrix: new_matrix too large");
@@ -91,7 +129,7 @@ void ira::setMatrix(unsigned long mantissa_length, unsigned long exponent_length
     }
 
     for(unsigned i = 0; i < new_matrix.size(); i++){
-        this->A[i] |= mps(mantissa_length, exponent_length, new_matrix[i]);
+        this->A[i] |= mps(this->parameters.ur_m_l, this->parameters.ur_e_l, new_matrix[i]);
     }
 }
 
@@ -102,19 +140,15 @@ void ira::setMatrix(unsigned long mantissa_length, unsigned long exponent_length
  * @param mantissa_length the size of the mantissa of the elements of the matrix
  * @param exponent_length the size of the exponent of the elements of the matrix
  */
-void ira::setRandomMatrix(unsigned long mantissa_length, unsigned long exponent_length){
-
-    if (exponent_length < 1) {
-        throw std::invalid_argument("ERROR: setRandomMatrix: exponent too small");
-    }
+void ira::setRandomMatrix(){
 
     std::random_device rd;
     std::mt19937 mt(rd());
-    std::uniform_real_distribution<double> dist(this->random_range.random_lower_bound, this->random_range.random_upper_bound);
+    std::uniform_real_distribution<double> dist(this->parameters.random_lower_bound, this->parameters.random_upper_bound);
 
 
     for(unsigned i = 0; i < (this->n * this->n); i++){
-        this->A[i] |= mps(mantissa_length, exponent_length, dist(mt));
+        this->A[i] |= mps(this->parameters.ur_m_l, this->parameters.ur_e_l, dist(mt));
     }
 }
 
@@ -312,7 +346,7 @@ void ira::setU(unsigned long mantissa_length, unsigned long exponent_length, vec
 
     std::random_device rd;
     std::mt19937 mt(rd());
-    std::uniform_real_distribution<double> dist(this->random_range.random_lower_bound, this->random_range.random_upper_bound);
+    std::uniform_real_distribution<double> dist(this->parameters.random_lower_bound, this->parameters.random_upper_bound);
 
     for(unsigned i = 0; i < size; i++){
         ret.emplace_back(mantissa_length, exponent_length, dist(mt));
@@ -805,13 +839,20 @@ void ira::PLU_decomposition(unsigned long mantissa_precision, unsigned long expo
  * @return the approximate solution of the system as an mps object.
  */
 [[nodiscard]] vector<mps>
-ira::iterativeRefinementLU(const vector<mps> &b, unsigned long u[2], unsigned long ul[2], unsigned long n_max, const vector<mps> &x_expected_mps, const mps& precision) {
+ira::iterativeRefinementLU(const vector<mps> &b, unsigned long n_max, const vector<mps> &x_expected_mps, const mps& precision) {
 
-    // set some initial variables
+    // set evaluation parameters to zero
     //-------------------------------
     this->evaluation.IR_area_relativeError = 0;
     this->evaluation.IR_area_precision = 0;
-    vector<unsigned long> ur{A[0].mantissa_length, A[0].exponent_length};
+    //-------------------------------
+
+    // set precisions (for easier naming)
+    //-------------------------------
+    vector<unsigned long> ur{this->parameters.ur_m_l, this->parameters.ur_e_l};
+    vector<unsigned long> u{this->parameters.u_m_l, this->parameters.u_e_l};
+    vector<unsigned long> ul{this->parameters.ul_m_l, this->parameters.ul_e_l};
+    //-------------------------------
 
     if(not x_expected_mps.empty()){
         auto x_expected_d = mps_to_double(x_expected_mps);

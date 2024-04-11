@@ -11,8 +11,8 @@ TEST(unitary_matrix, init_2x2) {
     unsigned long mantissa_length = 53;
     unsigned long exponent_length = 11;
 
-    ira IRA(2);
-    IRA.setUnitaryMatrix(mantissa_length, exponent_length);
+    ira IRA(2, mantissa_length, exponent_length);
+    IRA.setUnitaryMatrix();
 
     EXPECT_EQ(IRA.to_string('A'), "1.000000, 0.000000, 0.000000, 1.000000");
     EXPECT_EQ(mantissa_length, IRA.getMatrixElement(0).mantissa_length);
@@ -24,8 +24,8 @@ TEST(unitary_matrix, init_3x3) {
     unsigned long mantissa_length = 53;
     unsigned long exponent_length = 11;
 
-    ira IRA(3);
-    IRA.setUnitaryMatrix(mantissa_length, exponent_length);
+    ira IRA(3, mantissa_length, exponent_length);
+    IRA.setUnitaryMatrix();
 
     EXPECT_EQ(IRA.to_string('A'), "1.000000, 0.000000, 0.000000, 0.000000, 1.000000, 0.000000, 0.000000, 0.000000, 1.000000");
     EXPECT_EQ(mantissa_length, IRA.getMatrixElement(0).mantissa_length);
@@ -39,8 +39,8 @@ TEST(custom_matrix, init_2x2) {
 
     vector<double> new_matrix{ 10, 20, 30, 40 };
 
-    ira IRA(2);
-    IRA.setMatrix(mantissa_length, exponent_length, new_matrix);
+    ira IRA(2, mantissa_length, exponent_length);
+    IRA.setMatrix(new_matrix);
 
     EXPECT_EQ(IRA.to_string('A'), "10.000000, 20.000000, 30.000000, 40.000000");
     EXPECT_EQ(mantissa_length, IRA.getMatrixElement(0).mantissa_length);
@@ -54,8 +54,8 @@ TEST(custom_matrix, init_3x3) {
 
     vector<double> new_matrix{ 10, 20, 30, 40, 50, 60, 70, 80, 90};
 
-    ira IRA(3);
-    IRA.setMatrix(mantissa_length, exponent_length, new_matrix);
+    ira IRA(3, mantissa_length, exponent_length);
+    IRA.setMatrix(new_matrix);
 
     EXPECT_EQ(IRA.to_string('A'), "10.000000, 20.000000, 30.000000, 40.000000, 50.000000, 60.000000, 70.000000, 80.000000, 90.000000");
     EXPECT_EQ(mantissa_length, IRA.getMatrixElement(0).mantissa_length);
@@ -69,13 +69,13 @@ TEST(custom_matrix, new_matrix_too_large) {
 
     vector<double> new_matrix{ 10, 20, 30, 40, 50, 60, 70, 80, 90, 100};
 
-    ira IRA(3);
+    ira IRA(3, mantissa_length, exponent_length);
 
     bool test = false;
 
     try
     {
-        IRA.setMatrix(mantissa_length, exponent_length, new_matrix);
+        IRA.setMatrix(new_matrix);
     }
 
     catch (std::invalid_argument& e)
@@ -93,13 +93,13 @@ TEST(custom_matrix, new_matrix_too_small) {
 
     vector<double> new_matrix{ 10, 20, 30, 40, 50, 60, 70, 80};
 
-    ira IRA(3);
+    ira IRA(3, mantissa_length, exponent_length);
 
     bool test = false;
 
     try
     {
-        IRA.setMatrix(mantissa_length, exponent_length, new_matrix);
+        IRA.setMatrix(new_matrix);
     }
 
     catch (std::invalid_argument& e)
@@ -110,18 +110,6 @@ TEST(custom_matrix, new_matrix_too_small) {
     EXPECT_EQ(true, test);
 }
 
-TEST(setRandomMatrix, exception_exponent_too_small) {
-
-    unsigned long n = 3;
-
-    unsigned long mantissa_length = 52;
-    unsigned long exponent_length = 0;
-
-    ira IRA(n);
-
-    EXPECT_ANY_THROW(IRA.setRandomMatrix(mantissa_length, exponent_length));
-}
-
 TEST(setRandomMatrix, simple_1) {
 
     unsigned long n = 3;
@@ -129,8 +117,8 @@ TEST(setRandomMatrix, simple_1) {
     unsigned long mantissa_length = 52;
     unsigned long exponent_length = 11;
 
-    ira IRA(n);
-    IRA.setRandomMatrix(mantissa_length, exponent_length);
+    ira IRA(n, mantissa_length, exponent_length);
+    IRA.setRandomMatrix();
 
     for(unsigned long i = 0; i < n * n; i++){
         EXPECT_TRUE(IRA.getMatrixElement(i).getValue() <= 10);
@@ -158,8 +146,8 @@ TEST(setRandomMatrix, simple_2) {
     unsigned long mantissa_length = 23;
     unsigned long exponent_length = 8;
 
-    ira IRA(n);
-    IRA.setRandomMatrix(mantissa_length, exponent_length);
+    ira IRA(n, mantissa_length, exponent_length);
+    IRA.setRandomMatrix();
 
     for(unsigned long i = 0; i < n * n; i++){
         EXPECT_TRUE(IRA.getMatrixElement(i).getValue() <= 10);
@@ -187,10 +175,10 @@ TEST(setRandomMatrix, uniqueness_1) {
     unsigned long mantissa_length = 23;
     unsigned long exponent_length = 8;
 
-    ira IRA_1(n);
-    ira IRA_2(n);
-    IRA_1.setRandomMatrix(mantissa_length, exponent_length);
-    IRA_2.setRandomMatrix(mantissa_length, exponent_length);
+    ira IRA_1(n, mantissa_length, exponent_length);
+    ira IRA_2(n, mantissa_length, exponent_length);
+    IRA_1.setRandomMatrix();
+    IRA_2.setRandomMatrix();
 
     for(unsigned long i = 0; i < n * n; i++){
         EXPECT_TRUE(IRA_1.getMatrixElement(i).getValue() <= 10);
@@ -222,8 +210,8 @@ TEST(getMatrixElement, idx_too_large) {
 
     vector<double> new_matrix{ 10, 20, 30, 40, 50, 60, 70, 80, 90};
 
-    ira IRA(3);
-    IRA.setMatrix(mantissa_length, exponent_length, new_matrix);
+    ira IRA(3, mantissa_length, exponent_length);
+    IRA.setMatrix(new_matrix);
 
     bool test = false;
 
@@ -247,8 +235,8 @@ TEST(getMatrixElement, simple_1) {
 
     vector<double> new_matrix{ 10, 20, 30, 40, 50, 60, 70, 80, 90};
 
-    ira IRA(3);
-    IRA.setMatrix(mantissa_length, exponent_length, new_matrix);
+    ira IRA(3, mantissa_length, exponent_length);
+    IRA.setMatrix(new_matrix);
 
     auto tmp = IRA.getMatrixElement(8);
 
@@ -262,7 +250,7 @@ TEST(setL, simple_1) {
 
     vector<double> new_L{ 10, 20, 30, 40, 50, 60, 70, 80, 90};
 
-    ira IRA(3);
+    ira IRA(3, mantissa_length, exponent_length);
 
     IRA.setL(mantissa_length, exponent_length, new_L);
 
@@ -277,7 +265,7 @@ TEST(setL, exception_L_too_large) {
 
     vector<double> new_L{ 10, 20, 30, 40, 50, 60, 70, 80, 90, 100};
 
-    ira IRA(3);
+    ira IRA(3, mantissa_length, exponent_length);
 
     EXPECT_ANY_THROW(IRA.setL(mantissa_length, exponent_length, new_L));
 }
@@ -289,7 +277,7 @@ TEST(setL, exception_L_too_small) {
 
     vector<double> new_L{ 10, 20, 30, 40, 50, 60, 70, 80};
 
-    ira IRA(3);
+    ira IRA(3, mantissa_length, exponent_length);
 
     EXPECT_ANY_THROW(IRA.setL(mantissa_length, exponent_length, new_L));
 }
@@ -301,7 +289,7 @@ TEST(setU, simple_1) {
 
     vector<double> new_U{ 10, 20, 30, 40, 50, 60, 70, 80, 90};
 
-    ira IRA(3);
+    ira IRA(3, mantissa_length, exponent_length);
 
     IRA.setU(mantissa_length, exponent_length, new_U);
 
@@ -316,7 +304,7 @@ TEST(setL, exception_U_too_large) {
 
     vector<double> new_U{ 10, 20, 30, 40, 50, 60, 70, 80, 90, 100};
 
-    ira IRA(3);
+    ira IRA(3, mantissa_length, exponent_length);
 
     EXPECT_ANY_THROW(IRA.setU(mantissa_length, exponent_length, new_U));
 }
@@ -328,7 +316,7 @@ TEST(setL, exception_U_too_small) {
 
     vector<double> new_U{ 10, 20, 30, 40, 50, 60, 70, 80};
 
-    ira IRA(3);
+    ira IRA(3, mantissa_length, exponent_length);
 
     EXPECT_ANY_THROW(IRA.setU(mantissa_length, exponent_length, new_U));
 }
@@ -528,7 +516,7 @@ TEST(castVectorElements, double_to_float_1) {
 // -------------------------------------
 TEST(to_string, exception_nullptr) {
 
-    ira IRA(3);
+    ira IRA(3, 53, 11);
 
     EXPECT_ANY_THROW(auto tmp = IRA.to_string('A'));
     EXPECT_ANY_THROW(auto tmp = IRA.to_string('L'));
@@ -543,8 +531,8 @@ TEST(to_string, exception_invalid_argument) {
 
     vector<double> new_matrix{ 10, 20, 30, 40, 50, 60, 70, 80, 90};
 
-    ira IRA(3);
-    IRA.setMatrix(mantissa_length, exponent_length, new_matrix);
+    ira IRA(3, mantissa_length, exponent_length);
+    IRA.setMatrix(new_matrix);
 
     EXPECT_ANY_THROW(auto tmp = IRA.to_string('Z'));
 }
@@ -556,8 +544,8 @@ TEST(to_string, round_to_precision_zero) {
 
     vector<double> new_matrix{ 10, 20, 30, 40, 50, 60, 70, 80, 90};
 
-    ira IRA(3);
-    IRA.setMatrix(mantissa_length, exponent_length, new_matrix);
+    ira IRA(3, mantissa_length, exponent_length);
+    IRA.setMatrix(new_matrix);
 
     EXPECT_EQ(IRA.to_string('A', 0), "10, 20, 30, 40, 50, 60, 70, 80, 90");
     EXPECT_EQ(mantissa_length, IRA.getMatrixElement(0).mantissa_length);
@@ -571,8 +559,8 @@ TEST(to_string, round_to_precision_two) {
 
     vector<double> new_matrix{ 10, 20, 30, 40, 50, 60, 70, 80, 90};
 
-    ira IRA(3);
-    IRA.setMatrix(mantissa_length, exponent_length, new_matrix);
+    ira IRA(3, mantissa_length, exponent_length);
+    IRA.setMatrix(new_matrix);
 
     EXPECT_EQ(IRA.to_string('A', 2), "10.00, 20.00, 30.00, 40.00, 50.00, 60.00, 70.00, 80.00, 90.00");
     EXPECT_EQ(mantissa_length, IRA.getMatrixElement(0).mantissa_length);

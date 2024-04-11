@@ -21,7 +21,7 @@ TEST(solveLU, auto_overprecision_double){
 
     for(unsigned long n = start; n <= number_of_tests; n++){
 
-        ira IRA(n);
+        ira IRA(n, u[0], u[1]);
 
         // Set up A
         //--------------------------------
@@ -32,7 +32,7 @@ TEST(solveLU, auto_overprecision_double){
                 new_A.push_back((double) ((j+i)%n));
             }
         }
-        IRA.setMatrix(u[0], u[1], new_A);
+        IRA.setMatrix(new_A);
         //--------------------------------
 
         // Set up x_should;
@@ -85,7 +85,7 @@ TEST(solveLU, auto_overprecision_float){
 
     for(unsigned long n = start; n <= number_of_tests; n++){
 
-        ira IRA(n);
+        ira IRA(n, u[0], u[1]);
 
         // Set up A
         //--------------------------------
@@ -96,7 +96,7 @@ TEST(solveLU, auto_overprecision_float){
                 new_A.push_back((double) ((j+i)%n));
             }
         }
-        IRA.setMatrix(u[0], u[1], new_A);
+        IRA.setMatrix(new_A);
         //--------------------------------
 
         // Set up x_should;
@@ -148,7 +148,7 @@ TEST(solveLU, auto_double){
 
     for(unsigned long n = start; n <= number_of_tests; n++){
 
-        ira IRA(n);
+        ira IRA(n, u[0], u[1]);
 
         // Set up A
         //--------------------------------
@@ -159,7 +159,7 @@ TEST(solveLU, auto_double){
                 new_A.push_back((double) ((j+i)%n));
             }
         }
-        IRA.setMatrix(u[0], u[1], new_A);
+        IRA.setMatrix(new_A);
         //--------------------------------
 
         // Set up x_should;
@@ -219,7 +219,7 @@ TEST(solveLU, auto_float){
 
     for(unsigned long n = start; n <= number_of_tests; n++){
 
-        ira IRA(n);
+        ira IRA(n, u[0], u[1]);
 
         // Set up A
         //--------------------------------
@@ -230,7 +230,7 @@ TEST(solveLU, auto_float){
                 new_A.push_back((double) ((j+i)%n));
             }
         }
-        IRA.setMatrix(u[0], u[1], new_A);
+        IRA.setMatrix(new_A);
         //--------------------------------
 
         // Set up x_should;
@@ -290,11 +290,11 @@ TEST(solveLU, random_float){
 
     for(unsigned long m = 0; m <= number_of_tests; m++){
 
-        ira IRA(matrix_size);
+        ira IRA(matrix_size, u[0], u[1]);
 
         // Set up A
         //--------------------------------
-        IRA.setRandomMatrix(u[0], u[1]);
+        IRA.setRandomMatrix();
         //--------------------------------
 
         // Set up x_should;
@@ -358,11 +358,11 @@ TEST(solveLU, random_double){
 
     for(unsigned long m = 0; m <= number_of_tests; m++){
 
-        ira IRA(matrix_size);
+        ira IRA(matrix_size, u[0], u[1]);
 
         // Set up A
         //--------------------------------
-        IRA.setRandomMatrix(u[0], u[1]);
+        IRA.setRandomMatrix();
         //--------------------------------
 
         // Set up x_should;
@@ -426,11 +426,11 @@ TEST(solveLU, DISABLED_random_distana_float){
 
     for(unsigned long m = 0; m <= number_of_tests; m++){
 
-        ira IRA(matrix_size);
+        ira IRA(matrix_size, u[0], u[1]);
 
         // Set up A
         //--------------------------------
-        IRA.setRandomMatrix(u[0], u[1]);
+        IRA.setRandomMatrix();
         //--------------------------------
 
         // Set up x_should;
@@ -502,11 +502,11 @@ TEST(solveLU, DISABLED_random_distana_double){
 
     for(unsigned long m = 0; m <= number_of_tests; m++){
 
-        ira IRA(matrix_size);
+        ira IRA(matrix_size, u[0], u[1]);
 
         // Set up A
         //--------------------------------
-        IRA.setRandomMatrix(u[0], u[1]);
+        IRA.setRandomMatrix();
         //--------------------------------
 
         // Set up x_should;
@@ -575,11 +575,11 @@ TEST(solveLU, random_LUcompare_double){
 
     for(unsigned long m = 0; m <= number_of_tests; m++){
 
-        ira IRA(matrix_size);
+        ira IRA(matrix_size, 52, 11);
 
         // Set up A
         //--------------------------------
-        IRA.setRandomMatrix(52, 11);
+        IRA.setRandomMatrix();
         //--------------------------------
 
         // Set up x_should
@@ -645,7 +645,9 @@ TEST(iterativeRefinementLU, auto_double){
 
     for(unsigned long n = start_matrix_size; n <= last_matrix_size; n++){
 
-        ira IRA(n);
+        ira IRA(n, ur[0], ur[1]);
+        IRA.setWorkingPrecision(u[0], u[1]);
+        IRA.setUL(ul[0], ul[1]);
 
         // Set up A
         //--------------------------------
@@ -656,7 +658,7 @@ TEST(iterativeRefinementLU, auto_double){
                 new_A.push_back((double) ((j+i)%n));
             }
         }
-        IRA.setMatrix(ur[0], ur[1], new_A);
+        IRA.setMatrix(new_A);
         //--------------------------------
 
          // Set up x_should;
@@ -683,7 +685,7 @@ TEST(iterativeRefinementLU, auto_double){
 
         // solve system
         //--------------------------------
-        auto x = IRA.iterativeRefinementLU(b, u, ul, 10);
+        auto x = IRA.iterativeRefinementLU(b, 10);
         auto x_result = ira::mps_to_double(x);
         //--------------------------------
 
@@ -719,7 +721,9 @@ TEST(iterativeRefinementLU, auto_float){
 
     for(unsigned long n = start_matrix_size; n <= last_matrix_size; n++){
 
-        ira IRA(n);
+        ira IRA(n, ur[0], ur[1]);
+        IRA.setWorkingPrecision(u[0], u[1]);
+        IRA.setUL(ul[0], ul[1]);
 
         // Set up A
         //--------------------------------
@@ -730,7 +734,7 @@ TEST(iterativeRefinementLU, auto_float){
                 new_A.push_back((double) ((j+i)%n));
             }
         }
-        IRA.setMatrix(ur[0], ur[1], new_A);
+        IRA.setMatrix(new_A);
         //--------------------------------
 
         // Set up x_should;
@@ -757,7 +761,7 @@ TEST(iterativeRefinementLU, auto_float){
 
         // solve system
         //--------------------------------
-        auto x = IRA.iterativeRefinementLU(b, u, ul, 10);
+        auto x = IRA.iterativeRefinementLU(b, 10);
         auto x_result = ira::mps_to_double(x);
         //--------------------------------
 
@@ -795,11 +799,13 @@ TEST(iterativeRefinementLU, random_double){
 
     for(unsigned long n = start_matrix_size; n <= last_matrix_size; n++){
 
-        ira IRA(n);
+        ira IRA(n, ur[0], ur[1]);
+        IRA.setWorkingPrecision(u[0], u[1]);
+        IRA.setUL(ul[0], ul[1]);
 
         // Set up A
         //--------------------------------
-        IRA.setRandomMatrix(ur[0], ur[1]);
+        IRA.setRandomMatrix();
         //--------------------------------
 
         // Set up x_should;
@@ -829,7 +835,7 @@ TEST(iterativeRefinementLU, random_double){
 
         // solve system
         //--------------------------------
-        auto x = IRA.iterativeRefinementLU(b, u, ul, n_max);
+        auto x = IRA.iterativeRefinementLU(b, n_max);
         auto x_result = ira::mps_to_double(x);
         //--------------------------------
 
@@ -865,11 +871,13 @@ TEST(iterativeRefinementLU, random_float){
 
     for(unsigned long n = start_matrix_size; n <= last_matrix_size; n++){
 
-        ira IRA(n);
+        ira IRA(n, ur[0], ur[1]);
+        IRA.setWorkingPrecision(u[0], u[1]);
+        IRA.setUL(ul[0], ul[1]);
 
         // Set up A
         //--------------------------------
-        IRA.setRandomMatrix(ur[0], ur[1]);
+        IRA.setRandomMatrix();
         //--------------------------------
 
         // Set up x_should;
@@ -899,7 +907,7 @@ TEST(iterativeRefinementLU, random_float){
 
         // solve system
         //--------------------------------
-        auto x = IRA.iterativeRefinementLU(b, u, ul, 10);
+        auto x = IRA.iterativeRefinementLU(b, 10);
         auto x_result = ira::mps_to_double(x);
         //--------------------------------
 
