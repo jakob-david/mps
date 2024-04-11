@@ -18,7 +18,7 @@ using namespace std;
  *
  * @param n the size of the system matrix.
  */
-ira::ira(unsigned long n, unsigned long u_mantissa_length, unsigned long u_exponent_length){
+ira::ira(unsigned long n, unsigned long ur_mantissa_length, unsigned long ur_exponent_length){
 
     // TODO: do error handling
 
@@ -32,8 +32,8 @@ ira::ira(unsigned long n, unsigned long u_mantissa_length, unsigned long u_expon
 
     this->parameters.max_iter = 10;     // Must be 10 because of unit tests.
 
-    this->parameters.ur_m_l = u_mantissa_length;
-    this->parameters.ur_e_l = u_exponent_length;
+    this->parameters.ur_m_l = ur_mantissa_length;
+    this->parameters.ur_e_l = ur_exponent_length;
 
     this->parameters.expected_result_present = false;       // after construction no result vector is present.
     this->parameters.expected_precision_present = false;    // after construction no expected precision is present.
@@ -119,6 +119,28 @@ void ira::setLowerPrecision(unsigned long mantissa_length, unsigned long exponen
 }
 
 /**
+ * Sets the size of the mantissa and exponent of the working precision (u)
+ *
+ * Throws Exception:    When the mantissa is smaller than 1.
+ *                      When the exponent is smaller than 2.
+ *
+ * @param mantissa_length the new mantissa size.
+ * @param exponent_length the new exponent size. .
+ */
+void ira::setWorkingPrecision(unsigned long mantissa_length, unsigned long exponent_length){
+
+    if (mantissa_length <= 0) {
+        throw std::invalid_argument("ERROR: in setWorkingPrecision : mantissa size too small");
+    }
+    if (exponent_length <= 1) {
+        throw std::invalid_argument("ERROR: in setWorkingPrecision : exponent size too small");
+    }
+
+    this->parameters.u_m_l = mantissa_length;
+    this->parameters.u_e_l = exponent_length;
+}
+
+/**
  * Sets the size of the mantissa and exponent of the upper precision (ur)
  *
  * Throws Exception:    When the mantissa is smaller than 1.
@@ -138,6 +160,34 @@ void ira::setUpperPrecision(unsigned long mantissa_length, unsigned long exponen
 
     this->parameters.ur_m_l = mantissa_length;
     this->parameters.ur_e_l = exponent_length;
+}
+
+/**
+ * Sets the expected result of the linear system x. (Ax=b)
+ * Its also additionally converts the vector to a double vector and saves it sepperately.
+ *
+ * Throws Exception:    When the vector is empty.
+ *                      When the dimensions do not match.
+ *
+ * @param new_expected_x
+ */
+void ira::setExpectedX(const vector<mps>& new_expected_x){
+
+    if (new_expected_x.empty()) {
+        throw std::invalid_argument("ERROR: in setExpectedX : input vector is empty");
+    }
+    if (new_expected_x.size() != this->n) {
+        throw std::invalid_argument("ERROR: in setExpectedX : input vector is empty");
+    }
+
+    this->parameters.expected_result_present = true;
+
+    this->parameters.x_expected_mps.clear();
+    for(const auto & idx : new_expected_x){
+        this->parameters.x_expected_mps.emplace_back(idx);
+    }
+
+    this->parameters.x_expected_double = ira::mps_to_double(new_expected_x);
 }
 
 
@@ -185,6 +235,22 @@ vector<unsigned long> ira::getLowerPrecision() const {
 }
 
 /**
+ * Gets the length of the mantissa and exponent of the working precision (u) inside a n=2 vector.
+ * The first entry is the mantissa length and the second the exponent length.
+ *
+ * @return vector containing the sizes for mantissa and exponent.
+ */
+vector<unsigned long> ira::getWorkingPrecision() const {
+
+    vector<unsigned long> ret;
+
+    ret.push_back(this->parameters.u_m_l);
+    ret.push_back(this->parameters.u_e_l);
+
+    return ret;
+}
+
+/**
  * Gets the length of the mantissa and exponent of the upper precision (ur) inside a n=2 vector.
  * The first entry is the mantissa length and the second the exponent length.
  *
@@ -199,33 +265,54 @@ vector<unsigned long> ira::getUpperPrecision() const {
 
     return ret;
 }
+
+/**
+ * Gets the expected result (x) as an vector consisting of mps objects.
+ *
+ * Throws Exception:    When no expected result was set.
+ *
+ * @return the expected result as vector<mps>
+ */
+vector<mps> ira::getExpectedX_mps() const{
+
+    if (not this->parameters.expected_result_present) {
+        throw std::invalid_argument("ERROR: in getExpectedX_mps : no expected result present");
+    }
+
+    vector<mps> ret;
+    for(const auto & element : this->parameters.x_expected_mps){
+        ret.push_back(element);
+    }
+
+    return ret;
+}
+
+/**
+ * Gets the expected result (x) as an vector consisting of doubles.
+ *
+ * Throws Exception:    When no expected result was set.
+ *
+ * @return the expected result as vector<double>
+ */
+vector<double> ira::getExpectedX_double() const{
+
+    if (not this->parameters.expected_result_present) {
+        throw std::invalid_argument("ERROR: in getExpectedX_double : no expected result present");
+    }
+
+    vector<double> ret;
+    for(const auto & element : this->parameters.x_expected_mps){
+        ret.push_back(element.getValue());
+    }
+
+    return ret;
+}
 //-------------------------------
 
 
 
 
 
-
-void ira::setWorkingPrecision(unsigned long mantissa_length, unsigned long exponent_length){
-
-    // TODO: add error handling
-
-    this->parameters.u_m_l = mantissa_length;
-    this->parameters.u_e_l = exponent_length;
-}
-void ira::setExpectedX(const vector<mps>& new_expected_x){
-
-    // TODO: add error handling
-
-    this->parameters.expected_result_present = true;
-
-    this->parameters.x_expected_mps.clear();
-    for(const auto & idx : new_expected_x){
-        this->parameters.x_expected_mps.emplace_back(idx);
-    }
-
-    this->parameters.x_expected_double = ira::mps_to_double(new_expected_x);
-}
 void ira::setExpectedPrecision(const mps& new_expected_precision){
 
     // TODO: error handling
