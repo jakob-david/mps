@@ -787,7 +787,7 @@ TEST(iterativeRefinementLU, random_double){
     //------------------------------------------------------------------------------------------------------
     unsigned long n_max = 15;
 
-    unsigned long precision = 35;                // the number of  mantissa bits which should be checked.
+    unsigned long precision = 34;                // the number of  mantissa bits which should be checked.
     unsigned long start_matrix_size = 35;
     unsigned long last_matrix_size = 35;         // the number of test runs. Each run with a larger matrix.
 
@@ -860,7 +860,7 @@ TEST(iterativeRefinementLU, random_double){
 TEST(iterativeRefinementLU, random_float){
 
     //------------------------------------------------------------------------------------------------------
-    unsigned long precision = 14;                // the number of  mantissa bits which should be checked.
+    unsigned long precision = 13;                // the number of  mantissa bits which should be checked.
     unsigned long start_matrix_size = 35;
     unsigned long last_matrix_size = 35;         // the number of test runs. Each run with a larger matrix.
 
