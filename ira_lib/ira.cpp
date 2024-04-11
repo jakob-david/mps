@@ -169,25 +169,25 @@ void ira::setUpperPrecision(unsigned long mantissa_length, unsigned long exponen
  * Throws Exception:    When the vector is empty.
  *                      When the dimensions do not match.
  *
- * @param new_expected_x
+ * @param new_expected_result
  */
-void ira::setExpectedX(const vector<mps>& new_expected_x){
+void ira::setExpectedResult(const vector<mps>& new_expected_result){
 
-    if (new_expected_x.empty()) {
-        throw std::invalid_argument("ERROR: in setExpectedX : input vector is empty");
+    if (new_expected_result.empty()) {
+        throw std::invalid_argument("ERROR: in setExpectedResult : input vector is empty");
     }
-    if (new_expected_x.size() != this->n) {
-        throw std::invalid_argument("ERROR: in setExpectedX : input vector is empty");
+    if (new_expected_result.size() != this->n) {
+        throw std::invalid_argument("ERROR: in setExpectedResult : input vector is empty");
     }
 
     this->parameters.expected_result_present = true;
 
-    this->parameters.x_expected_mps.clear();
-    for(const auto & idx : new_expected_x){
-        this->parameters.x_expected_mps.emplace_back(idx);
+    this->parameters.expected_result_mps.clear();
+    for(const auto & idx : new_expected_result){
+        this->parameters.expected_result_mps.emplace_back(idx);
     }
 
-    this->parameters.x_expected_double = ira::mps_to_double(new_expected_x);
+    this->parameters.expected_result_double = ira::mps_to_double(new_expected_result);
 }
 
 
@@ -273,14 +273,15 @@ vector<unsigned long> ira::getUpperPrecision() const {
  *
  * @return the expected result as vector<mps>
  */
-vector<mps> ira::getExpectedX_mps() const{
+vector<mps> ira::getExpectedResult_mps() const{
 
     if (not this->parameters.expected_result_present) {
-        throw std::invalid_argument("ERROR: in getExpectedX_mps : no expected result present");
+        throw std::invalid_argument("ERROR: in getExpectedResult_mps : no expected result present");
     }
 
     vector<mps> ret;
-    for(const auto & element : this->parameters.x_expected_mps){
+    ret.reserve(this->parameters.expected_result_mps.size());
+    for(const auto & element : this->parameters.expected_result_mps){
         ret.push_back(element);
     }
 
@@ -294,14 +295,15 @@ vector<mps> ira::getExpectedX_mps() const{
  *
  * @return the expected result as vector<double>
  */
-vector<double> ira::getExpectedX_double() const{
+vector<double> ira::getExpectedResult_double() const{
 
     if (not this->parameters.expected_result_present) {
-        throw std::invalid_argument("ERROR: in getExpectedX_double : no expected result present");
+        throw std::invalid_argument("ERROR: in getExpectedResult_double : no expected result present");
     }
 
     vector<double> ret;
-    for(const auto & element : this->parameters.x_expected_mps){
+    ret.reserve(this->parameters.expected_result_mps.size());
+    for(const auto & element : this->parameters.expected_result_mps){
         ret.push_back(element.getValue());
     }
 
@@ -1163,7 +1165,7 @@ ira::iterativeRefinementLU(const vector<mps> &b) {
         if(this->parameters.expected_result_present) {
             for (unsigned long element_id = 0; element_id < this->n; element_id++) {
                 this->evaluation.IR_relativeError.push_back(
-                        x[element_id].getRelativeError_double(this->parameters.x_expected_mps[element_id]));
+                        x[element_id].getRelativeError_double(this->parameters.expected_result_mps[element_id]));
                 this->evaluation.IR_area_relativeError += this->evaluation.IR_relativeError.back();
             }
         }

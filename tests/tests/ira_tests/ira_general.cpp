@@ -121,10 +121,10 @@ TEST(ExpectedResult, simple_1) {
 
     vector<double> expected_result_double = ira::mps_to_double(expected_result_mps);
 
-    IRA.setExpectedX(expected_result_mps);
+    IRA.setExpectedResult(expected_result_mps);
 
-    EXPECT_EQ(expected_result_mps, IRA.getExpectedX_mps());
-    EXPECT_EQ(expected_result_double, IRA.getExpectedX_double());
+    EXPECT_EQ(expected_result_mps, IRA.getExpectedResult_mps());
+    EXPECT_EQ(expected_result_double, IRA.getExpectedResult_double());
 }
 
 TEST(ExpectedResult, exception_empty_vector) {
@@ -136,7 +136,7 @@ TEST(ExpectedResult, exception_empty_vector) {
 
     vector<mps> expected_result_mps;
 
-    EXPECT_ANY_THROW(IRA.setExpectedX(expected_result_mps));
+    EXPECT_ANY_THROW(IRA.setExpectedResult(expected_result_mps));
 }
 
 TEST(ExpectedResult, exception_wrong_dimensions) {
@@ -151,7 +151,7 @@ TEST(ExpectedResult, exception_wrong_dimensions) {
     expected_result_mps.emplace_back(mantissa_length, exponent_length, -2);
     expected_result_mps.emplace_back(mantissa_length, exponent_length, -3);
 
-    EXPECT_ANY_THROW(IRA.setExpectedX(expected_result_mps));
+    EXPECT_ANY_THROW(IRA.setExpectedResult(expected_result_mps));
 }
 
 TEST(ExpectedResult, exception_expected_result_not_set) {
@@ -161,8 +161,8 @@ TEST(ExpectedResult, exception_expected_result_not_set) {
 
     ira IRA(2, mantissa_length, exponent_length);
 
-    EXPECT_ANY_THROW(auto tmp_1 = IRA.getExpectedX_mps());
-    EXPECT_ANY_THROW(auto tmp_2 = IRA.getExpectedX_double());
+    EXPECT_ANY_THROW(auto tmp_1 = IRA.getExpectedResult_mps());
+    EXPECT_ANY_THROW(auto tmp_2 = IRA.getExpectedResult_double());
 }
 
 // setter and getter

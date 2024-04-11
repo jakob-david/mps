@@ -1338,7 +1338,7 @@ TEST(IR, get_evaluation_value_IR_area){
     b.emplace_back(ur[0], ur[1], 235.5745);
 
     auto x_should = IRA.solveLU(b, u);
-    IRA.setExpectedX(x_should);
+    IRA.setExpectedResult(x_should);
 
     auto x = IRA.iterativeRefinementLU(b);
 
@@ -1383,7 +1383,7 @@ TEST(IR, get_evaluation_value_microseconds){
     b.emplace_back(ur[0], ur[1], 235.5745);
 
     auto x_should = IRA.solveLU(b, u);
-    IRA.setExpectedX(x_should);
+    IRA.setExpectedResult(x_should);
 
     auto x = IRA.iterativeRefinementLU(b);
 
