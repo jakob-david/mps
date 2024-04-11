@@ -86,6 +86,7 @@ public:
     void setUpperPrecision(unsigned long mantissa_length, unsigned long exponent_length);
     void setWorkingPrecision(unsigned long mantissa_length, unsigned long exponent_length);
     void setExpectedResult(const vector<mps>& new_expected_result);
+    void setExpectedPrecision(const mps& new_expected_precision);
 
     [[nodiscard]] vector<double> getRandomRange() const;
     [[nodiscard]] unsigned long getMaxIter() const;
@@ -94,11 +95,10 @@ public:
     [[nodiscard]] vector<unsigned long> getWorkingPrecision() const;
     [[nodiscard]] vector<mps> getExpectedResult_mps() const;
     [[nodiscard]] vector<double> getExpectedResult_double() const;
+    [[nodiscard]] mps getExpectedPrecision() const;
     //-------------------------------
 
 
-    // TODO: Test
-    void setExpectedPrecision(const mps& new_expected_precision);
 
     void setUnitaryMatrix();
     void setMatrix(vector<double> new_matrix);

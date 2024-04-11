@@ -164,7 +164,7 @@ void ira::setUpperPrecision(unsigned long mantissa_length, unsigned long exponen
 
 /**
  * Sets the expected result of the linear system x. (Ax=b)
- * Its also additionally converts the vector to a double vector and saves it sepperately.
+ * Its also additionally converts the vector to a double vector and saves it separately.
  *
  * Throws Exception:    When the vector is empty.
  *                      When the dimensions do not match.
@@ -188,6 +188,26 @@ void ira::setExpectedResult(const vector<mps>& new_expected_result){
     }
 
     this->parameters.expected_result_double = ira::mps_to_double(new_expected_result);
+}
+
+/**
+ * Sets the expected precision which is maximal distance between the expected result and the actual result.
+ * If the Floating Point Format does not match with the set upper precision it will be converted accordingly.
+ *
+ * Throws Exception:    When no expected precision was set beforehand.
+ *
+ * @param new_expected_precision the expected precision.
+ */
+void ira::setExpectedPrecision(const mps& new_expected_precision){
+
+    if(not this->parameters.expected_result_present){
+        throw std::invalid_argument("ERROR: in setExpectedPrecision: expected result must be set before expected precision!");
+    }
+
+    this->parameters.expected_precision_present = true;
+
+    this->parameters.expected_precision |= new_expected_precision;
+    this->parameters.expected_precision.cast(this->parameters.ur_m_l, this->parameters.ur_e_l);
 }
 
 
@@ -309,25 +329,29 @@ vector<double> ira::getExpectedResult_double() const{
 
     return ret;
 }
+
+/**
+ * Gets the expected result (x) as an vector consisting of doubles.
+ *
+ * Throws Exception:    When no expected precision was set.
+ *
+ * @return the expected result as vector<double>
+ */
+mps ira::getExpectedPrecision() const{
+
+    if (not this->parameters.expected_precision_present) {
+        throw std::invalid_argument("ERROR: in getExpectedPrecision : no expected precision present");
+    }
+
+    mps ret;
+    ret |= this->parameters.expected_precision;
+
+    return ret;
+}
 //-------------------------------
 
 
 
-
-
-void ira::setExpectedPrecision(const mps& new_expected_precision){
-
-    // TODO: error handling
-
-    if(not this->parameters.expected_result_present){
-        throw std::invalid_argument("ERROR: in setExpectedPrecision: expected result must be set before expected precision!");
-    }
-
-    this->parameters.expected_precision_present = true;
-
-    this->parameters.expected_precision |= new_expected_precision;
-    this->parameters.expected_precision.cast(this->parameters.ur_m_l, this->parameters.ur_e_l);
-}
 
 
 /**

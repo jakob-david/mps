@@ -165,6 +165,51 @@ TEST(ExpectedResult, exception_expected_result_not_set) {
     EXPECT_ANY_THROW(auto tmp_2 = IRA.getExpectedResult_double());
 }
 
+TEST(ExpectedPrecision, simple_1) {
+
+    unsigned long mantissa_length = 23;
+    unsigned long exponent_length = 8;
+
+    ira IRA(2, mantissa_length, exponent_length);
+
+    vector<mps> expected_result_mps;
+    expected_result_mps.emplace_back(mantissa_length, exponent_length, 4);
+    expected_result_mps.emplace_back(mantissa_length, exponent_length, -2);
+    IRA.setExpectedResult(expected_result_mps);
+
+    mps expected_precision(mantissa_length, exponent_length, 0.01);
+    IRA.setExpectedPrecision(expected_precision);
+
+    EXPECT_EQ(expected_precision, IRA.getExpectedPrecision());
+}
+
+TEST(ExpectedPrecision, exception_no_expected_result_set) {
+
+    unsigned long mantissa_length = 23;
+    unsigned long exponent_length = 8;
+
+    ira IRA(2, mantissa_length, exponent_length);
+
+    mps expected_precision(mantissa_length, exponent_length, 0.01);
+
+    EXPECT_ANY_THROW(IRA.setExpectedPrecision(expected_precision));
+}
+
+TEST(ExpectedPrecision, exception_no_expected_precision_set) {
+
+    unsigned long mantissa_length = 23;
+    unsigned long exponent_length = 8;
+
+    ira IRA(2, mantissa_length, exponent_length);
+
+    vector<mps> expected_result_mps;
+    expected_result_mps.emplace_back(mantissa_length, exponent_length, 4);
+    expected_result_mps.emplace_back(mantissa_length, exponent_length, -2);
+    IRA.setExpectedResult(expected_result_mps);
+
+    EXPECT_ANY_THROW(auto tp = IRA.getExpectedPrecision());
+}
+
 // setter and getter
 // -------------------------------------
 TEST(unitary_matrix, init_2x2) {
