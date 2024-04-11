@@ -42,6 +42,28 @@ TEST(MaxIter, simple_1) {
     EXPECT_EQ(max_iter, result);
 }
 
+TEST(LowerPrecision, simple_1) {
+
+    unsigned long mantissa_length = 23;
+    unsigned long exponent_length = 8;
+
+    ira IRA(2, 2, 2);
+    IRA.setLowerPrecision(mantissa_length, exponent_length);
+
+    auto result = IRA.getLowerPrecision();
+
+    EXPECT_EQ(mantissa_length, result[0]);
+    EXPECT_EQ(exponent_length, result[1]);
+}
+
+TEST(LowerPrecision, exception_wrong_input) {
+
+    ira IRA(2, 2, 2);
+
+    EXPECT_ANY_THROW(IRA.setLowerPrecision(0, 12));
+    EXPECT_ANY_THROW(IRA.setLowerPrecision(12, 1));
+}
+
 // setter and getter
 // -------------------------------------
 TEST(unitary_matrix, init_2x2) {

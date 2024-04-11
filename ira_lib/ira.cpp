@@ -71,7 +71,7 @@ ira::~ira() = default;
 /**
  * Sets the lower and upper bound for random value generators.
  *
- * Throws Exception: When lower bound >= upper bound.
+ * Throws Exception:    When lower bound >= upper bound.
  *
  * @param lower_bound the lower bound for the random number generator.
  * @param upper_bound the upper bound for the random number generator.
@@ -95,17 +95,34 @@ void ira::setMaxIter(unsigned long new_max_iter){
 
     this->parameters.max_iter = new_max_iter;
 }
-//-------------------------------
 
-
-
+/**
+ * Sets the size of the mantissa and exponent of the lower precision (ul)
+ *
+ * Throws Exception:    When the mantissa is smaller than 1.
+ *                      When the exponent is smaller than 2.
+ *
+ * @param mantissa_length the new mantissa size.
+ * @param exponent_length the new exponent size. .
+ */
 void ira::setLowerPrecision(unsigned long mantissa_length, unsigned long exponent_length){
 
-    // TODO: add error handling
+    if (mantissa_length <= 0) {
+        throw std::invalid_argument("ERROR: in setLowerPrecision : mantissa size too small");
+    }
+    if (exponent_length <= 1) {
+        throw std::invalid_argument("ERROR: in setLowerPrecision : exponent size too small");
+    }
 
     this->parameters.ul_m_l = mantissa_length;
     this->parameters.ul_e_l = exponent_length;
 }
+//-------------------------------
+
+
+
+
+
 void ira::setUpperPrecision(unsigned long mantissa_length, unsigned long exponent_length){
 
     // TODO: add error handling
@@ -254,7 +271,7 @@ void ira::setU(vector<double> new_U) {
 //-------------------------------
 
 
-// getter
+// parameter getters
 //-------------------------------
 /**
  * Gets the lower and upper bound for random value generators inside a n=2 vector.
@@ -282,6 +299,22 @@ unsigned long ira::getMaxIter() const {
     return this->parameters.max_iter;
 }
 
+/**
+ * Gets the length of the mantissa and exponent of the lower precision (ul) inside a n=2 vector.
+ * The first entry is the mantissa length and the second the exponent length.
+ *
+ * @return vector containing the sizes for mantissa and exponent.
+ */
+vector<unsigned long> ira::getLowerPrecision() const {
+
+    vector<unsigned long> ret;
+
+    ret.push_back(this->parameters.ul_m_l);
+    ret.push_back(this->parameters.ul_e_l);
+
+    return ret;
+}
+//-------------------------------
 
 
 
