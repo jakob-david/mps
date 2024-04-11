@@ -475,7 +475,7 @@ void ira::setU(vector<double> new_U) {
  * @param idx the index of the element in the array.
  * @return the element at the index.
  */
-[[nodiscard]] mps ira::getMatrixElement(unsigned long idx){
+mps ira::getMatrixElement(unsigned long idx){
 
     if (idx >= (this->n * this->n)) {
         throw std::invalid_argument("ERROR: getMatrixElement: idx too large");
@@ -499,7 +499,7 @@ void ira::setU(vector<double> new_U) {
  * @param precision the precision in which the values should be displayed. (-1 = "normal" precision)
  * @return the matrix in an std::string format
  */
-[[nodiscard]] std::string ira::to_string(const char& matrix, const int precision) const {
+string ira::to_string(const char& matrix, const int precision) const {
 
     std::string ret;
 
@@ -590,7 +590,7 @@ void ira::setU(vector<double> new_U) {
  * @param precision the precision in which the values should be displayed. (-1 = "normal" precision)
  * @return the vector in an std::string format.
  */
-[[nodiscard]] std::string ira::to_string(vector<mps> vec, int precision) {
+string ira::to_string(vector<mps> vec, int precision) {
 
     if (vec.empty()) {
         throw std::invalid_argument("ERROR: to_string (vector): a is empty");
@@ -665,7 +665,7 @@ void ira::castSystemMatrix(unsigned long mantissa_length, unsigned long exponent
 
 // array converters
 //-------------------------------
-[[nodiscard]] vector<mps> ira::double_to_mps(unsigned long mantissa_length, unsigned long exponent_length, vector<double> double_vector){
+vector<mps> ira::double_to_mps(unsigned long mantissa_length, unsigned long exponent_length, vector<double> double_vector){
 
     if (double_vector.empty()) {
         throw std::invalid_argument("ERROR: in vectorNorm: double_vector is empty");
@@ -692,7 +692,7 @@ void ira::castSystemMatrix(unsigned long mantissa_length, unsigned long exponent
  * @param mps_vector the vector of mps objects which should be converted.
  * @return a vector consisting of doubles.
  */
-[[nodiscard]] vector<double> ira::mps_to_double(vector<mps> mps_vector){
+vector<double> ira::mps_to_double(vector<mps> mps_vector){
 
     if (mps_vector.empty()) {
         throw std::invalid_argument("ERROR: in mps_to_double: mps_vector is empty");
@@ -713,7 +713,7 @@ void ira::castSystemMatrix(unsigned long mantissa_length, unsigned long exponent
  * @param mps_vector the vector of mps objects which should be converted.
  * @return a vector consisting of floats.
  */
-[[nodiscard]] vector<float> ira::mps_to_float(vector<mps> mps_vector){
+vector<float> ira::mps_to_float(vector<mps> mps_vector){
 
     if (mps_vector.empty()) {
         throw std::invalid_argument("ERROR: in mps_to_float: mps_vector is empty");
@@ -732,7 +732,7 @@ void ira::castSystemMatrix(unsigned long mantissa_length, unsigned long exponent
 
 // getting and calculating vectors
 //-------------------------------
-[[nodiscard]] vector<mps> ira::getRandomVector(unsigned long mantissa_length, unsigned long exponent_length, unsigned long size) const {
+vector<mps> ira::getRandomVector(unsigned long mantissa_length, unsigned long exponent_length, unsigned long size) const {
 
     vector<mps> ret;
 
@@ -751,7 +751,7 @@ void ira::castSystemMatrix(unsigned long mantissa_length, unsigned long exponent
     return ret;
 }
 
-[[nodiscard]] vector<mps> ira::getBVector(vector<mps> x) const {
+vector<mps> ira::getBVector(vector<mps> x) const {
 
     if (this->A.empty()) {
         throw std::invalid_argument("ERROR: in getBVector: system matrix is empty");
@@ -782,7 +782,7 @@ void ira::castSystemMatrix(unsigned long mantissa_length, unsigned long exponent
  * @param a the vector for which the L1 norm should be calculated
  * @return the L1 norm of the vector
  */
-[[nodiscard]] mps ira::vectorNorm_L1(const vector<mps>& a){
+mps ira::vectorNorm_L1(const vector<mps>& a){
 
     if (a.empty()) {
         throw std::invalid_argument("ERROR: in vectorNorm: a is empty");
@@ -812,7 +812,7 @@ void ira::castSystemMatrix(unsigned long mantissa_length, unsigned long exponent
  * @param b the second vector.
  * @return the resulting vector after the addition.
  */
-[[nodiscard]] vector<mps> ira::vectorAddition(const vector<mps>& a, const vector<mps>& b) {
+vector<mps> ira::vectorAddition(const vector<mps>& a, const vector<mps>& b) {
 
     if (a.empty()) {
         throw std::invalid_argument("ERROR: in vectorAddition: a is empty");
@@ -846,7 +846,7 @@ void ira::castSystemMatrix(unsigned long mantissa_length, unsigned long exponent
  * @param b the second vector which is the amount to subtract.
  * @return the resulting vector after the subtraction.
  */
-[[nodiscard]] vector<mps> ira::vectorSubtraction(const vector<mps>& a, const vector<mps>& b) {
+vector<mps> ira::vectorSubtraction(const vector<mps>& a, const vector<mps>& b) {
 
     if (a.empty()) {
         throw std::invalid_argument("ERROR: in vectorSubtraction: a is empty");
@@ -881,7 +881,7 @@ void ira::castSystemMatrix(unsigned long mantissa_length, unsigned long exponent
  * @param x the vector for the multiplication
  * @return the resulting vector after the multiplication.
  */
-[[nodiscard]] vector<mps> ira::matrixVectorProduct(const vector<mps>& D, const vector<mps>& x) {
+vector<mps> ira::matrixVectorProduct(const vector<mps>& D, const vector<mps>& x) {
 
     if (D.empty()) {
         throw std::invalid_argument("ERROR: in matrixVectorProduct: D is empty");
@@ -1007,7 +1007,7 @@ void ira::PLU_decomposition(unsigned long mantissa_precision, unsigned long expo
  * @param b the b vector needed for the substitution.
  * @return the resulting x vector.
  */
-[[nodiscard]] vector<mps> ira::forwardSubstitution(const vector<mps>& b) const {
+vector<mps> ira::forwardSubstitution(const vector<mps>& b) const {
 
     if (this->L.empty()) {
         throw std::invalid_argument("ERROR: in forwardSubstitution: L is empty");
@@ -1042,7 +1042,7 @@ void ira::PLU_decomposition(unsigned long mantissa_precision, unsigned long expo
  * @param b the b vector needed for the substitution.
  * @return the resulting x vector.
  */
-[[nodiscard]] vector<mps> ira::backwardSubstitution(const vector<mps>& b) const {
+vector<mps> ira::backwardSubstitution(const vector<mps>& b) const {
 
     if (this->U.empty()) {
         throw std::invalid_argument("ERROR: in backwardSubstitution: U is empty");
@@ -1081,7 +1081,7 @@ void ira::PLU_decomposition(unsigned long mantissa_precision, unsigned long expo
  * @param u the precision in which the system should be solved.
  * @return the solution of the system as an mps object.
  */
-[[nodiscard]] vector<mps> ira::solveLU(const vector<mps>& b, unsigned long u[2]){
+vector<mps> ira::solveLU(const vector<mps>& b, unsigned long u[2]){
 // TODO: delete u
 
     this->PLU_decomposition(u[0], u[1]);
@@ -1106,7 +1106,7 @@ void ira::PLU_decomposition(unsigned long mantissa_precision, unsigned long expo
  * @param ul the precision in which the LU-decomposition should be performed.
  * @return the approximate solution of the system as an mps object.
  */
-[[nodiscard]] vector<mps> ira::iterativeRefinementLU(const vector<mps> &b) {
+vector<mps> ira::iterativeRefinementLU(const vector<mps> &b) {
 
     // set evaluation parameters to zero
     //-------------------------------
@@ -1218,7 +1218,7 @@ void ira::PLU_decomposition(unsigned long mantissa_precision, unsigned long expo
  * @param b the solution vector of the system.
  * @return the solution of the system.
  */
-[[nodiscard]] vector<double> ira::solveLU_double(const vector<double>& b){
+vector<double> ira::solveLU_double(const vector<double>& b){
 
     // operators   (to avoid subnormal numbers)
     //-------------------------------
