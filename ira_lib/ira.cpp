@@ -665,16 +665,29 @@ void ira::castSystemMatrix(unsigned long mantissa_length, unsigned long exponent
 
 // array converters
 //-------------------------------
+/**
+ * Given a vector consisting of doubles the function returns a new vector consisting of mps objects.
+ * The mantissa and exponent length oft the mps objects can be set
+ *
+ * Throws Exception:    When the input vector is empty.
+ *                      When the mantissa length is too small.
+ *                      When the exponent length is too small.
+ *
+ * @param mantissa_length the new mantissa length of the mps objects
+ * @param exponent_length the new exponent length of the mps objects
+ * @param double_vector the vector of double objects
+ * @return a new vector consisting of mps elements
+ */
 vector<mps> ira::double_to_mps(unsigned long mantissa_length, unsigned long exponent_length, vector<double> double_vector){
 
     if (double_vector.empty()) {
-        throw std::invalid_argument("ERROR: in vectorNorm: double_vector is empty");
+        throw std::invalid_argument("ERROR: in double_to_mps: double_vector is empty");
     }
     if (mantissa_length <= 0) {
-        throw std::invalid_argument("ERROR: in double_to_mps : mantissa size too small");
+        throw std::invalid_argument("ERROR: in double_to_mps : mantissa length too small");
     }
     if (exponent_length <= 1) {
-        throw std::invalid_argument("ERROR: in double_to_mps : exponent size too small");
+        throw std::invalid_argument("ERROR: in double_to_mps : exponent length too small");
     }
 
     vector<mps> ret(double_vector.size(), mps(mantissa_length, exponent_length));
@@ -687,10 +700,12 @@ vector<mps> ira::double_to_mps(unsigned long mantissa_length, unsigned long expo
 }
 
 /**
- * Converts a vector of mps objects to a vector consisting of doubles.
+ * Given a vector consisting of mps objects the function returns a new vector consisting of double objects.
  *
- * @param mps_vector the vector of mps objects which should be converted.
- * @return a vector consisting of doubles.
+ * Throws Exception:    When the input vector is empty.
+ *
+ * @param mps_vector the vector of mps objects.
+ * @return a vector new vector consisting of doubles.
  */
 vector<double> ira::mps_to_double(vector<mps> mps_vector){
 
@@ -708,10 +723,12 @@ vector<double> ira::mps_to_double(vector<mps> mps_vector){
 }
 
 /**
- * Converts a vector of mps objects to a vector consisting of floats.
+ * Given a vector consisting of mps objects the function returns a new vector consisting of float objects.
  *
- * @param mps_vector the vector of mps objects which should be converted.
- * @return a vector consisting of floats.
+ * Throws Exception:    When the input vector is empty.
+ *
+ * @param mps_vector the vector of mps objects.
+ * @return a vector new vector consisting of floats.
  */
 vector<float> ira::mps_to_float(vector<mps> mps_vector){
 
