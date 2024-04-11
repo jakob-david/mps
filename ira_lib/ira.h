@@ -98,8 +98,8 @@ public:
     void setUnitaryMatrix();
     void setMatrix(vector<double> new_matrix);
     void setRandomMatrix();
-    void setL(unsigned long mantissa_length, unsigned long exponent_length, vector<double> new_L);
-    void setU(unsigned long mantissa_length, unsigned long exponent_length, vector<double> new_U);
+    void setL(vector<double> new_L);
+    void setU(vector<double> new_U);
     //-------------------------------
 
     // getter

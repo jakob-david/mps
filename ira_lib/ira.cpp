@@ -197,7 +197,7 @@ void ira::setRandomMatrix(){
  * @param exponent_length the size of the exponent of the elements of the matrix
  * @param new_L the new matrix to which the lower triangular matrix should be set.
  */
-void ira::setL(unsigned long mantissa_length, unsigned long exponent_length, vector<double> new_L) {
+void ira::setL(vector<double> new_L) {
 
     if (new_L.size() > this->n * this->n) {
         throw std::invalid_argument("ERROR: in setL: new_L too large");
@@ -207,7 +207,7 @@ void ira::setL(unsigned long mantissa_length, unsigned long exponent_length, vec
     }
 
     for(unsigned long i = 0; i < new_L.size(); i++){
-        this->L[i] |= mps(mantissa_length, exponent_length, new_L[i]);
+        this->L[i] |= mps(this->parameters.ur_m_l, this->parameters.ur_e_l, new_L[i]);
     }
 }
 
@@ -219,7 +219,7 @@ void ira::setL(unsigned long mantissa_length, unsigned long exponent_length, vec
  * @param exponent_length the size of the exponent of the elements of the matrix
  * @param new_U the new matrix to which the upper triangular matrix should be set.
  */
-void ira::setU(unsigned long mantissa_length, unsigned long exponent_length, vector<double> new_U) {
+void ira::setU(vector<double> new_U) {
 
     if (new_U.size() > this->n * this->n) {
         throw std::invalid_argument("ERROR: in setU: new_U too large");
@@ -229,7 +229,7 @@ void ira::setU(unsigned long mantissa_length, unsigned long exponent_length, vec
     }
 
     for(unsigned long i = 0; i < new_U.size(); i++){
-        this->U[i] |= mps(mantissa_length, exponent_length, new_U[i]);
+        this->U[i] |= mps(this->parameters.ur_m_l, this->parameters.ur_e_l, new_U[i]);
     }
 }
 //-------------------------------

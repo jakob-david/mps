@@ -345,7 +345,7 @@ TEST(FS, exception_b_empty) {
     ira IRA(4, mantissa_length, exponent_length);
 
     vector<double> new_L{ 3, 0, 0, 0, 2, 1, 0, 0, 1, 0, 1, 0, 1, 1, 1, 1};
-    IRA.setL(mantissa_length, exponent_length, new_L);
+    IRA.setL(new_L);
 
     vector<mps> b;
 
@@ -361,7 +361,7 @@ TEST(FS, simple_4x4_float_1){
 
 
     vector<double> new_L{ 3, 0, 0, 0, 2, 1, 0, 0, 1, 0, 1, 0, 1, 1, 1, 1};
-    IRA.setL(mantissa_length, exponent_length, new_L);
+    IRA.setL(new_L);
 
 
     vector<mps> b;
@@ -390,7 +390,7 @@ TEST(FS, simple_4x4_float_2) {
 
 
     vector<double> new_L{-4.3, 0, 0, 0, 2, -5.2, 0, 0, -18, 7.4, -1, 0, 3, -0.34, 4.2321, 1.98};
-    IRA.setL(mantissa_length, exponent_length, new_L);
+    IRA.setL(new_L);
 
 
     vector<mps> b;
@@ -419,7 +419,7 @@ TEST(FS, simple_4x4_double_1){
 
 
     vector<double> new_L{ 3, 0, 0, 0, 2, 1, 0, 0, 1, 0, 1, 0, 1, 1, 1, 1};
-    IRA.setL(mantissa_length, exponent_length, new_L);
+    IRA.setL(new_L);
 
 
     vector<mps> b;
@@ -449,7 +449,7 @@ TEST(FS, simple_4x4_double_2){
 
 
     vector<double> new_L{-4.3, 0, 0, 0, 2, -5.2, 0, 0, -18, 7.4, -1, 0, 3, -0.34, 4.2321, 1.98};
-    IRA.setL(mantissa_length, exponent_length, new_L);
+    IRA.setL(new_L);
 
 
     vector<mps> b;
@@ -477,7 +477,7 @@ TEST(FS, simple_5x5_float_1){
     ira IRA(5, mantissa_length, exponent_length);
 
     vector<double> new_L{3, 0, 0, 0, 0, 2, 1, 0, 0, 0, 1, 0, 1, 0, 0, 1, 1, 1, 1, 0, 3, 5, 1, 3, 2};
-    IRA.setL(mantissa_length, exponent_length, new_L);
+    IRA.setL(new_L);
 
 
     vector<mps> b;
@@ -506,7 +506,7 @@ TEST(FS, simple_5x5_float_2){
     ira IRA(5, mantissa_length, exponent_length);
 
     vector<double> new_L{-4.3, 0, 0, 0, 0, 2, -5.2, 0, 0, 0, -18, 7.4, -1, 0, 0, 3, -0.34, 4.2321, 1.98, 0, 3.64, -2.4, -14.7, 2, 9.3};
-    IRA.setL(mantissa_length, exponent_length, new_L);
+    IRA.setL(new_L);
 
     vector<mps> b;
     b.emplace_back(mantissa_length, exponent_length, 34.2);
@@ -534,7 +534,7 @@ TEST(FS, simple_5x5_double_1){
     ira IRA(5, mantissa_length, exponent_length);
 
     vector<double> new_L{3, 0, 0, 0, 0, 2, 1, 0, 0, 0, 1, 0, 1, 0, 0, 1, 1, 1, 1, 0, 3, 5, 1, 3, 2};
-    IRA.setL(mantissa_length, exponent_length, new_L);
+    IRA.setL(new_L);
 
 
     vector<mps> b;
@@ -563,7 +563,7 @@ TEST(FS, simple_5x5_double_2){
     ira IRA(5, mantissa_length, exponent_length);
 
     vector<double> new_L{-4.3, 0, 0, 0, 0, 2, -5.2, 0, 0, 0, -18, 7.4, -1, 0, 0, 3, -0.34, 4.2321, 1.98, 0, 3.64, -2.4, -14.7, 2, 9.3};
-    IRA.setL(mantissa_length, exponent_length, new_L);
+    IRA.setL(new_L);
 
     vector<mps> b;
     b.emplace_back(mantissa_length, exponent_length, 34.2);
@@ -609,7 +609,7 @@ TEST(BS, exception_b_empty) {
     ira IRA(4, mantissa_length, exponent_length);
 
     vector<double> new_U{ 1, 1, 2, 1, 0, 4, 1, 1, 0, 0, 2, 1, 0, 0, 0, 3};
-    IRA.setU(mantissa_length, exponent_length, new_U);
+    IRA.setU(new_U);
 
     vector<mps> b;
 
@@ -624,7 +624,7 @@ TEST(BS, simple_4x4_float_1){
     ira IRA(4, mantissa_length, exponent_length);
 
     vector<double> new_U{ 1, 1, 2, 1, 0, 4, 1, 1, 0, 0, 2, 1, 0, 0, 0, 3};
-    IRA.setU(mantissa_length, exponent_length, new_U);
+    IRA.setU(new_U);
 
 
     vector<mps> b;
@@ -653,7 +653,7 @@ TEST(BS, simple_4x4_float_2){
     ira IRA(4, mantissa_length, exponent_length);
 
     vector<double> new_U{3, -0.34, 4.2321, 1.98, 0, 7.4, -1, -18, 0, 0, -5.2, 2, 0, 0, 0, -4.3};
-    IRA.setU(mantissa_length, exponent_length, new_U);
+    IRA.setU(new_U);
 
 
     vector<mps> b;
@@ -682,7 +682,7 @@ TEST(BS, simple_4x4_double_1){
     ira IRA(4, mantissa_length, exponent_length);
 
     vector<double> new_U{ 1, 1, 2, 1, 0, 4, 1, 1, 0, 0, 2, 1, 0, 0, 0, 3};
-    IRA.setU(mantissa_length, exponent_length, new_U);
+    IRA.setU(new_U);
 
 
     vector<mps> b;
@@ -711,7 +711,7 @@ TEST(BS, simple_4x4_double_2){
     ira IRA(4, mantissa_length, exponent_length);
 
     vector<double> new_U{3, -0.34, 4.2321, 1.98, 0, 7.4, -1, -18, 0, 0, -5.2, 2, 0, 0, 0, -4.3};
-    IRA.setU(mantissa_length, exponent_length, new_U);
+    IRA.setU(new_U);
 
 
     vector<mps> b;
@@ -740,7 +740,7 @@ TEST(BS, simple_5x5_float_1){
     ira IRA(5, mantissa_length, exponent_length);
 
     vector<double> new_U{3, 0.5, 1, 3, 2, 0, 1, -1, 1, 3, 0, 0, 1, 0.1, -3, 0, 0, 0, 3, -1, 0, 0, 0, 0, -4};
-    IRA.setU(mantissa_length, exponent_length, new_U);
+    IRA.setU(new_U);
 
 
     vector<mps> b;
@@ -770,7 +770,7 @@ TEST(BS, simple_5x5_float_2){
     ira IRA(5, mantissa_length, exponent_length);
 
     vector<double> new_U{2.4, 0.5, 3.253, 7, 9.23, 0, 3.2, -1.53, 2.21, 4.23, 0, 0, 7.8, 0.64, -0.321, 0, 0, 0, 7.3, -14, 0, 0, 0, 0, -4.85};
-    IRA.setU(mantissa_length, exponent_length, new_U);
+    IRA.setU(new_U);
 
     vector<mps> b;
     b.emplace_back(mantissa_length, exponent_length, 3.64);
@@ -799,7 +799,7 @@ TEST(BS, simple_5x5_double_1){
     ira IRA(5, mantissa_length, exponent_length);
 
     vector<double> new_U{3, 0.5, 1, 3, 2, 0, 1, -1, 1, 3, 0, 0, 1, 0.1, -3, 0, 0, 0, 3, -1, 0, 0, 0, 0, -4};
-    IRA.setU(mantissa_length, exponent_length, new_U);
+    IRA.setU(new_U);
 
 
     vector<mps> b;
@@ -829,7 +829,7 @@ TEST(BS, simple_5x5_double_2){
     ira IRA(5, mantissa_length, exponent_length);
 
     vector<double> new_U{2.4, 0.5, 3.253, 7, 9.23, 0, 3.2, -1.53, 2.21, 4.23, 0, 0, 7.8, 0.64, -0.321, 0, 0, 0, 7.3, -14, 0, 0, 0, 0, -4.85};
-    IRA.setU(mantissa_length, exponent_length, new_U);
+    IRA.setU(new_U);
 
     vector<mps> b;
     b.emplace_back(mantissa_length, exponent_length, 3.64);

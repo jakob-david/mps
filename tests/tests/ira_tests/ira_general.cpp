@@ -252,7 +252,7 @@ TEST(setL, simple_1) {
 
     ira IRA(3, mantissa_length, exponent_length);
 
-    IRA.setL(mantissa_length, exponent_length, new_L);
+    IRA.setL(new_L);
 
 
     EXPECT_EQ("10, 20, 30, 40, 50, 60, 70, 80, 90", IRA.to_string('L', 0));
@@ -267,7 +267,7 @@ TEST(setL, exception_L_too_large) {
 
     ira IRA(3, mantissa_length, exponent_length);
 
-    EXPECT_ANY_THROW(IRA.setL(mantissa_length, exponent_length, new_L));
+    EXPECT_ANY_THROW(IRA.setL(new_L));
 }
 
 TEST(setL, exception_L_too_small) {
@@ -279,7 +279,7 @@ TEST(setL, exception_L_too_small) {
 
     ira IRA(3, mantissa_length, exponent_length);
 
-    EXPECT_ANY_THROW(IRA.setL(mantissa_length, exponent_length, new_L));
+    EXPECT_ANY_THROW(IRA.setL(new_L));
 }
 
 TEST(setU, simple_1) {
@@ -291,7 +291,7 @@ TEST(setU, simple_1) {
 
     ira IRA(3, mantissa_length, exponent_length);
 
-    IRA.setU(mantissa_length, exponent_length, new_U);
+    IRA.setU(new_U);
 
 
     EXPECT_EQ("10, 20, 30, 40, 50, 60, 70, 80, 90", IRA.to_string('U', 0));
@@ -306,7 +306,7 @@ TEST(setL, exception_U_too_large) {
 
     ira IRA(3, mantissa_length, exponent_length);
 
-    EXPECT_ANY_THROW(IRA.setU(mantissa_length, exponent_length, new_U));
+    EXPECT_ANY_THROW(IRA.setU(new_U));
 }
 
 TEST(setL, exception_U_too_small) {
@@ -318,7 +318,7 @@ TEST(setL, exception_U_too_small) {
 
     ira IRA(3, mantissa_length, exponent_length);
 
-    EXPECT_ANY_THROW(IRA.setU(mantissa_length, exponent_length, new_U));
+    EXPECT_ANY_THROW(IRA.setU(new_U));
 }
 
 
