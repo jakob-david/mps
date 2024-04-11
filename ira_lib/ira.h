@@ -8,16 +8,12 @@
 #ifndef MPS_IRA_H
 #define MPS_IRA_H
 
-// TODO: write minimisation algorithm.
-
-
 class ira {
 
 public:
 
     // parameters struct
     //-------------------------------
-    // TODO: write setters
     struct {
 
         double random_lower_bound;          // the lower bound when getting a random value.
@@ -54,17 +50,12 @@ public:
     } evaluation{};
     //-------------------------------
 
-private:
-public:
 
-    // general_properties
+    // variables
     //-------------------------------
     unsigned long n;           // dimension of the A
     vector<mps> A;             // the A which should be solved
-    //-------------------------------
 
-    // PLU_calculated_properties
-    //-------------------------------
     vector<mps> L;             // The resulting lower triangular Matrix after PLU decomposition.
     vector<mps> U;             // The resulting upper triangular Matrix after PLU decomposition.
     vector<mps> P;             // The resulting permutation vector P after PLU decomposition.
@@ -98,8 +89,8 @@ public:
     [[nodiscard]] mps getExpectedPrecision() const;
     //-------------------------------
 
-
-
+    // matrix setters
+    //-------------------------------
     void setUnitaryMatrix();
     void setMatrix(vector<double> new_matrix);
     void setRandomMatrix();
@@ -107,29 +98,38 @@ public:
     void setU(vector<double> new_U);
     //-------------------------------
 
-    // getter
+    // matrix getter
     //-------------------------------
     [[nodiscard]] mps getMatrixElement(unsigned long idx);
+    //-------------------------------
+
+    // to_string converters
+    //-------------------------------
     [[nodiscard]] std::string to_string(const char& matrix, int precision = -1) const;
     [[nodiscard]] static std::string to_string(vector<mps> vec, int precision = -1);
     //-------------------------------
 
-    // calculators and static getters
+    // cast functions
+    //-------------------------------
+    static void castVectorElements(unsigned long mantissa_length, unsigned long exponent_length, vector<mps>* vec);
+    // TODO: Test
+    void castSystemMatrix(unsigned long mantissa_length, unsigned long exponent_length);
+    //-------------------------------
+
+    // array converters
+    //-------------------------------
+    //TODO: Test
+    [[nodiscard]] static vector<mps> double_to_mps(unsigned long mantissa_length, unsigned long exponent_length, vector<double> double_vector);
+    [[nodiscard]] static vector<double> mps_to_double(vector<mps> mps_vector);
+    [[nodiscard]] static vector<float> mps_to_float(vector<mps> mps_vector);
+    //-------------------------------
+
+    // getting and calculating vectors
     //-------------------------------
     // TODO: test
     [[nodiscard]] vector<mps> getRandomVector(unsigned long mantissa_length, unsigned long exponent_length, unsigned long size) const;
     // TODO: test
     [[nodiscard]] vector<mps> getBVector(vector<mps> x) const;
-    //-------------------------------
-
-    // converters
-    //-------------------------------
-    [[nodiscard]] static vector<mps> double_to_mps(unsigned long mantissa_length, unsigned long exponent_length, vector<double> double_vector);
-    [[nodiscard]] static vector<double> mps_to_double(vector<mps> mps_vector);
-    [[nodiscard]] static vector<float> mps_to_float(vector<mps> mps_vector);
-    static void castVectorElements(unsigned long mantissa_length, unsigned long exponent_length, vector<mps>* vec);
-    // TODO: Test
-    void castSystemMatrix(unsigned long mantissa_length, unsigned long exponent_length);
     //-------------------------------
 
     // operators
@@ -149,14 +149,13 @@ public:
     [[nodiscard]] vector<mps> solveLU(const vector<mps>& b, unsigned long u[2]);
     //-------------------------------
 
-    // "double" algorithms
+    // algorithms using double data types
     //-------------------------------
     [[nodiscard]] vector<double> solveLU_double(const vector<double>& b);
     //-------------------------------
 
 
 private:
-public:
 
     // helper functions
     //-------------------------------

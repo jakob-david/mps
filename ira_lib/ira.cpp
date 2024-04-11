@@ -218,7 +218,6 @@ void ira::setExpectedPrecision(const mps& new_expected_precision){
 }
 
 
-
 /**
  * Gets the lower and upper bound for random value generators inside a n=2 vector.
  * The first entry is the lower bound and the second the upper bound.
@@ -358,9 +357,8 @@ mps ira::getExpectedPrecision() const{
 //-------------------------------
 
 
-
-
-
+// matrix setters
+//-------------------------------
 /**
  * Sets the system matrix of the ira object to an identity matrix of a custom size.
  *
@@ -467,10 +465,8 @@ void ira::setU(vector<double> new_U) {
 //-------------------------------
 
 
-
-
-
-
+// matrix getter
+//-------------------------------
 /**
  * Returns one element of the system matrix.
  *
@@ -485,7 +481,11 @@ void ira::setU(vector<double> new_U) {
 
     return this->A[idx];
 }
+//-------------------------------
 
+
+// to_string converters
+//-------------------------------
 /**
  * Takes one of the matrices of the ira object and converts it into an std::string.
  *
@@ -605,61 +605,64 @@ void ira::setU(vector<double> new_U) {
 //-------------------------------
 
 
-// static getters
-//-------------------------------
-[[nodiscard]] vector<mps> ira::getRandomVector(unsigned long mantissa_length, unsigned long exponent_length, unsigned long size) const {
-
-    vector<mps> ret;
-
-    if (exponent_length < 1) {
-        throw std::invalid_argument("ERROR: getRandomVector: exponent too small");
-    }
-
-    std::random_device rd;
-    std::mt19937 mt(rd());
-    std::uniform_real_distribution<double> dist(this->parameters.random_lower_bound, this->parameters.random_upper_bound);
-
-    for(unsigned i = 0; i < size; i++){
-        ret.emplace_back(mantissa_length, exponent_length, dist(mt));
-    }
-
-    return ret;
-}
-
-[[nodiscard]] vector<mps> ira::getBVector(vector<mps> x) const {
-
-    if (this->A.empty()) {
-        throw std::invalid_argument("ERROR: in getBVector: system matrix is empty");
-    }
-    if (x.empty()) {
-        throw std::invalid_argument("ERROR: in getBVector: x is empty");
-    }
-    if (this->A.size() != (x.size() * x.size())) {
-        throw std::invalid_argument("ERROR: in getBVector: dimensions of A and x do not match");
-    }
-    if (this->A[0].exponent_length != x[0].exponent_length) {
-        throw std::invalid_argument("ERROR: in getBVector: exponents do not match");
-    }
-    if (this->A[0].mantissa_length != x[0].mantissa_length) {
-        throw std::invalid_argument("ERROR: in getBVector: mantissas do not match");
-    }
-
-    return matrixVectorProduct(this->A, x);
-}
-//-------------------------------
-
-
-// converters
+// cast functions
 //-------------------------------
 /**
- * Converts a vector of booleans to a vector of mps objects.
- * The double vector is not destroyed but a new vector consisting of mps objects is created.
+ * Given a vector of mps objects this function casts all of its elements to new mantissa and exponent sizes.
+ * This works also for the matrices in the ira object since they are internally saved as vectors.
  *
- * @param mantissa_length the mantissa lengths of the mps objects
- * @param exponent_length the exponent lengths of the mps objects
- * @param double_vector the vector of booleans which should be converted.
- * @return vector consisting of mps objects.
+ * @param mantissa_length the new mantissa length of the mps objects
+ * @param exponent_length the new exponent length of the mps objects
+ * @param double_vector the vector of mos objects which should be converted
  */
+void ira::castVectorElements(unsigned long mantissa_length, unsigned long exponent_length, vector<mps>* vec){
+
+    if ((*vec).empty()) {
+        throw std::invalid_argument("ERROR: in castVectorElements: vector is empty");
+    }
+    if (mantissa_length <= 0) {
+        throw std::invalid_argument("ERROR: in castVectorElements : mantissa size too small");
+    }
+    if (exponent_length <= 1) {
+        throw std::invalid_argument("ERROR: in castVectorElements : exponent size too small");
+    }
+
+
+    if(mantissa_length == (*vec)[0].mantissa_length && exponent_length == (*vec)[0].exponent_length){
+        return;
+    }
+
+    for(auto & i : *vec){
+        i.cast(mantissa_length, exponent_length);
+    }
+}
+
+void ira::castSystemMatrix(unsigned long mantissa_length, unsigned long exponent_length){
+
+    if (this->A.empty()) {
+        throw std::invalid_argument("ERROR: in castSystemMatrix: system matrix is empty");
+    }
+    if (mantissa_length <= 0) {
+        throw std::invalid_argument("ERROR: in castSystemMatrix : mantissa size too small");
+    }
+    if (exponent_length <= 1) {
+        throw std::invalid_argument("ERROR: in castSystemMatrix : exponent size too small");
+    }
+
+    if(mantissa_length == this->A[0].mantissa_length && exponent_length == this->A[0].exponent_length){
+        return;
+    }
+
+    for(auto & element : this->A){
+        element.cast(mantissa_length, exponent_length);
+    }
+
+}
+//-------------------------------
+
+
+// array converters
+//-------------------------------
 [[nodiscard]] vector<mps> ira::double_to_mps(unsigned long mantissa_length, unsigned long exponent_length, vector<double> double_vector){
 
     if (double_vector.empty()) {
@@ -722,57 +725,49 @@ void ira::setU(vector<double> new_U) {
 
     return ret;
 }
-
-/**
- * Given a vector of mps objects this function casts all of its elements to new mantissa and exponent sizes.
- * This works also for the matrices in the ira object since they are internally saved as vectors.
- *
- * @param mantissa_length the new mantissa length of the mps objects
- * @param exponent_length the new exponent length of the mps objects
- * @param double_vector the vector of mos objects which should be converted
- */
-void ira::castVectorElements(unsigned long mantissa_length, unsigned long exponent_length, vector<mps>* vec){
-
-    if ((*vec).empty()) {
-        throw std::invalid_argument("ERROR: in castVectorElements: vector is empty");
-    }
-    if (mantissa_length <= 0) {
-        throw std::invalid_argument("ERROR: in castVectorElements : mantissa size too small");
-    }
-    if (exponent_length <= 1) {
-        throw std::invalid_argument("ERROR: in castVectorElements : exponent size too small");
-    }
+//-------------------------------
 
 
-    if(mantissa_length == (*vec)[0].mantissa_length && exponent_length == (*vec)[0].exponent_length){
-        return;
+// getting and calculating vectors
+//-------------------------------
+[[nodiscard]] vector<mps> ira::getRandomVector(unsigned long mantissa_length, unsigned long exponent_length, unsigned long size) const {
+
+    vector<mps> ret;
+
+    if (exponent_length < 1) {
+        throw std::invalid_argument("ERROR: getRandomVector: exponent too small");
     }
 
-    for(auto & i : *vec){
-        i.cast(mantissa_length, exponent_length);
+    std::random_device rd;
+    std::mt19937 mt(rd());
+    std::uniform_real_distribution<double> dist(this->parameters.random_lower_bound, this->parameters.random_upper_bound);
+
+    for(unsigned i = 0; i < size; i++){
+        ret.emplace_back(mantissa_length, exponent_length, dist(mt));
     }
+
+    return ret;
 }
 
-void ira::castSystemMatrix(unsigned long mantissa_length, unsigned long exponent_length){
+[[nodiscard]] vector<mps> ira::getBVector(vector<mps> x) const {
 
     if (this->A.empty()) {
-        throw std::invalid_argument("ERROR: in castSystemMatrix: system matrix is empty");
+        throw std::invalid_argument("ERROR: in getBVector: system matrix is empty");
     }
-    if (mantissa_length <= 0) {
-        throw std::invalid_argument("ERROR: in castSystemMatrix : mantissa size too small");
+    if (x.empty()) {
+        throw std::invalid_argument("ERROR: in getBVector: x is empty");
     }
-    if (exponent_length <= 1) {
-        throw std::invalid_argument("ERROR: in castSystemMatrix : exponent size too small");
+    if (this->A.size() != (x.size() * x.size())) {
+        throw std::invalid_argument("ERROR: in getBVector: dimensions of A and x do not match");
     }
-
-    if(mantissa_length == this->A[0].mantissa_length && exponent_length == this->A[0].exponent_length){
-        return;
+    if (this->A[0].exponent_length != x[0].exponent_length) {
+        throw std::invalid_argument("ERROR: in getBVector: exponents do not match");
     }
-
-    for(auto & element : this->A){
-        element.cast(mantissa_length, exponent_length);
+    if (this->A[0].mantissa_length != x[0].mantissa_length) {
+        throw std::invalid_argument("ERROR: in getBVector: mantissas do not match");
     }
 
+    return matrixVectorProduct(this->A, x);
 }
 //-------------------------------
 
@@ -1213,9 +1208,8 @@ ira::iterativeRefinementLU(const vector<mps> &b) {
 //-------------------------------
 
 
-// algorithms which use "normal" double
+// algorithms using double data types
 //-------------------------------
-
 /**
  * Solves a system of equation using a PLU-Factorisation and "normal" double variables.
  * The system matrix needs not to be a parameter since it must set beforehand.
