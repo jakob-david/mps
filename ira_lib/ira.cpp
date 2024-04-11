@@ -367,13 +367,15 @@ mps ira::getExpectedPrecision() const{
  */
 void ira::setUnitaryMatrix() {
 
-    // TODO: previously declear one and zero
+    mps zero(this->parameters.ur_m_l, this->parameters.ur_e_l, 0);
+    mps one(this->parameters.ur_m_l, this->parameters.ur_e_l, 1);
+
     for(unsigned long i = 0; i <  this->n; i++){
         for(unsigned long j = 0; j < this->n; j++){
             if(i == j){
-                this->A[get_idx(i, j)] |= mps(this->parameters.ur_m_l, this->parameters.ur_e_l, 1);
+                this->A[get_idx(i, j)] |= one;
             } else {
-                this->A[get_idx(i, j)] |= mps(this->parameters.ur_m_l, this->parameters.ur_e_l, 0);
+                this->A[get_idx(i, j)] |= zero;
             }
         }
     }
