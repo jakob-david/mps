@@ -1082,7 +1082,7 @@ void ira::PLU_decomposition(unsigned long mantissa_precision, unsigned long expo
  * @return the solution of the system as an mps object.
  */
 [[nodiscard]] vector<mps> ira::solveLU(const vector<mps>& b, unsigned long u[2]){
-
+// TODO: delete u
 
     this->PLU_decomposition(u[0], u[1]);
     auto tmp_b = b;
