@@ -80,14 +80,14 @@ void ira::setMaxIter(unsigned long new_max_iter){
 
     this->parameters.max_iter = new_max_iter;
 }
-void ira::setUL(unsigned long mantissa_length, unsigned long exponent_length){
+void ira::setLowerPrecision(unsigned long mantissa_length, unsigned long exponent_length){
 
     // TODO: add error handling
 
     this->parameters.ul_m_l = mantissa_length;
     this->parameters.ul_e_l = exponent_length;
 }
-void ira::setUR(unsigned long mantissa_length, unsigned long exponent_length){
+void ira::setUpperPrecision(unsigned long mantissa_length, unsigned long exponent_length){
 
     // TODO: add error handling
 

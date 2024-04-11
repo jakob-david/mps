@@ -85,9 +85,9 @@ public:
     // TODO: Test
     void setMaxIter(unsigned long new_max_iter);
     // TODO: Test
-    void setUL(unsigned long mantissa_length, unsigned long exponent_length);
+    void setLowerPrecision(unsigned long mantissa_length, unsigned long exponent_length);
     // TODO: Test
-    void setUR(unsigned long mantissa_length, unsigned long exponent_length);
+    void setUpperPrecision(unsigned long mantissa_length, unsigned long exponent_length);
     // TODO: Test
     void setWorkingPrecision(unsigned long mantissa_length, unsigned long exponent_length);
     // TODO: Test

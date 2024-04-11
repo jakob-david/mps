@@ -647,7 +647,7 @@ TEST(iterativeRefinementLU, auto_double){
 
         ira IRA(n, ur[0], ur[1]);
         IRA.setWorkingPrecision(u[0], u[1]);
-        IRA.setUL(ul[0], ul[1]);
+        IRA.setLowerPrecision(ul[0], ul[1]);
 
         // Set up A
         //--------------------------------
@@ -723,7 +723,7 @@ TEST(iterativeRefinementLU, auto_float){
 
         ira IRA(n, ur[0], ur[1]);
         IRA.setWorkingPrecision(u[0], u[1]);
-        IRA.setUL(ul[0], ul[1]);
+        IRA.setLowerPrecision(ul[0], ul[1]);
 
         // Set up A
         //--------------------------------
@@ -801,7 +801,7 @@ TEST(iterativeRefinementLU, random_double){
 
         ira IRA(n, ur[0], ur[1]);
         IRA.setWorkingPrecision(u[0], u[1]);
-        IRA.setUL(ul[0], ul[1]);
+        IRA.setLowerPrecision(ul[0], ul[1]);
         IRA.setMaxIter(n_max);
 
         // Set up A
@@ -874,7 +874,7 @@ TEST(iterativeRefinementLU, random_float){
 
         ira IRA(n, ur[0], ur[1]);
         IRA.setWorkingPrecision(u[0], u[1]);
-        IRA.setUL(ul[0], ul[1]);
+        IRA.setLowerPrecision(ul[0], ul[1]);
 
         // Set up A
         //--------------------------------

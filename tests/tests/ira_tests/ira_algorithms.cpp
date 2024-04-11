@@ -1255,7 +1255,7 @@ TEST(IR, simple_3x3_double_1){
     vector<double> new_A{5, 1 ,3, 1, 1 ,1, 1, 2 ,1};
     IRA.setMatrix(new_A);
     IRA.setWorkingPrecision(u[0], u[1]);
-    IRA.setUL(ul[0], ul[1]);
+    IRA.setLowerPrecision(ul[0], ul[1]);
 
     vector<mps> b;
     b.emplace_back(mantissa_length, exponent_length, 16);
@@ -1289,7 +1289,7 @@ TEST(IR, simple_3x3_double_2){
     vector<double> new_A{563.46, 634.346, 575.346, 694.3453, 573.234, 4638.67, 985.456, 575.56, 978.56};
     IRA.setMatrix(new_A);
     IRA.setWorkingPrecision(u[0], u[1]);
-    IRA.setUL(ul[0], ul[1]);
+    IRA.setLowerPrecision(ul[0], ul[1]);
 
     vector<mps> b;
     b.emplace_back(ur[0], ur[1], 463.56);
@@ -1330,7 +1330,7 @@ TEST(IR, get_evaluation_value_IR_area){
     vector<double> new_A{563.46, 634.346, 575.346, 694.3453, 573.234, 4638.67, 985.456, 575.56, 978.56};
     IRA.setMatrix(new_A);
     IRA.setWorkingPrecision(u[0], u[1]);
-    IRA.setUL(ul[0], ul[1]);
+    IRA.setLowerPrecision(ul[0], ul[1]);
 
     vector<mps> b;
     b.emplace_back(ur[0], ur[1], 463.56);
@@ -1375,7 +1375,7 @@ TEST(IR, get_evaluation_value_microseconds){
     vector<double> new_A{563.46, 634.346, 575.346, 694.3453, 573.234, 4638.67, 985.456, 575.56, 978.56};
     IRA.setMatrix(new_A);
     IRA.setWorkingPrecision(u[0], u[1]);
-    IRA.setUL(ul[0], ul[1]);
+    IRA.setLowerPrecision(ul[0], ul[1]);
 
     vector<mps> b;
     b.emplace_back(ur[0], ur[1], 463.56);
