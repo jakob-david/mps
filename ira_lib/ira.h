@@ -80,8 +80,9 @@ public:
 
     // setter
     //-------------------------------
-    // TODO: Test
     void setRandomRange(double lower_bound, double upper_bound);
+
+
     // TODO: Test
     void setMaxIter(unsigned long new_max_iter);
     // TODO: Test
@@ -104,6 +105,8 @@ public:
 
     // getter
     //-------------------------------
+    [[nodiscard]] vector<double> getRandomRange() const;
+
     [[nodiscard]] mps getMatrixElement(unsigned long idx);
     [[nodiscard]] std::string to_string(const char& matrix, int precision = -1) const;
     [[nodiscard]] static std::string to_string(vector<mps> vec, int precision = -1);

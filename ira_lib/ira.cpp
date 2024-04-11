@@ -68,14 +68,26 @@ ira::~ira() = default;
 
 // setter
 //-------------------------------
-
+/**
+ * Sets the lower and upper bound for random value generators.
+ *
+ * Throws Exception: When lower bound >= upper bound.
+ *
+ * @param lower_bound the lower bound for the random number generator.
+ * @param upper_bound the upper bound for the random number generator.
+ * @param new_L the new matrix to which the lower triangular matrix should be set.
+ */
 void ira::setRandomRange(double lower_bound, double upper_bound){
 
-    // TODO: add error handling
+    if(lower_bound >= upper_bound){
+        throw std::invalid_argument("ERROR: setRandomRange: upper bound smaller/equal than/to lower bound ");
+    }
 
     this->parameters.random_lower_bound = lower_bound;
     this->parameters.random_upper_bound = upper_bound;
 }
+
+
 void ira::setMaxIter(unsigned long new_max_iter){
 
     this->parameters.max_iter = new_max_iter;
@@ -237,6 +249,23 @@ void ira::setU(vector<double> new_U) {
 
 // getter
 //-------------------------------
+/**
+ * Gets the lower and upper bound for random value generators inside a n=2 vector.
+ * The first entry is the lower bound and the second the upper bound.
+ *
+ * @return vector containing lower and upper bound.
+ */
+[[nodiscard]] vector<double> ira::getRandomRange() const{
+
+    vector<double> ret;
+
+    ret.push_back(this->parameters.random_lower_bound);
+    ret.push_back(this->parameters.random_upper_bound);
+
+    return ret;
+}
+
+
 /**
  * Returns one element of the system matrix.
  *

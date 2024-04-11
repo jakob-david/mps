@@ -4,6 +4,32 @@
 
 
 
+// parameter setter and parameter getter
+// -------------------------------------
+TEST(RandomRange, simple_1) {
+
+    double lower_bound = -345.0;
+    double upper_bound = 5634.0;
+
+    ira IRA(2, 23, 8);
+    IRA.setRandomRange(lower_bound, upper_bound);
+
+    auto result = IRA.getRandomRange();
+
+    EXPECT_EQ(lower_bound, result[0]);
+    EXPECT_EQ(upper_bound, result[1]);
+}
+
+TEST(RandomRange, exception_1) {
+
+    double lower_bound = 345.0;
+    double upper_bound = -5634.0;
+
+    ira IRA(2, 23, 8);
+
+    EXPECT_ANY_THROW(IRA.setRandomRange(lower_bound, upper_bound));
+}
+
 // setter and getter
 // -------------------------------------
 TEST(unitary_matrix, init_2x2) {
