@@ -29,8 +29,14 @@ ira::ira(unsigned long n, unsigned long u_mantissa_length, unsigned long u_expon
     //-------------------------------
     this->parameters.random_lower_bound = -10;
     this->parameters.random_upper_bound = 10;
+
+    this->parameters.max_iter = 10;     // Must be 10 because of unit tests.
+
     this->parameters.ur_m_l = u_mantissa_length;
     this->parameters.ur_e_l = u_exponent_length;
+
+    this->parameters.expected_result_present = false;       // after construction no result vector is present.
+    this->parameters.expected_precision_present = false;    // after construction no expected precision is present.
 
 
     // set up matrices
@@ -70,6 +76,10 @@ void ira::setRandomRange(double lower_bound, double upper_bound){
     this->parameters.random_lower_bound = lower_bound;
     this->parameters.random_upper_bound = upper_bound;
 }
+void ira::setMaxIter(unsigned long new_max_iter){
+
+    this->parameters.max_iter = new_max_iter;
+}
 void ira::setUL(unsigned long mantissa_length, unsigned long exponent_length){
 
     // TODO: add error handling
@@ -91,6 +101,33 @@ void ira::setWorkingPrecision(unsigned long mantissa_length, unsigned long expon
     this->parameters.u_m_l = mantissa_length;
     this->parameters.u_e_l = exponent_length;
 }
+void ira::setExpectedX(const vector<mps>& new_expected_x){
+
+    // TODO: add error handling
+
+    this->parameters.expected_result_present = true;
+
+    this->parameters.x_expected_mps.clear();
+    for(const auto & idx : new_expected_x){
+        this->parameters.x_expected_mps.emplace_back(idx);
+    }
+
+    this->parameters.x_expected_double = ira::mps_to_double(new_expected_x);
+}
+void ira::setExpectedPrecision(const mps& new_expected_precision){
+
+    // TODO: error handling
+
+    if(not this->parameters.expected_result_present){
+        throw std::invalid_argument("ERROR: in setExpectedPrecision: expected result must be set before expected precision!");
+    }
+
+    this->parameters.expected_precision_present = true;
+
+    this->parameters.expected_precision |= new_expected_precision;
+    this->parameters.expected_precision.cast(this->parameters.ur_m_l, this->parameters.ur_e_l);
+}
+
 
 /**
  * Sets the system matrix of the ira object to an identity matrix of a custom size.
@@ -839,12 +876,14 @@ void ira::PLU_decomposition(unsigned long mantissa_precision, unsigned long expo
  * @return the approximate solution of the system as an mps object.
  */
 [[nodiscard]] vector<mps>
-ira::iterativeRefinementLU(const vector<mps> &b, unsigned long n_max, const vector<mps> &x_expected_mps, const mps& precision) {
+ira::iterativeRefinementLU(const vector<mps> &b) {
 
     // set evaluation parameters to zero
     //-------------------------------
-    this->evaluation.IR_area_relativeError = 0;
-    this->evaluation.IR_area_precision = 0;
+    if(this->parameters.expected_result_present) {
+        this->evaluation.IR_area_relativeError = 0;
+        this->evaluation.IR_area_precision = 0;
+    }
     //-------------------------------
 
     // set precisions (for easier naming)
@@ -852,18 +891,6 @@ ira::iterativeRefinementLU(const vector<mps> &b, unsigned long n_max, const vect
     vector<unsigned long> ur{this->parameters.ur_m_l, this->parameters.ur_e_l};
     vector<unsigned long> u{this->parameters.u_m_l, this->parameters.u_e_l};
     vector<unsigned long> ul{this->parameters.ul_m_l, this->parameters.ul_e_l};
-    //-------------------------------
-
-    if(not x_expected_mps.empty()){
-        auto x_expected_d = mps_to_double(x_expected_mps);
-    }
-
-    mps target_precision;
-    bool check_for_precision = not precision.isNaN();
-    if(check_for_precision){
-        target_precision |= precision;
-        target_precision.cast(ur[0], ur[1]);
-    }
     //-------------------------------
 
     // start timer
@@ -889,7 +916,7 @@ ira::iterativeRefinementLU(const vector<mps> &b, unsigned long n_max, const vect
 
 
 
-    for(unsigned long i = 0; i < n_max; i++){
+    for(unsigned long i = 0; i < this->parameters.max_iter; i++){
 
         // calculate: r_i = b − A * x_i
         // in precision: ur
@@ -902,10 +929,9 @@ ira::iterativeRefinementLU(const vector<mps> &b, unsigned long n_max, const vect
 
         // check convergence
         //-------------------------------
-        if(check_for_precision){
+        if(this->parameters.expected_precision_present){
             auto norm = vectorNorm_L1(r);
-            if(norm < target_precision){
-                cout << "Iteration " << i << ":     " << norm.getValue() << " < " << target_precision.getValue() << endl;
+            if(norm < this->parameters.expected_precision){
                 this->evaluation.iterations_needed = i;
                 break;
             }
@@ -933,9 +959,12 @@ ira::iterativeRefinementLU(const vector<mps> &b, unsigned long n_max, const vect
 
         // evaluation
         //-------------------------------
-        for(unsigned long element_id = 0; element_id < x_expected_mps.size(); element_id++){
-            this->evaluation.IR_relativeError.push_back(x[element_id].getRelativeError_double(x_expected_mps[element_id]));
-            this->evaluation.IR_area_relativeError += this->evaluation.IR_relativeError.back();
+        if(this->parameters.expected_result_present) {
+            for (unsigned long element_id = 0; element_id < this->n; element_id++) {
+                this->evaluation.IR_relativeError.push_back(
+                        x[element_id].getRelativeError_double(this->parameters.x_expected_mps[element_id]));
+                this->evaluation.IR_area_relativeError += this->evaluation.IR_relativeError.back();
+            }
         }
         //-------------------------------
 

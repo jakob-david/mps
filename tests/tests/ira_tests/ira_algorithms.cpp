@@ -1262,7 +1262,7 @@ TEST(IR, simple_3x3_double_1){
     b.emplace_back(mantissa_length, exponent_length, 6);
     b.emplace_back(mantissa_length, exponent_length, 8);
 
-    auto x = IRA.iterativeRefinementLU(b, 10);
+    auto x = IRA.iterativeRefinementLU(b);
 
 
     std::string solution = x[0].to_string(8);
@@ -1296,7 +1296,7 @@ TEST(IR, simple_3x3_double_2){
     b.emplace_back(ur[0], ur[1], 875.357);
     b.emplace_back(ur[0], ur[1], 235.5745);
 
-    auto x = IRA.iterativeRefinementLU(b, 10);
+    auto x = IRA.iterativeRefinementLU(b);
 
     auto x_should = IRA.solveLU(b, u);
 
@@ -1338,8 +1338,9 @@ TEST(IR, get_evaluation_value_IR_area){
     b.emplace_back(ur[0], ur[1], 235.5745);
 
     auto x_should = IRA.solveLU(b, u);
+    IRA.setExpectedX(x_should);
 
-    auto x = IRA.iterativeRefinementLU(b, 10, x_should);
+    auto x = IRA.iterativeRefinementLU(b);
 
     // perform tests
     //--------------------------------
@@ -1382,8 +1383,9 @@ TEST(IR, get_evaluation_value_microseconds){
     b.emplace_back(ur[0], ur[1], 235.5745);
 
     auto x_should = IRA.solveLU(b, u);
+    IRA.setExpectedX(x_should);
 
-    auto x = IRA.iterativeRefinementLU(b, 10, x_should);
+    auto x = IRA.iterativeRefinementLU(b);
 
     // perform tests
     //--------------------------------

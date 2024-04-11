@@ -685,7 +685,7 @@ TEST(iterativeRefinementLU, auto_double){
 
         // solve system
         //--------------------------------
-        auto x = IRA.iterativeRefinementLU(b, 10);
+        auto x = IRA.iterativeRefinementLU(b);
         auto x_result = ira::mps_to_double(x);
         //--------------------------------
 
@@ -761,7 +761,7 @@ TEST(iterativeRefinementLU, auto_float){
 
         // solve system
         //--------------------------------
-        auto x = IRA.iterativeRefinementLU(b, 10);
+        auto x = IRA.iterativeRefinementLU(b);
         auto x_result = ira::mps_to_double(x);
         //--------------------------------
 
@@ -802,6 +802,7 @@ TEST(iterativeRefinementLU, random_double){
         ira IRA(n, ur[0], ur[1]);
         IRA.setWorkingPrecision(u[0], u[1]);
         IRA.setUL(ul[0], ul[1]);
+        IRA.setMaxIter(n_max);
 
         // Set up A
         //--------------------------------
@@ -835,7 +836,7 @@ TEST(iterativeRefinementLU, random_double){
 
         // solve system
         //--------------------------------
-        auto x = IRA.iterativeRefinementLU(b, n_max);
+        auto x = IRA.iterativeRefinementLU(b);
         auto x_result = ira::mps_to_double(x);
         //--------------------------------
 
@@ -907,7 +908,7 @@ TEST(iterativeRefinementLU, random_float){
 
         // solve system
         //--------------------------------
-        auto x = IRA.iterativeRefinementLU(b, 10);
+        auto x = IRA.iterativeRefinementLU(b);
         auto x_result = ira::mps_to_double(x);
         //--------------------------------
 
