@@ -78,19 +78,23 @@ public:
     ~ira();
     //-------------------------------
 
-    // parameter setters
+    // parameter setters and getters
     //-------------------------------
     void setRandomRange(double lower_bound, double upper_bound);
     void setMaxIter(unsigned long new_max_iter);
-    //-------------------------------
-
-
-    // TODO: Test
     void setLowerPrecision(unsigned long mantissa_length, unsigned long exponent_length);
+
+    [[nodiscard]] vector<double> getRandomRange() const;
+    [[nodiscard]] unsigned long getMaxIter() const;
+    [[nodiscard]] vector<unsigned long> getLowerPrecision() const;
+    [[nodiscard]] vector<unsigned long> getUpperPrecision() const;
+    //-------------------------------
 
 
     // TODO: Test
     void setUpperPrecision(unsigned long mantissa_length, unsigned long exponent_length);
+
+
     // TODO: Test
     void setWorkingPrecision(unsigned long mantissa_length, unsigned long exponent_length);
     // TODO: Test
@@ -103,13 +107,6 @@ public:
     void setRandomMatrix();
     void setL(vector<double> new_L);
     void setU(vector<double> new_U);
-    //-------------------------------
-
-    // parameter getters
-    //-------------------------------
-    [[nodiscard]] vector<double> getRandomRange() const;
-    [[nodiscard]] unsigned long getMaxIter() const;
-    [[nodiscard]] vector<unsigned long> getLowerPrecision() const;
     //-------------------------------
 
     // getter
