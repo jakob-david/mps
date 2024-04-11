@@ -4,6 +4,33 @@
 
 
 
+// constructor
+// -------------------------------------
+TEST(Constructor, simple_1) {
+
+    unsigned long mantissa_length = 23;
+    unsigned long exponent_length = 8;
+    unsigned long dimension = 2;
+
+    ira IRA(dimension, mantissa_length, exponent_length);
+
+    auto result = IRA.getUpperPrecision();
+
+    EXPECT_EQ(mantissa_length, result[0]);
+    EXPECT_EQ(exponent_length, result[1]);
+}
+
+TEST(Constructor, exception_wrong_input) {
+
+    unsigned long mantissa_length = 23;
+    unsigned long exponent_length = 8;
+    unsigned long dimension = 2;
+
+    EXPECT_ANY_THROW(ira IRA(dimension, 0, exponent_length));
+    EXPECT_ANY_THROW(ira IRA(dimension, mantissa_length, 1));
+}
+
+
 // parameter setter and parameter getter
 // -------------------------------------
 TEST(RandomRange, simple_1) {
@@ -209,6 +236,8 @@ TEST(ExpectedPrecision, exception_no_expected_precision_set) {
 
     EXPECT_ANY_THROW(auto tp = IRA.getExpectedPrecision());
 }
+
+
 
 // setter and getter
 // -------------------------------------

@@ -20,7 +20,14 @@ using namespace std;
  */
 ira::ira(unsigned long n, unsigned long ur_mantissa_length, unsigned long ur_exponent_length){
 
-    // TODO: do error handling
+    if (ur_mantissa_length <= 0) {
+        throw std::invalid_argument("ERROR: in ira Constructor : mantissa size too small");
+    }
+    if (ur_exponent_length <= 1) {
+        throw std::invalid_argument("ERROR: in ira Constructor : exponent size too small");
+    }
+
+
 
     this->n = n;
     unsigned long matrix_1D_size = this->n * this->n;
