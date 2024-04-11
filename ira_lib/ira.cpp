@@ -1106,8 +1106,7 @@ void ira::PLU_decomposition(unsigned long mantissa_precision, unsigned long expo
  * @param ul the precision in which the LU-decomposition should be performed.
  * @return the approximate solution of the system as an mps object.
  */
-[[nodiscard]] vector<mps>
-ira::iterativeRefinementLU(const vector<mps> &b) {
+[[nodiscard]] vector<mps> ira::iterativeRefinementLU(const vector<mps> &b) {
 
     // set evaluation parameters to zero
     //-------------------------------
