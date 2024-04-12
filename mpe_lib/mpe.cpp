@@ -63,6 +63,21 @@ void mpe::setUpperPrecision(unsigned long mantissa_length, unsigned long exponen
     this->parameters.ur_e_l = exponent_length;
 }
 
+void mpe::setLowerPrecisionExponent(unsigned long exponent_length){
+
+    this->parameters.ul_e_l = exponent_length;
+}
+
+void mpe::setWorkingPrecisionExponent(unsigned long exponent_length){
+
+    this->parameters.u_e_l = exponent_length;
+}
+
+void mpe::setUpperPrecisionExponent(unsigned long exponent_length){
+
+    this->parameters.ur_e_l = exponent_length;
+}
+
 
 void mpe::setLowerPrecisionMantissaRange(unsigned long lower_bound, unsigned long upper_bound){
 
@@ -86,6 +101,11 @@ void mpe::setUpperPrecisionMantissaRange(unsigned long lower_bound, unsigned lon
 
 // getters
 //-------------------------------
+unsigned long mpe::getIterations() const {
+
+    return this->parameters.iterations;
+}
+
 vector<unsigned long> mpe::getLowerPrecisionMantissaAxis() const {
 
     vector<unsigned long> ret;
@@ -281,7 +301,7 @@ std::vector<std::vector<long double>> mpe::evaluateArea_2D(bool output) const {
     ira IRA(this->parameters.n, this->parameters.ur_m_r_upper, this->parameters.ur_e_l);
     IRA.setRandomRange(this->parameters.random_lower_bound, this->parameters.random_upper_bound);
     IRA.setMaxIter(this->parameters.iterations);
-    IRA.setLowerPrecision(this->parameters.ul_m_l, this->parameters.ul_e_l);
+    IRA.setLowerPrecisionExponent(this->parameters.ul_e_l);
     IRA.setWorkingPrecision(this->parameters.u_m_l, this->parameters.u_e_l);
 
     // generate linear system
@@ -296,7 +316,7 @@ std::vector<std::vector<long double>> mpe::evaluateArea_2D(bool output) const {
 
         std::vector<long double> tmp;
 
-        IRA.setUpperPrecision(ur_mantissa_size, this->parameters.ur_e_l);
+        IRA.setUpperPrecisionMantissa(ur_mantissa_size);
 
         // convert the system into the new precision
         IRA.castSystemMatrix(ur_mantissa_size, this->parameters.u_e_l);
@@ -307,12 +327,12 @@ std::vector<std::vector<long double>> mpe::evaluateArea_2D(bool output) const {
         for(unsigned long ul_mantissa_size = this->parameters.ul_m_r_lower; ul_mantissa_size <= this->parameters.ul_m_r_upper; ul_mantissa_size++){
 
             // perform iterative refinement algorithm
-            IRA.setLowerPrecision(ul_mantissa_size, this->parameters.ul_e_l);
+            IRA.setLowerPrecisionMantissa(ul_mantissa_size);
             IRA.iterativeRefinementLU(b);
 
             // save data
             auto tmp_result = IRA.evaluation.IR_area_relativeError * (double) IRA.evaluation.milliseconds;
-             tmp.push_back(tmp_result);
+            tmp.push_back(tmp_result);
         }
 
         result.insert(result.begin(), tmp);

@@ -67,6 +67,9 @@ public:
     void setLowerPrecision(unsigned long mantissa_length, unsigned long exponent_length);
     void setWorkingPrecision(unsigned long mantissa_length, unsigned long exponent_length);
     void setUpperPrecision(unsigned long mantissa_length, unsigned long exponent_length);
+    void setLowerPrecisionExponent(unsigned long exponent_length);
+    void setWorkingPrecisionExponent(unsigned long exponent_length);
+    void setUpperPrecisionExponent(unsigned long exponent_length);
 
     void setLowerPrecisionMantissaRange(unsigned long lower_bound, unsigned long upper_bound);
     void setWorkingPrecisionMantissaRange(unsigned long lower_bound, unsigned long upper_bound);
@@ -76,6 +79,8 @@ public:
 
     // getters
     //-------------------------------
+    [[nodiscard]] unsigned long getIterations() const;
+
     [[nodiscard]] vector<unsigned long> getLowerPrecisionMantissaAxis() const;
     [[nodiscard]] vector<unsigned long> getWorkingPrecisionMantissaAxis() const;
     [[nodiscard]] vector<unsigned long> getUpperPrecisionMantissaAxis() const;

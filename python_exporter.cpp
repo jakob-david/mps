@@ -33,6 +33,9 @@ PYBIND11_MODULE(mpe_library, mpe_handle) {
             .def("setLowerPrecision", &mpe::setLowerPrecision)
             .def("setWorkingPrecision", &mpe::setWorkingPrecision)
             .def("setUpperPrecision", &mpe::setUpperPrecision)
+            .def("setLowerPrecisionExponent", &mpe::setLowerPrecisionExponent)
+            .def("setWorkingPrecisionExponent", &mpe::setWorkingPrecisionExponent)
+            .def("setUpperPrecisionExponent", &mpe::setUpperPrecisionExponent)
 
             .def("setLowerPrecisionMantissaRange", &mpe::setLowerPrecisionMantissaRange)
             .def("setWorkingPrecisionMantissaRange", &mpe::setWorkingPrecisionMantissaRange)
@@ -42,6 +45,7 @@ PYBIND11_MODULE(mpe_library, mpe_handle) {
 
             // getters
             //-------------------------------
+            .def_property_readonly("iterations", &mpe::getIterations)
             .def("getLowerPrecisionMantissaAxis", [](mpe &self){
                 py::array out = py::cast(self.getLowerPrecisionMantissaAxis());
                 return out;
