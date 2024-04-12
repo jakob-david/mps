@@ -40,6 +40,7 @@ ira::ira(unsigned long n, unsigned long ur_mantissa_length, unsigned long ur_exp
     this->parameters.ur_m_l = ur_mantissa_length;
     this->parameters.ur_e_l = ur_exponent_length;
 
+    this->parameters.working_precision_set = false;         // after construction no working precision is set.
     this->parameters.expected_result_present = false;       // after construction no result vector is present.
     this->parameters.expected_precision_present = false;    // after construction no expected precision is present.
 
@@ -152,6 +153,7 @@ void ira::setWorkingPrecision(unsigned long mantissa_length, unsigned long expon
         throw std::invalid_argument("ERROR: in setWorkingPrecision : exponent size too small");
     }
 
+    this->parameters.working_precision_set = true;
     this->parameters.u_m_l = mantissa_length;
     this->parameters.u_e_l = exponent_length;
 }
@@ -180,6 +182,7 @@ void ira::setUpperPrecision(unsigned long mantissa_length, unsigned long exponen
 
 /**
  * Sets the expected result of the linear system x. (Ax=b)
+ * The expected x vector is casted to working precision before being saved in ur.
  * Its also additionally converts the vector to a double vector and saves it separately.
  *
  * Throws Exception:    When the vector is empty.
@@ -193,7 +196,10 @@ void ira::setExpectedResult(const vector<mps>& new_expected_result){
         throw std::invalid_argument("ERROR: in setExpectedResult : input vector is empty");
     }
     if (new_expected_result.size() != this->parameters.n) {
-        throw std::invalid_argument("ERROR: in setExpectedResult : input vector is empty");
+        throw std::invalid_argument("ERROR: in setExpectedResult : dimensions do not match");
+    }
+    if(not this->parameters.working_precision_set){
+        throw std::invalid_argument("ERROR: in setExpectedResult : working precision must be set beforehand.");
     }
 
     this->parameters.expected_result_present = true;
@@ -203,7 +209,10 @@ void ira::setExpectedResult(const vector<mps>& new_expected_result){
         this->parameters.expected_result_mps.emplace_back(idx);
     }
 
-    this->parameters.expected_result_double = ira::mps_to_double(new_expected_result);
+    // TODO: test
+    castExpectedResult(this->parameters.u_m_l, this->parameters.u_e_l);
+    castExpectedResult(this->parameters.ur_m_l, this->parameters.ur_e_l);
+    this->parameters.expected_result_double = ira::mps_to_double(this->parameters.expected_result_mps);
 }
 
 /**
@@ -689,6 +698,27 @@ void ira::castSystemMatrix(unsigned long mantissa_length, unsigned long exponent
     }
 
 }
+
+void ira::castExpectedResult(unsigned long mantissa_length, unsigned long exponent_length){
+
+    if (this->parameters.expected_result_mps.empty()) {
+        throw std::invalid_argument("ERROR: in castExpectedResult: expected result is empty");
+    }
+    if (mantissa_length <= 0) {
+        throw std::invalid_argument("ERROR: in castExpectedResult : mantissa size too small");
+    }
+    if (exponent_length <= 1) {
+        throw std::invalid_argument("ERROR: in castExpectedResult : exponent size too small");
+    }
+
+    if(mantissa_length == this->parameters.expected_result_mps[0].mantissa_length && exponent_length == this->parameters.expected_result_mps[0].exponent_length){
+        return;
+    }
+
+    for(auto & element : this->parameters.expected_result_mps){
+        element.cast(mantissa_length, exponent_length);
+    }
+}
 //-------------------------------
 
 
@@ -798,12 +828,11 @@ vector<mps> ira::generateRandomVector(unsigned long mantissa_length, unsigned lo
     if (exponent_length <= 1) {
         throw std::invalid_argument("ERROR: in generateRandomVector : exponent size too small");
     }
-
-    vector<mps> ret;
-
     if (exponent_length < 1) {
         throw std::invalid_argument("ERROR: generateRandomVector: exponent too small");
     }
+
+    vector<mps> ret;
 
     std::random_device rd;
     std::mt19937 mt(rd());
@@ -825,9 +854,10 @@ vector<mps> ira::generateRandomVector(unsigned long mantissa_length, unsigned lo
 vector<mps> ira::generateRandomRHS() {
 
     auto x = generateRandomVector(this->parameters.ur_m_l, this->parameters.ur_e_l, this->parameters.n);
+    auto b = multiplyWithSystemMatrix(x);
     setExpectedResult(x);
 
-    return multiplyWithSystemMatrix(x);
+    return b;
 }
 
 /**

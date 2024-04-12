@@ -20,54 +20,77 @@ PYBIND11_MODULE(mpe_library, mpe_handle) {
     py::class_<mpe>(mpe_handle, "mpe")
             .def(py::init<>())
 
+            // setters
+            //-------------------------------
             .def("setRandomLimits", &mpe::setRandomLimits)
             .def("setUpperRandomLimit", &mpe::setUpperRandomLimit)
-            .def("setFormatRange", &mpe::setFormatRange)
-            .def("setBasicParameters_irm", &mpe::setBasicParameters_irm)
-            .def("setWorkingPrecision_irm", &mpe::setWorkingPrecision_irm)
-            .def("setRange_ul_irm", &mpe::setRange_ul_irm)
-            .def("setRange_ur_irm", &mpe::setRange_ur_irm)
+            .def("setLowerRandomLimit", &mpe::setLowerRandomLimit)
 
-            .def("getMantissaAxis", [](mpe &self){
-                py::array out = py::cast(self.getMantissaAxis());
-                return out;
-            })
-            .def("getAxis_ul_irm", [](mpe &self){
-                py::array out = py::cast(self.getAxis_ul_irm());
-                return out;
-            })
-            .def("getAxis_ur_irm", [](mpe &self){
-                py::array out = py::cast(self.getAxis_ur_irm());
-                return out;
-            })
+            .def("setDimension", &mpe::setDimension)
+            .def("setIterations", &mpe::setIterations)
+            .def("setMaxIter", &mpe::setMaxIter)
 
-            .def("evaluateAddition", [](mpe &self, unsigned long n_tests){
-                py::array out = py::cast(self.evaluateAddition(n_tests));
-                return out;
-            })
-            .def("evaluateSubtraction", [](mpe &self, unsigned long n_tests){
-                py::array out = py::cast(self.evaluateSubtraction(n_tests));
-                return out;
-            })
-            .def("evaluateMultiplication", [](mpe &self, unsigned long n_tests){
-                py::array out = py::cast(self.evaluateMultiplication(n_tests));
-                return out;
-            })
-            .def("evaluateDivision", [](mpe &self, unsigned long n_tests){
-                py::array out = py::cast(self.evaluateDivision(n_tests));
-                return out;
-            })
+            .def("setLowerPrecision", &mpe::setLowerPrecision)
+            .def("setWorkingPrecision", &mpe::setWorkingPrecision)
+            .def("setUpperPrecision", &mpe::setUpperPrecision)
 
+            .def("setLowerPrecisionMantissaRange", &mpe::setLowerPrecisionMantissaRange)
+            .def("setWorkingPrecisionMantissaRange", &mpe::setWorkingPrecisionMantissaRange)
+            .def("setUpperPrecisionMantissaRange", &mpe::setUpperPrecisionMantissaRange)
+            //-------------------------------
+
+
+            // getters
+            //-------------------------------
+            .def("getLowerPrecisionMantissaAxis", [](mpe &self){
+                py::array out = py::cast(self.getLowerPrecisionMantissaAxis());
+                return out;
+            })
+            .def("getWorkingPrecisionMantissaAxis", [](mpe &self){
+                py::array out = py::cast(self.getWorkingPrecisionMantissaAxis());
+                return out;
+            })
+            .def("getUpperPrecisionMantissaAxis", [](mpe &self){
+                py::array out = py::cast(self.getUpperPrecisionMantissaAxis());
+                return out;
+            })
+            //-------------------------------
+
+
+            // operator evaluation
+            //-------------------------------
+            .def("evaluateAddition", [](mpe &self){
+                py::array out = py::cast(self.evaluateAddition());
+                return out;
+            })
+            .def("evaluateSubtraction", [](mpe &self){
+                py::array out = py::cast(self.evaluateSubtraction());
+                return out;
+            })
+            .def("evaluateMultiplication", [](mpe &self){
+                py::array out = py::cast(self.evaluateMultiplication());
+                return out;
+            })
+            .def("evaluateDivision", [](mpe &self){
+                py::array out = py::cast(self.evaluateDivision());
+                return out;
+            })
+            //-------------------------------
+
+
+            // iterative refinement evaluation
+            //-------------------------------
             .def("evaluateArea_2D", [](mpe &self, bool output = false){
                 py::array out = py::cast(self.evaluateArea_2D(output));
                 return out;
             })
-
+            //-------------------------------
+/*
             .def("evaluateConvergence_2D", [](mpe &self, double precision, unsigned long max_iter, bool output = false){
                 py::array out = py::cast(self.evaluateConvergence_2D(precision, max_iter, output));
                 return out;
             })
-
+*/
             ;
 }
 

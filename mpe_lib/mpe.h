@@ -91,13 +91,10 @@ public:
     //-------------------------------
 
 
-
-
-
     // iterative refinement evaluation
     //-------------------------------
     [[nodiscard]] std::vector<std::vector<long double>> evaluateArea_2D(bool output = false) const;
-    [[nodiscard]] std::vector<std::vector<long double>> evaluateConvergence_2D(double precision, bool output = false) const;
+    //[[nodiscard]] std::vector<std::vector<long double>> evaluateConvergence_2D(double precision, bool output = false) const;
     //-------------------------------
 
 private:

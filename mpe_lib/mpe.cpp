@@ -134,6 +134,8 @@ double mpe::generatePositiveRandomDouble() const {
 //-------------------------------
 
 
+
+
 // operator evaluation
 //-------------------------------
 std::vector<long long int> mpe::evaluateAddition() const {
@@ -261,6 +263,7 @@ std::vector<long long int> mpe::evaluateDivision() const {
 }
 //-------------------------------
 
+
 // iterative refinement evaluation
 //-------------------------------
 std::vector<std::vector<long double>> mpe::evaluateArea_2D(bool output) const {
@@ -271,27 +274,21 @@ std::vector<std::vector<long double>> mpe::evaluateArea_2D(bool output) const {
         cout << "STARTING: evaluateArea_2D" << endl;
     }
 
-    // init FP precision objects
-    unsigned long u[2] = {this->irm.u_mantissa_size, this->irm.u_exponent_size};
-    unsigned long ul[2] = {0, this->irm.u_exponent_size};
-
     // release GIL
     py::gil_scoped_release release;
 
     // init ira object.
-    ira IRA(this->irm.n, this->parameters.ur_m_r_upper, this->parameters.ur_e_l);
-    // TODO: set randomness
+    ira IRA(this->parameters.n, this->parameters.ur_m_r_upper, this->parameters.ur_e_l);
+    IRA.setRandomRange(this->parameters.random_lower_bound, this->parameters.random_upper_bound);
+    IRA.setMaxIter(this->parameters.iterations);
+    IRA.setLowerPrecision(this->parameters.ul_m_l, this->parameters.ul_e_l);
+    IRA.setWorkingPrecision(this->parameters.u_m_l, this->parameters.u_e_l);
 
-    // set up linear system
-    IRA.setRandomMatrix();
-    auto x_mps = IRA.generateRandomVector(this->irm.ur_last_mantissa_size, this->irm.u_exponent_size, this->irm.n);
-    auto b = IRA.multiplyWithSystemMatrix(x_mps);
-
-    // set x_mps to working precision
-    ira::castVectorElements(this->irm.u_mantissa_size, this->irm.u_exponent_size, &x_mps);
+    // generate linear system
+    auto b = IRA.generateRandomLinearSystem();
 
     // loop over all different mantissa sizes of u_r
-    for(unsigned long ur_mantissa_size = this->irm.ur_last_mantissa_size; ur_mantissa_size >= this->irm.ur_first_mantissa_size; ur_mantissa_size--){
+    for(unsigned long ur_mantissa_size = this->parameters.ur_m_r_upper; ur_mantissa_size >= this->parameters.ur_m_r_lower; ur_mantissa_size--){
 
         if(output){
             cout << "\t ur_mantissa_size: " << ur_mantissa_size;
@@ -299,17 +296,18 @@ std::vector<std::vector<long double>> mpe::evaluateArea_2D(bool output) const {
 
         std::vector<long double> tmp;
 
+        IRA.setUpperPrecision(ur_mantissa_size, this->parameters.ur_e_l);
+
         // convert the system into the new precision
-        IRA.castSystemMatrix(ur_mantissa_size, this->irm.u_exponent_size);
-        ira::castVectorElements(ur_mantissa_size, this->irm.u_exponent_size, &b);
+        IRA.castSystemMatrix(ur_mantissa_size, this->parameters.u_e_l);
+        IRA.castExpectedResult(ur_mantissa_size, this->parameters.u_e_l);
+        ira::castVectorElements(ur_mantissa_size, this->parameters.u_e_l, &b);
 
         // loop over all different mantissa sizes of u_l
-        for(unsigned long ul_mantissa_size = this->irm.ul_first_mantissa_size; ul_mantissa_size <= this->irm.ul_last_mantissa_size; ul_mantissa_size++){
-
-            // set new u_l mantissa size
-            ul[0] = ul_mantissa_size;
+        for(unsigned long ul_mantissa_size = this->parameters.ul_m_r_lower; ul_mantissa_size <= this->parameters.ul_m_r_upper; ul_mantissa_size++){
 
             // perform iterative refinement algorithm
+            IRA.setLowerPrecision(ul_mantissa_size, this->parameters.ul_e_l);
             IRA.iterativeRefinementLU(b);
 
             // save data
@@ -320,7 +318,7 @@ std::vector<std::vector<long double>> mpe::evaluateArea_2D(bool output) const {
         result.insert(result.begin(), tmp);
 
         if(output){
-            cout << "\tdone\t\tlast: " << this->irm.ur_first_mantissa_size << endl;
+            cout << "\tdone\t\tlast: " << this->parameters.ur_m_r_lower << endl;
         }
     }
 
@@ -330,6 +328,7 @@ std::vector<std::vector<long double>> mpe::evaluateArea_2D(bool output) const {
     return result;
 }
 
+/*
 std::vector<std::vector<long double>> mpe::evaluateConvergence_2D(double precision, bool output) const {
 
     std::vector<std::vector<long double>> result;
@@ -399,6 +398,7 @@ std::vector<std::vector<long double>> mpe::evaluateConvergence_2D(double precisi
 
     return result;
 }
+ */
 //-------------------------------
 
 

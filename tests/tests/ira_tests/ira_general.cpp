@@ -157,16 +157,19 @@ TEST(ExpectedResult, simple_1) {
 
     unsigned long mantissa_length = 23;
     unsigned long exponent_length = 8;
+    unsigned long u_m_l = 12;
+    unsigned long u_m_e = 5;
 
     ira IRA(2, mantissa_length, exponent_length);
+    IRA.setWorkingPrecision(u_m_l, u_m_e);
 
     vector<mps> expected_result_mps;
     expected_result_mps.emplace_back(mantissa_length, exponent_length, 4);
     expected_result_mps.emplace_back(mantissa_length, exponent_length, -2);
 
     vector<double> expected_result_double = ira::mps_to_double(expected_result_mps);
-
     IRA.setExpectedResult(expected_result_mps);
+    ira::castVectorElements(u_m_l, u_m_e, &expected_result_mps);
 
     EXPECT_EQ(expected_result_mps, IRA.getExpectedResult_mps());
     EXPECT_EQ(expected_result_double, IRA.getExpectedResult_double());
@@ -176,8 +179,11 @@ TEST(ExpectedResult, exception_empty_vector) {
 
     unsigned long mantissa_length = 23;
     unsigned long exponent_length = 8;
+    unsigned long u_m_l = 12;
+    unsigned long u_m_e = 5;
 
     ira IRA(2, mantissa_length, exponent_length);
+    IRA.setWorkingPrecision(u_m_l, u_m_e);
 
     vector<mps> expected_result_mps;
 
@@ -188,8 +194,11 @@ TEST(ExpectedResult, exception_wrong_dimensions) {
 
     unsigned long mantissa_length = 23;
     unsigned long exponent_length = 8;
+    unsigned long u_m_l = 12;
+    unsigned long u_m_e = 5;
 
     ira IRA(2, mantissa_length, exponent_length);
+    IRA.setWorkingPrecision(u_m_l, u_m_e);
 
     vector<mps> expected_result_mps;
     expected_result_mps.emplace_back(mantissa_length, exponent_length, 4);
@@ -203,8 +212,25 @@ TEST(ExpectedResult, exception_expected_result_not_set) {
 
     unsigned long mantissa_length = 23;
     unsigned long exponent_length = 8;
+    unsigned long u_m_l = 12;
+    unsigned long u_m_e = 5;
 
     ira IRA(2, mantissa_length, exponent_length);
+    IRA.setWorkingPrecision(u_m_l, u_m_e);
+
+    EXPECT_ANY_THROW(auto tmp_1 = IRA.getExpectedResult_mps());
+    EXPECT_ANY_THROW(auto tmp_2 = IRA.getExpectedResult_double());
+}
+
+TEST(ExpectedResult, exception_working_precision_not_set) {
+
+    unsigned long mantissa_length = 23;
+    unsigned long exponent_length = 8;
+    unsigned long u_m_l = 12;
+    unsigned long u_m_e = 5;
+
+    ira IRA(2, mantissa_length, exponent_length);
+    IRA.setWorkingPrecision(u_m_l, u_m_e);
 
     EXPECT_ANY_THROW(auto tmp_1 = IRA.getExpectedResult_mps());
     EXPECT_ANY_THROW(auto tmp_2 = IRA.getExpectedResult_double());
@@ -214,8 +240,11 @@ TEST(ExpectedPrecision, simple_1) {
 
     unsigned long mantissa_length = 23;
     unsigned long exponent_length = 8;
+    unsigned long u_m_l = 12;
+    unsigned long u_m_e = 5;
 
     ira IRA(2, mantissa_length, exponent_length);
+    IRA.setWorkingPrecision(u_m_l, u_m_e);
 
     vector<mps> expected_result_mps;
     expected_result_mps.emplace_back(mantissa_length, exponent_length, 4);
@@ -232,8 +261,11 @@ TEST(ExpectedPrecision, exception_no_expected_result_set) {
 
     unsigned long mantissa_length = 23;
     unsigned long exponent_length = 8;
+    unsigned long u_m_l = 12;
+    unsigned long u_m_e = 5;
 
     ira IRA(2, mantissa_length, exponent_length);
+    IRA.setWorkingPrecision(u_m_l, u_m_e);
 
     mps expected_precision(mantissa_length, exponent_length, 0.01);
 
@@ -244,8 +276,11 @@ TEST(ExpectedPrecision, exception_no_expected_precision_set) {
 
     unsigned long mantissa_length = 23;
     unsigned long exponent_length = 8;
+    unsigned long u_m_l = 12;
+    unsigned long u_m_e = 5;
 
     ira IRA(2, mantissa_length, exponent_length);
+    IRA.setWorkingPrecision(u_m_l, u_m_e);
 
     vector<mps> expected_result_mps;
     expected_result_mps.emplace_back(mantissa_length, exponent_length, 4);

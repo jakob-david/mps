@@ -23,6 +23,9 @@ public:
         unsigned long n;                        // dimension of the system
         unsigned long matrix_1D_size;           // The number of elements of the system matrix.
 
+        // TODO: Test
+        bool working_precision_set;             // true if a working precision was set.
+
         unsigned long u_m_l;                    // working precision mantissa length
         unsigned long u_e_l;                    // working precision exponent length
         unsigned long ul_m_l;                   // lower precision mantissa length
@@ -118,6 +121,8 @@ public:
     static void castVectorElements(unsigned long mantissa_length, unsigned long exponent_length, vector<mps>* vec);
     // TODO: Test
     void castSystemMatrix(unsigned long mantissa_length, unsigned long exponent_length);
+    // TODO: Test
+    void castExpectedResult(unsigned long mantissa_length, unsigned long exponent_length);
     //-------------------------------
 
     // array converters
