@@ -14,10 +14,14 @@ TEST(Constructor, simple_1) {
 
     ira IRA(dimension, mantissa_length, exponent_length);
 
-    auto result = IRA.getUpperPrecision();
+    auto result_1 = IRA.getUpperPrecision();
+    auto result_2 = IRA.getDimension();
+    auto result_3 = IRA.get1DMatrixSize();
 
-    EXPECT_EQ(mantissa_length, result[0]);
-    EXPECT_EQ(exponent_length, result[1]);
+    EXPECT_EQ(mantissa_length, result_1[0]);
+    EXPECT_EQ(exponent_length, result_1[1]);
+    EXPECT_EQ(dimension, result_2);
+    EXPECT_EQ(dimension * dimension, result_3);
 }
 
 TEST(Constructor, exception_wrong_input) {
@@ -67,6 +71,20 @@ TEST(MaxIter, simple_1) {
     auto result = IRA.getMaxIter();
 
     EXPECT_EQ(max_iter, result);
+}
+
+TEST(Dimension, simple_1) {
+
+    unsigned long dimension = 4;
+
+    ira IRA(2, 23, 8);
+    IRA.setDimension(dimension);
+
+    auto result_1 = IRA.getDimension();
+    auto result_2 = IRA.get1DMatrixSize();
+
+    EXPECT_EQ(dimension, result_1);
+    EXPECT_EQ(dimension * dimension, result_2);
 }
 
 TEST(LowerPrecision, simple_1) {

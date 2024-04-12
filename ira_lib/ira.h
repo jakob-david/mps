@@ -16,10 +16,12 @@ public:
     //-------------------------------
     struct {
 
-        double random_lower_bound;          // the lower bound when getting a random value.
-        double random_upper_bound;          // the upper bound when getting a random value.
+        double random_lower_bound;              // the lower bound when getting a random value.
+        double random_upper_bound;              // the upper bound when getting a random value.
 
-        unsigned long max_iter;
+        unsigned long max_iter;                 // The maximal number of refinement steps.
+        unsigned long n;                        // dimension of the system
+        unsigned long matrix_1D_size;           // The number of elements of the system matrix.
 
         unsigned long u_m_l;                    // working precision mantissa length
         unsigned long u_e_l;                    // working precision exponent length
@@ -53,7 +55,6 @@ public:
 
     // variables
     //-------------------------------
-    unsigned long n;           // dimension of the A
     vector<mps> A;             // the A which should be solved
 
     vector<mps> L;             // The resulting lower triangular Matrix after PLU decomposition.
@@ -73,6 +74,7 @@ public:
     //-------------------------------
     void setRandomRange(double lower_bound, double upper_bound);
     void setMaxIter(unsigned long new_max_iter);
+    void setDimension(unsigned long new_dimension);
     void setLowerPrecision(unsigned long mantissa_length, unsigned long exponent_length);
     void setUpperPrecision(unsigned long mantissa_length, unsigned long exponent_length);
     void setWorkingPrecision(unsigned long mantissa_length, unsigned long exponent_length);
@@ -81,6 +83,8 @@ public:
 
     [[nodiscard]] vector<double> getRandomRange() const;
     [[nodiscard]] unsigned long getMaxIter() const;
+    [[nodiscard]] unsigned long getDimension();
+    [[nodiscard]] unsigned long get1DMatrixSize();
     [[nodiscard]] vector<unsigned long> getLowerPrecision() const;
     [[nodiscard]] vector<unsigned long> getUpperPrecision() const;
     [[nodiscard]] vector<unsigned long> getWorkingPrecision() const;
@@ -123,7 +127,7 @@ public:
     [[nodiscard]] static vector<float> mps_to_float(vector<mps> mps_vector);
     //-------------------------------
 
-    // getting and calculating vectors
+    // generators
     //-------------------------------
     // TODO: test
     [[nodiscard]] vector<mps> getRandomVector(unsigned long mantissa_length, unsigned long exponent_length, unsigned long size) const;

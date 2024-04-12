@@ -28,9 +28,7 @@ ira::ira(unsigned long n, unsigned long ur_mantissa_length, unsigned long ur_exp
     }
 
 
-
-    this->n = n;
-    unsigned long matrix_1D_size = this->n * this->n;
+    setDimension(n);
 
     // set up parameters
     //-------------------------------
@@ -48,13 +46,13 @@ ira::ira(unsigned long n, unsigned long ur_mantissa_length, unsigned long ur_exp
 
     // set up matrices
     //-------------------------------
-    this->A.resize(matrix_1D_size);
-    this->L.resize(matrix_1D_size);
-    this->U.resize(matrix_1D_size);
+    this->A.resize(this->parameters.matrix_1D_size);
+    this->L.resize(this->parameters.matrix_1D_size);
+    this->U.resize(this->parameters.matrix_1D_size);
 
     // set up permutation vector
     //-------------------------------
-    this->P.resize(this->n);
+    this->P.resize(this->parameters.n);
 
     // set up evaluation struct
     //-------------------------------
@@ -101,6 +99,12 @@ void ira::setRandomRange(double lower_bound, double upper_bound){
 void ira::setMaxIter(unsigned long new_max_iter){
 
     this->parameters.max_iter = new_max_iter;
+}
+
+void ira::setDimension(unsigned long new_dimension){
+
+    this->parameters.n = new_dimension;
+    this->parameters.matrix_1D_size = new_dimension * new_dimension;
 }
 
 /**
@@ -183,7 +187,7 @@ void ira::setExpectedResult(const vector<mps>& new_expected_result){
     if (new_expected_result.empty()) {
         throw std::invalid_argument("ERROR: in setExpectedResult : input vector is empty");
     }
-    if (new_expected_result.size() != this->n) {
+    if (new_expected_result.size() != this->parameters.n) {
         throw std::invalid_argument("ERROR: in setExpectedResult : input vector is empty");
     }
 
@@ -242,6 +246,16 @@ vector<double> ira::getRandomRange() const{
 unsigned long ira::getMaxIter() const {
 
     return this->parameters.max_iter;
+}
+
+unsigned long ira::getDimension(){
+
+    return this->parameters.n;
+}
+
+unsigned long ira::get1DMatrixSize(){
+
+    return this->parameters.matrix_1D_size;
 }
 
 /**
@@ -370,8 +384,8 @@ void ira::setUnitaryMatrix() {
     mps zero(this->parameters.ur_m_l, this->parameters.ur_e_l, 0);
     mps one(this->parameters.ur_m_l, this->parameters.ur_e_l, 1);
 
-    for(unsigned long i = 0; i <  this->n; i++){
-        for(unsigned long j = 0; j < this->n; j++){
+    for(unsigned long i = 0; i <  this->parameters.n; i++){
+        for(unsigned long j = 0; j < this->parameters.n; j++){
             if(i == j){
                 this->A[get_idx(i, j)] |= one;
             } else {
@@ -390,10 +404,10 @@ void ira::setUnitaryMatrix() {
  */
 void ira::setMatrix(vector<double> new_matrix) {
 
-    if (new_matrix.size() > this->n * this->n) {
+    if (new_matrix.size() > this->parameters.matrix_1D_size) {
         throw std::invalid_argument("ERROR: in setMatrix: new_matrix too large");
     }
-    if (new_matrix.size() < this->n * this->n) {
+    if (new_matrix.size() < this->parameters.matrix_1D_size) {
         throw std::invalid_argument("ERROR: in setMatrix: new_matrix too small");
     }
 
@@ -416,7 +430,7 @@ void ira::setRandomMatrix(){
     std::uniform_real_distribution<double> dist(this->parameters.random_lower_bound, this->parameters.random_upper_bound);
 
 
-    for(unsigned i = 0; i < (this->n * this->n); i++){
+    for(unsigned i = 0; i < this->parameters.matrix_1D_size; i++){
         this->A[i] |= mps(this->parameters.ur_m_l, this->parameters.ur_e_l, dist(mt));
     }
 }
@@ -431,10 +445,10 @@ void ira::setRandomMatrix(){
  */
 void ira::setL(vector<double> new_L) {
 
-    if (new_L.size() > this->n * this->n) {
+    if (new_L.size() > this->parameters.matrix_1D_size) {
         throw std::invalid_argument("ERROR: in setL: new_L too large");
     }
-    if (new_L.size() < this->n * this->n) {
+    if (new_L.size() < this->parameters.matrix_1D_size) {
         throw std::invalid_argument("ERROR: in setL: new_L too small");
     }
 
@@ -453,10 +467,10 @@ void ira::setL(vector<double> new_L) {
  */
 void ira::setU(vector<double> new_U) {
 
-    if (new_U.size() > this->n * this->n) {
+    if (new_U.size() > this->parameters.matrix_1D_size) {
         throw std::invalid_argument("ERROR: in setU: new_U too large");
     }
-    if (new_U.size() < this->n * this->n) {
+    if (new_U.size() < this->parameters.matrix_1D_size) {
         throw std::invalid_argument("ERROR: in setU: new_U too small");
     }
 
@@ -477,7 +491,7 @@ void ira::setU(vector<double> new_U) {
  */
 mps ira::getMatrixElement(unsigned long idx){
 
-    if (idx >= (this->n * this->n)) {
+    if (idx >= this->parameters.matrix_1D_size) {
         throw std::invalid_argument("ERROR: getMatrixElement: idx too large");
     }
 
@@ -510,7 +524,7 @@ string ira::to_string(const char& matrix, const int precision) const {
         }
 
         ret += this->A[0].to_string(precision);
-        for(unsigned long i = 1; i < n*n; i++){
+        for(unsigned long i = 1; i < this->parameters.matrix_1D_size; i++){
             ret.append(", ");
             ret.append(this->A[i].to_string(precision));
         }
@@ -522,7 +536,7 @@ string ira::to_string(const char& matrix, const int precision) const {
         }
 
         ret += this->L[0].to_string(precision);
-        for(unsigned long i = 1; i < n*n; i++){
+        for(unsigned long i = 1; i < this->parameters.matrix_1D_size; i++){
             ret.append(", ");
             ret.append(this->L[i].to_string(precision));
         }
@@ -534,7 +548,7 @@ string ira::to_string(const char& matrix, const int precision) const {
         }
 
         ret += this->U[0].to_string(precision);
-        for(unsigned long i = 1; i < n*n; i++){
+        for(unsigned long i = 1; i < this->parameters.matrix_1D_size; i++){
             ret.append(", ");
             ret.append(this->U[i].to_string(precision));
         }
@@ -747,7 +761,7 @@ vector<float> ira::mps_to_float(vector<mps> mps_vector){
 //-------------------------------
 
 
-// getting and calculating vectors
+// generators
 //-------------------------------
 vector<mps> ira::getRandomVector(unsigned long mantissa_length, unsigned long exponent_length, unsigned long size) const {
 
@@ -954,8 +968,8 @@ void ira::PLU_decomposition(unsigned long mantissa_precision, unsigned long expo
     mps mps_zero(mantissa_precision, exponent_precision, 0);
     mps mps_one(mantissa_precision, exponent_precision, 1);
 
-    for(unsigned long i = 0; i <  this->n; i++){
-        for(unsigned long j = 0; j < this->n; j++){
+    for(unsigned long i = 0; i <  this->parameters.n; i++){
+        for(unsigned long j = 0; j < this->parameters.n; j++){
 
             idx = get_idx(i, j);
 
@@ -970,7 +984,7 @@ void ira::PLU_decomposition(unsigned long mantissa_precision, unsigned long expo
 
     // set up P
     //-------------------------------
-    for(unsigned long i = 0; i < this->n; i++){
+    for(unsigned long i = 0; i < this->parameters.n; i++){
         P[i] |= mps(mantissa_precision, exponent_precision, (double) i);
     }
     //-------------------------------
@@ -978,8 +992,8 @@ void ira::PLU_decomposition(unsigned long mantissa_precision, unsigned long expo
 
     // set up U
     //-------------------------------
-    for(unsigned long i = 0; i <  this->n; i++){
-        for(unsigned long j = 0; j < this->n; j++){
+    for(unsigned long i = 0; i <  this->parameters.n; i++){
+        for(unsigned long j = 0; j < this->parameters.n; j++){
 
             idx = get_idx(i, j);
 
@@ -992,22 +1006,22 @@ void ira::PLU_decomposition(unsigned long mantissa_precision, unsigned long expo
 
     // algorithm
     //-------------------------------
-    for(unsigned long k = 0; k < this->n; k++){
+    for(unsigned long k = 0; k < this->parameters.n; k++){
         // cout << "iteration: " << k << "/" << this->n << endl;
 
         auto max_row = get_max_U_idx(k, k);
 
-        interchangeRow(&this->U, k, max_row, k, n);
+        interchangeRow(&this->U, k, max_row, k, this->parameters.n);
         interchangeRow(&this->L, k, max_row, 0, k);
 
         auto tmp = P[k]; P[k] = P[max_row]; P[max_row] = tmp;
 
-        for(unsigned long j = k+1; j < n; j++){
+        for(unsigned long j = k+1; j < this->parameters.n; j++){
 
             idx = get_idx(j, k);
             this->L[idx] = this->U[idx] / this->U[get_idx(k, k)];
 
-            for(unsigned long i = k; i < n; i++){
+            for(unsigned long i = k; i < this->parameters.n; i++){
 
                 this->U[get_idx(j, i)]  = this->U[get_idx(j, i)] - (this->L[idx] * this->U[get_idx(k, i)]);
             }
@@ -1039,7 +1053,7 @@ vector<mps> ira::forwardSubstitution(const vector<mps>& b) const {
 
     mps tmp_sum(this->L[0].mantissa_length, this->L[0].exponent_length);
 
-    for(unsigned long i = 1; i < this->n; i++){
+    for(unsigned long i = 1; i < this->parameters.n; i++){
 
         tmp_sum = 0;
         for(unsigned long j = 0; j < i; j++){
@@ -1068,18 +1082,20 @@ vector<mps> ira::backwardSubstitution(const vector<mps>& b) const {
         throw std::invalid_argument("ERROR: in backwardSubstitution: b is empty");
     }
 
+    // TODO: maybe precalculate n-1
+
     vector<mps> x(b.size(), mps(this->U[0].mantissa_length, this->U[0].exponent_length));
 
-    x[this->n-1] = b[this->n-1]/U[get_idx(this->n-1, this->n-1)];
+    x[this->parameters.n-1] = b[this->parameters.n-1]/U[get_idx(this->parameters.n-1, this->parameters.n-1)];
 
     mps tmp_sum(this->U[0].mantissa_length, this->U[0].exponent_length);
 
-    for(unsigned long i = this->n-1; i > 0;){
+    for(unsigned long i = this->parameters.n-1; i > 0;){
 
         i--;
 
         tmp_sum = 0;
-        for(unsigned long j = this->n-1; j > i; j--){
+        for(unsigned long j = this->parameters.n-1; j > i; j--){
 
             tmp_sum =  tmp_sum + (U[get_idx(i,j)] * x[j]);
         }
@@ -1207,7 +1223,7 @@ vector<mps> ira::iterativeRefinementLU(const vector<mps> &b) {
         // evaluation
         //-------------------------------
         if(this->parameters.expected_result_present) {
-            for (unsigned long element_id = 0; element_id < this->n; element_id++) {
+            for (unsigned long element_id = 0; element_id < this->parameters.n; element_id++) {
                 this->evaluation.IR_relativeError.push_back(
                         x[element_id].getRelativeError_double(this->parameters.expected_result_mps[element_id]));
                 this->evaluation.IR_area_relativeError += this->evaluation.IR_relativeError.back();
@@ -1317,11 +1333,11 @@ vector<double> ira::solveLU_double(const vector<double>& b){
     vector<vector<double>> L_;
     vector<vector<double>> P_;
 
-    for(unsigned long i = 0; i <  this->n; i++){
+    for(unsigned long i = 0; i <  this->parameters.n; i++){
 
         vector<double> row;
 
-        for(unsigned long j = 0; j < this->n; j++){
+        for(unsigned long j = 0; j < this->parameters.n; j++){
 
             if(i == j){
                 row.push_back(1);
@@ -1339,11 +1355,11 @@ vector<double> ira::solveLU_double(const vector<double>& b){
     //-------------------------------
     vector<vector<double>> U_;
 
-    for(unsigned long i = 0; i <  this->n; i++){
+    for(unsigned long i = 0; i <  this->parameters.n; i++){
 
         vector<double> row;
 
-        for(unsigned long j = 0; j < this->n; j++){
+        for(unsigned long j = 0; j < this->parameters.n; j++){
 
             auto idx = get_idx(i, j);
 
@@ -1357,19 +1373,19 @@ vector<double> ira::solveLU_double(const vector<double>& b){
 
     // PLU decomposition algorithm
     //-------------------------------
-    for(unsigned long k = 0; k < this->n; k++){
+    for(unsigned long k = 0; k < this->parameters.n; k++){
 
-        auto max_row = get_max_U(U_, this->n, k, k);
+        auto max_row = get_max_U(U_, this->parameters.n, k, k);
 
-        interchange(&U_, k, max_row, k, n);
+        interchange(&U_, k, max_row, k, this->parameters.n);
         interchange(&L_, k, max_row, 0, k);
-        interchange(&P_, k, max_row, 0, n);
+        interchange(&P_, k, max_row, 0, this->parameters.n);
 
-        for(unsigned long j = k+1; j < n; j++){
+        for(unsigned long j = k+1; j < this->parameters.n; j++){
 
             L_[j][k] = div(U_[j][k], U_[k][k]);
 
-            for(unsigned long i = k; i < n; i++){
+            for(unsigned long i = k; i < this->parameters.n; i++){
                 U_[j][i]  = sub(U_[j][i], mul(L_[j][k], U_[k][i]));
             }
         }
@@ -1395,7 +1411,7 @@ vector<double> ira::solveLU_double(const vector<double>& b){
     vector<double> xf;
 
     xf.push_back(div(permut_b[0], L_[0][0]));
-    for(unsigned long i = 1; i < this->n; i++){
+    for(unsigned long i = 1; i < this->parameters.n; i++){
 
         double tmp_sum = 0;
         for(unsigned long j = 0; j < i; j++){
@@ -1410,13 +1426,13 @@ vector<double> ira::solveLU_double(const vector<double>& b){
     //-------------------------------
     vector<double> xb(xf.size(), 0);
 
-    xb[this->n-1] = div(xf[this->n-1], U_[this->n-1][this->n-1]);
-    for(unsigned long i = this->n-1; i > 0;){
+    xb[this->parameters.n-1] = div(xf[this->parameters.n-1], U_[this->parameters.n-1][this->parameters.n-1]);
+    for(unsigned long i = this->parameters.n-1; i > 0;){
 
         i--;
 
         double tmp_sum = 0;
-        for(unsigned long j = this->n-1; j > i; j--){
+        for(unsigned long j = this->parameters.n-1; j > i; j--){
 
             tmp_sum =  add(tmp_sum, mul(U_[i][j], xb[j]));
         }
@@ -1443,7 +1459,7 @@ vector<double> ira::solveLU_double(const vector<double>& b){
  * @return the resulting 1D-index.
  */
 unsigned long ira::get_idx(unsigned long row, unsigned long column) const{
-    return this->n * row + column;
+    return this->parameters.n * row + column;
 }
 
 /**
@@ -1476,7 +1492,7 @@ unsigned long ira::get_max_U_idx(unsigned long column, unsigned long start) cons
     unsigned long max_row = start;
     mps value = U[get_idx(start, column)];
 
-    for(unsigned long i = start; i < this->n; i++){
+    for(unsigned long i = start; i < this->parameters.n; i++){
 
         unsigned long idx = get_idx(i, column);
 
