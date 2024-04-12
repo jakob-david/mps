@@ -12,6 +12,8 @@
 #include "../mps_lib/mps.h"
 #include "../ira_lib/ira.h"
 
+using namespace std;
+
 
 class mpe {
 
@@ -23,8 +25,9 @@ private:
         double random_upper_bound;              // the upper bound when getting a random value.
 
         unsigned long n;                        // the dimension of the system
-        unsigned long matrix_1D_size;           // The number of elements of the system matrix.
-        unsigned long iter_max;                 // dimension of the system
+        unsigned long matrix_1D_size;           // the number of elements of the system matrix
+        unsigned long iterations;               // the number of iterations
+        unsigned long iter_max;                 // the maximal number of iterations
 
         unsigned long ul_m_l;                   // lower precision mantissa length
         unsigned long ul_e_l;                   // lower precision exponent length
@@ -40,24 +43,8 @@ private:
         unsigned long ur_m_r_lower;             // upper precision mantissa range lower limit
         unsigned long ur_m_r_upper;             // upper precision mantissa range upper limit
 
-    } parameters ;
+    } parameters;
 
-    unsigned long first_mantissa_size;
-    unsigned long last_mantissa_size;
-    unsigned long exponent_size;
-
-    struct {
-        unsigned long n; // TODO: remove n
-        unsigned long iter_max;
-
-        unsigned long u_exponent_size;
-        unsigned long u_mantissa_size;
-
-        unsigned long ul_first_mantissa_size;
-        unsigned long ul_last_mantissa_size;
-        unsigned long ur_first_mantissa_size;
-        unsigned long ur_last_mantissa_size;
-    } irm{};
 
 public:
 
@@ -73,39 +60,39 @@ public:
     void setUpperRandomLimit(double upper_bound);
     void setLowerRandomLimit(double lower_bound);
 
+    void setDimension(unsigned long new_dimension);
+    void setIterations(unsigned long new_iterations);
+    void setMaxIter(unsigned long new_max_iter);
+
     void setLowerPrecision(unsigned long mantissa_length, unsigned long exponent_length);
     void setWorkingPrecision(unsigned long mantissa_length, unsigned long exponent_length);
     void setUpperPrecision(unsigned long mantissa_length, unsigned long exponent_length);
 
+    void setLowerPrecisionMantissaRange(unsigned long lower_bound, unsigned long upper_bound);
+    void setWorkingPrecisionMantissaRange(unsigned long lower_bound, unsigned long upper_bound);
+    void setUpperPrecisionMantissaRange(unsigned long lower_bound, unsigned long upper_bound);
+    //-------------------------------
 
+
+    // getters
+    //-------------------------------
+    [[nodiscard]] vector<unsigned long> getLowerPrecisionMantissaAxis() const;
+    [[nodiscard]] vector<unsigned long> getWorkingPrecisionMantissaAxis() const;
+    [[nodiscard]] vector<unsigned long> getUpperPrecisionMantissaAxis() const;
+    //-------------------------------
 
 
     // operator evaluation
-    void setFormatRange(unsigned long new_first_mantissa_size, unsigned long new_last_mantissa_size, unsigned long new_exponent_size);
-
-    // irm setter
-    void setBasicParameters_irm(unsigned long new_n, unsigned long new_iter_max);
-    void setWorkingPrecision_irm(unsigned long new_u_exponent_size, unsigned long new_u_mantissa_size);
-    void setRange_ul_irm(unsigned long new_ul_first_mantissa_size, unsigned long new_ul_last_mantissa_size);
-    void setRange_ur_irm(unsigned long new_ur_first_mantissa_size, unsigned long new_ur_last_mantissa_size);
+    //-------------------------------
+    [[nodiscard]] std::vector<long long int> evaluateAddition() const ;
+    [[nodiscard]] std::vector<long long int> evaluateSubtraction() const ;
+    [[nodiscard]] std::vector<long long int> evaluateMultiplication() const ;
+    [[nodiscard]] std::vector<long long int> evaluateDivision() const ;
     //-------------------------------
 
-    // getter
-    //-------------------------------
-    [[nodiscard]] std::vector<unsigned long int> getMantissaAxis() const;
 
-    // irm getter
-    [[nodiscard]] std::vector<unsigned long int> getAxis_ul_irm() const;
-    [[nodiscard]] std::vector<unsigned long int> getAxis_ur_irm() const;
-    //-------------------------------
 
-    // operator evaluation
-    //-------------------------------
-    [[nodiscard]] std::vector<long long int> evaluateAddition(unsigned long n_tests) const ;
-    [[nodiscard]] std::vector<long long int> evaluateSubtraction(unsigned long n_tests) const ;
-    [[nodiscard]] std::vector<long long int> evaluateMultiplication(unsigned long n_tests) const ;
-    [[nodiscard]] std::vector<long long int> evaluateDivision(unsigned long n_tests) const ;
-    //-------------------------------
+
 
     // iterative refinement evaluation
     //-------------------------------
@@ -114,9 +101,11 @@ public:
     //-------------------------------
 
 private:
-    // helper functions
+
+    // generators
     //-------------------------------
-    [[nodiscard]] double getPositiveRandomDouble() const;
+    [[nodiscard]] double generatePositiveRandomDouble() const;
+    //-------------------------------
 };
 
 

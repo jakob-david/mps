@@ -28,6 +28,23 @@ void mpe::setLowerRandomLimit(double lower_bound){
 }
 
 
+void mpe::setDimension(unsigned long new_dimension){
+
+    this->parameters.n = new_dimension;
+    this->parameters.matrix_1D_size = new_dimension * new_dimension;
+}
+
+void mpe::setIterations(unsigned long new_iterations){
+
+    this->parameters.iterations = new_iterations;
+}
+
+void mpe::setMaxIter(unsigned long new_max_iter){
+
+    this->parameters.iter_max = new_max_iter;
+}
+
+
 void mpe::setLowerPrecision(unsigned long mantissa_length, unsigned long exponent_length){
 
     this->parameters.ul_m_l = mantissa_length;
@@ -47,103 +64,96 @@ void mpe::setUpperPrecision(unsigned long mantissa_length, unsigned long exponen
 }
 
 
+void mpe::setLowerPrecisionMantissaRange(unsigned long lower_bound, unsigned long upper_bound){
 
-
-
-
-
-
-void mpe::setFormatRange(unsigned long new_first_mantissa_size, unsigned long new_last_mantissa_size, unsigned long new_exponent_size){
-
-    this->first_mantissa_size = new_first_mantissa_size;
-    this->last_mantissa_size = new_last_mantissa_size;
-    this->exponent_size = new_exponent_size;
+    this->parameters.ul_m_r_lower = lower_bound;
+    this->parameters.ul_m_r_upper = upper_bound;
 }
 
-// irm setter
-void mpe::setBasicParameters_irm(unsigned long new_n, unsigned long new_iter_max) {
+void mpe::setWorkingPrecisionMantissaRange(unsigned long lower_bound, unsigned long upper_bound){
 
-    this->irm.n = new_n;
-    this->irm.iter_max = new_iter_max;
+    this->parameters.u_m_r_lower = lower_bound;
+    this->parameters.u_m_r_upper = upper_bound;
 }
 
-void mpe::setWorkingPrecision_irm(unsigned long new_u_mantissa_size, unsigned long new_u_exponent_size){
+void mpe::setUpperPrecisionMantissaRange(unsigned long lower_bound, unsigned long upper_bound){
 
-    this->irm.u_mantissa_size = new_u_mantissa_size;
-    this->irm.u_exponent_size = new_u_exponent_size;
-}
-
-void mpe::setRange_ul_irm(unsigned long new_ul_first_mantissa_size, unsigned long new_ul_last_mantissa_size){
-
-    this->irm.ul_first_mantissa_size = new_ul_first_mantissa_size;
-    this->irm.ul_last_mantissa_size = new_ul_last_mantissa_size;
-}
-
-void mpe::setRange_ur_irm(unsigned long new_ur_first_mantissa_size, unsigned long new_ur_last_mantissa_size){
-
-    this->irm.ur_first_mantissa_size = new_ur_first_mantissa_size;
-    this->irm.ur_last_mantissa_size = new_ur_last_mantissa_size;
+    this->parameters.ur_m_r_lower = lower_bound;
+    this->parameters.ur_m_r_upper = upper_bound;
 }
 //-------------------------------
 
-// getter
+
+// getters
 //-------------------------------
-std::vector<unsigned long int> mpe::getMantissaAxis() const {
-    std::vector<unsigned long> ret;
+vector<unsigned long> mpe::getLowerPrecisionMantissaAxis() const {
 
-    for(unsigned long m_size = this->first_mantissa_size; m_size <= this->last_mantissa_size; m_size++){
+    vector<unsigned long> ret;
+
+    for(unsigned long m_size = this->parameters.ul_m_r_lower; m_size <= this->parameters.ul_m_r_upper; m_size++){
         ret.push_back(m_size);
     }
 
     return ret;
 }
 
-// irm getter
-std::vector<unsigned long int> mpe::getAxis_ul_irm() const {
+vector<unsigned long> mpe::getWorkingPrecisionMantissaAxis() const {
 
-    std::vector<unsigned long> ret;
+    vector<unsigned long> ret;
 
-    for(unsigned long m_size = this->irm.ul_first_mantissa_size; m_size <= this->irm.ul_last_mantissa_size; m_size++){
+    for(unsigned long m_size = this->parameters.u_m_r_lower; m_size <= this->parameters.u_m_r_upper; m_size++){
         ret.push_back(m_size);
     }
 
     return ret;
 }
 
-std::vector<unsigned long int> mpe::getAxis_ur_irm() const {
+vector<unsigned long> mpe::getUpperPrecisionMantissaAxis() const {
 
-    std::vector<unsigned long> ret;
+    vector<unsigned long> ret;
 
-    for(unsigned long m_size = this->irm.ur_first_mantissa_size; m_size <= this->irm.ur_last_mantissa_size; m_size++){
+    for(unsigned long m_size = this->parameters.ur_m_r_lower; m_size <= this->parameters.ur_m_r_upper; m_size++){
         ret.push_back(m_size);
     }
 
     return ret;
+}
+//-------------------------------
+
+
+// generators
+//-------------------------------
+double mpe::generatePositiveRandomDouble() const {
+
+    std::random_device rd;
+    std::mt19937 mt(rd());
+    std::uniform_real_distribution<double> dist(numeric_limits<double>::min(), this->parameters.random_upper_bound);
+
+    return dist(mt);
 }
 //-------------------------------
 
 
 // operator evaluation
 //-------------------------------
-std::vector<long long int> mpe::evaluateAddition(unsigned long n_tests) const {
+std::vector<long long int> mpe::evaluateAddition() const {
 
     // variable for python multithreading.
-
     py::gil_scoped_release release;
 
     std::vector<long long> ret;
 
-    double a = getPositiveRandomDouble();
-    double b = getPositiveRandomDouble();
+    double a = generatePositiveRandomDouble();
+    double b = generatePositiveRandomDouble();
 
-    for(unsigned long m_size = this->first_mantissa_size; m_size <= this->last_mantissa_size; m_size++){
+    for(unsigned long m_size = this->parameters.u_m_r_lower; m_size <= this->parameters.u_m_r_upper; m_size++){
 
-        mps A(m_size, this->exponent_size, a);
-        mps B(m_size, this->exponent_size, b);
+        mps A(m_size, this->parameters.u_e_l, a);
+        mps B(m_size, this->parameters.u_e_l, b);
 
         const auto start = std::chrono::high_resolution_clock::now();
 
-        for(unsigned long test = 0; test < n_tests; test++){
+        for(unsigned long test = 0; test < this->parameters.iterations; test++){
             A + B;
         }
 
@@ -156,7 +166,7 @@ std::vector<long long int> mpe::evaluateAddition(unsigned long n_tests) const {
     return ret;
 }
 
-std::vector<long long int> mpe::evaluateSubtraction(unsigned long n_tests) const {
+std::vector<long long int> mpe::evaluateSubtraction() const {
 
     // variable for python multithreading.
 
@@ -164,18 +174,18 @@ std::vector<long long int> mpe::evaluateSubtraction(unsigned long n_tests) const
 
     std::vector<long long> ret;
 
-    double a = getPositiveRandomDouble();
-    double b = getPositiveRandomDouble();
+    double a = generatePositiveRandomDouble();
+    double b = generatePositiveRandomDouble();
     a += b; // in order to get a non-negative result.
 
-    for(unsigned long m_size = this->first_mantissa_size; m_size <= this->last_mantissa_size; m_size++){
+    for(unsigned long m_size = this->parameters.u_m_r_lower; m_size <= this->parameters.u_m_r_upper; m_size++){
 
-        mps A(m_size, this->exponent_size, a);
-        mps B(m_size, this->exponent_size, b);
+        mps A(m_size, this->parameters.u_e_l, a);
+        mps B(m_size, this->parameters.u_e_l, b);
 
         const auto start = std::chrono::high_resolution_clock::now();
 
-        for(unsigned long test = 0; test < n_tests; test++){
+        for(unsigned long test = 0; test < this->parameters.iterations; test++){
             A - B;
         }
 
@@ -188,7 +198,7 @@ std::vector<long long int> mpe::evaluateSubtraction(unsigned long n_tests) const
     return ret;
 }
 
-std::vector<long long int> mpe::evaluateMultiplication(unsigned long n_tests) const {
+std::vector<long long int> mpe::evaluateMultiplication() const {
 
     // variable for python multithreading.
 
@@ -196,17 +206,17 @@ std::vector<long long int> mpe::evaluateMultiplication(unsigned long n_tests) co
 
     std::vector<long long> ret;
 
-    double a = getPositiveRandomDouble();
-    double b = getPositiveRandomDouble();
+    double a = generatePositiveRandomDouble();
+    double b = generatePositiveRandomDouble();
 
-    for(unsigned long m_size = this->first_mantissa_size; m_size <= this->last_mantissa_size; m_size++){
+    for(unsigned long m_size = this->parameters.u_m_r_lower; m_size <= this->parameters.u_m_r_upper; m_size++){
 
-        mps A(m_size, this->exponent_size, a);
-        mps B(m_size, this->exponent_size, b);
+        mps A(m_size, this->parameters.u_e_l, a);
+        mps B(m_size, this->parameters.u_e_l, b);
 
         const auto start = std::chrono::high_resolution_clock::now();
 
-        for(unsigned long test = 0; test < n_tests; test++){
+        for(unsigned long test = 0; test < this->parameters.iterations; test++){
             A * B;
         }
 
@@ -219,7 +229,7 @@ std::vector<long long int> mpe::evaluateMultiplication(unsigned long n_tests) co
     return ret;
 }
 
-std::vector<long long int> mpe::evaluateDivision(unsigned long n_tests) const {
+std::vector<long long int> mpe::evaluateDivision() const {
 
     // variable for python multithreading.
 
@@ -227,17 +237,17 @@ std::vector<long long int> mpe::evaluateDivision(unsigned long n_tests) const {
 
     std::vector<long long> ret;
 
-    double a = getPositiveRandomDouble();
-    double b = getPositiveRandomDouble();
+    double a = generatePositiveRandomDouble();
+    double b = generatePositiveRandomDouble();
 
-    for(unsigned long m_size = this->first_mantissa_size; m_size <= this->last_mantissa_size; m_size++){
+    for(unsigned long m_size = this->parameters.u_m_r_lower; m_size <= this->parameters.u_m_r_upper; m_size++){
 
-        mps A(m_size, this->exponent_size, a);
-        mps B(m_size, this->exponent_size, b);
+        mps A(m_size, this->parameters.u_e_l, a);
+        mps B(m_size, this->parameters.u_e_l, b);
 
         const auto start = std::chrono::high_resolution_clock::now();
 
-        for(unsigned long test = 0; test < n_tests; test++){
+        for(unsigned long test = 0; test < this->parameters.iterations; test++){
             A / B;
         }
 
@@ -392,14 +402,3 @@ std::vector<std::vector<long double>> mpe::evaluateConvergence_2D(double precisi
 //-------------------------------
 
 
-// helper functions
-//-------------------------------
-double mpe::getPositiveRandomDouble() const {
-
-    std::random_device rd;
-    std::mt19937 mt(rd());
-    std::uniform_real_distribution<double> dist(numeric_limits<double>::min(), this->parameters.random_upper_bound);
-
-    return dist(mt);
-}
-//-------------------------------
