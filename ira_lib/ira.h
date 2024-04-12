@@ -130,9 +130,11 @@ public:
     // generators
     //-------------------------------
     // TODO: test
-    [[nodiscard]] vector<mps> getRandomVector(unsigned long mantissa_length, unsigned long exponent_length, unsigned long size) const;
+    [[nodiscard]] vector<mps> generateRandomVector(unsigned long mantissa_length, unsigned long exponent_length, unsigned long size) const;
     // TODO: test
-    [[nodiscard]] vector<mps> multiplyWithSystemMatrix(vector<mps> x) const;
+    [[nodiscard]] vector<mps> generateRandomRHS();
+    // TODO: test
+    [[nodiscard]] vector<mps> generateRandomLinearSystem();
     //-------------------------------
 
     // operators
@@ -141,6 +143,8 @@ public:
     [[nodiscard]] static vector<mps> vectorAddition(const vector<mps>& a, const vector<mps>& b);
     [[nodiscard]] static vector<mps> vectorSubtraction(const vector<mps>& a, const vector<mps>& b);
     [[nodiscard]] static vector<mps> matrixVectorProduct(const vector<mps>& D, const vector<mps>& x);
+    // TODO: test
+    [[nodiscard]] vector<mps> multiplyWithSystemMatrix(vector<mps> x) const;
     //-------------------------------
 
     // algorithms

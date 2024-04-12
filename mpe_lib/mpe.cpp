@@ -273,7 +273,7 @@ std::vector<std::vector<long double>> mpe::irmGetWholePlane(bool output) const {
 
     // set up linear system
     IRA.setRandomMatrix(this->irm.ur_last_mantissa_size, this->irm.u_exponent_size);
-    auto x_mps = IRA.getRandomVector(this->irm.ur_last_mantissa_size, this->irm.u_exponent_size, this->irm.n);
+    auto x_mps = IRA.generateRandomVector(this->irm.ur_last_mantissa_size, this->irm.u_exponent_size, this->irm.n);
     auto b = IRA.multiplyWithSystemMatrix(x_mps);
 
     // set x_mps to working precision
@@ -343,7 +343,7 @@ std::vector<std::vector<long double>> mpe::irmGetWholePlane_convergence(double p
 
     // set up linear system
     IRA.setRandomMatrix(this->irm.ur_last_mantissa_size, this->irm.u_exponent_size);
-    auto x_mps = IRA.getRandomVector(this->irm.ur_last_mantissa_size, this->irm.u_exponent_size, this->irm.n);
+    auto x_mps = IRA.generateRandomVector(this->irm.ur_last_mantissa_size, this->irm.u_exponent_size, this->irm.n);
     auto b = IRA.multiplyWithSystemMatrix(x_mps);
 
     // set x_mps to working precision

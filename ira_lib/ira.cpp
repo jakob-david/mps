@@ -778,12 +778,31 @@ vector<float> ira::mps_to_float(vector<mps> mps_vector){
 
 // generators
 //-------------------------------
-vector<mps> ira::getRandomVector(unsigned long mantissa_length, unsigned long exponent_length, unsigned long size) const {
+/**
+ * Generates a random vector consisting of mps objects.
+ * The value range can be set by changing the random range parameters.
+ *
+ * Throws Exception:    When the mantissa length is too small.
+ *                      When the exponent length is too small.
+ *
+ * @param mantissa_length the mantissa length of the mps objects
+ * @param exponent_length the exponent length of the mps objects
+ * @param size the size of the generated vector
+ * @return a randomly created vector consisting of mps objects.
+ */
+vector<mps> ira::generateRandomVector(unsigned long mantissa_length, unsigned long exponent_length, unsigned long size) const {
+
+    if (mantissa_length <= 0) {
+        throw std::invalid_argument("ERROR: in generateRandomVector : mantissa size too small");
+    }
+    if (exponent_length <= 1) {
+        throw std::invalid_argument("ERROR: in generateRandomVector : exponent size too small");
+    }
 
     vector<mps> ret;
 
     if (exponent_length < 1) {
-        throw std::invalid_argument("ERROR: getRandomVector: exponent too small");
+        throw std::invalid_argument("ERROR: generateRandomVector: exponent too small");
     }
 
     std::random_device rd;
@@ -797,25 +816,30 @@ vector<mps> ira::getRandomVector(unsigned long mantissa_length, unsigned long ex
     return ret;
 }
 
-vector<mps> ira::multiplyWithSystemMatrix(vector<mps> x) const {
+/**
+ * Generates a random rhs for the linear system.
+ * Generates the vector x and calculates the vector b (Ax=b). Also sets the expected result.
+ *
+ * @return the b vector of the system
+ */
+vector<mps> ira::generateRandomRHS() {
 
-    if (this->A.empty()) {
-        throw std::invalid_argument("ERROR: in multiplyWithSystemMatrix: system matrix is empty");
-    }
-    if (x.empty()) {
-        throw std::invalid_argument("ERROR: in multiplyWithSystemMatrix: x is empty");
-    }
-    if (this->A.size() != (x.size() * x.size())) {
-        throw std::invalid_argument("ERROR: in multiplyWithSystemMatrix: dimensions of A and x do not match");
-    }
-    if (this->A[0].exponent_length != x[0].exponent_length) {
-        throw std::invalid_argument("ERROR: in multiplyWithSystemMatrix: exponents do not match");
-    }
-    if (this->A[0].mantissa_length != x[0].mantissa_length) {
-        throw std::invalid_argument("ERROR: in multiplyWithSystemMatrix: mantissas do not match");
-    }
+    auto x = generateRandomVector(this->parameters.ur_m_l, this->parameters.ur_e_l, this->parameters.n);
+    setExpectedResult(x);
 
-    return matrixVectorProduct(this->A, x);
+    return multiplyWithSystemMatrix(x);
+}
+
+/**
+ * Generates a complete random linear system.
+ * Generates A and x calulases vectors the vector b (Ax=b). Also sets the expected result.
+ *
+ * @return the b vector of the system
+ */
+vector<mps> ira::generateRandomLinearSystem() {
+
+    setRandomMatrix();
+    return generateRandomRHS();
 }
 //-------------------------------
 
@@ -920,12 +944,12 @@ vector<mps> ira::vectorSubtraction(const vector<mps>& a, const vector<mps>& b) {
 }
 
 /**
- * Performs a vector matrix product.
+ * Performs a matrix vector product.
  * The elements of the matrix and the vector are mps objects.
  *
  * @param D the matrix for the multiplication
  * @param x the vector for the multiplication
- * @return the resulting vector after the multiplication.
+ * @return the resulting vector from the multiplication.
  */
 vector<mps> ira::matrixVectorProduct(const vector<mps>& D, const vector<mps>& x) {
 
@@ -954,6 +978,33 @@ vector<mps> ira::matrixVectorProduct(const vector<mps>& D, const vector<mps>& x)
     }
 
     return y;
+}
+
+/**
+ * Performs a matrix vector product. The matrix is the system matrix A.
+ *
+ * @param x the vector for the multiplication
+ * @return the resulting vector from the multiplication.
+ */
+vector<mps> ira::multiplyWithSystemMatrix(vector<mps> x) const {
+
+    if (this->A.empty()) {
+        throw std::invalid_argument("ERROR: in multiplyWithSystemMatrix: system matrix is empty");
+    }
+    if (x.empty()) {
+        throw std::invalid_argument("ERROR: in multiplyWithSystemMatrix: x is empty");
+    }
+    if (this->A.size() != (x.size() * x.size())) {
+        throw std::invalid_argument("ERROR: in multiplyWithSystemMatrix: dimensions of A and x do not match");
+    }
+    if (this->A[0].exponent_length != x[0].exponent_length) {
+        throw std::invalid_argument("ERROR: in multiplyWithSystemMatrix: exponents do not match");
+    }
+    if (this->A[0].mantissa_length != x[0].mantissa_length) {
+        throw std::invalid_argument("ERROR: in multiplyWithSystemMatrix: mantissas do not match");
+    }
+
+    return matrixVectorProduct(this->A, x);
 }
 //-------------------------------
 
