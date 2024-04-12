@@ -58,13 +58,13 @@ PYBIND11_MODULE(mpe_library, mpe_handle) {
                 return out;
             })
 
-            .def("irmGetWholePlane", [](mpe &self, bool output = false){
-                py::array out = py::cast(self.irmGetWholePlane(output));
+            .def("evaluateArea_2D", [](mpe &self, bool output = false){
+                py::array out = py::cast(self.evaluateArea_2D(output));
                 return out;
             })
 
-            .def("irmGetWholePlane_convergence", [](mpe &self, double precision, unsigned long max_iter, bool output = false){
-                py::array out = py::cast(self.irmGetWholePlane_convergence(precision, max_iter, output));
+            .def("evaluateConvergence_2D", [](mpe &self, double precision, unsigned long max_iter, bool output = false){
+                py::array out = py::cast(self.evaluateConvergence_2D(precision, max_iter, output));
                 return out;
             })
 

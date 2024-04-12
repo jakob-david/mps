@@ -252,12 +252,12 @@ std::vector<long long int> mpe::evaluateDivision(unsigned long n_tests) const {
 
 // iterative refinement evaluation
 //-------------------------------
-std::vector<std::vector<long double>> mpe::irmGetWholePlane(bool output) const {
+std::vector<std::vector<long double>> mpe::evaluateArea_2D(bool output) const {
 
     std::vector<std::vector<long double>> result;
 
     if(output){
-        cout << "STARTING: irmGetWholePlane" << endl;
+        cout << "STARTING: evaluateArea_2D" << endl;
     }
 
     // init FP precision objects
@@ -319,12 +319,12 @@ std::vector<std::vector<long double>> mpe::irmGetWholePlane(bool output) const {
     return result;
 }
 
-std::vector<std::vector<long double>> mpe::irmGetWholePlane_convergence(double precision, unsigned long max_iter, bool output) const {
+std::vector<std::vector<long double>> mpe::evaluateConvergence_2D(double precision, unsigned long max_iter, bool output) const {
 
     std::vector<std::vector<long double>> result;
 
     if(output){
-        cout << "STARTING: irmGetWholePlane_convergence" << endl;
+        cout << "STARTING: evaluateConvergence_2D" << endl;
     }
 
     // init FP precision objects
