@@ -119,8 +119,8 @@ void ira::setDimension(unsigned long new_dimension){
  * Throws Exception:    When the mantissa is smaller than 1.
  *                      When the exponent is smaller than 2.
  *
- * @param mantissa_length the new mantissa size.
- * @param exponent_length the new exponent size. .
+ * @param mantissa_length the new mantissa size
+ * @param exponent_length the new exponent size
  */
 void ira::setLowerPrecision(unsigned long mantissa_length, unsigned long exponent_length){
 
@@ -135,6 +135,13 @@ void ira::setLowerPrecision(unsigned long mantissa_length, unsigned long exponen
     this->parameters.ul_e_l = exponent_length;
 }
 
+/**
+ * Sets the size of the mantissa of the lower precision (ul)
+ *
+ * Throws Exception:    When the mantissa is smaller than 1.
+ *
+ * @param mantissa_length the new mantissa size.
+ */
 void ira::setLowerPrecisionMantissa(unsigned long mantissa_length){
 
     if (mantissa_length <= 0) {
@@ -144,6 +151,13 @@ void ira::setLowerPrecisionMantissa(unsigned long mantissa_length){
     this->parameters.ul_m_l = mantissa_length;
 }
 
+/**
+ * Sets the size of the exponent of the lower precision (ul).
+ *
+ * Throws Exception:    When the exponent is smaller than 2.
+ *
+ * @param exponent_length the new exponent size
+ */
 void ira::setLowerPrecisionExponent(unsigned long exponent_length){
 
     if (exponent_length <= 1) {
@@ -176,6 +190,13 @@ void ira::setWorkingPrecision(unsigned long mantissa_length, unsigned long expon
     this->parameters.u_e_l = exponent_length;
 }
 
+/**
+ * Sets the size of the mantissa of the working precision (u)
+ *
+ * Throws Exception:    When the mantissa is smaller than 1.
+ *
+ * @param mantissa_length the new mantissa size
+ */
 void ira::setWorkingPrecisionMantissa(unsigned long mantissa_length){
 
     if (mantissa_length <= 0) {
@@ -185,6 +206,13 @@ void ira::setWorkingPrecisionMantissa(unsigned long mantissa_length){
     this->parameters.u_m_l = mantissa_length;
 }
 
+/**
+ * Sets the size of the exponent of the working precision (u)
+ *
+ * Throws Exception:    When the exponent is smaller than 2.
+ *
+ * @param exponent_length the new exponent size
+ */
 void ira::setWorkingPrecisionExponent(unsigned long exponent_length){
 
     if (exponent_length <= 1) {
@@ -195,7 +223,7 @@ void ira::setWorkingPrecisionExponent(unsigned long exponent_length){
 }
 
 /**
- * Sets the size of the mantissa and exponent of the upper precision (ur)
+ * Sets the size of the mantissa and exponent of the upper precision (ur).
  *
  * Throws Exception:    When the mantissa is smaller than 1.
  *                      When the exponent is smaller than 2.
@@ -216,6 +244,13 @@ void ira::setUpperPrecision(unsigned long mantissa_length, unsigned long exponen
     this->parameters.ur_e_l = exponent_length;
 }
 
+/**
+ * Sets the size of the mantissa of the upper precision (ur).
+ *
+ * Throws Exception:    When the mantissa is smaller than 1.
+ *
+ * @param mantissa_length the new mantissa size
+ */
 void ira::setUpperPrecisionMantissa(unsigned long mantissa_length){
 
     if (mantissa_length <= 0) {
@@ -225,6 +260,13 @@ void ira::setUpperPrecisionMantissa(unsigned long mantissa_length){
     this->parameters.ur_m_l = mantissa_length;
 }
 
+/**
+ * Sets the size of the exponent of the upper precision (ur).
+ *
+ * Throws Exception:    When the exponent is smaller than 2.
+ *
+ * @param exponent_length the new exponent size
+ */
 void ira::setUpperPrecisionExponent(unsigned long exponent_length){
 
     if (exponent_length <= 1) {
