@@ -8,49 +8,50 @@
 namespace py = pybind11;
 
 
-// constructors and destructor
-//-------------------------------
 
-/**
- * Simple constructor for a multiprecision evaluation object.
- */
-mpe::mpe() {
-
-    this->random_lower_bound = -10;
-    this->random_upper_bound = 10;
-
-    this->first_mantissa_size = 10;
-    this->last_mantissa_size = 52;
-    this->exponent_size = 11;
-
-    this->irm.n = 10;
-    this->irm.iter_max = 10;
-    this->irm.u_mantissa_size = 23;
-    this->irm.u_exponent_size = 8;
-    this->irm.ul_first_mantissa_size = 10;
-    this->irm.ul_last_mantissa_size = 22;
-    this->irm.ur_first_mantissa_size = 24;
-    this->irm.ur_last_mantissa_size = 40;
-}
-
-/**
- * Destructor for a multiprecision evaluation object.
- */
-mpe::~mpe() = default;
-//-------------------------------
-
-// setter
+// parameter setters
 //-------------------------------
 void mpe::setRandomLimits(double lower_bound, double upper_bound) {
 
-    this->random_lower_bound = lower_bound;
-    this->random_upper_bound = upper_bound;
+    this->parameters.random_lower_bound = lower_bound;
+    this->parameters.random_upper_bound = upper_bound;
 }
 
 void mpe::setUpperRandomLimit(double upper_bound){
 
-    this->random_upper_bound = upper_bound;
+    this->parameters.random_upper_bound = upper_bound;
 }
+
+void mpe::setLowerRandomLimit(double lower_bound){
+
+    this->parameters.random_lower_bound = lower_bound;
+}
+
+
+void mpe::setLowerPrecision(unsigned long mantissa_length, unsigned long exponent_length){
+
+    this->parameters.ul_m_l = mantissa_length;
+    this->parameters.ul_e_l = exponent_length;
+}
+
+void mpe::setWorkingPrecision(unsigned long mantissa_length, unsigned long exponent_length){
+
+    this->parameters.u_m_l = mantissa_length;
+    this->parameters.u_e_l = exponent_length;
+}
+
+void mpe::setUpperPrecision(unsigned long mantissa_length, unsigned long exponent_length){
+
+    this->parameters.ur_m_l = mantissa_length;
+    this->parameters.ur_e_l = exponent_length;
+}
+
+
+
+
+
+
+
 
 void mpe::setFormatRange(unsigned long new_first_mantissa_size, unsigned long new_last_mantissa_size, unsigned long new_exponent_size){
 
@@ -268,11 +269,11 @@ std::vector<std::vector<long double>> mpe::evaluateArea_2D(bool output) const {
     py::gil_scoped_release release;
 
     // init ira object.
-    ira IRA(this->irm.n);
+    ira IRA(this->irm.n, this->parameters.ur_m_r_upper, this->parameters.ur_e_l);
     // TODO: set randomness
 
     // set up linear system
-    IRA.setRandomMatrix(this->irm.ur_last_mantissa_size, this->irm.u_exponent_size);
+    IRA.setRandomMatrix();
     auto x_mps = IRA.generateRandomVector(this->irm.ur_last_mantissa_size, this->irm.u_exponent_size, this->irm.n);
     auto b = IRA.multiplyWithSystemMatrix(x_mps);
 
@@ -299,7 +300,7 @@ std::vector<std::vector<long double>> mpe::evaluateArea_2D(bool output) const {
             ul[0] = ul_mantissa_size;
 
             // perform iterative refinement algorithm
-            IRA.iterativeRefinementLU(b, u, ul, this->irm.iter_max, x_mps);
+            IRA.iterativeRefinementLU(b);
 
             // save data
             auto tmp_result = IRA.evaluation.IR_area_relativeError * (double) IRA.evaluation.milliseconds;
@@ -319,7 +320,7 @@ std::vector<std::vector<long double>> mpe::evaluateArea_2D(bool output) const {
     return result;
 }
 
-std::vector<std::vector<long double>> mpe::evaluateConvergence_2D(double precision, unsigned long max_iter, bool output) const {
+std::vector<std::vector<long double>> mpe::evaluateConvergence_2D(double precision, bool output) const {
 
     std::vector<std::vector<long double>> result;
 
@@ -338,11 +339,11 @@ std::vector<std::vector<long double>> mpe::evaluateConvergence_2D(double precisi
     py::gil_scoped_release release;
 
     // init ira object.
-    ira IRA(this->irm.n);
+    ira IRA(this->irm.n, this->parameters.ur_m_r_upper, this->parameters.ur_e_l);
     // TODO: set randomness
 
     // set up linear system
-    IRA.setRandomMatrix(this->irm.ur_last_mantissa_size, this->irm.u_exponent_size);
+    IRA.setRandomMatrix();
     auto x_mps = IRA.generateRandomVector(this->irm.ur_last_mantissa_size, this->irm.u_exponent_size, this->irm.n);
     auto b = IRA.multiplyWithSystemMatrix(x_mps);
 
@@ -369,7 +370,7 @@ std::vector<std::vector<long double>> mpe::evaluateConvergence_2D(double precisi
             ul[0] = ul_mantissa_size;
 
             // perform iterative refinement algorithm
-            IRA.iterativeRefinementLU(b, u, ul, max_iter, x_mps, target_precision);
+            IRA.iterativeRefinementLU(b);
 
             // save data
             auto tmp_result = (double) IRA.evaluation.iterations_needed;
@@ -397,7 +398,7 @@ double mpe::getPositiveRandomDouble() const {
 
     std::random_device rd;
     std::mt19937 mt(rd());
-    std::uniform_real_distribution<double> dist(numeric_limits<double>::min(), this->random_upper_bound);
+    std::uniform_real_distribution<double> dist(numeric_limits<double>::min(), this->parameters.random_upper_bound);
 
     return dist(mt);
 }
