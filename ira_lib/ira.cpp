@@ -101,6 +101,11 @@ void ira::setMaxIter(unsigned long new_max_iter){
     this->parameters.max_iter = new_max_iter;
 }
 
+/**
+ * Sets the dimension of the system.
+ *
+ * @param new_dimension the new dimension of the system.
+ */
 void ira::setDimension(unsigned long new_dimension){
 
     this->parameters.n = new_dimension;
@@ -241,18 +246,28 @@ vector<double> ira::getRandomRange() const{
 /**
  * Gets the maximal iteration.
  *
- * @return the maximal iteration.
+ * @return the maximal iteration
  */
 unsigned long ira::getMaxIter() const {
 
     return this->parameters.max_iter;
 }
 
+/**
+ * Gets the dimension of the system.
+ *
+ * @return the dimension of the system
+ */
 unsigned long ira::getDimension(){
 
     return this->parameters.n;
 }
 
+/**
+ * Gets the number of elements of the system matrix (n*n).
+ *
+ * @return the number of elements of the systemmatrix
+ */
 unsigned long ira::get1DMatrixSize(){
 
     return this->parameters.matrix_1D_size;
