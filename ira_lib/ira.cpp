@@ -135,6 +135,24 @@ void ira::setLowerPrecision(unsigned long mantissa_length, unsigned long exponen
     this->parameters.ul_e_l = exponent_length;
 }
 
+void ira::setLowerPrecisionMantissa(unsigned long mantissa_length){
+
+    if (mantissa_length <= 0) {
+        throw std::invalid_argument("ERROR: in setLowerPrecisionMantissa : mantissa size too small");
+    }
+
+    this->parameters.ul_m_l = mantissa_length;
+}
+
+void ira::setLowerPrecisionExponent(unsigned long exponent_length){
+
+    if (exponent_length <= 1) {
+        throw std::invalid_argument("ERROR: in setLowerPrecisionExponent : exponent size too small");
+    }
+
+    this->parameters.ul_e_l = exponent_length;
+}
+
 /**
  * Sets the size of the mantissa and exponent of the working precision (u)
  *
@@ -158,6 +176,24 @@ void ira::setWorkingPrecision(unsigned long mantissa_length, unsigned long expon
     this->parameters.u_e_l = exponent_length;
 }
 
+void ira::setWorkingPrecisionMantissa(unsigned long mantissa_length){
+
+    if (mantissa_length <= 0) {
+        throw std::invalid_argument("ERROR: in setWorkingPrecisionMantissa : mantissa size too small");
+    }
+
+    this->parameters.u_m_l = mantissa_length;
+}
+
+void ira::setWorkingPrecisionExponent(unsigned long exponent_length){
+
+    if (exponent_length <= 1) {
+        throw std::invalid_argument("ERROR: in setWorkingPrecisionExponent : exponent size too small");
+    }
+
+    this->parameters.u_e_l = exponent_length;
+}
+
 /**
  * Sets the size of the mantissa and exponent of the upper precision (ur)
  *
@@ -177,6 +213,24 @@ void ira::setUpperPrecision(unsigned long mantissa_length, unsigned long exponen
     }
 
     this->parameters.ur_m_l = mantissa_length;
+    this->parameters.ur_e_l = exponent_length;
+}
+
+void ira::setUpperPrecisionMantissa(unsigned long mantissa_length){
+
+    if (mantissa_length <= 0) {
+        throw std::invalid_argument("ERROR: in setUpperPrecisionMantissa : mantissa size too small");
+    }
+
+    this->parameters.ur_m_l = mantissa_length;
+}
+
+void ira::setUpperPrecisionExponent(unsigned long exponent_length){
+
+    if (exponent_length <= 1) {
+        throw std::invalid_argument("ERROR: in setUpperPrecisionExponent : exponent size too small");
+    }
+
     this->parameters.ur_e_l = exponent_length;
 }
 

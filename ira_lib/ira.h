@@ -75,12 +75,19 @@ public:
 
     // parameter setters and getters
     //-------------------------------
+    // TODO: Test new setters
     void setRandomRange(double lower_bound, double upper_bound);
     void setMaxIter(unsigned long new_max_iter);
     void setDimension(unsigned long new_dimension);
     void setLowerPrecision(unsigned long mantissa_length, unsigned long exponent_length);
+    void setLowerPrecisionMantissa(unsigned long mantissa_length);
+    void setLowerPrecisionExponent(unsigned long exponent_length);
     void setUpperPrecision(unsigned long mantissa_length, unsigned long exponent_length);
+    void setUpperPrecisionMantissa(unsigned long mantissa_length);
+    void setUpperPrecisionExponent(unsigned long exponent_length);
     void setWorkingPrecision(unsigned long mantissa_length, unsigned long exponent_length);
+    void setWorkingPrecisionMantissa(unsigned long mantissa_length);
+    void setWorkingPrecisionExponent(unsigned long exponent_length);
     void setExpectedResult(const vector<mps>& new_expected_result);
     void setExpectedPrecision(const mps& new_expected_precision);
 

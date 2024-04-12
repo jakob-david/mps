@@ -101,12 +101,35 @@ TEST(LowerPrecision, simple_1) {
     EXPECT_EQ(exponent_length, result[1]);
 }
 
-TEST(LowerPrecision, exception_wrong_input) {
+TEST(LowerPrecision, simple_2) {
+
+    unsigned long mantissa_length = 23;
+    unsigned long exponent_length = 8;
+
+    ira IRA(2, 2, 2);
+    IRA.setLowerPrecisionMantissa(mantissa_length);
+    IRA.setLowerPrecisionExponent(exponent_length);
+
+    auto result = IRA.getLowerPrecision();
+
+    EXPECT_EQ(mantissa_length, result[0]);
+    EXPECT_EQ(exponent_length, result[1]);
+}
+
+TEST(LowerPrecision, exception_wrong_input_1) {
 
     ira IRA(2, 2, 2);
 
     EXPECT_ANY_THROW(IRA.setLowerPrecision(0, 12));
     EXPECT_ANY_THROW(IRA.setLowerPrecision(12, 1));
+}
+
+TEST(LowerPrecision, exception_wrong_input_2) {
+
+    ira IRA(2, 2, 2);
+
+    EXPECT_ANY_THROW(IRA.setLowerPrecisionMantissa(0));
+    EXPECT_ANY_THROW(IRA.setLowerPrecisionExponent(1));
 }
 
 TEST(WorkingPrecision, simple_1) {
@@ -123,12 +146,35 @@ TEST(WorkingPrecision, simple_1) {
     EXPECT_EQ(exponent_length, result[1]);
 }
 
-TEST(WorkingPrecision, exception_wrong_input) {
+TEST(WorkingPrecision, simple_2) {
+
+    unsigned long mantissa_length = 23;
+    unsigned long exponent_length = 8;
+
+    ira IRA(2, 2, 2);
+    IRA.setWorkingPrecisionMantissa(mantissa_length);
+    IRA.setWorkingPrecisionExponent(exponent_length);
+
+    auto result = IRA.getWorkingPrecision();
+
+    EXPECT_EQ(mantissa_length, result[0]);
+    EXPECT_EQ(exponent_length, result[1]);
+}
+
+TEST(WorkingPrecision, exception_wrong_input_1) {
 
     ira IRA(2, 2, 2);
 
     EXPECT_ANY_THROW(IRA.setWorkingPrecision(0, 12));
     EXPECT_ANY_THROW(IRA.setWorkingPrecision(12, 1));
+}
+
+TEST(WorkingPrecision, exception_wrong_input_2) {
+
+    ira IRA(2, 2, 2);
+
+    EXPECT_ANY_THROW(IRA.setWorkingPrecisionMantissa(0));
+    EXPECT_ANY_THROW(IRA.setWorkingPrecisionExponent(1));
 }
 
 TEST(UpperPrecision, simple_1) {
@@ -145,12 +191,36 @@ TEST(UpperPrecision, simple_1) {
     EXPECT_EQ(exponent_length, result[1]);
 }
 
-TEST(UpperPrecision, exception_wrong_input) {
+TEST(UpperPrecision, simple_2) {
+
+    unsigned long mantissa_length = 23;
+    unsigned long exponent_length = 8;
+
+    ira IRA(2, 2, 2);
+    IRA.setUpperPrecision(mantissa_length, exponent_length);
+    IRA.setUpperPrecisionMantissa(mantissa_length);
+    IRA.setUpperPrecisionExponent(exponent_length);
+
+    auto result = IRA.getUpperPrecision();
+
+    EXPECT_EQ(mantissa_length, result[0]);
+    EXPECT_EQ(exponent_length, result[1]);
+}
+
+TEST(UpperPrecision, exception_wrong_input_1) {
 
     ira IRA(2, 2, 2);
 
     EXPECT_ANY_THROW(IRA.setUpperPrecision(0, 12));
     EXPECT_ANY_THROW(IRA.setUpperPrecision(12, 1));
+}
+
+TEST(UpperPrecision, exception_wrong_input_2) {
+
+    ira IRA(2, 2, 2);
+
+    EXPECT_ANY_THROW(IRA.setUpperPrecisionMantissa(0));
+    EXPECT_ANY_THROW(IRA.setUpperPrecisionExponent(1));
 }
 
 TEST(ExpectedResult, simple_1) {
@@ -170,6 +240,7 @@ TEST(ExpectedResult, simple_1) {
     vector<double> expected_result_double = ira::mps_to_double(expected_result_mps);
     IRA.setExpectedResult(expected_result_mps);
     ira::castVectorElements(u_m_l, u_m_e, &expected_result_mps);
+    ira::castVectorElements(mantissa_length, exponent_length, &expected_result_mps);
 
     EXPECT_EQ(expected_result_mps, IRA.getExpectedResult_mps());
     EXPECT_EQ(expected_result_double, IRA.getExpectedResult_double());
