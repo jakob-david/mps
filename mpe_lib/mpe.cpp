@@ -141,6 +141,17 @@ unsigned long mpe::getIterations() const {
     return this->parameters.iterations;
 }
 
+vector<unsigned long> mpe::getIterationAxis() const {
+
+    vector<unsigned long> ret;
+
+    for(unsigned long iteration = 1; iteration <= this->parameters.iterations; iteration++){
+        ret.push_back(iteration);
+    }
+
+    return ret;
+}
+
 vector<unsigned long> mpe::getLowerPrecisionMantissaAxis() const {
 
     vector<unsigned long> ret;
@@ -193,7 +204,7 @@ double mpe::generatePositiveRandomDouble() const {
 
 // operator evaluation
 //-------------------------------
-std::vector<long long int> mpe::evaluateAddition() const {
+vector<long long int> mpe::evaluateAddition() const {
 
     // variable for python multithreading.
     py::gil_scoped_release release;
@@ -223,7 +234,7 @@ std::vector<long long int> mpe::evaluateAddition() const {
     return ret;
 }
 
-std::vector<long long int> mpe::evaluateSubtraction() const {
+vector<long long int> mpe::evaluateSubtraction() const {
 
     // variable for python multithreading.
 
@@ -255,7 +266,7 @@ std::vector<long long int> mpe::evaluateSubtraction() const {
     return ret;
 }
 
-std::vector<long long int> mpe::evaluateMultiplication() const {
+vector<long long int> mpe::evaluateMultiplication() const {
 
     // variable for python multithreading.
 
@@ -286,7 +297,7 @@ std::vector<long long int> mpe::evaluateMultiplication() const {
     return ret;
 }
 
-std::vector<long long int> mpe::evaluateDivision() const {
+vector<long long int> mpe::evaluateDivision() const {
 
     // variable for python multithreading.
 
@@ -321,7 +332,37 @@ std::vector<long long int> mpe::evaluateDivision() const {
 
 // iterative refinement evaluation
 //-------------------------------
-std::vector<std::vector<long double>> mpe::evaluateArea_2D(bool output) const {
+vector<long double> mpe::evaluateArea(bool output) const {
+
+    if(output){
+        cout << "STARTING: evaluateArea" << endl;
+    }
+
+    // release GIL
+    py::gil_scoped_release release;
+
+    // init ira object.
+    ira IRA(this->parameters.n, this->parameters.ur_m_l, this->parameters.ur_e_l);
+    IRA.setRandomRange(this->parameters.random_lower_bound, this->parameters.random_upper_bound);
+    IRA.setMaxIter(this->parameters.iterations);
+    IRA.setLowerPrecision(this->parameters.ul_m_l, this->parameters.ul_e_l);
+    IRA.setWorkingPrecision(this->parameters.u_m_l, this->parameters.u_e_l);
+    IRA.setUpperPrecision(this->parameters.ur_m_l, this->parameters.ur_e_l);
+
+    // generate linear system
+    auto b = IRA.generateRandomLinearSystem();
+
+    // perform iterative refinement algorithm
+    IRA.iterativeRefinementLU(b);
+
+    // acquire GIL
+    pybind11::gil_scoped_acquire acquire;
+
+    return IRA.evaluation.IR_relativeError;
+}
+
+
+vector<std::vector<long double>> mpe::evaluateArea_2D(bool output) const {
 
     std::vector<std::vector<long double>> result;
 
@@ -383,7 +424,7 @@ std::vector<std::vector<long double>> mpe::evaluateArea_2D(bool output) const {
     return result;
 }
 
-std::vector<std::vector<long double>> mpe::evaluateConvergence_2D(bool output) const {
+vector<std::vector<long double>> mpe::evaluateConvergence_2D(bool output) const {
 
     std::vector<std::vector<long double>> result;
 

@@ -49,6 +49,12 @@ PYBIND11_MODULE(mpe_library, mpe_handle) {
             // getters
             //-------------------------------
             .def_property_readonly("iterations", &mpe::getIterations)
+
+            .def("getIterationAxis", [](mpe &self){
+                py::array out = py::cast(self.getIterationAxis());
+                return out;
+            })
+
             .def("getLowerPrecisionMantissaAxis", [](mpe &self){
                 py::array out = py::cast(self.getLowerPrecisionMantissaAxis());
                 return out;
@@ -87,6 +93,11 @@ PYBIND11_MODULE(mpe_library, mpe_handle) {
 
             // iterative refinement evaluation
             //-------------------------------
+            .def("evaluateArea", [](mpe &self, bool output = false){
+                py::array out = py::cast(self.evaluateArea(output));
+                return out;
+            })
+
             .def("evaluateArea_2D", [](mpe &self, bool output = false){
                 py::array out = py::cast(self.evaluateArea_2D(output));
                 return out;

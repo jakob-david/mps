@@ -97,6 +97,8 @@ public:
     //-------------------------------
     [[nodiscard]] unsigned long getIterations() const;
 
+    [[nodiscard]] vector<unsigned long> getIterationAxis() const;
+
     [[nodiscard]] vector<unsigned long> getLowerPrecisionMantissaAxis() const;
     [[nodiscard]] vector<unsigned long> getWorkingPrecisionMantissaAxis() const;
     [[nodiscard]] vector<unsigned long> getUpperPrecisionMantissaAxis() const;
@@ -105,17 +107,18 @@ public:
 
     // operator evaluation
     //-------------------------------
-    [[nodiscard]] std::vector<long long int> evaluateAddition() const ;
-    [[nodiscard]] std::vector<long long int> evaluateSubtraction() const ;
-    [[nodiscard]] std::vector<long long int> evaluateMultiplication() const ;
-    [[nodiscard]] std::vector<long long int> evaluateDivision() const ;
+    [[nodiscard]] vector<long long int> evaluateAddition() const ;
+    [[nodiscard]] vector<long long int> evaluateSubtraction() const ;
+    [[nodiscard]] vector<long long int> evaluateMultiplication() const ;
+    [[nodiscard]] vector<long long int> evaluateDivision() const ;
     //-------------------------------
 
 
     // iterative refinement evaluation
     //-------------------------------
-    [[nodiscard]] std::vector<std::vector<long double>> evaluateArea_2D(bool output = false) const;
-    [[nodiscard]] std::vector<std::vector<long double>> evaluateConvergence_2D(bool output = false) const;
+    [[nodiscard]] vector<long double> evaluateArea(bool output = false) const;
+    [[nodiscard]] vector<std::vector<long double>> evaluateArea_2D(bool output = false) const;
+    [[nodiscard]] vector<std::vector<long double>> evaluateConvergence_2D(bool output = false) const;
     //-------------------------------
 
 private:

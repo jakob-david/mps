@@ -1394,6 +1394,7 @@ vector<mps> ira::iterativeRefinementLU(const vector<mps> &b) {
     // set evaluation parameters to zero
     //-------------------------------
     if(this->parameters.expected_result_present) {
+        this->evaluation.IR_relativeError.clear();
         this->evaluation.IR_area_relativeError = 0;
         this->evaluation.IR_area_precision = 0;
     }
@@ -1490,11 +1491,13 @@ vector<mps> ira::iterativeRefinementLU(const vector<mps> &b) {
         // evaluation
         //-------------------------------
         if(this->parameters.expected_result_present) {
+            long double sum = 0.0;
             for (unsigned long element_id = 0; element_id < this->parameters.n; element_id++) {
-                this->evaluation.IR_relativeError.push_back(
-                        x[element_id].getRelativeError_double(this->parameters.expected_result_mps[element_id]));
-                this->evaluation.IR_area_relativeError += this->evaluation.IR_relativeError.back();
+                sum += x[element_id].getRelativeError_double(this->parameters.expected_result_mps[element_id]);
             }
+            sum /= (long double) this->parameters.n;
+            this->evaluation.IR_relativeError.push_back(sum);
+            this->evaluation.IR_area_relativeError += sum;
         }
         //-------------------------------
 
@@ -1504,6 +1507,7 @@ vector<mps> ira::iterativeRefinementLU(const vector<mps> &b) {
     const auto finish = std::chrono::high_resolution_clock::now();
     this->evaluation.milliseconds = (std::chrono::duration_cast<std::chrono::microseconds>(finish - start).count()) / 1000;
 
+    cout << this->evaluation.IR_relativeError.size() << endl;
     return x;
 }
 //-------------------------------
