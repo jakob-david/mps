@@ -75,7 +75,6 @@ public:
 
     // parameter setters and getters
     //-------------------------------
-    // TODO: Test new setters
     void setRandomRange(double lower_bound, double upper_bound);
     void setMaxIter(unsigned long new_max_iter);
     void setDimension(unsigned long new_dimension);
@@ -130,6 +129,8 @@ public:
     void castSystemMatrix(unsigned long mantissa_length, unsigned long exponent_length);
     // TODO: Test
     void castExpectedResult(unsigned long mantissa_length, unsigned long exponent_length);
+    // TODO: Test
+    void castExpectedPrecision(unsigned long mantissa_length, unsigned long exponent_length);
     //-------------------------------
 
     // array converters
@@ -152,6 +153,8 @@ public:
     // operators
     //-------------------------------
     [[nodiscard]] static mps vectorNorm_L1(const vector<mps>& a);
+    // TODO: test
+    [[nodiscard]] static mps calculateVectorMean(const vector<mps>& a);
     [[nodiscard]] static vector<mps> vectorAddition(const vector<mps>& a, const vector<mps>& b);
     [[nodiscard]] static vector<mps> vectorSubtraction(const vector<mps>& a, const vector<mps>& b);
     [[nodiscard]] static vector<mps> matrixVectorProduct(const vector<mps>& D, const vector<mps>& x);

@@ -815,6 +815,18 @@ void ira::castExpectedResult(unsigned long mantissa_length, unsigned long expone
         element.cast(mantissa_length, exponent_length);
     }
 }
+
+void ira::castExpectedPrecision(unsigned long mantissa_length, unsigned long exponent_length){
+
+    if (mantissa_length <= 0) {
+        throw std::invalid_argument("ERROR: in castExpectedResult : mantissa size too small");
+    }
+    if (exponent_length <= 1) {
+        throw std::invalid_argument("ERROR: in castExpectedResult : exponent size too small");
+    }
+
+    this->parameters.expected_precision.cast(mantissa_length, exponent_length);
+}
 //-------------------------------
 
 
@@ -999,6 +1011,28 @@ mps ira::vectorNorm_L1(const vector<mps>& a){
     }
 
     return ret;
+}
+
+mps ira::calculateVectorMean(const vector<mps>& a){
+
+    auto mantissa_length = a[0].mantissa_length;
+    auto exponent_length = a[0].exponent_length;
+
+    mps sum(mantissa_length, exponent_length, 0.0);
+    mps size(mantissa_length, exponent_length, (double) a.size());
+
+    for(const auto& element : a){
+
+        if(element.isPositive()){
+            sum = sum + element;
+        } else {
+            sum = sum - element;
+        }
+    }
+
+    return sum / size;
+
+
 }
 
 /**
@@ -1385,10 +1419,13 @@ vector<mps> ira::iterativeRefinementLU(const vector<mps> &b) {
         // check convergence
         //-------------------------------
         if(this->parameters.expected_precision_present){
-            auto norm = vectorNorm_L1(r);
+            //auto norm = vectorNorm_L1(r);
+            auto norm = calculateVectorMean(r);
             if(norm < this->parameters.expected_precision){
-                this->evaluation.iterations_needed = i;
+                this->evaluation.iterations_needed = i+1;
                 break;
+            } else if(i == this->parameters.max_iter-1){
+                this->evaluation.iterations_needed = this->parameters.max_iter;
             }
         }
         //-------------------------------

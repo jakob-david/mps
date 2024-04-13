@@ -40,6 +40,8 @@ PYBIND11_MODULE(mpe_library, mpe_handle) {
             .def("setLowerPrecisionMantissaRange", &mpe::setLowerPrecisionMantissaRange)
             .def("setWorkingPrecisionMantissaRange", &mpe::setWorkingPrecisionMantissaRange)
             .def("setUpperPrecisionMantissaRange", &mpe::setUpperPrecisionMantissaRange)
+
+            .def("setExpectedPrecision", &mpe::setExpectedPrecision)
             //-------------------------------
 
 
@@ -88,13 +90,12 @@ PYBIND11_MODULE(mpe_library, mpe_handle) {
                 py::array out = py::cast(self.evaluateArea_2D(output));
                 return out;
             })
-            //-------------------------------
-/*
-            .def("evaluateConvergence_2D", [](mpe &self, double precision, unsigned long max_iter, bool output = false){
-                py::array out = py::cast(self.evaluateConvergence_2D(precision, max_iter, output));
+            .def("evaluateConvergence_2D", [](mpe &self, bool output = false){
+                py::array out = py::cast(self.evaluateConvergence_2D(output));
                 return out;
             })
-*/
+            //-------------------------------
+
             ;
 }
 

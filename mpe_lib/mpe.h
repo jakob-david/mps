@@ -43,14 +43,23 @@ private:
         unsigned long ur_m_r_lower;             // upper precision mantissa range lower limit
         unsigned long ur_m_r_upper;             // upper precision mantissa range upper limit
 
+        mps expected_precision;                 // the expected precision the refinement method should achieve.
+
     } parameters;
+
+    struct {
+
+        bool working_precision_mantissa_set;
+        bool working_precision_exponent_set;
+
+    } controllers;
 
 
 public:
 
     // constructors and destructor
     //-------------------------------
-    mpe() = default;
+    mpe();
     ~mpe() = default;
     //-------------------------------
 
@@ -74,6 +83,8 @@ public:
     void setLowerPrecisionMantissaRange(unsigned long lower_bound, unsigned long upper_bound);
     void setWorkingPrecisionMantissaRange(unsigned long lower_bound, unsigned long upper_bound);
     void setUpperPrecisionMantissaRange(unsigned long lower_bound, unsigned long upper_bound);
+
+    void setExpectedPrecision(double new_expected_precision);
     //-------------------------------
 
 
@@ -99,7 +110,7 @@ public:
     // iterative refinement evaluation
     //-------------------------------
     [[nodiscard]] std::vector<std::vector<long double>> evaluateArea_2D(bool output = false) const;
-    //[[nodiscard]] std::vector<std::vector<long double>> evaluateConvergence_2D(double precision, bool output = false) const;
+    [[nodiscard]] std::vector<std::vector<long double>> evaluateConvergence_2D(bool output = false) const;
     //-------------------------------
 
 private:

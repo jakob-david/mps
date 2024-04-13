@@ -7,7 +7,14 @@
 #include <../pybind11/include/pybind11/pybind11.h>
 namespace py = pybind11;
 
+// constructor
+//-------------------------------
+mpe::mpe() {
 
+    this->controllers.working_precision_mantissa_set = false;
+    this->controllers.working_precision_exponent_set = false;
+}
+//-------------------------------
 
 // parameter setters
 //-------------------------------
@@ -53,6 +60,9 @@ void mpe::setLowerPrecision(unsigned long mantissa_length, unsigned long exponen
 
 void mpe::setWorkingPrecision(unsigned long mantissa_length, unsigned long exponent_length){
 
+    this->controllers.working_precision_mantissa_set = true;
+    this->controllers.working_precision_exponent_set = true;
+
     this->parameters.u_m_l = mantissa_length;
     this->parameters.u_e_l = exponent_length;
 }
@@ -69,6 +79,8 @@ void mpe::setLowerPrecisionExponent(unsigned long exponent_length){
 }
 
 void mpe::setWorkingPrecisionExponent(unsigned long exponent_length){
+
+    this->controllers.working_precision_exponent_set = true;
 
     this->parameters.u_e_l = exponent_length;
 }
@@ -95,6 +107,17 @@ void mpe::setUpperPrecisionMantissaRange(unsigned long lower_bound, unsigned lon
 
     this->parameters.ur_m_r_lower = lower_bound;
     this->parameters.ur_m_r_upper = upper_bound;
+}
+
+
+void mpe::setExpectedPrecision(double new_expected_precision){
+
+    if(!this->controllers.working_precision_mantissa_set || !this->controllers.working_precision_exponent_set){
+        throw std::invalid_argument("ERROR: in setExpectedPrecision (mpe) : working precision must be set beforehand");
+    }
+
+    mps ret(this->parameters.u_m_l, this->parameters.u_e_l, new_expected_precision);
+    this->parameters.expected_precision |= ret;
 }
 //-------------------------------
 
@@ -348,8 +371,7 @@ std::vector<std::vector<long double>> mpe::evaluateArea_2D(bool output) const {
     return result;
 }
 
-/*
-std::vector<std::vector<long double>> mpe::evaluateConvergence_2D(double precision, bool output) const {
+std::vector<std::vector<long double>> mpe::evaluateConvergence_2D(bool output) const {
 
     std::vector<std::vector<long double>> result;
 
@@ -357,30 +379,25 @@ std::vector<std::vector<long double>> mpe::evaluateConvergence_2D(double precisi
         cout << "STARTING: evaluateConvergence_2D" << endl;
     }
 
-    // init FP precision objects
-    unsigned long u[2] = {this->irm.u_mantissa_size, this->irm.u_exponent_size};
-    unsigned long ul[2] = {0, this->irm.u_exponent_size};
-
-    // init target precision
-    mps target_precision(this->irm.u_mantissa_size, this->irm.u_exponent_size, precision);
-
     // release GIL
     py::gil_scoped_release release;
 
     // init ira object.
-    ira IRA(this->irm.n, this->parameters.ur_m_r_upper, this->parameters.ur_e_l);
-    // TODO: set randomness
+    ira IRA(this->parameters.n, this->parameters.ur_m_r_upper, this->parameters.ur_e_l);
+    IRA.setRandomRange(this->parameters.random_lower_bound, this->parameters.random_upper_bound);
+    IRA.setMaxIter(this->parameters.iterations);
+    IRA.setLowerPrecisionExponent(this->parameters.ul_e_l);
+    IRA.setWorkingPrecision(this->parameters.u_m_l, this->parameters.u_e_l);
 
-    // set up linear system
-    IRA.setRandomMatrix();
-    auto x_mps = IRA.generateRandomVector(this->irm.ur_last_mantissa_size, this->irm.u_exponent_size, this->irm.n);
-    auto b = IRA.multiplyWithSystemMatrix(x_mps);
+    // generate linear system
+    auto b = IRA.generateRandomLinearSystem();
 
-    // set x_mps to working precision
-    ira::castVectorElements(this->irm.u_mantissa_size, this->irm.u_exponent_size, &x_mps);
+    // set up expected precision
+    IRA.setExpectedPrecision(this->parameters.expected_precision);
+
 
     // loop over all different mantissa sizes of u_r
-    for(unsigned long ur_mantissa_size = this->irm.ur_last_mantissa_size; ur_mantissa_size >= this->irm.ur_first_mantissa_size; ur_mantissa_size--){
+    for(unsigned long ur_mantissa_size = this->parameters.ur_m_r_upper; ur_mantissa_size >= this->parameters.ur_m_r_lower; ur_mantissa_size--){
 
         if(output){
             cout << "\t ur_mantissa_size: " << ur_mantissa_size;
@@ -388,17 +405,19 @@ std::vector<std::vector<long double>> mpe::evaluateConvergence_2D(double precisi
 
         std::vector<long double> tmp;
 
+        IRA.setUpperPrecisionMantissa(ur_mantissa_size);
+
         // convert the system into the new precision
-        IRA.castSystemMatrix(ur_mantissa_size, this->irm.u_exponent_size);
-        ira::castVectorElements(ur_mantissa_size, this->irm.u_exponent_size, &b);
+        IRA.castSystemMatrix(ur_mantissa_size, this->parameters.u_e_l);
+        IRA.castExpectedResult(ur_mantissa_size, this->parameters.u_e_l);
+        IRA.castExpectedPrecision(ur_mantissa_size, this->parameters.u_e_l);
+        ira::castVectorElements(ur_mantissa_size, this->parameters.u_e_l, &b);
 
         // loop over all different mantissa sizes of u_l
-        for(unsigned long ul_mantissa_size = this->irm.ul_first_mantissa_size; ul_mantissa_size <= this->irm.ul_last_mantissa_size; ul_mantissa_size++){
-
-            // set new u_l mantissa size
-            ul[0] = ul_mantissa_size;
+        for(unsigned long ul_mantissa_size = this->parameters.ul_m_r_lower; ul_mantissa_size <= this->parameters.ul_m_r_upper; ul_mantissa_size++){
 
             // perform iterative refinement algorithm
+            IRA.setLowerPrecisionMantissa(ul_mantissa_size);
             IRA.iterativeRefinementLU(b);
 
             // save data
@@ -409,7 +428,7 @@ std::vector<std::vector<long double>> mpe::evaluateConvergence_2D(double precisi
         result.insert(result.begin(), tmp);
 
         if(output){
-            cout << "\tdone\t\tlast: " << this->irm.ur_first_mantissa_size << endl;
+            cout << "\tdone\t\tlast: " << this->parameters.ur_m_r_lower << endl;
         }
     }
 
@@ -418,7 +437,7 @@ std::vector<std::vector<long double>> mpe::evaluateConvergence_2D(double precisi
 
     return result;
 }
- */
+
 //-------------------------------
 
 
