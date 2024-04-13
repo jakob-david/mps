@@ -43,7 +43,8 @@ private:
         unsigned long ur_m_r_lower;             // upper precision mantissa range lower limit
         unsigned long ur_m_r_upper;             // upper precision mantissa range upper limit
 
-        mps expected_error;                 // the expected precision the refinement method should achieve.
+        mps expected_error;                     // the expected error the refinement method should achieve.
+        long long expected_precision;           // the expected precision the refinement method should achieve.
 
     } parameters;
 
@@ -51,6 +52,9 @@ private:
 
         bool working_precision_mantissa_set;
         bool working_precision_exponent_set;
+
+        bool expected_error_set;
+        bool expected_precision_set;
 
     } controllers;
 
@@ -84,7 +88,8 @@ public:
     void setWorkingPrecisionMantissaRange(unsigned long lower_bound, unsigned long upper_bound);
     void setUpperPrecisionMantissaRange(unsigned long lower_bound, unsigned long upper_bound);
 
-    void setExpectedError(double new_expected_precision);
+    void setExpectedError(double new_expected_error);
+    void setExpectedPrecision(long long new_expected_precision);
     //-------------------------------
 
 

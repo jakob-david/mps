@@ -37,8 +37,11 @@ public:
         vector<mps> expected_result_mps;        // the expected x vector saved as mps
         vector<double> expected_result_double;  // the expected x vector saved as double
 
-        bool expected_error_present;        // true if an expected precision is set
-        mps expected_error;                 // the expected precision
+        bool expected_error_present;            // true if an expected error is set
+        mps expected_error;                     // the expected error
+
+        bool expected_precision_present;        // true if an expected precision is set
+        long long expected_precision;           // the expected precision
 
     } parameters{};
     //-------------------------------
@@ -88,12 +91,14 @@ public:
     void setWorkingPrecisionMantissa(unsigned long mantissa_length);
     void setWorkingPrecisionExponent(unsigned long exponent_length);
     void setExpectedResult(const vector<mps>& new_expected_result);
-    void setExpectedError(const mps& new_expected_precision);
+    void setExpectedError(const mps& new_expected_error);
+    // TODO: test
+    void setExpectedPrecision(const long long new_expected_precision);
 
     [[nodiscard]] vector<double> getRandomRange() const;
     [[nodiscard]] unsigned long getMaxIter() const;
-    [[nodiscard]] unsigned long getDimension();
-    [[nodiscard]] unsigned long get1DMatrixSize();
+    [[nodiscard]] unsigned long getDimension() const;
+    [[nodiscard]] unsigned long get1DMatrixSize() const;
     [[nodiscard]] vector<unsigned long> getLowerPrecision() const;
     [[nodiscard]] vector<unsigned long> getUpperPrecision() const;
     [[nodiscard]] vector<unsigned long> getWorkingPrecision() const;
@@ -130,7 +135,7 @@ public:
     // TODO: Test
     void castExpectedResult(unsigned long mantissa_length, unsigned long exponent_length);
     // TODO: Test
-    void castExpectedPrecision(unsigned long mantissa_length, unsigned long exponent_length);
+    void castExpectedError(unsigned long mantissa_length, unsigned long exponent_length);
     //-------------------------------
 
     // array converters
@@ -150,11 +155,17 @@ public:
     [[nodiscard]] vector<mps> generateRandomLinearSystem();
     //-------------------------------
 
-    // operators
+    // evaluators and norms
     //-------------------------------
     [[nodiscard]] static mps vectorNorm_L1(const vector<mps>& a);
     // TODO: test
     [[nodiscard]] static mps calculateVectorMean(const vector<mps>& a);
+    // TODO: test
+    [[nodiscard]] static long long calculateVectorMeanPrecision(const vector<mps>& is, const vector<mps>& should);
+    //-------------------------------
+
+    // operators
+    //-------------------------------
     [[nodiscard]] static vector<mps> vectorAddition(const vector<mps>& a, const vector<mps>& b);
     [[nodiscard]] static vector<mps> vectorSubtraction(const vector<mps>& a, const vector<mps>& b);
     [[nodiscard]] static vector<mps> matrixVectorProduct(const vector<mps>& D, const vector<mps>& x);

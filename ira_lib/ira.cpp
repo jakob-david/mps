@@ -317,18 +317,25 @@ void ira::setExpectedResult(const vector<mps>& new_expected_result){
  *
  * Throws Exception:    When no expected precision was set beforehand.
  *
- * @param new_expected_precision the expected precision.
+ * @param new_expected_error the expected precision.
  */
-void ira::setExpectedError(const mps& new_expected_precision){
+void ira::setExpectedError(const mps& new_expected_error){
 
     if(not this->parameters.expected_result_present){
-        throw std::invalid_argument("ERROR: in setExpectedError: expected result must be set before expected precision!");
+        throw std::invalid_argument("ERROR: in setExpectedError: expected result must be set before expected error!");
     }
 
     this->parameters.expected_error_present = true;
 
-    this->parameters.expected_error |= new_expected_precision;
+    this->parameters.expected_error |= new_expected_error;
     this->parameters.expected_error.cast(this->parameters.ur_m_l, this->parameters.ur_e_l);
+}
+
+void ira::setExpectedPrecision(const long long new_expected_precision){
+
+    this->parameters.expected_precision_present = true;
+
+    this->parameters.expected_precision = new_expected_precision;
 }
 
 
@@ -363,7 +370,7 @@ unsigned long ira::getMaxIter() const {
  *
  * @return the dimension of the system
  */
-unsigned long ira::getDimension(){
+unsigned long ira::getDimension() const {
 
     return this->parameters.n;
 }
@@ -371,9 +378,9 @@ unsigned long ira::getDimension(){
 /**
  * Gets the number of elements of the system matrix (n*n).
  *
- * @return the number of elements of the systemmatrix
+ * @return the number of elements of the system matrix
  */
-unsigned long ira::get1DMatrixSize(){
+unsigned long ira::get1DMatrixSize() const {
 
     return this->parameters.matrix_1D_size;
 }
@@ -816,7 +823,7 @@ void ira::castExpectedResult(unsigned long mantissa_length, unsigned long expone
     }
 }
 
-void ira::castExpectedPrecision(unsigned long mantissa_length, unsigned long exponent_length){
+void ira::castExpectedError(unsigned long mantissa_length, unsigned long exponent_length){
 
     if (mantissa_length <= 0) {
         throw std::invalid_argument("ERROR: in castExpectedResult : mantissa size too small");
@@ -970,7 +977,7 @@ vector<mps> ira::generateRandomRHS() {
 
 /**
  * Generates a complete random linear system.
- * Generates A and x calulases vectors the vector b (Ax=b). Also sets the expected result.
+ * Generates A and x calculates vectors the vector b (Ax=b). Also sets the expected result.
  *
  * @return the b vector of the system
  */
@@ -981,8 +988,7 @@ vector<mps> ira::generateRandomLinearSystem() {
 }
 //-------------------------------
 
-
-// operators
+// evaluators and norms
 //-------------------------------
 /**
  * Returns the L1 norm of a vector consisting of mps objects.
@@ -1035,6 +1041,24 @@ mps ira::calculateVectorMean(const vector<mps>& a){
 
 }
 
+long long ira::calculateVectorMeanPrecision(const vector<mps>& is, const vector<mps>& should){
+
+    // TODO: write exceptions
+
+    long long sum = 0;
+
+    for(unsigned long idx = 0; idx < is.size(); idx++){
+
+        sum += is[idx].getPrecision(should[idx]);
+
+    }
+
+    return sum / (long long) is.size();
+}
+//-------------------------------
+
+// operators
+//-------------------------------
 /**
  * Adds two vectors together. The vectors consist of mps objects.
  *
@@ -1412,16 +1436,30 @@ vector<mps> ira::iterativeRefinementLU(const vector<mps> &b) {
         //-------------------------------
         auto tmp_x = x;
         ira::castVectorElements(ur[0], ur[1], &tmp_x);
-        auto r = vectorSubtraction(b, ira::matrixVectorProduct(this->A, tmp_x));
+        auto b_approx = ira::matrixVectorProduct(this->A, tmp_x);
+        auto r = vectorSubtraction(b, b_approx);
         //-------------------------------
 
+        // check convergence (precision)
+        //-------------------------------
+        if(this->parameters.expected_precision_present){
+            auto mean_precision = ira::calculateVectorMeanPrecision(b_approx, b);
+            //cout << "iteration " << i << ":   " << mean_precision << endl;
+            if(mean_precision >= this->parameters.expected_precision){
+                this->evaluation.iterations_needed = i+1;
+                break;
+            } else if(i == this->parameters.max_iter-1){
+                this->evaluation.iterations_needed = this->parameters.max_iter;
+            }
+        }
+        //-------------------------------
 
-        // check convergence
+        // check convergence (error)
         //-------------------------------
         if(this->parameters.expected_error_present){
             //auto norm = vectorNorm_L1(r);
             auto norm = calculateVectorMean(r);
-            if(norm < this->parameters.expected_error){
+            if(norm <= this->parameters.expected_error){
                 this->evaluation.iterations_needed = i+1;
                 break;
             } else if(i == this->parameters.max_iter-1){

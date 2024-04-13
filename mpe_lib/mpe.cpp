@@ -13,6 +13,9 @@ mpe::mpe() {
 
     this->controllers.working_precision_mantissa_set = false;
     this->controllers.working_precision_exponent_set = false;
+
+    this->controllers.expected_error_set = false;
+    this->controllers.expected_precision_set = false;
 }
 //-------------------------------
 
@@ -110,14 +113,23 @@ void mpe::setUpperPrecisionMantissaRange(unsigned long lower_bound, unsigned lon
 }
 
 
-void mpe::setExpectedError(double new_expected_precision){
+void mpe::setExpectedError(double new_expected_error){
 
     if(!this->controllers.working_precision_mantissa_set || !this->controllers.working_precision_exponent_set){
         throw std::invalid_argument("ERROR: in setExpectedError (mpe) : working precision must be set beforehand");
     }
 
-    mps ret(this->parameters.u_m_l, this->parameters.u_e_l, new_expected_precision);
+    this->controllers.expected_error_set = true;
+
+    mps ret(this->parameters.u_m_l, this->parameters.u_e_l, new_expected_error);
     this->parameters.expected_error |= ret;
+}
+
+void mpe::setExpectedPrecision(long long new_expected_precision){
+
+    this->controllers.expected_precision_set = true;
+
+    this->parameters.expected_precision = new_expected_precision;
 }
 //-------------------------------
 
@@ -392,8 +404,17 @@ std::vector<std::vector<long double>> mpe::evaluateConvergence_2D(bool output) c
     // generate linear system
     auto b = IRA.generateRandomLinearSystem();
 
-    // set up expected precision
-    IRA.setExpectedError(this->parameters.expected_error);
+    // set up expected error or precision
+    if(this->controllers.expected_error_set && this->controllers.expected_precision_set){
+        throw std::invalid_argument("ERROR: in evaluateConvergence_2D: both expected error and precision set");
+    } else if(this->controllers.expected_error_set){
+        IRA.setExpectedError(this->parameters.expected_error);
+    } else if(this->controllers.expected_precision_set){
+        IRA.setExpectedPrecision(this->parameters.expected_precision);
+    } else {
+        throw std::invalid_argument("ERROR: in evaluateConvergence_2D: neither expected error or precision set");
+    }
+
 
 
     // loop over all different mantissa sizes of u_r
@@ -404,13 +425,16 @@ std::vector<std::vector<long double>> mpe::evaluateConvergence_2D(bool output) c
         }
 
         std::vector<long double> tmp;
-
         IRA.setUpperPrecisionMantissa(ur_mantissa_size);
 
         // convert the system into the new precision
         IRA.castSystemMatrix(ur_mantissa_size, this->parameters.u_e_l);
         IRA.castExpectedResult(ur_mantissa_size, this->parameters.u_e_l);
-        IRA.castExpectedPrecision(ur_mantissa_size, this->parameters.u_e_l);
+
+        if(this->controllers.expected_error_set){
+            IRA.castExpectedError(ur_mantissa_size, this->parameters.u_e_l);
+        }
+
         ira::castVectorElements(ur_mantissa_size, this->parameters.u_e_l, &b);
 
         // loop over all different mantissa sizes of u_l
@@ -420,7 +444,7 @@ std::vector<std::vector<long double>> mpe::evaluateConvergence_2D(bool output) c
             IRA.setLowerPrecisionMantissa(ul_mantissa_size);
             IRA.iterativeRefinementLU(b);
 
-            // save data
+            // save data;
             auto tmp_result = (double) IRA.evaluation.iterations_needed;
             tmp.push_back(tmp_result);
         }
