@@ -110,14 +110,14 @@ void mpe::setUpperPrecisionMantissaRange(unsigned long lower_bound, unsigned lon
 }
 
 
-void mpe::setExpectedPrecision(double new_expected_precision){
+void mpe::setExpectedError(double new_expected_precision){
 
     if(!this->controllers.working_precision_mantissa_set || !this->controllers.working_precision_exponent_set){
-        throw std::invalid_argument("ERROR: in setExpectedPrecision (mpe) : working precision must be set beforehand");
+        throw std::invalid_argument("ERROR: in setExpectedError (mpe) : working precision must be set beforehand");
     }
 
     mps ret(this->parameters.u_m_l, this->parameters.u_e_l, new_expected_precision);
-    this->parameters.expected_precision |= ret;
+    this->parameters.expected_error |= ret;
 }
 //-------------------------------
 
@@ -393,7 +393,7 @@ std::vector<std::vector<long double>> mpe::evaluateConvergence_2D(bool output) c
     auto b = IRA.generateRandomLinearSystem();
 
     // set up expected precision
-    IRA.setExpectedPrecision(this->parameters.expected_precision);
+    IRA.setExpectedError(this->parameters.expected_error);
 
 
     // loop over all different mantissa sizes of u_r

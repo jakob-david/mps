@@ -37,8 +37,8 @@ public:
         vector<mps> expected_result_mps;        // the expected x vector saved as mps
         vector<double> expected_result_double;  // the expected x vector saved as double
 
-        bool expected_precision_present;        // true if an expected precision is set
-        mps expected_precision;                 // the expected precision
+        bool expected_error_present;        // true if an expected precision is set
+        mps expected_error;                 // the expected precision
 
     } parameters{};
     //-------------------------------
@@ -88,7 +88,7 @@ public:
     void setWorkingPrecisionMantissa(unsigned long mantissa_length);
     void setWorkingPrecisionExponent(unsigned long exponent_length);
     void setExpectedResult(const vector<mps>& new_expected_result);
-    void setExpectedPrecision(const mps& new_expected_precision);
+    void setExpectedError(const mps& new_expected_precision);
 
     [[nodiscard]] vector<double> getRandomRange() const;
     [[nodiscard]] unsigned long getMaxIter() const;

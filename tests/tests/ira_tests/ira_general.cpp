@@ -323,12 +323,12 @@ TEST(ExpectedPrecision, simple_1) {
     IRA.setExpectedResult(expected_result_mps);
 
     mps expected_precision(mantissa_length, exponent_length, 0.01);
-    IRA.setExpectedPrecision(expected_precision);
+    IRA.setExpectedError(expected_precision);
 
     EXPECT_EQ(expected_precision, IRA.getExpectedPrecision());
 }
 
-TEST(ExpectedPrecision, exception_no_expected_result_set) {
+TEST(ExpectedError, exception_no_expected_result_set) {
 
     unsigned long mantissa_length = 23;
     unsigned long exponent_length = 8;
@@ -340,10 +340,10 @@ TEST(ExpectedPrecision, exception_no_expected_result_set) {
 
     mps expected_precision(mantissa_length, exponent_length, 0.01);
 
-    EXPECT_ANY_THROW(IRA.setExpectedPrecision(expected_precision));
+    EXPECT_ANY_THROW(IRA.setExpectedError(expected_precision));
 }
 
-TEST(ExpectedPrecision, exception_no_expected_precision_set) {
+TEST(ExpectedError, exception_no_expected_precision_set) {
 
     unsigned long mantissa_length = 23;
     unsigned long exponent_length = 8;

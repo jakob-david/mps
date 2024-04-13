@@ -41,7 +41,7 @@ PYBIND11_MODULE(mpe_library, mpe_handle) {
             .def("setWorkingPrecisionMantissaRange", &mpe::setWorkingPrecisionMantissaRange)
             .def("setUpperPrecisionMantissaRange", &mpe::setUpperPrecisionMantissaRange)
 
-            .def("setExpectedPrecision", &mpe::setExpectedPrecision)
+            .def("setExpectedError", &mpe::setExpectedError)
             //-------------------------------
 
 

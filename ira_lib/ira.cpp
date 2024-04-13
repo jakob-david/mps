@@ -42,7 +42,7 @@ ira::ira(unsigned long n, unsigned long ur_mantissa_length, unsigned long ur_exp
 
     this->parameters.working_precision_set = false;         // after construction no working precision is set.
     this->parameters.expected_result_present = false;       // after construction no result vector is present.
-    this->parameters.expected_precision_present = false;    // after construction no expected precision is present.
+    this->parameters.expected_error_present = false;    // after construction no expected precision is present.
 
 
     // set up matrices
@@ -319,16 +319,16 @@ void ira::setExpectedResult(const vector<mps>& new_expected_result){
  *
  * @param new_expected_precision the expected precision.
  */
-void ira::setExpectedPrecision(const mps& new_expected_precision){
+void ira::setExpectedError(const mps& new_expected_precision){
 
     if(not this->parameters.expected_result_present){
-        throw std::invalid_argument("ERROR: in setExpectedPrecision: expected result must be set before expected precision!");
+        throw std::invalid_argument("ERROR: in setExpectedError: expected result must be set before expected precision!");
     }
 
-    this->parameters.expected_precision_present = true;
+    this->parameters.expected_error_present = true;
 
-    this->parameters.expected_precision |= new_expected_precision;
-    this->parameters.expected_precision.cast(this->parameters.ur_m_l, this->parameters.ur_e_l);
+    this->parameters.expected_error |= new_expected_precision;
+    this->parameters.expected_error.cast(this->parameters.ur_m_l, this->parameters.ur_e_l);
 }
 
 
@@ -479,12 +479,12 @@ vector<double> ira::getExpectedResult_double() const{
  */
 mps ira::getExpectedPrecision() const{
 
-    if (not this->parameters.expected_precision_present) {
+    if (not this->parameters.expected_error_present) {
         throw std::invalid_argument("ERROR: in getExpectedPrecision : no expected precision present");
     }
 
     mps ret;
-    ret |= this->parameters.expected_precision;
+    ret |= this->parameters.expected_error;
 
     return ret;
 }
@@ -825,7 +825,7 @@ void ira::castExpectedPrecision(unsigned long mantissa_length, unsigned long exp
         throw std::invalid_argument("ERROR: in castExpectedResult : exponent size too small");
     }
 
-    this->parameters.expected_precision.cast(mantissa_length, exponent_length);
+    this->parameters.expected_error.cast(mantissa_length, exponent_length);
 }
 //-------------------------------
 
@@ -1418,10 +1418,10 @@ vector<mps> ira::iterativeRefinementLU(const vector<mps> &b) {
 
         // check convergence
         //-------------------------------
-        if(this->parameters.expected_precision_present){
+        if(this->parameters.expected_error_present){
             //auto norm = vectorNorm_L1(r);
             auto norm = calculateVectorMean(r);
-            if(norm < this->parameters.expected_precision){
+            if(norm < this->parameters.expected_error){
                 this->evaluation.iterations_needed = i+1;
                 break;
             } else if(i == this->parameters.max_iter-1){
