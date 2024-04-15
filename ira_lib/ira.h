@@ -55,6 +55,10 @@ public:
         long double IR_area_precision;
         long long milliseconds;
         unsigned long iterations_needed;
+
+        vector<long double> IR_precision_errors;
+        long double IR_precision_error_sum;
+
     } evaluation{};
     //-------------------------------
 

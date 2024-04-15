@@ -63,6 +63,9 @@ ira::ira(unsigned long n, unsigned long ur_mantissa_length, unsigned long ur_exp
     this->evaluation.milliseconds = 0;
 
     this->evaluation.iterations_needed = 0;
+
+    this->evaluation.IR_precision_errors.resize(0);
+    this->evaluation.IR_precision_error_sum = 0;
 }
 
 /**
@@ -1397,6 +1400,9 @@ vector<mps> ira::iterativeRefinementLU(const vector<mps> &b) {
         this->evaluation.IR_relativeError.clear();
         this->evaluation.IR_area_relativeError = 0;
         this->evaluation.IR_area_precision = 0;
+
+        this->evaluation.IR_precision_errors.clear();
+        this->evaluation.IR_precision_error_sum = 0;
     }
     //-------------------------------
 
@@ -1491,6 +1497,9 @@ vector<mps> ira::iterativeRefinementLU(const vector<mps> &b) {
         // evaluation
         //-------------------------------
         if(this->parameters.expected_result_present) {
+
+            // evaluate using error
+            //-------------------------------
             long double sum = 0.0;
             for (unsigned long element_id = 0; element_id < this->parameters.n; element_id++) {
                 sum += x[element_id].getRelativeError_double(this->parameters.expected_result_mps[element_id]);
@@ -1498,6 +1507,26 @@ vector<mps> ira::iterativeRefinementLU(const vector<mps> &b) {
             sum /= (long double) this->parameters.n;
             this->evaluation.IR_relativeError.push_back(sum);
             this->evaluation.IR_area_relativeError += sum;
+            //-------------------------------
+
+            // evaluate using precision
+            //-------------------------------
+            sum = 0.0;
+            for (unsigned long idx = 0; idx < this->parameters.n; idx++) {
+                auto precision = (long double) x[idx].getPrecision(this->parameters.expected_result_mps[idx]);
+                if(precision < (long double) parameters.u_m_l){
+                    sum += precision;
+                } else {
+                    sum += (long double) parameters.u_m_l;
+                }
+            }
+            sum /= (long double) this->parameters.n;
+
+            sum = (long double) this->parameters.u_m_l - sum;
+            this->evaluation.IR_precision_errors.push_back(sum);
+            this->evaluation.IR_precision_error_sum += sum;
+            //-------------------------------
+
         }
         //-------------------------------
 
@@ -1505,6 +1534,8 @@ vector<mps> ira::iterativeRefinementLU(const vector<mps> &b) {
     }
 
     const auto finish = std::chrono::high_resolution_clock::now();
+
+    // TODO: check units
     this->evaluation.milliseconds = (std::chrono::duration_cast<std::chrono::microseconds>(finish - start).count()) / 1000;
 
     return x;

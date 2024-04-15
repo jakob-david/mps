@@ -104,7 +104,6 @@ public:
     [[nodiscard]] vector<unsigned long> getUpperPrecisionMantissaAxis() const;
     //-------------------------------
 
-
     // operator evaluation
     //-------------------------------
     [[nodiscard]] vector<long long int> evaluateAddition() const ;
@@ -113,11 +112,19 @@ public:
     [[nodiscard]] vector<long long int> evaluateDivision() const ;
     //-------------------------------
 
+    // operator evaluation double
+    //-------------------------------
+    [[nodiscard]] vector<long long int> evaluateAdditionDouble() const ;
+    [[nodiscard]] vector<long long int> evaluateSubtractionDouble() const ;
+    [[nodiscard]] vector<long long int> evaluateMultiplicationDouble() const ;
+    [[nodiscard]] vector<long long int> evaluateDivisionDouble() const ;
+    //-------------------------------
+
 
     // iterative refinement evaluation
     //-------------------------------
-    [[nodiscard]] vector<long double> evaluateArea(bool output = false) const;
-    [[nodiscard]] vector<std::vector<long double>> evaluateArea_2D(bool output = false) const;
+    [[nodiscard]] vector<vector<long double>> evaluateArea(bool output = false) const;
+    [[nodiscard]] vector<vector<std::vector<long double>>> evaluateArea_2D(bool output = false) const;
     [[nodiscard]] vector<std::vector<long double>> evaluateConvergence_2D(bool output = false) const;
     //-------------------------------
 
