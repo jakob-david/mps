@@ -16,12 +16,12 @@ public:
     //-------------------------------
     struct {
 
-        double random_lower_bound;              // the lower bound when getting a random value.
-        double random_upper_bound;              // the upper bound when getting a random value.
+        double random_lower_bound;                          // the lower bound when getting a random value.
+        double random_upper_bound;                          // the upper bound when getting a random value.
 
-        unsigned long max_iter;                 // The maximal number of refinement steps.
-        unsigned long n;                        // dimension of the system
-        unsigned long matrix_1D_size;           // The number of elements of the system matrix.
+        unsigned long max_iter;                             // The maximal number of refinement steps.
+        unsigned long n;                                    // dimension of the system
+        unsigned long matrix_1D_size;                       // The number of elements of the system matrix.
 
         // TODO: Test
         bool working_precision_set;             // true if a working precision was set.
@@ -41,7 +41,9 @@ public:
         mps expected_error;                     // the expected error
 
         bool expected_precision_present;        // true if an expected precision is set
-        long long expected_precision;           // the expected precision
+        mps expected_precision;                 // the expected precision
+        unsigned long ep_mantissa_length;       // the mantissa length in which the expected precision should be saved.
+        unsigned long ep_exponent_length;       // the exponent length in which the expected precision should be saved.
 
     } parameters{};
     //-------------------------------
@@ -97,7 +99,7 @@ public:
     void setExpectedResult(const vector<mps>& new_expected_result);
     void setExpectedError(const mps& new_expected_error);
     // TODO: test
-    void setExpectedPrecision(const long long new_expected_precision);
+    void setExpectedPrecision(const long long new_expected_precision, unsigned long mantissa_length, unsigned long exponent_length);
 
     [[nodiscard]] vector<double> getRandomRange() const;
     [[nodiscard]] unsigned long getMaxIter() const;
@@ -165,7 +167,7 @@ public:
     // TODO: test
     [[nodiscard]] static mps calculateVectorMean(const vector<mps>& a);
     // TODO: test
-    [[nodiscard]] static long long calculateVectorMeanPrecision(const vector<mps>& is, const vector<mps>& should);
+    [[nodiscard]] mps calculateVectorMeanPrecision(const vector<mps>& is, const vector<mps>& should) const;
     //-------------------------------
 
     // operators

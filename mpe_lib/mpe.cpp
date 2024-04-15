@@ -125,11 +125,13 @@ void mpe::setExpectedError(double new_expected_error){
     this->parameters.expected_error |= ret;
 }
 
-void mpe::setExpectedPrecision(long long new_expected_precision){
+void mpe::setExpectedPrecision(long long new_expected_precision, unsigned long mantissa_length, unsigned long exponent_length){
 
     this->controllers.expected_precision_set = true;
 
     this->parameters.expected_precision = new_expected_precision;
+    this->parameters.ep_mantissa_length = mantissa_length;
+    this->parameters.ep_exponent_length = exponent_length;
 }
 //-------------------------------
 
@@ -710,12 +712,10 @@ vector<vector<vector<long double>>> mpe::evaluateConvergence_2D(bool output) con
     } else if(this->controllers.expected_error_set){
         IRA.setExpectedError(this->parameters.expected_error);
     } else if(this->controllers.expected_precision_set){
-        IRA.setExpectedPrecision(this->parameters.expected_precision);
+        IRA.setExpectedPrecision(this->parameters.expected_precision, this->parameters.ep_mantissa_length, this->parameters.ep_exponent_length);
     } else {
         throw std::invalid_argument("ERROR: in evaluateConvergence_2D: neither expected error or precision set");
     }
-
-
 
     // loop over all different mantissa sizes of u_r
     for(unsigned long ur_mantissa_size = this->parameters.ur_m_r_upper; ur_mantissa_size >= this->parameters.ur_m_r_lower; ur_mantissa_size--){

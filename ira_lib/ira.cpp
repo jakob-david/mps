@@ -334,11 +334,15 @@ void ira::setExpectedError(const mps& new_expected_error){
     this->parameters.expected_error.cast(this->parameters.ur_m_l, this->parameters.ur_e_l);
 }
 
-void ira::setExpectedPrecision(const long long new_expected_precision){
+void ira::setExpectedPrecision(const long long new_expected_precision, unsigned long mantissa_length, unsigned long exponent_length){
 
     this->parameters.expected_precision_present = true;
 
-    this->parameters.expected_precision = new_expected_precision;
+    this->parameters.ep_mantissa_length = mantissa_length;
+    this->parameters.ep_exponent_length = exponent_length;
+
+    mps expected_precision(mantissa_length, exponent_length, (double) new_expected_precision);
+    this->parameters.expected_precision |= expected_precision;
 }
 
 
@@ -1044,20 +1048,22 @@ mps ira::calculateVectorMean(const vector<mps>& a){
 
 }
 
-long long ira::calculateVectorMeanPrecision(const vector<mps>& is, const vector<mps>& should){
+mps ira::calculateVectorMeanPrecision(const vector<mps>& is, const vector<mps>& should) const {
 
     // TODO: write exceptions
-    // TODO: write using mps objects
 
-    long long sum = 0;
+    mps sum(is[0].mantissa_length, is[0].exponent_length, 0.0);
+    mps size(this->parameters.ep_mantissa_length, this->parameters.ep_exponent_length, (double) is.size());
 
     for(unsigned long idx = 0; idx < is.size(); idx++){
 
-        sum += is[idx].getPrecision(should[idx]);
+        mps precision(is[0].mantissa_length, is[0].exponent_length, (double) is[idx].getPrecision(should[idx]));
+        sum = sum + precision;
 
     }
 
-    return sum / (long long) is.size();
+    sum.cast(this->parameters.ep_mantissa_length, this->parameters.ep_exponent_length);
+    return sum / size;
 }
 //-------------------------------
 
@@ -1436,7 +1442,6 @@ vector<mps> ira::iterativeRefinementLU(const vector<mps> &b) {
     //-------------------------------
 
 
-
     for(unsigned long i = 0; i < this->parameters.max_iter; i++){
 
         // calculate: r_i = b − A * x_i
@@ -1503,8 +1508,7 @@ vector<mps> ira::iterativeRefinementLU(const vector<mps> &b) {
             //-------------------------------
             long double sum = 0.0;
             for (unsigned long element_id = 0; element_id < this->parameters.n; element_id++) {
-                // TODO: change to double
-                sum += x[element_id].getRelativeError_double(this->parameters.expected_result_mps[element_id]);
+                sum += x[element_id].getRelativeError_double(this->parameters.expected_result_double[element_id]);
             }
             sum /= (long double) this->parameters.n;
             this->evaluation.IR_relativeError.push_back(sum);

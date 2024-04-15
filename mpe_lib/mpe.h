@@ -45,6 +45,8 @@ private:
 
         mps expected_error;                     // the expected error the refinement method should achieve.
         long long expected_precision;           // the expected precision the refinement method should achieve.
+        unsigned long ep_mantissa_length;       // the mantissa length in which the expected precision should be saved.
+        unsigned long ep_exponent_length;       // the mantissa length in which the expected precision should be saved.
 
     } parameters;
 
@@ -89,7 +91,7 @@ public:
     void setUpperPrecisionMantissaRange(unsigned long lower_bound, unsigned long upper_bound);
 
     void setExpectedError(double new_expected_error);
-    void setExpectedPrecision(long long new_expected_precision);
+    void setExpectedPrecision(long long new_expected_precision, unsigned long mantissa_length, unsigned long exponent_length);
     //-------------------------------
 
 
