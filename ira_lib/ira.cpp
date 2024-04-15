@@ -1047,6 +1047,7 @@ mps ira::calculateVectorMean(const vector<mps>& a){
 long long ira::calculateVectorMeanPrecision(const vector<mps>& is, const vector<mps>& should){
 
     // TODO: write exceptions
+    // TODO: write using mps objects
 
     long long sum = 0;
 
@@ -1502,6 +1503,7 @@ vector<mps> ira::iterativeRefinementLU(const vector<mps> &b) {
             //-------------------------------
             long double sum = 0.0;
             for (unsigned long element_id = 0; element_id < this->parameters.n; element_id++) {
+                // TODO: change to double
                 sum += x[element_id].getRelativeError_double(this->parameters.expected_result_mps[element_id]);
             }
             sum /= (long double) this->parameters.n;

@@ -681,9 +681,11 @@ vector<vector<vector<long double>>> mpe::evaluateArea_2D(bool output) const {
     return result;
 }
 
-vector<std::vector<long double>> mpe::evaluateConvergence_2D(bool output) const {
+vector<vector<vector<long double>>> mpe::evaluateConvergence_2D(bool output) const {
 
-    std::vector<std::vector<long double>> result;
+    vector<vector<vector<long double>>> result;
+    vector<vector<long double>> result_iterations;
+    vector<vector<long double>> result_time;
 
     if(output){
         cout << "STARTING: evaluateConvergence_2D" << endl;
@@ -722,7 +724,8 @@ vector<std::vector<long double>> mpe::evaluateConvergence_2D(bool output) const 
             cout << "\t ur_mantissa_size: " << ur_mantissa_size;
         }
 
-        std::vector<long double> tmp;
+        std::vector<long double> subresult_iterations;
+        std::vector<long double> subresult_time;
         IRA.setUpperPrecisionMantissa(ur_mantissa_size);
 
         // convert the system into the new precision
@@ -742,12 +745,17 @@ vector<std::vector<long double>> mpe::evaluateConvergence_2D(bool output) const 
             IRA.setLowerPrecisionMantissa(ul_mantissa_size);
             IRA.iterativeRefinementLU(b);
 
-            // save data;
-            auto tmp_result = (double) IRA.evaluation.iterations_needed;
-            tmp.push_back(tmp_result);
+            // save data iterations
+            auto subsubresult_iterations = (double) IRA.evaluation.iterations_needed;
+            subresult_iterations.push_back(subsubresult_iterations);
+
+            // save data time
+            auto subsubresult_time = (double) IRA.evaluation.milliseconds;
+            subresult_time.push_back(subsubresult_time);
         }
 
-        result.insert(result.begin(), tmp);
+        result_iterations.insert(result_iterations.begin(), subresult_iterations);
+        result_time.insert(result_time.begin(), subresult_time);
 
         if(output){
             cout << "\tdone\t\tlast: " << this->parameters.ur_m_r_lower << endl;
@@ -756,6 +764,9 @@ vector<std::vector<long double>> mpe::evaluateConvergence_2D(bool output) const 
 
     // acquire GIL
     pybind11::gil_scoped_acquire acquire;
+
+    result.push_back(result_iterations);
+    result.push_back(result_time);
 
     return result;
 }
