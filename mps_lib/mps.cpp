@@ -513,9 +513,9 @@ std::string mps::to_string(const int precision) const {
 [[nodiscard]] double mps::getRelativeError_double(const mps& compare) const {
 
     auto is = this->getValue();
-    auto should = abs(compare.getValue());
+    auto should = compare.getValue();
 
-    return abs(is-should) / should;
+    return abs(is-should) / abs(should);
 }
 
 /**
