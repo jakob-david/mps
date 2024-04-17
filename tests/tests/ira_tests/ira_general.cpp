@@ -1227,6 +1227,38 @@ TEST(generateRandomLinearSystem, simple_3){
     }
 }
 
+TEST(generateRandomLinearSystem, test_precisions){
+    // also tests generateRandomRHS implicitly.
+
+    unsigned long size = 3;
+    unsigned long ur_m_l = 52;
+    unsigned long ur_e_l = 11;
+    unsigned long u_m_l = 23;
+    unsigned long u_e_l = 8;
+
+    ira IRA(size, ur_m_l,ur_e_l);
+    IRA.setWorkingPrecision(u_m_l, u_e_l);
+    auto b = IRA.generateRandomLinearSystem();
+    auto x = IRA.getExpectedResult_mps();
+
+    for(unsigned i = 0; i < size * size; i++){
+        auto element = IRA.getMatrixElement(i);
+        EXPECT_EQ(element.mantissa_length, ur_m_l);
+        EXPECT_EQ(element.exponent_length, ur_e_l);
+    }
+
+    for(auto element : b){
+        EXPECT_EQ(element.mantissa_length, ur_m_l);
+        EXPECT_EQ(element.exponent_length, ur_e_l);
+    }
+
+    for(auto element : x){
+        EXPECT_EQ(element.mantissa_length, ur_m_l);
+        EXPECT_EQ(element.exponent_length, ur_e_l);
+    }
+
+}
+
 
 
 // printing
