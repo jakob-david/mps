@@ -1114,6 +1114,17 @@ mps ira::calculateVectorMean(const vector<mps>& a){
 
 }
 
+/**
+ * Calculates the precision of each vector element and calculates the mean from them.
+ *
+ * Throws Exception:    When the is vector is empty.
+ *                      When the should vector is empty.
+ *                      When no working precision is set.
+ *                      When no expected precision is set.
+ *
+ * @param x the vector for the multiplication
+ * @return the resulting vector from the multiplication
+ */
 mps ira::calculateVectorMeanPrecision(const vector<mps>& is, const vector<mps>& should) const {
 
     if (is.empty()) {
@@ -1252,10 +1263,16 @@ vector<mps> ira::matrixVectorProduct(const vector<mps>& D, const vector<mps>& x)
 }
 
 /**
- * Performs a matrix vector product. The matrix is the system matrix A.
+ * Performs a matrix vector product. The matrix with which the vector is multiplies is the system matrix.
+ *
+ * Throws Exception:    When the system matrix is empty.
+ *                      When the vector x is empty.
+ *                      When the dimensions of the system matrix and the vector x do not match.
+ *                      When the exponents of the system matrix and the vector x do not match.
+ *                      When the mantissas of the system matrix and the vector x do not match.
  *
  * @param x the vector for the multiplication
- * @return the resulting vector from the multiplication.
+ * @return the resulting vector from the multiplication
  */
 vector<mps> ira::multiplyWithSystemMatrix(vector<mps> x) const {
 

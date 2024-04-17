@@ -376,3 +376,158 @@ TEST(matrixVectorProduct, simple_2_double) {
 
     EXPECT_EQ(should, ira::to_string(result, 8));
 }
+
+
+TEST(multiplyWithSystemMatrix, simple_1){
+
+    unsigned long mantissa_length = 52;
+    unsigned long exponent_length = 11;
+    unsigned long size = 3;
+
+    ira IRA(size, mantissa_length, exponent_length);
+
+    vector<double> new_matrix = {1, 2, 3, 4, 5, 6, 7, 8, 9};
+    IRA.setMatrix(new_matrix);
+
+    vector<double> x_d = {1, 2, 3};
+    auto x_mps = ira::double_to_mps(mantissa_length, exponent_length, x_d);
+
+    auto result = IRA.multiplyWithSystemMatrix(x_mps);
+
+    EXPECT_EQ(14, result[0].getValue());
+    EXPECT_EQ(32, result[1].getValue());
+    EXPECT_EQ(50, result[2].getValue());
+    EXPECT_EQ(mantissa_length, result[0].mantissa_length);
+    EXPECT_EQ(exponent_length, result[0].exponent_length);
+}
+
+TEST(multiplyWithSystemMatrix, simple_2){
+
+    unsigned long mantissa_length = 52;
+    unsigned long exponent_length = 11;
+    unsigned long size = 3;
+
+    ira IRA(size, mantissa_length, exponent_length);
+
+    vector<double> new_matrix = {9, -8, 7, -6, 5, -4, 3, -2, 1};
+    IRA.setMatrix(new_matrix);
+
+    vector<double> x_d = {1, -2, 3};
+    auto x_mps = ira::double_to_mps(mantissa_length, exponent_length, x_d);
+
+    auto result = IRA.multiplyWithSystemMatrix(x_mps);
+
+    EXPECT_EQ(46, result[0].getValue());
+    EXPECT_EQ(-28, result[1].getValue());
+    EXPECT_EQ(10, result[2].getValue());
+    EXPECT_EQ(mantissa_length, result[0].mantissa_length);
+    EXPECT_EQ(exponent_length, result[0].exponent_length);
+}
+
+TEST(multiplyWithSystemMatrix, exception_A_empty){
+
+    unsigned long mantissa_length = 52;
+    unsigned long exponent_length = 11;
+    unsigned long size = 2;
+
+    ira IRA(size, mantissa_length, exponent_length);
+
+    vector<double> x_d = {1, 2};
+    auto x_mps = ira::double_to_mps(mantissa_length, exponent_length, x_d);
+
+    EXPECT_ANY_THROW(auto result = IRA.multiplyWithSystemMatrix(x_mps));
+
+    vector<double> new_matrix = {1, 2, 3, 4};
+    IRA.setMatrix(new_matrix);
+
+    EXPECT_NO_THROW(auto result = IRA.multiplyWithSystemMatrix(x_mps));
+}
+
+TEST(multiplyWithSystemMatrix, exception_x_empty){
+
+    unsigned long mantissa_length = 52;
+    unsigned long exponent_length = 11;
+    unsigned long size = 2;
+
+    ira IRA(size, mantissa_length, exponent_length);
+
+
+    vector<double> new_matrix = {1, 2, 3, 4};
+    IRA.setMatrix(new_matrix);
+
+    vector<mps> x_mps;
+
+    EXPECT_ANY_THROW(auto result = IRA.multiplyWithSystemMatrix(x_mps));
+
+    vector<double> x_d = {1, 2};
+    x_mps = ira::double_to_mps(mantissa_length, exponent_length, x_d);
+
+    EXPECT_NO_THROW(auto result = IRA.multiplyWithSystemMatrix(x_mps));
+}
+
+TEST(multiplyWithSystemMatrix, exception_sizes_do_not_match){
+
+    unsigned long mantissa_length = 52;
+    unsigned long exponent_length = 11;
+    unsigned long size = 2;
+
+    ira IRA(size, mantissa_length, exponent_length);
+
+
+    vector<double> new_matrix = {1, 2, 3, 4};
+    IRA.setMatrix(new_matrix);
+
+    vector<double> x_d = {1, 2, 3};
+    auto x_mps = ira::double_to_mps(mantissa_length, exponent_length, x_d);
+
+    EXPECT_ANY_THROW(auto result = IRA.multiplyWithSystemMatrix(x_mps));
+
+    x_mps.pop_back();
+
+    EXPECT_NO_THROW(auto result = IRA.multiplyWithSystemMatrix(x_mps));
+}
+
+TEST(multiplyWithSystemMatrix, exception_exponents_do_not_match){
+
+    unsigned long mantissa_length = 52;
+    unsigned long exponent_length = 11;
+    unsigned long size = 2;
+
+    ira IRA(size, mantissa_length, exponent_length);
+
+
+    vector<double> new_matrix = {1, 2, 3, 4};
+    IRA.setMatrix(new_matrix);
+
+    vector<double> x_d = {1, 2};
+    auto x_mps = ira::double_to_mps(mantissa_length, exponent_length-1, x_d);
+
+    EXPECT_ANY_THROW(auto result = IRA.multiplyWithSystemMatrix(x_mps));
+
+    x_mps = ira::double_to_mps(mantissa_length, exponent_length, x_d);
+
+    EXPECT_NO_THROW(auto result = IRA.multiplyWithSystemMatrix(x_mps));
+}
+
+TEST(multiplyWithSystemMatrix, exception_mantissas_do_not_match){
+
+    unsigned long mantissa_length = 52;
+    unsigned long exponent_length = 11;
+    unsigned long size = 2;
+
+    ira IRA(size, mantissa_length, exponent_length);
+
+
+    vector<double> new_matrix = {1, 2, 3, 4};
+    IRA.setMatrix(new_matrix);
+
+    vector<double> x_d = {1, 2};
+    auto x_mps = ira::double_to_mps(mantissa_length-1, exponent_length, x_d);
+
+    EXPECT_ANY_THROW(auto result = IRA.multiplyWithSystemMatrix(x_mps));
+
+    x_mps = ira::double_to_mps(mantissa_length, exponent_length, x_d);
+
+    EXPECT_NO_THROW(auto result = IRA.multiplyWithSystemMatrix(x_mps));
+}
+

@@ -166,7 +166,6 @@ public:
     [[nodiscard]] static vector<mps> vectorAddition(const vector<mps>& a, const vector<mps>& b);
     [[nodiscard]] static vector<mps> vectorSubtraction(const vector<mps>& a, const vector<mps>& b);
     [[nodiscard]] static vector<mps> matrixVectorProduct(const vector<mps>& D, const vector<mps>& x);
-    // TODO: test
     [[nodiscard]] vector<mps> multiplyWithSystemMatrix(vector<mps> x) const;
     //-------------------------------
 
