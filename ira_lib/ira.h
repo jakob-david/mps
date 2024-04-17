@@ -23,7 +23,6 @@ public:
         unsigned long n;                        // dimension of the system
         unsigned long matrix_1D_size;           // The number of elements of the system matrix.
 
-        // TODO: Test
         bool working_precision_set;             // true if a working precision was set.
 
         unsigned long u_m_l;                    // working precision mantissa length
@@ -151,11 +150,8 @@ public:
 
     // generators
     //-------------------------------
-    // TODO: test
     [[nodiscard]] vector<mps> generateRandomVector(unsigned long mantissa_length, unsigned long exponent_length, unsigned long size) const;
-    // TODO: test
     [[nodiscard]] vector<mps> generateRandomRHS();
-    // TODO: test
     [[nodiscard]] vector<mps> generateRandomLinearSystem();
     //-------------------------------
 

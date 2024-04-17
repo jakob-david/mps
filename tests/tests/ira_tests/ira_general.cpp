@@ -1090,6 +1090,143 @@ TEST(castExpectedError, exception_wrong_input) {
 }
 
 
+// generators
+// -------------------------------------
+TEST(generateRandomVector, simple_1){
+
+    unsigned long mantissa_length = 52;
+    unsigned long exponent_length = 11;
+    unsigned long size = 4;
+
+    ira IRA(2, 54,12);
+
+    auto vec = IRA.generateRandomVector(mantissa_length, exponent_length, size);
+    auto random_range = IRA.getRandomRange();
+    auto lower_limit = random_range[0];
+    auto upper_limit = random_range[1];
+
+    EXPECT_EQ(mantissa_length, vec[0].mantissa_length);
+    EXPECT_EQ(exponent_length, vec[0].exponent_length);
+    EXPECT_EQ(size, vec.size());
+
+    for(auto element : vec){
+        EXPECT_TRUE(element.getValue() < upper_limit);
+        EXPECT_TRUE(element.getValue() > lower_limit);
+    }
+}
+
+TEST(generateRandomVector, zero_size){
+
+    unsigned long mantissa_length = 52;
+    unsigned long exponent_length = 11;
+    unsigned long size = 0;
+
+    ira IRA(2, 54,12);
+
+    auto vec = IRA.generateRandomVector(mantissa_length, exponent_length, size);
+
+    EXPECT_TRUE(vec.empty());
+}
+
+TEST(generateRandomVector, exception_wrong_input){
+
+    unsigned long mantissa_length = 0;
+    unsigned long exponent_length = 1;
+    unsigned long size = 4;
+
+    ira IRA(2, 54,12);
+
+    EXPECT_ANY_THROW(auto x = IRA.generateRandomVector(mantissa_length, 12, size));
+    EXPECT_ANY_THROW(auto x = IRA.generateRandomVector(12, exponent_length, size));
+}
+
+TEST(generateRandomLinearSystem, simple_1){
+    // also tests generateRandomRHS implicitly.
+
+    unsigned long size = 4;
+    unsigned long ur_m_l = 52;
+    unsigned long ur_e_l = 11;
+    unsigned long u_m_l = 52;
+    unsigned long u_e_l = 11;
+
+    ira IRA(size, ur_m_l,ur_e_l);
+    IRA.setWorkingPrecision(u_m_l, u_e_l);
+    auto b = IRA.generateRandomLinearSystem();
+    auto x = IRA.getExpectedResult_mps();
+
+    vector<mps> b_recalculated;
+
+    for(unsigned long i = 0; i < size; i++){
+        mps sum(u_m_l, u_e_l, 0);
+        for(unsigned j = 0; j < size; j++){
+            sum = sum + (IRA.getMatrixElement(i*size + j) * x[j]);
+        }
+        b_recalculated.push_back(sum);
+    }
+
+    for(unsigned long i = 0; i < size; i++){
+        EXPECT_EQ(b_recalculated[i].getValue(), b[i].getValue());
+    }
+}
+
+TEST(generateRandomLinearSystem, simple_2){
+    // also tests generateRandomRHS implicitly.
+
+    unsigned long size = 5;
+    unsigned long ur_m_l = 52;
+    unsigned long ur_e_l = 11;
+    unsigned long u_m_l = 52;
+    unsigned long u_e_l = 11;
+
+    ira IRA(size, ur_m_l,ur_e_l);
+    IRA.setWorkingPrecision(u_m_l, u_e_l);
+    auto b = IRA.generateRandomLinearSystem();
+    auto x = IRA.getExpectedResult_mps();
+
+    vector<mps> b_recalculated;
+
+    for(unsigned long i = 0; i < size; i++){
+        mps sum(u_m_l, u_e_l, 0);
+        for(unsigned j = 0; j < size; j++){
+            sum = sum + (IRA.getMatrixElement(i*size + j) * x[j]);
+        }
+        b_recalculated.push_back(sum);
+    }
+
+    for(unsigned long i = 0; i < size; i++){
+        EXPECT_EQ(b_recalculated[i].getValue(), b[i].getValue());
+    }
+}
+
+TEST(generateRandomLinearSystem, simple_3){
+    // also tests generateRandomRHS implicitly.
+
+    unsigned long size = 6;
+    unsigned long ur_m_l = 52;
+    unsigned long ur_e_l = 11;
+    unsigned long u_m_l = 52;
+    unsigned long u_e_l = 11;
+
+    ira IRA(size, ur_m_l,ur_e_l);
+    IRA.setWorkingPrecision(u_m_l, u_e_l);
+    auto b = IRA.generateRandomLinearSystem();
+    auto x = IRA.getExpectedResult_mps();
+
+    vector<mps> b_recalculated;
+
+    for(unsigned long i = 0; i < size; i++){
+        mps sum(u_m_l, u_e_l, 0);
+        for(unsigned j = 0; j < size; j++){
+            sum = sum + (IRA.getMatrixElement(i*size + j) * x[j]);
+        }
+        b_recalculated.push_back(sum);
+    }
+
+    for(unsigned long i = 0; i < size; i++){
+        EXPECT_EQ(b_recalculated[i].getValue(), b[i].getValue());
+    }
+}
+
 
 
 // printing

@@ -1014,9 +1014,6 @@ vector<mps> ira::generateRandomVector(unsigned long mantissa_length, unsigned lo
     if (exponent_length <= 1) {
         throw std::invalid_argument("ERROR: in generateRandomVector : exponent size too small");
     }
-    if (exponent_length < 1) {
-        throw std::invalid_argument("ERROR: generateRandomVector: exponent too small");
-    }
 
     vector<mps> ret;
 
