@@ -240,7 +240,7 @@ vector<long long int> mpe::evaluateSubtraction() const {
 
     // variable for python multithreading.
 
-    py::gil_scoped_release release;
+    py::gil_scoped_release release; // noqa
 
     std::vector<long long> ret;
 
@@ -712,7 +712,8 @@ vector<vector<vector<long double>>> mpe::evaluateConvergence_2D(bool output) con
     } else if(this->controllers.expected_error_set){
         IRA.setExpectedError(this->parameters.expected_error);
     } else if(this->controllers.expected_precision_set){
-        IRA.setExpectedPrecision(this->parameters.expected_precision, this->parameters.ep_mantissa_length, this->parameters.ep_exponent_length);
+        mps expected_precision(this->parameters.ep_mantissa_length, this->parameters.ep_exponent_length, (double) this->parameters.expected_precision);
+        IRA.setExpectedPrecision(expected_precision);
     } else {
         throw std::invalid_argument("ERROR: in evaluateConvergence_2D: neither expected error or precision set");
     }

@@ -307,6 +307,60 @@ TEST(ExpectedResult, exception_working_precision_not_set) {
     EXPECT_ANY_THROW(auto tmp_2 = IRA.getExpectedResult_double());
 }
 
+TEST(ExpectedError, simple_1) {
+
+    unsigned long mantissa_length = 23;
+    unsigned long exponent_length = 8;
+    unsigned long u_m_l = 12;
+    unsigned long u_m_e = 5;
+
+    ira IRA(2, mantissa_length, exponent_length);
+    IRA.setWorkingPrecision(u_m_l, u_m_e);
+
+    vector<mps> expected_result_mps;
+    expected_result_mps.emplace_back(mantissa_length, exponent_length, 4);
+    expected_result_mps.emplace_back(mantissa_length, exponent_length, -2);
+    IRA.setExpectedResult(expected_result_mps);
+
+    mps expected_error(mantissa_length, exponent_length, 0.01);
+    IRA.setExpectedError(expected_error);
+
+    EXPECT_EQ(expected_error, IRA.getExpectedError());
+}
+
+TEST(ExpectedError, exception_no_expected_result_set) {
+
+    unsigned long mantissa_length = 23;
+    unsigned long exponent_length = 8;
+    unsigned long u_m_l = 12;
+    unsigned long u_m_e = 5;
+
+    ira IRA(2, mantissa_length, exponent_length);
+    IRA.setWorkingPrecision(u_m_l, u_m_e);
+
+    mps expected_error(mantissa_length, exponent_length, 0.01);
+
+    EXPECT_ANY_THROW(IRA.setExpectedError(expected_error));
+}
+
+TEST(ExpectedError, exception_no_expected_precision_set) {
+
+    unsigned long mantissa_length = 23;
+    unsigned long exponent_length = 8;
+    unsigned long u_m_l = 12;
+    unsigned long u_m_e = 5;
+
+    ira IRA(2, mantissa_length, exponent_length);
+    IRA.setWorkingPrecision(u_m_l, u_m_e);
+
+    vector<mps> expected_result_mps;
+    expected_result_mps.emplace_back(mantissa_length, exponent_length, 4);
+    expected_result_mps.emplace_back(mantissa_length, exponent_length, -2);
+    IRA.setExpectedResult(expected_result_mps);
+
+    EXPECT_ANY_THROW(auto tp = IRA.getExpectedError());
+}
+
 TEST(ExpectedPrecision, simple_1) {
 
     unsigned long mantissa_length = 23;
@@ -322,13 +376,13 @@ TEST(ExpectedPrecision, simple_1) {
     expected_result_mps.emplace_back(mantissa_length, exponent_length, -2);
     IRA.setExpectedResult(expected_result_mps);
 
-    mps expected_precision(mantissa_length, exponent_length, 0.01);
-    IRA.setExpectedError(expected_precision);
+    mps expected_precision(mantissa_length, exponent_length, 24);
+    IRA.setExpectedPrecision(expected_precision);
 
     EXPECT_EQ(expected_precision, IRA.getExpectedPrecision());
 }
 
-TEST(ExpectedError, exception_no_expected_result_set) {
+TEST(ExpectedPrecision, exception_no_expected_result_set) {
 
     unsigned long mantissa_length = 23;
     unsigned long exponent_length = 8;
@@ -338,12 +392,12 @@ TEST(ExpectedError, exception_no_expected_result_set) {
     ira IRA(2, mantissa_length, exponent_length);
     IRA.setWorkingPrecision(u_m_l, u_m_e);
 
-    mps expected_precision(mantissa_length, exponent_length, 0.01);
+    mps expected_precision(mantissa_length, exponent_length, 24);
 
-    EXPECT_ANY_THROW(IRA.setExpectedError(expected_precision));
+    EXPECT_ANY_THROW(IRA.setExpectedPrecision(expected_precision));
 }
 
-TEST(ExpectedError, exception_no_expected_precision_set) {
+TEST(ExpectedPrecision, exception_no_expected_precision_set) {
 
     unsigned long mantissa_length = 23;
     unsigned long exponent_length = 8;
@@ -363,7 +417,8 @@ TEST(ExpectedError, exception_no_expected_precision_set) {
 
 
 
-// setter and getter
+
+// setter for matrix
 // -------------------------------------
 TEST(unitary_matrix, init_2x2) {
 
@@ -868,6 +923,172 @@ TEST(castVectorElements, double_to_float_1) {
     EXPECT_EQ(23, mps_vector[0].mantissa_length);
     EXPECT_EQ(8, mps_vector[0].exponent_length);
 }
+
+TEST(castSystemMatrix, simple_1) {
+
+    unsigned long wanted_mantissa = 12;
+    unsigned long wanted_exponent = 5;
+
+    ira IRA(5, 23, 8);
+    IRA.setRandomMatrix();
+
+    IRA.castSystemMatrix(wanted_mantissa, wanted_exponent);
+
+    EXPECT_EQ(wanted_mantissa, IRA.getMatrixElement(0).mantissa_length);
+    EXPECT_EQ(wanted_exponent, IRA.getMatrixElement(0).exponent_length);
+}
+
+TEST(castSystemMatrix, simple_2) {
+
+    unsigned long wanted_mantissa = 52;
+    unsigned long wanted_exponent = 11;
+
+    ira IRA(5, 23, 8);
+    IRA.setRandomMatrix();
+
+    IRA.castSystemMatrix(wanted_mantissa, wanted_exponent);
+
+    EXPECT_EQ(wanted_mantissa, IRA.getMatrixElement(0).mantissa_length);
+    EXPECT_EQ(wanted_exponent, IRA.getMatrixElement(0).exponent_length);
+}
+
+TEST(castSystemMatrix, exception_wrong_input) {
+
+    unsigned long wanted_mantissa = 0;
+    unsigned long wanted_exponent = 1;
+
+
+
+    ira IRA(5, 23, 8);
+    IRA.setRandomMatrix();
+
+    EXPECT_ANY_THROW(IRA.castSystemMatrix(wanted_mantissa, 8));
+    EXPECT_ANY_THROW(IRA.castSystemMatrix(13, wanted_exponent));
+}
+
+TEST(castSystemMatrix, exception_system_matrix_not_set) {
+
+    unsigned long wanted_mantissa = 12;
+    unsigned long wanted_exponent = 4;
+
+    ira IRA(5, 23, 8);
+    EXPECT_ANY_THROW(IRA.castSystemMatrix(wanted_mantissa, wanted_exponent));
+}
+
+TEST(castExpectedResult, simple_1) {
+
+    unsigned long wanted_mantissa = 12;
+    unsigned long wanted_exponent = 5;
+
+    ira IRA(5, 23, 8);
+    IRA.setRandomMatrix();
+    IRA.setWorkingPrecision(20, 8);
+    auto b = IRA.generateRandomLinearSystem();
+
+    IRA.castExpectedResult(wanted_mantissa, wanted_exponent);
+
+    auto x = IRA.getExpectedResult_mps();
+
+    EXPECT_EQ(wanted_mantissa, x[0].mantissa_length);
+    EXPECT_EQ(wanted_exponent, x[0].exponent_length);
+}
+
+TEST(castExpectedResult, simple_2) {
+
+    unsigned long wanted_mantissa = 52;
+    unsigned long wanted_exponent = 11;
+
+    ira IRA(5, 23, 8);
+    IRA.setRandomMatrix();
+    IRA.setWorkingPrecision(20, 8);
+    auto b = IRA.generateRandomLinearSystem();
+
+    IRA.castExpectedResult(wanted_mantissa, wanted_exponent);
+
+    auto x = IRA.getExpectedResult_mps();
+
+    EXPECT_EQ(wanted_mantissa, x[0].mantissa_length);
+    EXPECT_EQ(wanted_exponent, x[0].exponent_length);
+}
+
+TEST(castExpectedResult, exception_wrong_input) {
+
+    unsigned long wanted_mantissa = 0;
+    unsigned long wanted_exponent = 1;
+
+    ira IRA(5, 23, 8);
+    IRA.setRandomMatrix();
+    IRA.setWorkingPrecision(20, 8);
+    auto b = IRA.generateRandomLinearSystem();
+
+    EXPECT_ANY_THROW(IRA.castExpectedResult(wanted_mantissa, 8););
+    EXPECT_ANY_THROW(IRA.castExpectedResult(13, wanted_exponent));
+}
+
+TEST(castExpectedResult, exception_system_matrix_not_set) {
+
+    unsigned long wanted_mantissa = 12;
+    unsigned long wanted_exponent = 4;
+
+    ira IRA(5, 23, 8);
+    EXPECT_ANY_THROW(IRA.castExpectedResult(wanted_mantissa, wanted_exponent));
+}
+
+TEST(castExpectedError, simple_1) {
+
+    unsigned long wanted_mantissa = 12;
+    unsigned long wanted_exponent = 5;
+    mps expected_error(23, 8, 0.01);
+
+    ira IRA(5, 23, 8);
+    IRA.setRandomMatrix();
+    IRA.setWorkingPrecision(20, 8);
+    auto b = IRA.generateRandomLinearSystem();
+
+    IRA.setExpectedError(expected_error);
+
+    IRA.castExpectedError(wanted_mantissa, wanted_exponent);
+
+    EXPECT_EQ(wanted_mantissa, IRA.getExpectedError().mantissa_length);
+    EXPECT_EQ(wanted_exponent, IRA.getExpectedError().exponent_length);
+}
+
+TEST(castExpectedError, simple_2) {
+
+    unsigned long wanted_mantissa = 52;
+    unsigned long wanted_exponent = 11;
+    mps expected_error(23, 8, 0.01);
+
+    ira IRA(5, 23, 8);
+    IRA.setRandomMatrix();
+    IRA.setWorkingPrecision(20, 8);
+    auto b = IRA.generateRandomLinearSystem();
+
+    IRA.setExpectedError(expected_error);
+
+    IRA.castExpectedError(wanted_mantissa, wanted_exponent);
+
+    EXPECT_EQ(wanted_mantissa, IRA.getExpectedError().mantissa_length);
+    EXPECT_EQ(wanted_exponent, IRA.getExpectedError().exponent_length);
+}
+
+TEST(castExpectedError, exception_wrong_input) {
+
+    unsigned long wanted_mantissa = 0;
+    unsigned long wanted_exponent = 1;
+    mps expected_error(23, 8, 0.01);
+
+    ira IRA(5, 23, 8);
+    IRA.setRandomMatrix();
+    IRA.setWorkingPrecision(20, 8);
+    auto b = IRA.generateRandomLinearSystem();
+
+    IRA.setExpectedError(expected_error);
+
+    EXPECT_ANY_THROW(IRA.castExpectedError(wanted_mantissa, 8));
+    EXPECT_ANY_THROW(IRA.castExpectedError(11, wanted_exponent));
+}
+
 
 
 

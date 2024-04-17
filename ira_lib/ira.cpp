@@ -45,9 +45,8 @@ ira::ira(unsigned long n, unsigned long ur_mantissa_length, unsigned long ur_exp
     this->parameters.expected_error_present = false;    // after construction no expected precision is present.
 
 
-    // set up matrices
+    // set up LU matrices
     //-------------------------------
-    this->A.resize(this->parameters.matrix_1D_size);
     this->L.resize(this->parameters.matrix_1D_size);
     this->U.resize(this->parameters.matrix_1D_size);
 
@@ -315,12 +314,12 @@ void ira::setExpectedResult(const vector<mps>& new_expected_result){
 }
 
 /**
- * Sets the expected precision which is maximal distance between the expected result and the actual result.
+ * Sets the expected error which is maximal distance between the expected result and the actual result.
  * If the Floating Point Format does not match with the set upper precision it will be converted accordingly.
  *
- * Throws Exception:    When no expected precision was set beforehand.
+ * Throws Exception:    When no expected result was set beforehand.
  *
- * @param new_expected_error the expected precision.
+ * @param new_expected_error the expected result.
  */
 void ira::setExpectedError(const mps& new_expected_error){
 
@@ -334,15 +333,26 @@ void ira::setExpectedError(const mps& new_expected_error){
     this->parameters.expected_error.cast(this->parameters.ur_m_l, this->parameters.ur_e_l);
 }
 
-void ira::setExpectedPrecision(const long long new_expected_precision, unsigned long mantissa_length, unsigned long exponent_length){
+/**
+ * Sets the expected precision which is the number of mantissa bits expected to match.
+ *
+ * Throws Exception:    When no expected result was set beforehand.
+ *
+ * @param new_expected_precision the new expected precision.
+ */
+void ira::setExpectedPrecision(const mps& new_expected_precision){
+
+    if(not this->parameters.expected_result_present){
+        throw std::invalid_argument("ERROR: in setExpectedPrecision: expected result must be set before expected precision!");
+    }
 
     this->parameters.expected_precision_present = true;
 
-    this->parameters.ep_mantissa_length = mantissa_length;
-    this->parameters.ep_exponent_length = exponent_length;
+    this->parameters.ep_mantissa_length = new_expected_precision.mantissa_length;
+    this->parameters.ep_exponent_length = new_expected_precision.exponent_length;
 
-    mps expected_precision(mantissa_length, exponent_length, (double) new_expected_precision);
-    this->parameters.expected_precision |= expected_precision;
+    //mps expected_precision(mantissa_length, exponent_length, (double) new_expected_precision);
+    this->parameters.expected_precision |= new_expected_precision;
 }
 
 
@@ -485,20 +495,39 @@ vector<double> ira::getExpectedResult_double() const{
 }
 
 /**
- * Gets the expected result (x) as an vector consisting of doubles.
+ * Gets the expected error as an mps object.
  *
- * Throws Exception:    When no expected precision was set.
+ * Throws Exception:    When no expected error was set.
  *
- * @return the expected result as vector<double>
+ * @return the expected error
  */
-mps ira::getExpectedPrecision() const{
+mps ira::getExpectedError() const{
 
     if (not this->parameters.expected_error_present) {
-        throw std::invalid_argument("ERROR: in getExpectedPrecision : no expected precision present");
+        throw std::invalid_argument("ERROR: in getExpectedError : no expected error present");
     }
 
     mps ret;
     ret |= this->parameters.expected_error;
+
+    return ret;
+}
+
+/**
+ * Gets the expected precision as an mps object.
+ *
+ * Throws Exception:    When no expected precision was set.
+ *
+ * @return the expected precision
+ */
+mps ira::getExpectedPrecision() const{
+
+    if (not this->parameters.expected_precision_present) {
+        throw std::invalid_argument("ERROR: in getExpectedError : no expected precision present");
+    }
+
+    mps ret;
+    ret |= this->parameters.expected_precision;
 
     return ret;
 }
@@ -514,6 +543,8 @@ mps ira::getExpectedPrecision() const{
  * @param exponent_length the size of the exponent of the elements of the matrix
  */
 void ira::setUnitaryMatrix() {
+
+    this->A.resize(this->parameters.matrix_1D_size);
 
     mps zero(this->parameters.ur_m_l, this->parameters.ur_e_l, 0);
     mps one(this->parameters.ur_m_l, this->parameters.ur_e_l, 1);
@@ -538,6 +569,8 @@ void ira::setUnitaryMatrix() {
  */
 void ira::setMatrix(vector<double> new_matrix) {
 
+    this->A.resize(this->parameters.matrix_1D_size);
+
     if (new_matrix.size() > this->parameters.matrix_1D_size) {
         throw std::invalid_argument("ERROR: in setMatrix: new_matrix too large");
     }
@@ -558,6 +591,8 @@ void ira::setMatrix(vector<double> new_matrix) {
  * @param exponent_length the size of the exponent of the elements of the matrix
  */
 void ira::setRandomMatrix(){
+
+    this->A.resize(this->parameters.matrix_1D_size);
 
     std::random_device rd;
     std::mt19937 mt(rd());
@@ -787,6 +822,16 @@ void ira::castVectorElements(unsigned long mantissa_length, unsigned long expone
     }
 }
 
+/**
+ * Casts all elements of the system matrix to a new mantissa an exponent length.
+ *
+ * Throws Exception:    When the system matrix is empty.
+ *                      When the mantissa length is too small.
+ *                      When the exponent length is too small.
+ *
+ * @param mantissa_length the new mantissa length of the mps objects
+ * @param exponent_length the new exponent length of the mps objects
+ */
 void ira::castSystemMatrix(unsigned long mantissa_length, unsigned long exponent_length){
 
     if (this->A.empty()) {
@@ -809,6 +854,16 @@ void ira::castSystemMatrix(unsigned long mantissa_length, unsigned long exponent
 
 }
 
+/**
+ * Casts all elements of the expected result to a new mantissa an exponent length.
+ *
+ * Throws Exception:    When the expected result is empty.
+ *                      When the mantissa length is too small.
+ *                      When the exponent length is too small.
+ *
+ * @param mantissa_length the new mantissa length of the mps objects
+ * @param exponent_length the new exponent length of the mps objects
+ */
 void ira::castExpectedResult(unsigned long mantissa_length, unsigned long exponent_length){
 
     if (this->parameters.expected_result_mps.empty()) {
@@ -830,6 +885,15 @@ void ira::castExpectedResult(unsigned long mantissa_length, unsigned long expone
     }
 }
 
+/**
+ * Casts the expected error to a new mantissa an exponent length.
+ *
+ * Throws Exception:    When the mantissa length is too small.
+ *                      When the exponent length is too small.
+ *
+ * @param mantissa_length the new mantissa length of the mps object
+ * @param exponent_length the new exponent length of the mps object
+ */
 void ira::castExpectedError(unsigned long mantissa_length, unsigned long exponent_length){
 
     if (mantissa_length <= 0) {

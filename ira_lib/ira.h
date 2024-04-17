@@ -16,12 +16,12 @@ public:
     //-------------------------------
     struct {
 
-        double random_lower_bound;                          // the lower bound when getting a random value.
-        double random_upper_bound;                          // the upper bound when getting a random value.
+        double random_lower_bound;              // the lower bound when getting a random value.
+        double random_upper_bound;              // the upper bound when getting a random value.
 
-        unsigned long max_iter;                             // The maximal number of refinement steps.
-        unsigned long n;                                    // dimension of the system
-        unsigned long matrix_1D_size;                       // The number of elements of the system matrix.
+        unsigned long max_iter;                 // The maximal number of refinement steps.
+        unsigned long n;                        // dimension of the system
+        unsigned long matrix_1D_size;           // The number of elements of the system matrix.
 
         // TODO: Test
         bool working_precision_set;             // true if a working precision was set.
@@ -98,8 +98,7 @@ public:
     void setWorkingPrecisionExponent(unsigned long exponent_length);
     void setExpectedResult(const vector<mps>& new_expected_result);
     void setExpectedError(const mps& new_expected_error);
-    // TODO: test
-    void setExpectedPrecision(const long long new_expected_precision, unsigned long mantissa_length, unsigned long exponent_length);
+    void setExpectedPrecision(const mps& new_expected_precision);
 
     [[nodiscard]] vector<double> getRandomRange() const;
     [[nodiscard]] unsigned long getMaxIter() const;
@@ -110,6 +109,7 @@ public:
     [[nodiscard]] vector<unsigned long> getWorkingPrecision() const;
     [[nodiscard]] vector<mps> getExpectedResult_mps() const;
     [[nodiscard]] vector<double> getExpectedResult_double() const;
+    [[nodiscard]] mps getExpectedError() const;
     [[nodiscard]] mps getExpectedPrecision() const;
     //-------------------------------
 
@@ -136,11 +136,9 @@ public:
     // cast functions
     //-------------------------------
     static void castVectorElements(unsigned long mantissa_length, unsigned long exponent_length, vector<mps>* vec);
-    // TODO: Test
+    // TODO: maybe automatically change ur_l...
     void castSystemMatrix(unsigned long mantissa_length, unsigned long exponent_length);
-    // TODO: Test
     void castExpectedResult(unsigned long mantissa_length, unsigned long exponent_length);
-    // TODO: Test
     void castExpectedError(unsigned long mantissa_length, unsigned long exponent_length);
     //-------------------------------
 
