@@ -1419,21 +1419,20 @@ vector<mps> ira::backwardSubstitution(const vector<mps>& b) const {
         throw std::invalid_argument("ERROR: in backwardSubstitution: b is empty");
     }
 
-    // TODO: maybe precalculate n-1
     auto n_minus_one = this->parameters.n-1;
 
     vector<mps> x(b.size(), mps(this->U[0].mantissa_length, this->U[0].exponent_length));
 
-    x[this->parameters.n-1] = b[this->parameters.n-1]/U[get_idx(this->parameters.n-1, this->parameters.n-1)];
+    x[n_minus_one] = b[n_minus_one]/U[get_idx(n_minus_one, n_minus_one)];
 
     mps tmp_sum(this->U[0].mantissa_length, this->U[0].exponent_length);
 
-    for(unsigned long i = this->parameters.n-1; i > 0;){
+    for(unsigned long i = n_minus_one; i > 0;){
 
         i--;
 
         tmp_sum = 0;
-        for(unsigned long j = this->parameters.n-1; j > i; j--){
+        for(unsigned long j = n_minus_one; j > i; j--){
 
             tmp_sum =  tmp_sum + (U[get_idx(i,j)] * x[j]);
         }
