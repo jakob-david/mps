@@ -392,9 +392,23 @@ std::string mps::to_string(const int precision) const {
         }
     }
 
-    if(exponent_precision_id < this->exponent_length - 1){
-        auto tmp = (this->exponent_length-exponent_precision_id);
-        return (long) (pow(2, tmp) * -1); // TODO: test
+    cout << exponent_precision_id << endl;
+    if(exponent_precision_id < compare.exponent_length - 1){
+        cout << "hu" << endl;
+        auto larger_result = larger(this->exponent, compare.exponent);
+        if(larger_result < 0){
+            return 0;
+        } else {
+            auto subtraction_result = binarySubtraction(this->exponent, compare.exponent);
+            long long sum = 0;
+            for(unsigned long i = 0; i < subtraction_result.size(); i++){
+                if(subtraction_result[i]){
+                    sum += (long long) pow(2, subtraction_result.size()-i) -2; // -2 because of the definition.
+                }
+            }
+
+            return sum * -1;
+        }
     } else if(exponent_precision_id < this->exponent_length){
 
         if(this->exponent[exponent_precision_id] == last_bit_of_larger_exponent){   // the exponent of "this" is larger

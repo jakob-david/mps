@@ -1639,7 +1639,6 @@ vector<mps> ira::iterativeRefinementLU(const vector<mps> &b) {
 
     const auto finish = std::chrono::high_resolution_clock::now();
 
-    // TODO: check units
     auto result_in_microseconds = (std::chrono::duration_cast<std::chrono::microseconds>(finish - start).count());
     this->evaluation.milliseconds = ((long double) result_in_microseconds) / 1000;
 
