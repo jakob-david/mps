@@ -1247,12 +1247,12 @@ TEST(generateRandomLinearSystem, test_precisions){
         EXPECT_EQ(element.exponent_length, ur_e_l);
     }
 
-    for(auto element : b){
+    for(const auto& element : b){
         EXPECT_EQ(element.mantissa_length, ur_m_l);
         EXPECT_EQ(element.exponent_length, ur_e_l);
     }
 
-    for(auto element : x){
+    for(const auto& element : x){
         EXPECT_EQ(element.mantissa_length, ur_m_l);
         EXPECT_EQ(element.exponent_length, ur_e_l);
     }
@@ -1314,6 +1314,124 @@ TEST(calculateVectorMean, simple_pos_neg){
     EXPECT_EQ(2.25, result.getValue());
     EXPECT_EQ(mantissa_length, result.mantissa_length);
     EXPECT_EQ(exponent_length, result.exponent_length);
+}
+
+TEST(calculateVectorMeanPrecision, simple_1){
+
+
+    unsigned long mantissa_length = 5;
+    unsigned long exponent_length = 11;
+    double init_value = 8;
+    unsigned long ira_mantissa_length = 52;
+    unsigned long ira_exponent_length = 11;
+
+    vector<mps> x_should;
+    vector<bool> xs_mantissa = {1,0,0,0,0};         // NOLINT(*-use-bool-literals)
+    for(unsigned long i = 0; i < 4; i++){
+        mps xs_value(mantissa_length, exponent_length, init_value);
+        xs_value.setMantissa(xs_mantissa);
+        x_should.push_back(xs_value);
+    }
+
+    vector<mps> x_is;
+    for(unsigned long i = 0; i < 4; i++){
+        mps xi_value(mantissa_length, exponent_length, init_value);
+        x_is.push_back(xi_value);
+    }
+    vector<bool> xi_zero_mantissa = {1,0,0,1,0};    // NOLINT(*-use-bool-literals)
+    x_is[0].setMantissa(xi_zero_mantissa);
+    vector<bool> xi_one_mantissa = {1,0,0,0,0};     // NOLINT(*-use-bool-literals)
+    x_is[1].setMantissa(xi_zero_mantissa);
+    vector<bool> xi_two_mantissa = {1,0,0,0,1};     // NOLINT(*-use-bool-literals)
+    x_is[2].setMantissa(xi_zero_mantissa);
+    vector<bool> xi_three_mantissa = {1,0,1,0,1};   // NOLINT(*-use-bool-literals)
+    x_is[3].setMantissa(xi_zero_mantissa);
+
+    ira IRA(4, ira_mantissa_length, ira_exponent_length);
+    IRA.setWorkingPrecision(ira_mantissa_length, ira_exponent_length);
+    auto b = IRA.generateRandomLinearSystem();
+    mps expected_precision(ira_mantissa_length, ira_exponent_length, 0.001);
+    IRA.setExpectedPrecision(expected_precision);
+
+    auto result = IRA.calculateVectorMeanPrecision(x_is, x_should);
+
+    EXPECT_EQ(4, result.getValue());
+    EXPECT_EQ(ira_mantissa_length, result.mantissa_length);
+    EXPECT_EQ(ira_exponent_length, result.exponent_length);
+}
+
+TEST(calculateVectorMeanPrecision, exception_empty_vector){
+
+
+    unsigned long mantissa_length = 5;
+    unsigned long exponent_length = 11;
+    unsigned long ira_mantissa_length = 52;
+    unsigned long ira_exponent_length = 11;
+
+    ira IRA(4, ira_mantissa_length, ira_exponent_length);
+    IRA.setWorkingPrecision(ira_mantissa_length, ira_exponent_length);
+    auto b = IRA.generateRandomLinearSystem();
+    mps expected_precision(ira_mantissa_length, ira_exponent_length, 0.001);
+    IRA.setExpectedPrecision(expected_precision);
+
+    vector<mps> not_empty_vector;
+    not_empty_vector.emplace_back(mantissa_length, exponent_length, 6.0);
+
+    vector<mps> empty_vector;
+
+    EXPECT_NO_THROW(auto x = IRA.calculateVectorMeanPrecision(not_empty_vector, not_empty_vector));
+    EXPECT_ANY_THROW(auto x_1 = IRA.calculateVectorMeanPrecision(empty_vector, not_empty_vector));
+    EXPECT_ANY_THROW(auto x_2 = IRA.calculateVectorMeanPrecision(not_empty_vector, empty_vector));
+}
+
+TEST(calculateVectorMeanPrecision, exception_no_working_precision_set){
+
+
+    unsigned long mantissa_length = 5;
+    unsigned long exponent_length = 11;
+    unsigned long ira_mantissa_length = 52;
+    unsigned long ira_exponent_length = 11;
+
+    ira IRA(4, ira_mantissa_length, ira_exponent_length);
+
+    vector<mps> not_empty_vector;
+    not_empty_vector.emplace_back(mantissa_length, exponent_length, 6.0);
+
+    vector<mps> empty_vector;
+
+    EXPECT_ANY_THROW(auto x = IRA.calculateVectorMeanPrecision(not_empty_vector, not_empty_vector));
+
+    IRA.setWorkingPrecision(ira_mantissa_length, ira_exponent_length);
+    auto b = IRA.generateRandomLinearSystem();
+    mps expected_precision(ira_mantissa_length, ira_exponent_length, 0.001);
+    IRA.setExpectedPrecision(expected_precision);
+
+    EXPECT_NO_THROW(auto x = IRA.calculateVectorMeanPrecision(not_empty_vector, not_empty_vector));
+}
+
+TEST(calculateVectorMeanPrecision, exception_no_expected_precision_set){
+
+
+    unsigned long mantissa_length = 5;
+    unsigned long exponent_length = 11;
+    unsigned long ira_mantissa_length = 52;
+    unsigned long ira_exponent_length = 11;
+
+    ira IRA(4, ira_mantissa_length, ira_exponent_length);
+    IRA.setWorkingPrecision(ira_mantissa_length, ira_exponent_length);
+    auto b = IRA.generateRandomLinearSystem();
+
+    vector<mps> not_empty_vector;
+    not_empty_vector.emplace_back(mantissa_length, exponent_length, 6.0);
+
+    vector<mps> empty_vector;
+
+    EXPECT_ANY_THROW(auto x = IRA.calculateVectorMeanPrecision(not_empty_vector, not_empty_vector));
+
+    mps expected_precision(ira_mantissa_length, ira_exponent_length, 0.001);
+    IRA.setExpectedPrecision(expected_precision);
+
+    EXPECT_NO_THROW(auto x = IRA.calculateVectorMeanPrecision(not_empty_vector, not_empty_vector));
 }
 
 

@@ -1116,7 +1116,18 @@ mps ira::calculateVectorMean(const vector<mps>& a){
 
 mps ira::calculateVectorMeanPrecision(const vector<mps>& is, const vector<mps>& should) const {
 
-    // TODO: write exceptions
+    if (is.empty()) {
+        throw std::invalid_argument("ERROR: in generateRandomVector : is vector is empty");
+    }
+    if (should.empty()) {
+        throw std::invalid_argument("ERROR: in calculateVectorMeanPrecision : should vector is empty");
+    }
+    if (not this->parameters.working_precision_set) {
+        throw std::invalid_argument("ERROR: in calculateVectorMeanPrecision : working precision must be set beforehand.");
+    }
+    if (not this->parameters.expected_precision_present) {
+        throw std::invalid_argument("ERROR: in calculateVectorMeanPrecision : expected precision must be set beforehand.");
+    }
 
     mps sum(is[0].mantissa_length, is[0].exponent_length, 0.0);
     mps size(this->parameters.ep_mantissa_length, this->parameters.ep_exponent_length, (double) is.size());
@@ -1409,6 +1420,7 @@ vector<mps> ira::backwardSubstitution(const vector<mps>& b) const {
     }
 
     // TODO: maybe precalculate n-1
+    auto n_minus_one = this->parameters.n-1;
 
     vector<mps> x(b.size(), mps(this->U[0].mantissa_length, this->U[0].exponent_length));
 
