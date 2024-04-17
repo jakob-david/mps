@@ -351,7 +351,6 @@ void ira::setExpectedPrecision(const mps& new_expected_precision){
     this->parameters.ep_mantissa_length = new_expected_precision.mantissa_length;
     this->parameters.ep_exponent_length = new_expected_precision.exponent_length;
 
-    //mps expected_precision(mantissa_length, exponent_length, (double) new_expected_precision);
     this->parameters.expected_precision |= new_expected_precision;
 }
 
@@ -1087,6 +1086,12 @@ mps ira::vectorNorm_L1(const vector<mps>& a){
     return ret;
 }
 
+/**
+ * Returns the mean absolute value of all elements elements of the vector.
+ *
+ * @param a the vector for which the mean absolute value should be calculated
+ * @return the mean absolute value of the vector
+ */
 mps ira::calculateVectorMean(const vector<mps>& a){
 
     auto mantissa_length = a[0].mantissa_length;

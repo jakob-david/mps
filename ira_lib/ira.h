@@ -158,7 +158,6 @@ public:
     // evaluators and norms
     //-------------------------------
     [[nodiscard]] static mps vectorNorm_L1(const vector<mps>& a);
-    // TODO: test
     [[nodiscard]] static mps calculateVectorMean(const vector<mps>& a);
     // TODO: test
     [[nodiscard]] mps calculateVectorMeanPrecision(const vector<mps>& is, const vector<mps>& should) const;

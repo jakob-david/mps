@@ -1109,7 +1109,7 @@ TEST(generateRandomVector, simple_1){
     EXPECT_EQ(exponent_length, vec[0].exponent_length);
     EXPECT_EQ(size, vec.size());
 
-    for(auto element : vec){
+    for(const auto& element : vec){
         EXPECT_TRUE(element.getValue() < upper_limit);
         EXPECT_TRUE(element.getValue() > lower_limit);
     }
@@ -1257,6 +1257,63 @@ TEST(generateRandomLinearSystem, test_precisions){
         EXPECT_EQ(element.exponent_length, ur_e_l);
     }
 
+}
+
+
+// evaluators and norms
+//-------------------------------
+TEST(calculateVectorMean, simple_pos){
+
+    unsigned long mantissa_length = 52;
+    unsigned long exponent_length = 11;
+
+    vector<mps> vec;
+    vec.emplace_back(mantissa_length, exponent_length, 3);
+    vec.emplace_back(mantissa_length, exponent_length, 5);
+    vec.emplace_back(mantissa_length, exponent_length, 1);
+    vec.emplace_back(mantissa_length, exponent_length, 0);
+
+    auto result =  ira::calculateVectorMean(vec);
+
+    EXPECT_EQ(2.25, result.getValue());
+    EXPECT_EQ(mantissa_length, result.mantissa_length);
+    EXPECT_EQ(exponent_length, result.exponent_length);
+}
+
+TEST(calculateVectorMean, simple_neg){
+
+    unsigned long mantissa_length = 52;
+    unsigned long exponent_length = 11;
+
+    vector<mps> vec;
+    vec.emplace_back(mantissa_length, exponent_length, -3);
+    vec.emplace_back(mantissa_length, exponent_length, -5);
+    vec.emplace_back(mantissa_length, exponent_length, -1);
+    vec.emplace_back(mantissa_length, exponent_length, -0);
+
+    auto result =  ira::calculateVectorMean(vec);
+
+    EXPECT_EQ(2.25, result.getValue());
+    EXPECT_EQ(mantissa_length, result.mantissa_length);
+    EXPECT_EQ(exponent_length, result.exponent_length);
+}
+
+TEST(calculateVectorMean, simple_pos_neg){
+
+    unsigned long mantissa_length = 52;
+    unsigned long exponent_length = 11;
+
+    vector<mps> vec;
+    vec.emplace_back(mantissa_length, exponent_length, -3);
+    vec.emplace_back(mantissa_length, exponent_length, 5);
+    vec.emplace_back(mantissa_length, exponent_length, 1);
+    vec.emplace_back(mantissa_length, exponent_length, 0);
+
+    auto result =  ira::calculateVectorMean(vec);
+
+    EXPECT_EQ(2.25, result.getValue());
+    EXPECT_EQ(mantissa_length, result.mantissa_length);
+    EXPECT_EQ(exponent_length, result.exponent_length);
 }
 
 
