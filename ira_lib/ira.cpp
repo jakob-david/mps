@@ -1446,17 +1446,22 @@ vector<mps> ira::backwardSubstitution(const vector<mps>& b) const {
 /**
  * Solves a system of equation using a PLU-Factorisation.
  * The system matrix needs not to be a parameter since it must set beforehand.
+ * The precision in which the system is solved is the upper precision (ur).
+ *
+ * Throws Exception:    When b is empty.
  *
  * @param b the solution vector of the system.
- * @param u the precision in which the system should be solved.
  * @return the solution of the system as an mps object.
  */
-vector<mps> ira::solveLU(const vector<mps>& b, unsigned long u[2]){
-// TODO: delete u
+vector<mps> ira::solveLU(const vector<mps>& b){
 
-    this->PLU_decomposition(u[0], u[1]);
+    if (b.empty()) {
+        throw std::invalid_argument("ERROR: in solveLU: b is empty");
+    }
+
+    this->PLU_decomposition(this->parameters.ur_m_l, this->parameters.ur_e_l);
     auto tmp_b = b;
-    ira::castVectorElements(u[0], u[1], &tmp_b);
+    ira::castVectorElements(this->parameters.ur_m_l, this->parameters.ur_e_l, &tmp_b);
 
 
 

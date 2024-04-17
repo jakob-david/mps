@@ -135,7 +135,6 @@ public:
     // cast functions
     //-------------------------------
     static void castVectorElements(unsigned long mantissa_length, unsigned long exponent_length, vector<mps>* vec);
-    // TODO: maybe automatically change ur_l...
     void castSystemMatrix(unsigned long mantissa_length, unsigned long exponent_length);
     void castExpectedResult(unsigned long mantissa_length, unsigned long exponent_length);
     void castExpectedError(unsigned long mantissa_length, unsigned long exponent_length);
@@ -177,7 +176,7 @@ public:
     [[nodiscard]] vector<mps> forwardSubstitution(const vector<mps>& b) const;
     [[nodiscard]] vector<mps> backwardSubstitution(const vector<mps>& b) const;
     vector<mps> iterativeRefinementLU(const vector<mps> &b);
-    [[nodiscard]] vector<mps> solveLU(const vector<mps>& b, unsigned long u[2]);
+    [[nodiscard]] vector<mps> solveLU(const vector<mps>& b);
     //-------------------------------
 
     // algorithms using double data types

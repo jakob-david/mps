@@ -58,7 +58,7 @@ TEST(solveLU, auto_overprecision_double){
 
         // solve system
         //--------------------------------
-        auto x = IRA.solveLU(b, u);
+        auto x = IRA.solveLU(b);
         auto x_result = ira::mps_to_double(x);
         //--------------------------------
 
@@ -122,7 +122,7 @@ TEST(solveLU, auto_overprecision_float){
 
         // solve system
         //--------------------------------
-        auto x = IRA.solveLU(b, u);
+        auto x = IRA.solveLU(b);
         auto x_result = ira::mps_to_float(x);
         //--------------------------------
 
@@ -187,7 +187,7 @@ TEST(solveLU, auto_double){
 
         // solve system
         //--------------------------------
-        auto x = IRA.solveLU(b, u);
+        auto x = IRA.solveLU(b);
         //auto x_result = ira::mps_to_double(x);
         //--------------------------------
 
@@ -258,7 +258,7 @@ TEST(solveLU, auto_float){
 
         // solve system
         //--------------------------------
-        auto x = IRA.solveLU(b, u);
+        auto x = IRA.solveLU(b);
         //auto x_result = ira::mps_to_double(x);
         //--------------------------------
 
@@ -325,7 +325,7 @@ TEST(solveLU, random_float){
 
         // solve system
         //--------------------------------
-        auto x = IRA.solveLU(b, u);
+        auto x = IRA.solveLU(b);
         //--------------------------------
 
         // perform tests
@@ -392,7 +392,7 @@ TEST(solveLU, random_double){
 
         // solve system
         //--------------------------------
-        auto x = IRA.solveLU(b, u);
+        auto x = IRA.solveLU(b);
         //--------------------------------
 
         // perform tests
@@ -460,7 +460,7 @@ TEST(solveLU, DISABLED_random_distana_float){
 
         // solve system
         //--------------------------------
-        auto x = IRA.solveLU(b, u);
+        auto x = IRA.solveLU(b);
         //--------------------------------
 
         // perform tests
@@ -536,7 +536,7 @@ TEST(solveLU, DISABLED_random_distana_double){
 
         // solve system
         //--------------------------------
-        auto x = IRA.solveLU(b, u);
+        auto x = IRA.solveLU(b);
         //--------------------------------
 
         // perform tests
@@ -575,7 +575,8 @@ TEST(solveLU, random_LUcompare_double){
 
     for(unsigned long m = 0; m <= number_of_tests; m++){
 
-        ira IRA(matrix_size, 52, 11);
+        unsigned long u[2] = {52, 11};
+        ira IRA(matrix_size, u[0], u[1]);
 
         // Set up A
         //--------------------------------
@@ -610,8 +611,7 @@ TEST(solveLU, random_LUcompare_double){
 
         // solve system
         //--------------------------------
-        unsigned long u[2] = {52, 11};
-        auto x_result = IRA.solveLU(b, u);
+        auto x_result = IRA.solveLU(b);
         auto x_should_double = IRA.solveLU_double(ira::mps_to_double(b));
         //--------------------------------
 

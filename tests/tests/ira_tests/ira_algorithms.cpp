@@ -870,7 +870,7 @@ TEST(solve_LU, simple_3x3_float_1){
     b.emplace_back(u[0], u[1], 6);
     b.emplace_back(u[0], u[1], 8);
 
-    auto x = IRA.solveLU(b, u);
+    auto x = IRA.solveLU(b);
     auto x_result = ira::mps_to_float(x);
 
     vector<float> x_should{1.0f, 2.0f, 3.0f};
@@ -899,7 +899,7 @@ TEST(solve_LU, simple_3x3_double_1){
     b.emplace_back(u[0], u[1], 6);
     b.emplace_back(u[0], u[1], 8);
 
-    auto x = IRA.solveLU(b, u);
+    auto x = IRA.solveLU(b);
     auto x_result = ira::mps_to_double(x);
 
     vector<double> x_should{1, 2, 3};
@@ -929,7 +929,7 @@ TEST(solve_LU, simple_3x3_float_2){
     b.emplace_back(u[0], u[1], 194.1884);
     b.emplace_back(u[0], u[1], -21.37);
 
-    auto x = IRA.solveLU(b, u);
+    auto x = IRA.solveLU(b);
     auto x_result = ira::mps_to_float(x);
 
     vector<float> x_should{3.432f, 12.34f, 6.34f};
@@ -959,7 +959,7 @@ TEST(solve_LU, simple_3x3_double_2){
     b.emplace_back(u[0], u[1], 194.1884);
     b.emplace_back(u[0], u[1], -21.37);
 
-    auto x = IRA.solveLU(b, u);
+    auto x = IRA.solveLU(b);
     auto x_result = ira::mps_to_double(x);
 
     vector<double> x_should{3.4320000000000004, 12.34, 6.34};
@@ -989,7 +989,7 @@ TEST(solve_LU, simple_4x4_float_1){
     b.emplace_back(u[0], u[1], 20);
     b.emplace_back(u[0], u[1], 17);
 
-    auto x = IRA.solveLU(b, u);
+    auto x = IRA.solveLU(b);
     auto x_result = ira::mps_to_float(x);
 
     vector<float> x_should{1.0f, 2.0f, 3.0f, 4.0f};
@@ -1020,7 +1020,7 @@ TEST(solve_LU, simple_4x4_double_1){
     b.emplace_back(u[0], u[1], 20);
     b.emplace_back(u[0], u[1], 17);
 
-    auto x = IRA.solveLU(b, u);
+    auto x = IRA.solveLU(b);
     auto x_result = ira::mps_to_double(x);
 
     vector<double> x_should{1, 2, 3, 4};
@@ -1052,7 +1052,7 @@ TEST(solve_LU, simple_5x5_float_1){
     b.emplace_back(u[0], u[1], 32);
     b.emplace_back(u[0], u[1], -21);
 
-    auto x = IRA.solveLU(b, u);
+    auto x = IRA.solveLU(b);
     auto x_result = ira::mps_to_float(x);
 
     vector<float> x_should{1.0f, 2.0f, 3.0f, 4.0f, 5.0f};
@@ -1085,7 +1085,7 @@ TEST(solve_LU, simple_5x5_double_1){
     b.emplace_back(u[0], u[1], 32);
     b.emplace_back(u[0], u[1], -21);
 
-    auto x = IRA.solveLU(b, u);
+    auto x = IRA.solveLU(b);
     auto x_result = ira::mps_to_double(x);
 
     vector<double> x_should{1.0, 2.0, 3.0, 4.0, 5.0};
@@ -1119,7 +1119,7 @@ TEST(solve_LU, simple_6x6_float_1){
     b.emplace_back(u[0], u[1], -15);
     b.emplace_back(u[0], u[1], -4);
 
-    auto x = IRA.solveLU(b, u);
+    auto x = IRA.solveLU(b);
     auto x_result = ira::mps_to_float(x);
 
     vector<float> x_should{1.0f, 2.0f, 3.0f, 4.0f, 5.0f, 6.0f};
@@ -1153,7 +1153,7 @@ TEST(solve_LU, simple_6x6_double_1){
     b.emplace_back(u[0], u[1], -15);
     b.emplace_back(u[0], u[1], -4);
 
-    auto x = IRA.solveLU(b, u);
+    auto x = IRA.solveLU(b);
     auto x_result = ira::mps_to_double(x);
 
     vector<double> x_should{1.0, 2.0, 3.0, 4.0, 5.0, 6.0};
@@ -1164,6 +1164,38 @@ TEST(solve_LU, simple_6x6_double_1){
     EXPECT_EQ(should_value(x_should[2]), should_value(x_result[2]));
     EXPECT_EQ(should_value(x_should[3]), should_value(x_result[3]));
     EXPECT_EQ(should_value(x_should[4]), should_value(x_result[4]));
+}
+
+TEST(solve_LU, exception_b_empty){
+
+    //------------------------------------------------------------------------------------------------------
+    unsigned long precision = 4;    // the extra mantissa bits which are needed to achieve double precision.
+    // one value (3.432) needed to be fitted.
+    //------------------------------------------------------------------------------------------------------
+
+    unsigned long u[2] = {52 + precision, 11};
+
+    ira IRA(3, u[0], u[1]);
+
+    vector<double> new_A{-34.23, 4.2 ,0.43, 3.2, 8.45 ,12.45, -7, 2.45 ,-4.35};
+    IRA.setMatrix(new_A);
+
+    vector<mps> b;
+    EXPECT_ANY_THROW(auto tmp = IRA.solveLU(b));
+
+    b.emplace_back(u[0], u[1], -62.92316);
+    b.emplace_back(u[0], u[1], 194.1884);
+    b.emplace_back(u[0], u[1], -21.37);
+
+    auto x = IRA.solveLU(b);
+    auto x_result = ira::mps_to_double(x);
+
+    vector<double> x_should{3.4320000000000004, 12.34, 6.34};
+
+    EXPECT_EQ(x_should, x_result);
+    EXPECT_EQ(should_value(x_should[0]), should_value(x_result[0]));
+    EXPECT_EQ(should_value(x_should[1]), should_value(x_result[1]));
+    EXPECT_EQ(should_value(x_should[2]), should_value(x_result[2]));
 }
 
 
@@ -1242,6 +1274,7 @@ TEST(solve_LU_double, simple_6x6_1){
 
 
 
+
 TEST(IR, simple_3x3_double_1){
 
     unsigned long mantissa_length = 52;
@@ -1298,7 +1331,7 @@ TEST(IR, simple_3x3_double_2){
 
     auto x = IRA.iterativeRefinementLU(b);
 
-    auto x_should = IRA.solveLU(b, u);
+    auto x_should = IRA.solveLU(b);
 
     // perform tests
     //--------------------------------
@@ -1337,7 +1370,7 @@ TEST(IR, get_evaluation_value_IR_area){
     b.emplace_back(ur[0], ur[1], 875.357);
     b.emplace_back(ur[0], ur[1], 235.5745);
 
-    auto x_should = IRA.solveLU(b, u);
+    auto x_should = IRA.solveLU(b);
     IRA.setExpectedResult(x_should);
 
     auto x = IRA.iterativeRefinementLU(b);
@@ -1382,7 +1415,7 @@ TEST(IR, get_evaluation_value_microseconds){
     b.emplace_back(ur[0], ur[1], 875.357);
     b.emplace_back(ur[0], ur[1], 235.5745);
 
-    auto x_should = IRA.solveLU(b, u);
+    auto x_should = IRA.solveLU(b);
     IRA.setExpectedResult(x_should);
 
     auto x = IRA.iterativeRefinementLU(b);
