@@ -206,12 +206,12 @@ double mpe::generatePositiveRandomDouble() const {
 
 // operator evaluation
 //-------------------------------
-vector<long long int> mpe::evaluateAddition() const {
+vector<long double> mpe::evaluateAddition() const {
 
     // variable for python multithreading.
     py::gil_scoped_release release;
 
-    std::vector<long long> ret;
+    std::vector<long double> ret;
 
     double a = generatePositiveRandomDouble();
     double b = generatePositiveRandomDouble();
@@ -228,21 +228,22 @@ vector<long long int> mpe::evaluateAddition() const {
         }
 
         const auto finish = std::chrono::high_resolution_clock::now();
-        ret.push_back(std::chrono::duration_cast<std::chrono::microseconds>(finish-start).count());
+
+        auto result_in_microseconds = std::chrono::duration_cast<std::chrono::microseconds>(finish-start).count();
+        ret.push_back(((long double) result_in_microseconds) / 1000) ;
     }
 
     pybind11::gil_scoped_acquire acquire;
 
     return ret;
 }
-
-vector<long long int> mpe::evaluateSubtraction() const {
+vector<long double> mpe::evaluateSubtraction() const {
 
     // variable for python multithreading.
 
     py::gil_scoped_release release; // noqa
 
-    std::vector<long long> ret;
+    std::vector<long double> ret;
 
     double a = generatePositiveRandomDouble();
     double b = generatePositiveRandomDouble();
@@ -260,21 +261,22 @@ vector<long long int> mpe::evaluateSubtraction() const {
         }
 
         const auto finish = std::chrono::high_resolution_clock::now();
-        ret.push_back(std::chrono::duration_cast<std::chrono::microseconds>(finish-start).count());
+
+        auto result_in_microseconds = std::chrono::duration_cast<std::chrono::microseconds>(finish-start).count();
+        ret.push_back(((long double) result_in_microseconds) / 1000) ;
     }
 
     pybind11::gil_scoped_acquire acquire;
 
     return ret;
 }
-
-vector<long long int> mpe::evaluateMultiplication() const {
+vector<long double> mpe::evaluateMultiplication() const {
 
     // variable for python multithreading.
 
     py::gil_scoped_release release;
 
-    std::vector<long long> ret;
+    std::vector<long double> ret;
 
     double a = generatePositiveRandomDouble();
     double b = generatePositiveRandomDouble();
@@ -291,21 +293,22 @@ vector<long long int> mpe::evaluateMultiplication() const {
         }
 
         const auto finish = std::chrono::high_resolution_clock::now();
-        ret.push_back(std::chrono::duration_cast<std::chrono::microseconds>(finish-start).count());
+
+        auto result_in_microseconds = std::chrono::duration_cast<std::chrono::microseconds>(finish-start).count();
+        ret.push_back(((long double) result_in_microseconds) / 1000) ;
     }
 
     pybind11::gil_scoped_acquire acquire;
 
     return ret;
 }
-
-vector<long long int> mpe::evaluateDivision() const {
+vector<long double> mpe::evaluateDivision() const {
 
     // variable for python multithreading.
 
     py::gil_scoped_release release;
 
-    std::vector<long long> ret;
+    std::vector<long double> ret;
 
     double a = generatePositiveRandomDouble();
     double b = generatePositiveRandomDouble();
@@ -322,7 +325,9 @@ vector<long long int> mpe::evaluateDivision() const {
         }
 
         const auto finish = std::chrono::high_resolution_clock::now();
-        ret.push_back(std::chrono::duration_cast<std::chrono::microseconds>(finish-start).count());
+
+        auto result_in_microseconds = std::chrono::duration_cast<std::chrono::microseconds>(finish-start).count();
+        ret.push_back(((long double) result_in_microseconds) / 1000) ;
     }
 
     pybind11::gil_scoped_acquire acquire;
@@ -334,12 +339,13 @@ vector<long long int> mpe::evaluateDivision() const {
 
 // operator evaluation
 //-------------------------------
-vector<long long int> mpe::evaluateAdditionDouble() const {
+vector<long double> mpe::evaluateAdditionDouble() const {
 
     // variable for python multithreading.
     py::gil_scoped_release release;
 
-    std::vector<long long> ret;
+    std::vector<long double> ret;
+    long long result_in_nanoseconds;
 
     double a = generatePositiveRandomDouble();
     double b = generatePositiveRandomDouble();
@@ -358,8 +364,9 @@ vector<long long int> mpe::evaluateAdditionDouble() const {
         //#pragma GCC diagnostic pop
     }
     auto finish = std::chrono::high_resolution_clock::now();
-    ret.push_back(std::chrono::duration_cast<std::chrono::microseconds>(finish-start).count());
-    cout << sum_f << endl;
+
+    result_in_nanoseconds = std::chrono::duration_cast<std::chrono::nanoseconds>(finish-start).count();
+    ret.push_back(((long double) result_in_nanoseconds) / 1000);
     //-------------------------------
 
 
@@ -373,8 +380,9 @@ vector<long long int> mpe::evaluateAdditionDouble() const {
         sum_d += (A_d + B_d);
     }
     finish = std::chrono::high_resolution_clock::now();
-    ret.push_back(std::chrono::duration_cast<std::chrono::microseconds>(finish-start).count());
-    cout << sum_d << endl;
+
+    result_in_nanoseconds = std::chrono::duration_cast<std::chrono::nanoseconds>(finish-start).count();
+    ret.push_back(((long double) result_in_nanoseconds) / 1000);
     //-------------------------------
 
 
@@ -388,8 +396,9 @@ vector<long long int> mpe::evaluateAdditionDouble() const {
         sum_ld += (A_ld + B_ld);
     }
     finish = std::chrono::high_resolution_clock::now();
-    ret.push_back(std::chrono::duration_cast<std::chrono::microseconds>(finish-start).count());
-    cout << sum_ld << endl;
+
+    result_in_nanoseconds = std::chrono::duration_cast<std::chrono::nanoseconds>(finish-start).count();
+    ret.push_back(((long double) result_in_nanoseconds) / 1000);
     //-------------------------------
 
     cout << sum_f + sum_d + sum_ld << endl;
@@ -399,12 +408,13 @@ vector<long long int> mpe::evaluateAdditionDouble() const {
     return ret;
 
 }
-vector<long long int> mpe::evaluateSubtractionDouble() const {
+vector<long double> mpe::evaluateSubtractionDouble() const {
 
     // variable for python multithreading.
     py::gil_scoped_release release;
 
-    std::vector<long long> ret;
+    std::vector<long double> ret;
+    long long result_in_nanoseconds;
 
     double a = generatePositiveRandomDouble();
     double b = generatePositiveRandomDouble();
@@ -420,7 +430,9 @@ vector<long long int> mpe::evaluateSubtractionDouble() const {
         sum_f -= (A_f - B_f);
     }
     auto finish = std::chrono::high_resolution_clock::now();
-    ret.push_back(std::chrono::duration_cast<std::chrono::microseconds>(finish-start).count());
+
+    result_in_nanoseconds = std::chrono::duration_cast<std::chrono::nanoseconds>(finish-start).count();
+    ret.push_back(((long double) result_in_nanoseconds) / 1000);
     //-------------------------------
 
 
@@ -434,7 +446,9 @@ vector<long long int> mpe::evaluateSubtractionDouble() const {
         sum_d -= (A_d - B_d);
     }
     finish = std::chrono::high_resolution_clock::now();
-    ret.push_back(std::chrono::duration_cast<std::chrono::microseconds>(finish-start).count());
+
+    result_in_nanoseconds = std::chrono::duration_cast<std::chrono::nanoseconds>(finish-start).count();
+    ret.push_back(((long double) result_in_nanoseconds) / 1000);
     //-------------------------------
 
 
@@ -448,7 +462,9 @@ vector<long long int> mpe::evaluateSubtractionDouble() const {
         sum_ld -= (A_ld - B_ld);
     }
     finish = std::chrono::high_resolution_clock::now();
-    ret.push_back(std::chrono::duration_cast<std::chrono::microseconds>(finish-start).count());
+
+    result_in_nanoseconds = std::chrono::duration_cast<std::chrono::nanoseconds>(finish-start).count();
+    ret.push_back(((long double) result_in_nanoseconds) / 1000);
     //-------------------------------
 
     cout << sum_f + sum_d + sum_ld << endl;
@@ -457,12 +473,13 @@ vector<long long int> mpe::evaluateSubtractionDouble() const {
 
     return ret;
 }
-vector<long long int> mpe::evaluateMultiplicationDouble() const {
+vector<long double> mpe::evaluateMultiplicationDouble() const {
 
     // variable for python multithreading.
     py::gil_scoped_release release;
 
-    std::vector<long long> ret;
+    std::vector<long double> ret;
+    long long result_in_nanoseconds;
 
     double a = generatePositiveRandomDouble();
     double b = generatePositiveRandomDouble();
@@ -477,7 +494,9 @@ vector<long long int> mpe::evaluateMultiplicationDouble() const {
         sum_f *= (A_f * B_f);
     }
     auto finish = std::chrono::high_resolution_clock::now();
-    ret.push_back(std::chrono::duration_cast<std::chrono::microseconds>(finish-start).count());
+
+    result_in_nanoseconds = std::chrono::duration_cast<std::chrono::nanoseconds>(finish-start).count();
+    ret.push_back(((long double) result_in_nanoseconds) / 1000);
     //-------------------------------
 
 
@@ -491,7 +510,9 @@ vector<long long int> mpe::evaluateMultiplicationDouble() const {
         sum_d *= (A_d * B_d);
     }
     finish = std::chrono::high_resolution_clock::now();
-    ret.push_back(std::chrono::duration_cast<std::chrono::microseconds>(finish-start).count());
+
+    result_in_nanoseconds = std::chrono::duration_cast<std::chrono::nanoseconds>(finish-start).count();
+    ret.push_back(((long double) result_in_nanoseconds) / 1000);
     //-------------------------------
 
 
@@ -505,7 +526,9 @@ vector<long long int> mpe::evaluateMultiplicationDouble() const {
         sum_ld *= (A_ld * B_ld);
     }
     finish = std::chrono::high_resolution_clock::now();
-    ret.push_back(std::chrono::duration_cast<std::chrono::microseconds>(finish-start).count());
+
+    result_in_nanoseconds = std::chrono::duration_cast<std::chrono::nanoseconds>(finish-start).count();
+    ret.push_back(((long double) result_in_nanoseconds) / 1000);
     //-------------------------------
 
     cout << sum_f + sum_d + sum_ld << endl;
@@ -514,12 +537,13 @@ vector<long long int> mpe::evaluateMultiplicationDouble() const {
 
     return ret;
 }
-vector<long long int> mpe::evaluateDivisionDouble() const {
+vector<long double> mpe::evaluateDivisionDouble() const {
 
     // variable for python multithreading.
     py::gil_scoped_release release;
 
-    std::vector<long long> ret;
+    std::vector<long double> ret;
+    long long result_in_nanoseconds;
 
     double a = generatePositiveRandomDouble();
     double b = generatePositiveRandomDouble();
@@ -534,7 +558,9 @@ vector<long long int> mpe::evaluateDivisionDouble() const {
         sum_f /= (A_f / B_f);
     }
     auto finish = std::chrono::high_resolution_clock::now();
-    ret.push_back(std::chrono::duration_cast<std::chrono::microseconds>(finish-start).count());
+
+    result_in_nanoseconds = std::chrono::duration_cast<std::chrono::nanoseconds>(finish-start).count();
+    ret.push_back(((long double) result_in_nanoseconds) / 1000);
     //-------------------------------
 
 
@@ -548,7 +574,9 @@ vector<long long int> mpe::evaluateDivisionDouble() const {
         sum_d /= (A_d / B_d);
     }
     finish = std::chrono::high_resolution_clock::now();
-    ret.push_back(std::chrono::duration_cast<std::chrono::microseconds>(finish-start).count());
+
+    result_in_nanoseconds = std::chrono::duration_cast<std::chrono::nanoseconds>(finish-start).count();
+    ret.push_back(((long double) result_in_nanoseconds) / 1000);
     //-------------------------------
 
 
@@ -562,7 +590,9 @@ vector<long long int> mpe::evaluateDivisionDouble() const {
         sum_ld /= (A_ld / B_ld);
     }
     finish = std::chrono::high_resolution_clock::now();
-    ret.push_back(std::chrono::duration_cast<std::chrono::microseconds>(finish-start).count());
+
+    result_in_nanoseconds = std::chrono::duration_cast<std::chrono::nanoseconds>(finish-start).count();
+    ret.push_back(((long double) result_in_nanoseconds) / 1000);
     //-------------------------------
 
     cout << sum_f + sum_d + sum_ld << endl;
@@ -658,11 +688,11 @@ vector<vector<vector<long double>>> mpe::evaluateArea_2D(bool output) const {
             IRA.iterativeRefinementLU(b);
 
             // save data relative error
-            auto subsubresult_error = IRA.evaluation.IR_area_relativeError * (double) IRA.evaluation.milliseconds;
+            auto subsubresult_error = IRA.evaluation.IR_area_relativeError * IRA.evaluation.milliseconds;
             subresult_error.push_back(subsubresult_error);
 
             // save data precision error
-            auto subsubresult_precision = IRA.evaluation.IR_precision_error_sum * (double) IRA.evaluation.milliseconds;
+            auto subsubresult_precision = IRA.evaluation.IR_precision_error_sum * IRA.evaluation.milliseconds;
             subresult_precision.push_back(subsubresult_precision);
         }
 
@@ -751,7 +781,7 @@ vector<vector<vector<long double>>> mpe::evaluateConvergence_2D(bool output) con
             subresult_iterations.push_back(subsubresult_iterations);
 
             // save data time
-            auto subsubresult_time = (double) IRA.evaluation.milliseconds;
+            auto subsubresult_time = IRA.evaluation.milliseconds;
             subresult_time.push_back(subsubresult_time);
         }
 

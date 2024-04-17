@@ -108,18 +108,18 @@ public:
 
     // operator evaluation
     //-------------------------------
-    [[nodiscard]] vector<long long int> evaluateAddition() const ;
-    [[nodiscard]] vector<long long int> evaluateSubtraction() const ;
-    [[nodiscard]] vector<long long int> evaluateMultiplication() const ;
-    [[nodiscard]] vector<long long int> evaluateDivision() const ;
+    [[nodiscard]] vector<long double> evaluateAddition() const ;
+    [[nodiscard]] vector<long double> evaluateSubtraction() const ;
+    [[nodiscard]] vector<long double> evaluateMultiplication() const ;
+    [[nodiscard]] vector<long double> evaluateDivision() const ;
     //-------------------------------
 
     // operator evaluation double
     //-------------------------------
-    [[nodiscard]] vector<long long int> evaluateAdditionDouble() const ;
-    [[nodiscard]] vector<long long int> evaluateSubtractionDouble() const ;
-    [[nodiscard]] vector<long long int> evaluateMultiplicationDouble() const ;
-    [[nodiscard]] vector<long long int> evaluateDivisionDouble() const ;
+    [[nodiscard]] vector<long double> evaluateAdditionDouble() const ;
+    [[nodiscard]] vector<long double> evaluateSubtractionDouble() const ;
+    [[nodiscard]] vector<long double> evaluateMultiplicationDouble() const ;
+    [[nodiscard]] vector<long double> evaluateDivisionDouble() const ;
     //-------------------------------
 
 

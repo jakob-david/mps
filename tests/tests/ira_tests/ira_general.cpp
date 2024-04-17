@@ -246,6 +246,38 @@ TEST(ExpectedResult, simple_1) {
     EXPECT_EQ(expected_result_double, IRA.getExpectedResult_double());
 }
 
+TEST(ExpectedResult, correct_rounding){
+
+    unsigned long ur_m_l = 7;
+    unsigned long u_m_l = 5;
+    unsigned long exponent_length = 10;
+    unsigned long size = 2;
+
+    ira IRA(size, ur_m_l, exponent_length);
+    IRA.setWorkingPrecision(u_m_l, exponent_length);
+
+    vector<double> x_d = {8, 8};
+    auto x_mps = ira::double_to_mps(ur_m_l, exponent_length, x_d);
+    vector<bool> m_zero = {1, 0, 0, 0, 1, 0, 1};
+    x_mps[0].setMantissa(m_zero);
+    vector<bool> m_one = {1, 0, 0, 0, 1, 1, 1};
+    x_mps[0].setMantissa(m_one);
+
+    auto xs_mps = ira::double_to_mps(ur_m_l, exponent_length, x_d);
+    vector<bool> ms_zero = {1, 0, 0, 0, 1, 0, 0};
+    xs_mps[0].setMantissa(ms_zero);
+    vector<bool> ms_one = {1, 0, 0, 1, 0, 0, 0};
+    xs_mps[0].setMantissa(ms_one);
+
+    IRA.setExpectedResult(x_mps);
+
+    auto result = IRA.getExpectedResult_mps();
+
+    for(unsigned long i = 0; i < size; i++){
+        EXPECT_EQ(xs_mps[i].print(), result[i].print());
+    }
+}
+
 TEST(ExpectedResult, exception_empty_vector) {
 
     unsigned long mantissa_length = 23;

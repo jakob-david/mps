@@ -307,7 +307,6 @@ void ira::setExpectedResult(const vector<mps>& new_expected_result){
         this->parameters.expected_result_mps.emplace_back(idx);
     }
 
-    // TODO: test
     castExpectedResult(this->parameters.u_m_l, this->parameters.u_e_l);
     castExpectedResult(this->parameters.ur_m_l, this->parameters.ur_e_l);
     this->parameters.expected_result_double = ira::mps_to_double(this->parameters.expected_result_mps);
@@ -1641,7 +1640,8 @@ vector<mps> ira::iterativeRefinementLU(const vector<mps> &b) {
     const auto finish = std::chrono::high_resolution_clock::now();
 
     // TODO: check units
-    this->evaluation.milliseconds = (std::chrono::duration_cast<std::chrono::microseconds>(finish - start).count()) / 1000;
+    auto result_in_microseconds = (std::chrono::duration_cast<std::chrono::microseconds>(finish - start).count());
+    this->evaluation.milliseconds = ((long double) result_in_microseconds) / 1000;
 
     return x;
 }

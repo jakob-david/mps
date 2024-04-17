@@ -54,7 +54,7 @@ public:
         vector<long double> IR_relativeError;
         long double IR_area_relativeError;
         long double IR_area_precision;
-        long long milliseconds;
+        long double milliseconds;
         unsigned long iterations_needed;
 
         vector<long double> IR_precision_errors;
