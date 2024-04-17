@@ -365,115 +365,72 @@ std::string mps::to_string(const int precision) const {
 
     // TODO: add error handling
 
-    long long precision = 0;
-    unsigned long exponent_precision_id = 0;
+    auto exponent_this = (long long) binaryToInt(this->exponent);
+    auto exponent_compare = (long long) binaryToInt(compare.exponent);
 
-    bool last_bit_of_larger_exponent = true;
 
-    for(unsigned long exponent_idx = 0; exponent_idx < this->exponent.size(); exponent_idx++){
-        if(this->exponent[exponent_idx] != compare.exponent[exponent_idx]){
+    long long precision_error = 0;
 
-            exponent_idx++;
 
-            for(;exponent_idx < this->exponent_length; exponent_idx++){
-                if(this->exponent[exponent_idx] == compare.exponent[exponent_idx]){
-                    //for_loop_did_not_brake = false;
-                    break;
-                } else {
-                    exponent_precision_id++;
-                    last_bit_of_larger_exponent = false;
-                }
-            }
+    if(exponent_this == exponent_compare){
 
-            break;
+        auto mantissa_this = (long long) binaryToInt(this->mantissa);
+        auto mantissa_compare = (long long) binaryToInt(compare.mantissa);
 
-        } else {
-            exponent_precision_id++;
+        if(mantissa_this == mantissa_compare){
+            return (long long) compare.mantissa_length;
         }
-    }
+        precision_error = (long long) floor(log2(abs(mantissa_this - mantissa_compare))) + 1;
 
-    cout << exponent_precision_id << endl;
-    if(exponent_precision_id < compare.exponent_length - 1){
-        cout << "hu" << endl;
-        auto larger_result = larger(this->exponent, compare.exponent);
-        if(larger_result < 0){
-            return 0;
-        } else {
-            auto subtraction_result = binarySubtraction(this->exponent, compare.exponent);
-            long long sum = 0;
-            for(unsigned long i = 0; i < subtraction_result.size(); i++){
-                if(subtraction_result[i]){
-                    sum += (long long) pow(2, subtraction_result.size()-i) -2; // -2 because of the definition.
-                }
-            }
 
-            return sum * -1;
-        }
-    } else if(exponent_precision_id < this->exponent_length){
+    } else if (1 == exponent_this - exponent_compare){
 
-        if(this->exponent[exponent_precision_id] == last_bit_of_larger_exponent){   // the exponent of "this" is larger
+        auto copy_this = this->mantissa;
+        copy_this.insert(copy_this.begin(), true);
 
-            if(this->mantissa[0]){          // match of first mantissa bit with "hidden" bit of compare
-                return precision;
+        auto copy_compare = compare.mantissa;
+        copy_compare.insert(copy_compare.begin(), {false, true});
+        copy_compare.pop_back();
 
-            } else {
+        auto mantissa_compare = (long long) binaryToInt(copy_compare);
+        auto mantissa_this = (long long) binaryToInt(copy_this);
 
-                for(unsigned long mantissa_idx = 1; mantissa_idx < this->mantissa_length; mantissa_idx++){
-                    if(this->mantissa[mantissa_idx-1] == compare.mantissa[mantissa_idx-1]){
-                        return precision;
-                    } else {
-                        precision++;
-                    }
-                }
+        precision_error = (long long) floor(log2(abs(mantissa_this - mantissa_compare))) + 1;
 
-            }
+    } else if(1 == exponent_compare - exponent_this) {
 
-        } else {                            // the exponent of "compare" is larger
+        auto copy_compare = compare.mantissa;
+        copy_compare.insert(copy_compare.begin(), true);
 
-            if(compare.mantissa[0]){        // match of first mantissa bit with "hidden" bit of compare
-                return precision;
-            } else {
+        auto copy_this = this->mantissa;
+        copy_this.insert(copy_this.begin(), {false, true});
+        copy_this.pop_back();
 
-                precision++;
+        auto mantissa_compare = (long long) binaryToInt(copy_compare);
+        auto mantissa_this = (long long) binaryToInt(copy_this);
 
-                for(unsigned long mantissa_idx = 1; mantissa_idx < compare.mantissa_length; mantissa_idx++){
-                    if(this->mantissa[mantissa_idx-1] == compare.mantissa[mantissa_idx]){
-                        return precision;
-                    } else {
-                        precision++;
-                    }
-                }
-            }
-        }
+        precision_error = (long long) floor(log2(abs(mantissa_this - mantissa_compare))) + 1;
 
     } else {
 
-        precision++;
+        if(exponent_compare > exponent_this){
+            return 0;
+        } else {
 
-        for(unsigned long idx = 0; idx < this->mantissa_length; idx++){
+            auto difference = abs(exponent_compare - exponent_this);
 
-            if(this->mantissa[idx] != compare.mantissa[idx]){
-
-                precision--;
-
-                idx++;
-                precision++;
-
-                for(;idx < this->mantissa_length; idx++){
-                    if(this->mantissa[idx] == compare.mantissa[idx]){
-                        return precision;
-                    } else {
-                        precision++;
-                    }
+            for(unsigned long i = 0; i < (unsigned long) difference; i++){
+                if(this->mantissa[i]){
+                    difference++;
+                    break;
                 }
-
-            } else {
-                precision++;
             }
+
+            return difference * -1;
         }
     }
 
-    return precision;
+    return ((long long) compare.mantissa_length) - precision_error;
 }
 
 /**
