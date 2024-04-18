@@ -5,6 +5,8 @@
 #ifndef MPS_FUNCTIONS_H
 #define MPS_FUNCTIONS_H
 
+#include <bitset>
+
 inline std::string is_mps(const std::vector<bool>& vec){
 
     std::string str;
