@@ -669,7 +669,6 @@ TEST(addition_tests, neg_pos_inf_double) {
     EXPECT_EQ(should_value(value_1 + value_2), is_mps(test.getBitArray()));
 #else
     cout << "hi" << endl;
-    test.setSign(false);
     EXPECT_EQ(should_value(value_1 + value_2), is_mps(test.getBitArray()));
 #endif
 }
