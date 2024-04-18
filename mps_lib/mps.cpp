@@ -4,7 +4,6 @@
 
 #include <sstream>
 
-
 // constructors and destructor
 //-------------------------------
 

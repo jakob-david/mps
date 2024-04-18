@@ -146,14 +146,10 @@ PYBIND11_MODULE(mpe_library, mpe_handle) {
 
 
 
+PYBIND11_MODULE(mps_library, mps_handle) {
+    mps_handle.doc() = "Framework for mixed precision floating point simulation.";
 
-
-
-
-PYBIND11_MODULE(mps_library, handle) {
-    handle.doc() = "Framework for mixed precision floating point simulation.";
-
-    py::class_<mps>(handle, "mps")
+    py::class_<mps>(mps_handle, "mps")
             .def(py::init<unsigned long, unsigned long, double>())
             .def(py::init<unsigned long, unsigned long>())
             .def(py::init<>())

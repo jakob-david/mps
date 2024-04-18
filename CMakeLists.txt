@@ -21,7 +21,7 @@ set(SOURCE_FILES main.cpp)
 #add_executable(mps_run ${SOURCE_FILES})
 ######################################
 
-find_package(PythonLibs REQUIRED)
+find_package(Python3 COMPONENTS Interpreter)
 include_directories(${PYTHON_INCLUDE_DIRS})
 #target_link_libraries(mps_run ${PYTHON_LIBRARIES})
 
@@ -48,7 +48,7 @@ add_subdirectory(tests)
 # Pybind11
 ######################################
 add_subdirectory(pybind11)
-pybind11_add_module(mps_library python_exporter.cpp mps_lib/mps.cpp)
+pybind11_add_module(mps_library python_exporter.cpp mps_lib/mps.cpp ira_lib/ira.cpp mpe_lib/mpe.cpp)
 pybind11_add_module(mpe_library python_exporter.cpp mps_lib/mps.cpp ira_lib/ira.cpp mpe_lib/mpe.cpp)
 ######################################
 

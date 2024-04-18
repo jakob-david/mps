@@ -1,8 +1,8 @@
 import unittest
+import sys
 
-import mps_library
-from mps_library import *
-import numpy as np
+sys.path.insert(0, '../cmake-build-debug')
+from mps_library import mps
 
 #print(dir(mps_lib))
 
