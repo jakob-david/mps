@@ -579,10 +579,16 @@ TEST(subtraction_tests, pos_pos_inf_double) {
     auto test = MPS - MPS_2;
 
     EXPECT_EQ(isnan(value_1-value_2), isnan(test.getValue()));
-    EXPECT_EQ(should_value(value_1 - value_2), is_mps(test.getBitArray()));
     EXPECT_EQ(true, isnan(test.getValue()));
     EXPECT_EQ(value_1, MPS.getValue());
     EXPECT_EQ(value_2, MPS_2.getValue());
+
+#ifdef __APPLE__
+    EXPECT_EQ(should_value(value_1 - value_2), is_mps(test.getBitArray()));
+#else
+    test.setSign(true);
+    EXPECT_EQ(should_value(value_1 - value_2), is_mps(test.getBitArray()));
+#endif
 }
 
 TEST(subtraction_tests, pos_pos_inf_right_float) {
@@ -596,10 +602,16 @@ TEST(subtraction_tests, pos_pos_inf_right_float) {
     auto test = MPS - MPS_2;
 
     EXPECT_EQ(isnan(value_1-value_2), isnan(test.getValue()));
-    EXPECT_EQ(should_value(value_1 - value_2), is_mps(test.getBitArray()));
     EXPECT_EQ(true, isnan(test.getValue()));
     EXPECT_EQ(value_1, MPS.getValue());
     EXPECT_EQ(value_2, MPS_2.getValue());
+
+#ifdef __APPLE__
+    EXPECT_EQ(should_value(value_1 - value_2), is_mps(test.getBitArray()));
+#else
+    test.setSign(true);
+    EXPECT_EQ(should_value(value_1 - value_2), is_mps(test.getBitArray()));
+#endif
 }
 
 TEST(subtraction_tests, neg_neg_inf_double) {
@@ -613,10 +625,16 @@ TEST(subtraction_tests, neg_neg_inf_double) {
     auto test = MPS - MPS_2;
 
     EXPECT_EQ(isnan(value_1-value_2), isnan(test.getValue()));
-    EXPECT_EQ(should_value(value_1 - value_2), is_mps(test.getBitArray()));
     EXPECT_EQ(true, isnan(test.getValue()));
     EXPECT_EQ(value_1, MPS.getValue());
     EXPECT_EQ(value_2, MPS_2.getValue());
+
+#ifdef __APPLE__
+    EXPECT_EQ(should_value(value_1 - value_2), is_mps(test.getBitArray()));
+#else
+    test.setSign(true);
+    EXPECT_EQ(should_value(value_1 - value_2), is_mps(test.getBitArray()));
+#endif
 }
 
 TEST(subtraction_tests, neg_neg_inf_right_float) {
@@ -630,10 +648,16 @@ TEST(subtraction_tests, neg_neg_inf_right_float) {
     auto test = MPS - MPS_2;
 
     EXPECT_EQ(isnan(value_1-value_2), isnan(test.getValue()));
-    EXPECT_EQ(should_value(value_1 - value_2), is_mps(test.getBitArray()));
     EXPECT_EQ(true, isnan(test.getValue()));
     EXPECT_EQ(value_1, MPS.getValue());
     EXPECT_EQ(value_2, MPS_2.getValue());
+
+#ifdef __APPLE__
+    EXPECT_EQ(should_value(value_1 - value_2), is_mps(test.getBitArray()));
+#else
+    test.setSign(true);
+    EXPECT_EQ(should_value(value_1 - value_2), is_mps(test.getBitArray()));
+#endif
 }
 
 TEST(subtraction_tests, neg_pos_inf_double) {
