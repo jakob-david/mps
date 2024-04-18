@@ -18,7 +18,7 @@ set(CMAKE_CXX_FLAGS_RELEASE "-O1")
 # main.cpp
 ######################################
 set(SOURCE_FILES main.cpp)
-add_executable(mps_run ${SOURCE_FILES})
+#add_executable(mps_run ${SOURCE_FILES})
 ######################################
 
 find_package(PythonLibs REQUIRED)
@@ -29,15 +29,15 @@ target_link_libraries(mps_run ${PYTHON_LIBRARIES})
 ######################################
 include_directories(mps_lib)
 add_subdirectory(mps_lib)
-target_link_libraries(mps_run mps_lib)
+#target_link_libraries(mps_run mps_lib)
 
 include_directories(ira_lib)
 add_subdirectory(ira_lib)
-target_link_libraries(mps_run ira_lib)
+#target_link_libraries(mps_run ira_lib)
 
 include_directories(mpe_lib)
 add_subdirectory(mpe_lib)
-target_link_libraries(mps_run mpe_lib)
+#target_link_libraries(mps_run mpe_lib)
 ######################################
 
 # Google Tests
