@@ -15,22 +15,7 @@ using namespace std;
 int main() {
 
 
-    unsigned long n = 50;
-    auto IRA = ira(n);
-    IRA.setRandomMatrix(53, 11);
-    IRA.PLU_decomposition(53,11);
 
-    // Set up x_should;
-    //--------------------------------
-    std::random_device rd;
-    std::mt19937 mt(rd());
-    std::uniform_real_distribution<double> dist(-10.0, 10.0);
-
-    vector<mps> x_should;
-    for(unsigned long i = 0 + 1; i <= n; i++){
-        x_should.emplace_back(53, 11, dist(mt));
-    }
-    //--------------------------------
 
 
     //unsigned long ul[2] = { 53, 11};    // precision: LU
@@ -42,11 +27,8 @@ int main() {
 
 
     mpe MPE;
-    auto result = MPE.evaluateAddition(10000);
+    MPE.setIterations(1000);
 
-    for(unsigned long i = 0; i < result.size(); i++){
-        cout << result[i] << endl;
-    }
 
 
     std::chrono::milliseconds t_2 = chrono::duration_cast<chrono::milliseconds>(
