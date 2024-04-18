@@ -23,7 +23,7 @@ set(SOURCE_FILES main.cpp)
 
 find_package(PythonLibs REQUIRED)
 include_directories(${PYTHON_INCLUDE_DIRS})
-target_link_libraries(mps_run ${PYTHON_LIBRARIES})
+#target_link_libraries(mps_run ${PYTHON_LIBRARIES})
 
 # Includes
 ######################################
