@@ -44,7 +44,7 @@ add_subdirectory(mpe_lib)
 # Pybind11
 ######################################
 add_subdirectory(pybind11)
-pybind11_add_module(mps_library python_exporter.cpp mps_lib/mps.cpp)
+#pybind11_add_module(mps_library python_exporter.cpp mps_lib/mps.cpp)
 pybind11_add_module(mpe_library python_exporter.cpp mps_lib/mps.cpp ira_lib/ira.cpp mpe_lib/mpe.cpp)
 ######################################
 
