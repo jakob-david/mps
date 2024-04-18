@@ -1373,11 +1373,11 @@ TEST(calculateVectorMeanPrecision, simple_1){
     vector<bool> xi_zero_mantissa = {1,0,0,1,0};    // NOLINT(*-use-bool-literals)
     x_is[0].setMantissa(xi_zero_mantissa);
     vector<bool> xi_one_mantissa = {1,0,0,0,0};     // NOLINT(*-use-bool-literals)
-    x_is[1].setMantissa(xi_zero_mantissa);
+    x_is[1].setMantissa(xi_one_mantissa);
     vector<bool> xi_two_mantissa = {1,0,0,0,1};     // NOLINT(*-use-bool-literals)
-    x_is[2].setMantissa(xi_zero_mantissa);
+    x_is[2].setMantissa(xi_two_mantissa);
     vector<bool> xi_three_mantissa = {1,0,1,0,1};   // NOLINT(*-use-bool-literals)
-    x_is[3].setMantissa(xi_zero_mantissa);
+    x_is[3].setMantissa(xi_three_mantissa);
 
     ira IRA(4, ira_mantissa_length, ira_exponent_length);
     IRA.setWorkingPrecision(ira_mantissa_length, ira_exponent_length);
@@ -1387,7 +1387,7 @@ TEST(calculateVectorMeanPrecision, simple_1){
 
     auto result = IRA.calculateVectorMeanPrecision(x_is, x_should);
 
-    EXPECT_EQ(4, result.getValue());
+    EXPECT_EQ(3.5, result.getValue());
     EXPECT_EQ(ira_mantissa_length, result.mantissa_length);
     EXPECT_EQ(ira_exponent_length, result.exponent_length);
 }
