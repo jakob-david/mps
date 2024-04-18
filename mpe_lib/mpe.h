@@ -9,6 +9,7 @@
 #include <random>
 #include <iostream>
 #include <chrono>
+#include <algorithm>
 
 #include "../mps_lib/mps.h"
 #include "../ira_lib/ira.h"
