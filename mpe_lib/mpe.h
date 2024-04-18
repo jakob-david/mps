@@ -8,6 +8,7 @@
 #include <vector>
 #include <random>
 #include <iostream>
+#include <chrono>
 
 #include "../mps_lib/mps.h"
 #include "../ira_lib/ira.h"
