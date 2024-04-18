@@ -91,8 +91,14 @@ PYBIND11_MODULE(mpe_library, mpe_handle) {
             //-------------------------------
 
 
-            // operator evaluation
+            // operator evaluation system
             //-------------------------------
+            .def("evaluateAdditionDouble", &mpe::evaluateAdditionDouble)
+            .def("evaluateSubtractionDouble", &mpe::evaluateSubtractionDouble)
+            .def("evaluateMultiplicationDouble", &mpe::evaluateMultiplicationDouble)
+            .def("evaluateDivisionDouble", &mpe::evaluateDivisionDouble)
+
+            /*
             .def("evaluateAdditionDouble", [](mpe &self){
                 py::array out = py::cast(self.evaluateAdditionDouble());
                 return out;
@@ -109,6 +115,7 @@ PYBIND11_MODULE(mpe_library, mpe_handle) {
                 py::array out = py::cast(self.evaluateDivisionDouble());
                 return out;
             })
+             */
             //-------------------------------
 
 
