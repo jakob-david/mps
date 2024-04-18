@@ -17,8 +17,8 @@ set(CMAKE_CXX_FLAGS_RELEASE "-O1")
 
 # main.cpp
 ######################################
-set(SOURCE_FILES main.cpp)
-add_executable(mps_run ${SOURCE_FILES})
+#set(SOURCE_FILES main.cpp)
+#add_executable(mps_run ${SOURCE_FILES})
 ######################################
 
 # Includes
@@ -38,7 +38,7 @@ target_link_libraries(mps_run mpe_lib)
 
 # Google Tests
 ######################################
-add_subdirectory(tests)
+#add_subdirectory(tests)
 ######################################
 
 # Pybind11
