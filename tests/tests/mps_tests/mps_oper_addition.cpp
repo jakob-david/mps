@@ -668,6 +668,7 @@ TEST(addition_tests, neg_pos_inf_double) {
 #ifdef __APPLE__
     EXPECT_EQ(should_value(value_1 + value_2), is_mps(test.getBitArray()));
 #else
+    cout << "hi" << endl;
     test.setSign(false);
     EXPECT_EQ(should_value(value_1 + value_2), is_mps(test.getBitArray()));
 #endif
@@ -1226,8 +1227,8 @@ TEST(addition, special_left_overflow_overflow_float) {
     MPS_one.setExponent(exponent_one);
     MPS_one.setMantissa(mantissa_one);
 
-    vector<bool> exponent_two{1, 1, 1, 0, 0, 1, 1, 0};
-    vector<bool> mantissa_two{0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0};
+    vector<bool> exponent_two{1, 1, 1, 0, 0, 1, 1, 0};// NOLINT(*-use-bool-literals)
+    vector<bool> mantissa_two{0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0};// NOLINT(*-use-bool-literals)
     mps MPS_two(23,8);
     MPS_two.setSign(false);
     MPS_two.setExponent(exponent_two);
@@ -1248,8 +1249,8 @@ TEST(addition, special_right_float) {
     MPS_one.setExponent(exponent_one);
     MPS_one.setMantissa(mantissa_one);
 
-    vector<bool> exponent_two{0, 1, 1, 0, 0, 1, 1, 1};
-    vector<bool> mantissa_two{0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0};
+    vector<bool> exponent_two{0, 1, 1, 0, 0, 1, 1, 1};// NOLINT(*-use-bool-literals)
+    vector<bool> mantissa_two{0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0};// NOLINT(*-use-bool-literals)
     mps MPS_two(23,8);
     MPS_two.setSign(false);
     MPS_two.setExponent(exponent_two);
@@ -1292,8 +1293,8 @@ TEST(addition, special_right_overflow_overflow_float) {
     MPS_one.setExponent(exponent_one);
     MPS_one.setMantissa(mantissa_one);
 
-    vector<bool> exponent_two{1, 1, 1, 0, 0, 1, 1, 0};
-    vector<bool> mantissa_two{0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0};
+    vector<bool> exponent_two{1, 1, 1, 0, 0, 1, 1, 0};// NOLINT(*-use-bool-literals)
+    vector<bool> mantissa_two{0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0};// NOLINT(*-use-bool-literals)
     mps MPS_two(23,8);
     MPS_two.setSign(false);
     MPS_two.setExponent(exponent_two);
