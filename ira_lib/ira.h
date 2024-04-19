@@ -20,6 +20,7 @@ public:
 
         double random_lower_bound;              // the lower bound when getting a random value.
         double random_upper_bound;              // the upper bound when getting a random value.
+        double sparsity_rate;                   // percentage of zeros in the system matrix.
 
         unsigned long max_iter;                 // The maximal number of refinement steps.
         unsigned long n;                        // dimension of the system
@@ -86,6 +87,7 @@ public:
     // parameter setters and getters
     //-------------------------------
     void setRandomRange(double lower_bound, double upper_bound);
+    void setSparsityRate(double new_sparsity_rate);
     void setMaxIter(unsigned long new_max_iter);
     void setDimension(unsigned long new_dimension);
     void setLowerPrecision(unsigned long mantissa_length, unsigned long exponent_length);
@@ -102,6 +104,7 @@ public:
     void setExpectedPrecision(const mps& new_expected_precision);
 
     [[nodiscard]] vector<double> getRandomRange() const;
+    [[nodiscard]] double getSparsityRate() const;
     [[nodiscard]] unsigned long getMaxIter() const;
     [[nodiscard]] unsigned long getDimension() const;
     [[nodiscard]] unsigned long get1DMatrixSize() const;

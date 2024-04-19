@@ -34,6 +34,7 @@ ira::ira(unsigned long n, unsigned long ur_mantissa_length, unsigned long ur_exp
     //-------------------------------
     this->parameters.random_lower_bound = -10;
     this->parameters.random_upper_bound = 10;
+    this->parameters.sparsity_rate = 0;
 
     this->parameters.max_iter = 10;     // Must be 10 because of unit tests.
 
@@ -92,6 +93,23 @@ void ira::setRandomRange(double lower_bound, double upper_bound){
 
     this->parameters.random_lower_bound = lower_bound;
     this->parameters.random_upper_bound = upper_bound;
+}
+
+/**
+ * Sets the sparsity rate which is the amount of zeros in the system matrix in percent.
+ *
+ * Throws Exception:    When the new sparsity rate is lower than 0 or
+ *                      When the new sparsity rate is greater than 1
+ *
+ * @param new_sparsity_rate the new sparsity rate
+ */
+void ira::setSparsityRate(double new_sparsity_rate) {
+
+    if(new_sparsity_rate < 0 || new_sparsity_rate > 1){
+        throw std::invalid_argument("ERROR: setSparsityRate: sparsity rate must be between 0 and 1 ");
+    }
+
+    this->parameters.sparsity_rate = new_sparsity_rate;
 }
 
 /**
@@ -368,6 +386,17 @@ vector<double> ira::getRandomRange() const{
     ret.push_back(this->parameters.random_upper_bound);
 
     return ret;
+}
+
+
+/**
+ * Gets the sparsity rate which is the amount of zeros in the system matrix in percent.
+ *
+ * @return the sparsity rate
+ */
+double ira::getSparsityRate() const {
+
+    return this->parameters.sparsity_rate;
 }
 
 /**

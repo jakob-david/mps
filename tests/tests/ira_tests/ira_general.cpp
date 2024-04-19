@@ -18,10 +18,17 @@ TEST(Constructor, simple_1) {
     auto result_2 = IRA.getDimension();
     auto result_3 = IRA.get1DMatrixSize();
 
+    auto random_range = IRA.getRandomRange();
+    auto sparsity_rate = IRA.getSparsityRate();
+
     EXPECT_EQ(mantissa_length, result_1[0]);
     EXPECT_EQ(exponent_length, result_1[1]);
     EXPECT_EQ(dimension, result_2);
     EXPECT_EQ(dimension * dimension, result_3);
+
+    EXPECT_EQ(-10, random_range[0]);
+    EXPECT_EQ(10, random_range[1]);
+    EXPECT_EQ(0, sparsity_rate);
 }
 
 TEST(Constructor, exception_wrong_input) {
@@ -59,6 +66,26 @@ TEST(RandomRange, exception_1) {
     ira IRA(2, 23, 8);
 
     EXPECT_ANY_THROW(IRA.setRandomRange(lower_bound, upper_bound));
+}
+
+TEST(SparsityRate, simple_1) {
+
+    double sparsity_rate = 0.45;
+
+    ira IRA(2, 23, 8);
+    IRA.setSparsityRate(sparsity_rate);
+
+    auto result = IRA.getSparsityRate();
+
+    EXPECT_EQ(sparsity_rate, result);
+}
+
+TEST(SparsityRate, exception_wrong_input) {
+
+    ira IRA(2, 23, 8);
+
+    EXPECT_ANY_THROW(IRA.setSparsityRate(1.01));
+    EXPECT_ANY_THROW(IRA.setSparsityRate(-0.01));
 }
 
 TEST(MaxIter, simple_1) {
