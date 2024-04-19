@@ -676,6 +676,121 @@ TEST(setRandomMatrix, uniqueness_1) {
     EXPECT_TRUE(test);
 }
 
+TEST(setRandomMatrix, sparcity_1){
+
+    unsigned long n = 15;
+    double sparsity_rate = 0.5;
+
+    unsigned long mantissa_length = 52;
+    unsigned long exponent_length = 11;
+
+    ira IRA(n, mantissa_length, exponent_length);
+    IRA.setSparsityRate(sparsity_rate);
+    IRA.setRandomMatrix();
+
+    unsigned long sum = 0;
+    for(unsigned long idx = 0; idx < (n*n); idx++){
+        if(0 == IRA.getMatrixElement(idx).getValue()){
+            sum++;
+        }
+    }
+    double actual_rate = sum / ((double)(n*n));
+
+    EXPECT_NEAR(sparsity_rate, actual_rate, 0.05);
+}
+
+TEST(setRandomMatrix, sparcity_2){
+
+    unsigned long n = 15;
+    double sparsity_rate = 0.25;
+
+    unsigned long mantissa_length = 52;
+    unsigned long exponent_length = 11;
+
+    ira IRA(n, mantissa_length, exponent_length);
+    IRA.setSparsityRate(sparsity_rate);
+    IRA.setRandomMatrix();
+
+    unsigned long sum = 0;
+    for(unsigned long idx = 0; idx < (n*n); idx++){
+        if(0 == IRA.getMatrixElement(idx).getValue()){
+            sum++;
+        }
+    }
+    double actual_rate = sum / ((double)(n*n));
+
+    EXPECT_NEAR(sparsity_rate, actual_rate, 0.05);
+}
+
+TEST(setRandomMatrix, sparcity_3){
+
+    unsigned long n = 15;
+    double sparsity_rate = 0.75;
+
+    unsigned long mantissa_length = 52;
+    unsigned long exponent_length = 11;
+
+    ira IRA(n, mantissa_length, exponent_length);
+    IRA.setSparsityRate(sparsity_rate);
+    IRA.setRandomMatrix();
+
+    unsigned long sum = 0;
+    for(unsigned long idx = 0; idx < (n*n); idx++){
+        if(0 == IRA.getMatrixElement(idx).getValue()){
+            sum++;
+        }
+    }
+    double actual_rate = sum / ((double)(n*n));
+
+    EXPECT_NEAR(sparsity_rate, actual_rate, 0.05);
+}
+
+TEST(setRandomMatrix, sparcity_4){
+
+    unsigned long n = 15;
+    double sparsity_rate = 1;
+
+    unsigned long mantissa_length = 52;
+    unsigned long exponent_length = 11;
+
+    ira IRA(n, mantissa_length, exponent_length);
+    IRA.setSparsityRate(sparsity_rate);
+    IRA.setRandomMatrix();
+
+    unsigned long sum = 0;
+    for(unsigned long idx = 0; idx < (n*n); idx++){
+        if(0 == IRA.getMatrixElement(idx).getValue()){
+            sum++;
+        }
+    }
+    double actual_rate = sum / ((double)(n*n));
+
+    EXPECT_NEAR(sparsity_rate, actual_rate, 0.05);
+}
+
+TEST(setRandomMatrix, sparcity_6){
+
+    unsigned long n = 15;
+    double sparsity_rate = 0;
+
+    unsigned long mantissa_length = 52;
+    unsigned long exponent_length = 11;
+
+    ira IRA(n, mantissa_length, exponent_length);
+    IRA.setSparsityRate(sparsity_rate);
+    IRA.setRandomMatrix();
+
+    unsigned long sum = 0;
+    for(unsigned long idx = 0; idx < (n*n); idx++){
+        if(0 == IRA.getMatrixElement(idx).getValue()){
+            sum++;
+        }
+    }
+    double actual_rate = sum / ((double)(n*n));
+
+    EXPECT_NEAR(sparsity_rate, actual_rate, 0.05);
+}
+
 TEST(getMatrixElement, idx_too_large) {
 
     unsigned long mantissa_length = 52;

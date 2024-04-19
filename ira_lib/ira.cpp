@@ -625,9 +625,23 @@ void ira::setRandomMatrix(){
     std::mt19937 mt(rd());
     std::uniform_real_distribution<double> dist(this->parameters.random_lower_bound, this->parameters.random_upper_bound);
 
+    if(0 == this->parameters.sparsity_rate) {
+        for (unsigned i = 0; i < this->parameters.matrix_1D_size; i++) {
+            this->A[i] |= mps(this->parameters.ur_m_l, this->parameters.ur_e_l, dist(mt));
+        }
+    } else {
 
-    for(unsigned i = 0; i < this->parameters.matrix_1D_size; i++){
-        this->A[i] |= mps(this->parameters.ur_m_l, this->parameters.ur_e_l, dist(mt));
+        std::random_device sparsity_device;
+        std::mt19937 sparsity_mt(rd());
+        std::uniform_real_distribution<double> sparsity_dist(0.0, 1.0);
+
+        for (unsigned i = 0; i < this->parameters.matrix_1D_size; i++) {
+            if(sparsity_dist(sparsity_mt) < this->parameters.sparsity_rate){
+                this->A[i] |= mps(this->parameters.ur_m_l, this->parameters.ur_e_l, 0);
+            } else {
+                this->A[i] |= mps(this->parameters.ur_m_l, this->parameters.ur_e_l, dist(mt));
+            }
+        }
     }
 }
 
