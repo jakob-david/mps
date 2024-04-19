@@ -45,6 +45,9 @@ private:
         unsigned long ur_m_r_lower;             // upper precision mantissa range lower limit
         unsigned long ur_m_r_upper;             // upper precision mantissa range upper limit
 
+        unsigned long u_e_r_lower;               // working precision exponent range lower limit
+        unsigned long u_e_r_upper;               // working precision exponent range upper limit
+
         mps expected_error;                     // the expected error the refinement method should achieve.
         long long expected_precision;           // the expected precision the refinement method should achieve.
         unsigned long ep_mantissa_length;       // the mantissa length in which the expected precision should be saved.
@@ -93,6 +96,8 @@ public:
     void setWorkingPrecisionMantissaRange(unsigned long lower_bound, unsigned long upper_bound);
     void setUpperPrecisionMantissaRange(unsigned long lower_bound, unsigned long upper_bound);
 
+    void setWorkingPrecisionExponentRange(unsigned long lower_bound, unsigned long upper_bound);
+
     void setExpectedError(double new_expected_error);
     void setExpectedPrecision(long long new_expected_precision, unsigned long mantissa_length, unsigned long exponent_length);
     //-------------------------------
@@ -107,6 +112,8 @@ public:
     [[nodiscard]] vector<unsigned long> getLowerPrecisionMantissaAxis() const;
     [[nodiscard]] vector<unsigned long> getWorkingPrecisionMantissaAxis() const;
     [[nodiscard]] vector<unsigned long> getUpperPrecisionMantissaAxis() const;
+
+    [[nodiscard]] vector<unsigned long> getWorkingPrecisionExponentAxis() const;
     //-------------------------------
 
     // operator evaluation
@@ -115,9 +122,14 @@ public:
     [[nodiscard]] vector<long double> evaluateSubtraction() const ;
     [[nodiscard]] vector<long double> evaluateMultiplication() const ;
     [[nodiscard]] vector<long double> evaluateDivision() const ;
+
+    [[nodiscard]] vector<long double> evaluateAdditionExponent() const;
+    [[nodiscard]] vector<long double> evaluateSubtractionExponent() const;
+    [[nodiscard]] vector<long double> evaluateMultiplicationExponent() const;
+    [[nodiscard]] vector<long double> evaluateDivisionExponent() const;
     //-------------------------------
 
-    // operator evaluation double
+    // operator evaluation system
     //-------------------------------
     [[nodiscard]] vector<long double> evaluateAdditionDouble() const ;
     [[nodiscard]] vector<long double> evaluateSubtractionDouble() const ;

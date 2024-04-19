@@ -120,6 +120,13 @@ void mpe::setUpperPrecisionMantissaRange(unsigned long lower_bound, unsigned lon
 }
 
 
+void mpe::setWorkingPrecisionExponentRange(unsigned long lower_bound, unsigned long upper_bound) {
+
+    this->parameters.u_e_r_lower = lower_bound;
+    this->parameters.u_e_r_upper = upper_bound;
+}
+
+
 void mpe::setExpectedError(double new_expected_error){
 
     if(!this->controllers.working_precision_mantissa_set || !this->controllers.working_precision_exponent_set){
@@ -189,6 +196,18 @@ vector<unsigned long> mpe::getUpperPrecisionMantissaAxis() const {
 
     for(unsigned long m_size = this->parameters.ur_m_r_lower; m_size <= this->parameters.ur_m_r_upper; m_size++){
         ret.push_back(m_size);
+    }
+
+    return ret;
+}
+
+
+vector<unsigned long> mpe::getWorkingPrecisionExponentAxis() const {
+
+    vector<unsigned long> ret;
+
+    for(unsigned long e_size = this->parameters.u_e_r_lower; e_size <= this->parameters.u_e_r_upper; e_size++){
+        ret.push_back(e_size);
     }
 
     return ret;
@@ -324,6 +343,135 @@ vector<long double> mpe::evaluateDivision() const {
 
         mps A(m_size, this->parameters.u_e_l, a);
         mps B(m_size, this->parameters.u_e_l, b);
+
+        const auto start = std::chrono::high_resolution_clock::now();
+
+        for(unsigned long test = 0; test < this->parameters.iterations; test++){
+            A / B;
+        }
+
+        const auto finish = std::chrono::high_resolution_clock::now();
+
+        auto result_in_microseconds = std::chrono::duration_cast<std::chrono::microseconds>(finish-start).count();
+        ret.push_back(((long double) result_in_microseconds) / 1000) ;
+    }
+
+    pybind11::gil_scoped_acquire acquire;
+
+    return ret;
+}
+
+vector<long double> mpe::evaluateAdditionExponent() const {
+
+    // variable for python multithreading.
+    py::gil_scoped_release release;
+
+    std::vector<long double> ret;
+
+    double a = generatePositiveRandomDouble();
+    double b = generatePositiveRandomDouble();
+
+    for(unsigned long e_size = this->parameters.u_e_r_lower; e_size <= this->parameters.u_e_r_upper; e_size++){
+
+        mps A(this->parameters.u_m_l, e_size, a);
+        mps B(this->parameters.u_m_l, e_size, b);
+
+        const auto start = std::chrono::high_resolution_clock::now();
+
+        for(unsigned long test = 0; test < this->parameters.iterations; test++){
+            A + B;
+        }
+
+        const auto finish = std::chrono::high_resolution_clock::now();
+
+        auto result_in_microseconds = std::chrono::duration_cast<std::chrono::microseconds>(finish-start).count();
+        ret.push_back(((long double) result_in_microseconds) / 1000) ;
+    }
+
+    pybind11::gil_scoped_acquire acquire;
+
+    return ret;
+}
+vector<long double> mpe::evaluateSubtractionExponent() const {
+
+    // variable for python multithreading.
+
+    py::gil_scoped_release release; // noqa
+
+    std::vector<long double> ret;
+
+    double a = generatePositiveRandomDouble();
+    double b = generatePositiveRandomDouble();
+    a += b; // in order to get a non-negative result.
+
+    for(unsigned long e_size = this->parameters.u_e_r_lower; e_size <= this->parameters.u_e_r_upper; e_size++){
+
+        mps A(this->parameters.u_m_l, e_size, a);
+        mps B(this->parameters.u_m_l, e_size, b);
+
+        const auto start = std::chrono::high_resolution_clock::now();
+
+        for(unsigned long test = 0; test < this->parameters.iterations; test++){
+            A - B;
+        }
+
+        const auto finish = std::chrono::high_resolution_clock::now();
+
+        auto result_in_microseconds = std::chrono::duration_cast<std::chrono::microseconds>(finish-start).count();
+        ret.push_back(((long double) result_in_microseconds) / 1000) ;
+    }
+
+    pybind11::gil_scoped_acquire acquire;
+
+    return ret;
+}
+vector<long double> mpe::evaluateMultiplicationExponent() const {
+
+    // variable for python multithreading.
+
+    py::gil_scoped_release release;
+
+    std::vector<long double> ret;
+
+    double a = generatePositiveRandomDouble();
+    double b = generatePositiveRandomDouble();
+
+    for(unsigned long e_size = this->parameters.u_e_r_lower; e_size <= this->parameters.u_e_r_upper; e_size++){
+
+        mps A(this->parameters.u_m_l, e_size, a);
+        mps B(this->parameters.u_m_l, e_size, b);
+
+        const auto start = std::chrono::high_resolution_clock::now();
+
+        for(unsigned long test = 0; test < this->parameters.iterations; test++){
+            A * B;
+        }
+
+        const auto finish = std::chrono::high_resolution_clock::now();
+
+        auto result_in_microseconds = std::chrono::duration_cast<std::chrono::microseconds>(finish-start).count();
+        ret.push_back(((long double) result_in_microseconds) / 1000) ;
+    }
+
+    pybind11::gil_scoped_acquire acquire;
+
+    return ret;
+}
+vector<long double> mpe::evaluateDivisionExponent() const {
+
+    // variable for python multithreading.
+
+    py::gil_scoped_release release;
+
+    std::vector<long double> ret;
+
+    double a = generatePositiveRandomDouble();
+    double b = generatePositiveRandomDouble();
+
+    for(unsigned long e_size = this->parameters.u_e_r_lower; e_size <= this->parameters.u_e_r_upper; e_size++){
+
+        mps A(this->parameters.u_m_l, e_size, a);
+        mps B(this->parameters.u_m_l, e_size, b);
 
         const auto start = std::chrono::high_resolution_clock::now();
 

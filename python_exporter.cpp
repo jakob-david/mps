@@ -41,6 +41,8 @@ PYBIND11_MODULE(mpe_library, mpe_handle) {
             .def("setWorkingPrecisionMantissaRange", &mpe::setWorkingPrecisionMantissaRange)
             .def("setUpperPrecisionMantissaRange", &mpe::setUpperPrecisionMantissaRange)
 
+            .def("setWorkingPrecisionExponentRange", &mpe::setWorkingPrecisionExponentRange)
+
             .def("setExpectedError", &mpe::setExpectedError)
             .def("setExpectedPrecision", &mpe::setExpectedPrecision)
             //-------------------------------
@@ -67,6 +69,11 @@ PYBIND11_MODULE(mpe_library, mpe_handle) {
                 py::array out = py::cast(self.getUpperPrecisionMantissaAxis());
                 return out;
             })
+
+            .def("getWorkingPrecisionExponentAxis", [](mpe &self){
+                py::array out = py::cast(self.getWorkingPrecisionExponentAxis());
+                return out;
+            })
             //-------------------------------
 
 
@@ -76,6 +83,11 @@ PYBIND11_MODULE(mpe_library, mpe_handle) {
             .def("evaluateSubtraction", &mpe::evaluateSubtraction)
             .def("evaluateMultiplication", &mpe::evaluateMultiplication)
             .def("evaluateDivision", &mpe::evaluateDivision)
+
+            .def("evaluateAdditionExponent", &mpe::evaluateAdditionExponent)
+            .def("evaluateSubtractionExponent", &mpe::evaluateSubtractionExponent)
+            .def("evaluateMultiplicationExponent", &mpe::evaluateMultiplicationExponent)
+            .def("evaluateDivisionExponent", &mpe::evaluateDivisionExponent)
 
             /*
             .def("evaluateAddition", [](mpe &self){
