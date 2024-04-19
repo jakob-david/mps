@@ -24,6 +24,7 @@ private:
 
         double random_lower_bound;              // the lower bound when getting a random value.
         double random_upper_bound;              // the upper bound when getting a random value.
+        double sparsity_rate;                  // percentage of zeros in the system matrix.
 
         unsigned long n;                        // the dimension of the system
         unsigned long matrix_1D_size;           // the number of elements of the system matrix
@@ -75,6 +76,7 @@ public:
     void setRandomLimits(double lower_bound, double upper_bound);
     void setUpperRandomLimit(double upper_bound);
     void setLowerRandomLimit(double lower_bound);
+    void setSparsityRate(double new_sparsity_rate);
 
     void setDimension(unsigned long new_dimension);
     void setIterations(unsigned long new_iterations);

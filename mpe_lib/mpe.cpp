@@ -11,6 +11,8 @@ namespace py = pybind11;
 //-------------------------------
 mpe::mpe() {
 
+    this->parameters.sparsity_rate = 0;
+
     this->controllers.working_precision_mantissa_set = false;
     this->controllers.working_precision_exponent_set = false;
 
@@ -35,6 +37,11 @@ void mpe::setUpperRandomLimit(double upper_bound){
 void mpe::setLowerRandomLimit(double lower_bound){
 
     this->parameters.random_lower_bound = lower_bound;
+}
+
+void mpe::setSparsityRate(double new_sparsity_rate) {
+
+    this->parameters.sparsity_rate = new_sparsity_rate;
 }
 
 
