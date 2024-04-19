@@ -1545,9 +1545,9 @@ vector<mps> ira::iterativeRefinementLU(const vector<mps> &b) {
         // calculate: r_i = b − A * x_i
         // in precision: ur
         //-------------------------------
-        auto tmp_x = x;
-        ira::castVectorElements(ur[0], ur[1], &tmp_x);
-        auto b_approx = ira::matrixVectorProduct(this->A, tmp_x);
+        auto x_in_ur = x;
+        ira::castVectorElements(ur[0], ur[1], &x_in_ur);
+        auto b_approx = ira::matrixVectorProduct(this->A, x_in_ur);
         auto r = vectorSubtraction(b, b_approx);
         //-------------------------------
 
@@ -1617,7 +1617,7 @@ vector<mps> ira::iterativeRefinementLU(const vector<mps> &b) {
             //-------------------------------
             sum = 0.0;
             for (unsigned long idx = 0; idx < this->parameters.n; idx++) {
-                auto precision = (long double) x[idx].getPrecision(this->parameters.expected_result_mps[idx]);
+                auto precision = (long double) x_in_ur[idx].getPrecision(this->parameters.expected_result_mps[idx]);
                 if(precision < (long double) parameters.u_m_l){
                     sum += precision;
                 } else {

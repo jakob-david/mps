@@ -379,6 +379,7 @@ std::string mps::to_string(const int precision) const {
         if(mantissa_this == mantissa_compare){
             return (long long) compare.mantissa_length;
         }
+
         precision_error = (long long) floor(log2(abs(mantissa_this - mantissa_compare))) + 1;
 
 

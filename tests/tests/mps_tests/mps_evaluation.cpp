@@ -293,6 +293,42 @@ TEST(getPrecision, simple_6){
     EXPECT_EQ(5, MPS_should.getPrecision(MPS_is));
 }
 
+TEST(getPrecision, simple_7){
+
+    mps MPS_should(6, 4, 3.14);
+    vector<bool> should_mantissa{1, 0, 1, 0, 0, 0}; // NOLINT(*-use-bool-literals)
+    vector<bool> should_exponent{1 ,0 , 0, 0};      // NOLINT(*-use-bool-literals)
+    MPS_should.setMantissa(should_mantissa);
+    MPS_should.setExponent(should_exponent);
+
+    mps MPS_is(6, 4, 3.14);
+    vector<bool> is_mantissa{1, 1, 0, 0, 0, 0};     // NOLINT(*-use-bool-literals)
+    vector<bool> is_exponent{1 ,0 , 0, 0};      // NOLINT(*-use-bool-literals)
+    MPS_is.setMantissa(is_mantissa);
+    MPS_is.setExponent(is_exponent);
+
+    EXPECT_EQ(2, MPS_is.getPrecision(MPS_should));
+    EXPECT_EQ(2, MPS_should.getPrecision(MPS_is));
+}
+
+TEST(getPrecision, simple_8){
+
+    mps MPS_should(6, 4, 3.14);
+    vector<bool> should_mantissa{1, 0, 0, 0, 0, 0}; // NOLINT(*-use-bool-literals)
+    vector<bool> should_exponent{1 ,0 , 0, 0};      // NOLINT(*-use-bool-literals)
+    MPS_should.setMantissa(should_mantissa);
+    MPS_should.setExponent(should_exponent);
+
+    mps MPS_is(6, 4, 3.14);
+    vector<bool> is_mantissa{1, 1, 0, 0, 0, 0};     // NOLINT(*-use-bool-literals)
+    vector<bool> is_exponent{1 ,0 , 0, 0};      // NOLINT(*-use-bool-literals)
+    MPS_is.setMantissa(is_mantissa);
+    MPS_is.setExponent(is_exponent);
+
+    EXPECT_EQ(1, MPS_is.getPrecision(MPS_should));
+    EXPECT_EQ(1, MPS_should.getPrecision(MPS_is));
+}
+
 TEST(getPrecision, negative_precision_1){
 
     mps MPS_should(6, 4, 3.14);
