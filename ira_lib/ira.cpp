@@ -635,10 +635,25 @@ void ira::setRandomMatrix(){
         std::mt19937 sparsity_mt(rd());
         std::uniform_real_distribution<double> sparsity_dist(0.0, 1.0);
 
-        // TODO: precalculate 0
+        // generate random vector
+        vector<unsigned long> random_vector;
+        for(unsigned long idx = 0; idx < this->parameters.n; idx++){
+            random_vector.push_back(idx);
+        }
+        auto random_dev = std::random_device {};
+        auto rng = std::default_random_engine {random_dev()};
+        std::shuffle(std::begin(random_vector), std::end(random_vector), rng);
+
+
+        double adapted_sparsity_rate = (this->parameters.sparsity_rate * ((double) this->parameters.n)) / ((double) (this->parameters.n - 1));
+        mps zero(this->parameters.ur_m_l, this->parameters.ur_e_l, 0);
         for (unsigned i = 0; i < this->parameters.matrix_1D_size; i++) {
-            if(sparsity_dist(sparsity_mt) < this->parameters.sparsity_rate){
-                this->A[i] |= mps(this->parameters.ur_m_l, this->parameters.ur_e_l, 0);
+            if(random_vector[i / this->parameters.n] == (i % this->parameters.n)){
+                do{
+                    this->A[i] |= mps(this->parameters.ur_m_l, this->parameters.ur_e_l, dist(mt));
+                } while(this->A[i].isZero());
+            } else if(sparsity_dist(sparsity_mt) < adapted_sparsity_rate){
+                this->A[i] |= zero;
             } else {
                 this->A[i] |= mps(this->parameters.ur_m_l, this->parameters.ur_e_l, dist(mt));
             }

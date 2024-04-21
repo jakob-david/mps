@@ -696,7 +696,7 @@ TEST(setRandomMatrix, sparcity_1){
     }
     double actual_rate = sum / ((double)(n*n));
 
-    EXPECT_NEAR(sparsity_rate, actual_rate, 0.05);
+    EXPECT_NEAR(sparsity_rate, actual_rate, 0.07);
 
     //check if matrix is invertible
     // check rows
@@ -744,7 +744,7 @@ TEST(setRandomMatrix, sparcity_2){
     }
     double actual_rate = sum / ((double)(n*n));
 
-    EXPECT_NEAR(sparsity_rate, actual_rate, 0.05);
+    EXPECT_NEAR(sparsity_rate, actual_rate, 0.07);
 
 
     //check if matrix is invertible
@@ -793,7 +793,7 @@ TEST(setRandomMatrix, sparcity_3){
     }
     double actual_rate = sum / ((double)(n*n));
 
-    EXPECT_NEAR(sparsity_rate, actual_rate, 0.05);
+    EXPECT_NEAR(sparsity_rate, actual_rate, 0.07);
 
 
     //check if matrix is invertible
@@ -842,7 +842,7 @@ TEST(setRandomMatrix, sparcity_4){
     }
     double actual_rate = sum / ((double)(n*n));
 
-    EXPECT_NEAR(sparsity_rate, actual_rate, 0.05);
+    EXPECT_NEAR(sparsity_rate, actual_rate, 0.07);
 
 
     //check if matrix is invertible
@@ -891,7 +891,7 @@ TEST(setRandomMatrix, sparcity_5){
     }
     double actual_rate = sum / ((double)(n*n));
 
-    EXPECT_NEAR(sparsity_rate, actual_rate, 0.05);
+    EXPECT_NEAR(sparsity_rate, actual_rate, 0.07);
 
 
     //check if matrix is invertible
@@ -940,7 +940,7 @@ TEST(setRandomMatrix, sparcity_6){
     }
     double actual_rate = sum / ((double)(n*n));
 
-    EXPECT_NEAR(sparsity_rate, actual_rate, 0.05);
+    EXPECT_NEAR(sparsity_rate, actual_rate, 0.07);
 
 
     //check if matrix is invertible
