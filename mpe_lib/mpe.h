@@ -148,7 +148,7 @@ public:
 
     // evaluate sparsity
     //-------------------------------
-    [[nodiscard]] vector<long double> evaluateSparsity(bool output = false) const;
+    [[nodiscard]] vector<vector<long double>> evaluateSparsity(bool output = false) const;
     //-------------------------------
 
     // iterative refinement evaluation

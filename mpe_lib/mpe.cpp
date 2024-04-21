@@ -231,7 +231,7 @@ vector<double> mpe::getSparsityAxis() const{
     vector<double> sparsity_rates;
     auto sparsity_points_amount = (double) this->parameters.sparsity_points_amount;
     for(unsigned long i = 0; i <= this->parameters.sparsity_points_amount; i++){
-        sparsity_rates.push_back(((double) i)/sparsity_points_amount);
+        sparsity_rates.push_back((((double) i)/(sparsity_points_amount)) * 0.9);
     }
 
     return sparsity_rates;
@@ -785,13 +785,17 @@ vector<long double> mpe::evaluateDivisionDouble() const {
 
 // evaluate sparsity
 //-------------------------------
-vector<long double> mpe::evaluateSparsity(bool output) const {
+vector<vector<long double>> mpe::evaluateSparsity(bool output) const {
 
     if(output){
         cout << "STARTING: evaluateArea" << endl;
     }
 
-    vector<long double> result;
+    vector<vector<long double>> result;
+
+    vector<long double> result_relative_error;
+    vector<long double> result_precision;
+    vector<long double> run_time;
 
     py::gil_scoped_release release;
 
@@ -810,12 +814,17 @@ vector<long double> mpe::evaluateSparsity(bool output) const {
 
         IRA.iterativeRefinementLU(b);
 
-        result.push_back(IRA.evaluation.IR_absoluteError_sum);
+        result_relative_error.push_back(IRA.evaluation.IR_area_relativeError);
+        result_precision.push_back(IRA.evaluation.IR_precision_error_sum);
+        run_time.push_back(IRA.evaluation.milliseconds);
     }
 
     // acquire GIL
     pybind11::gil_scoped_acquire acquire;
 
+    result.push_back(result_relative_error);
+    result.push_back(result_precision);
+    result.push_back(run_time);
     return result;
 }
 //-------------------------------
