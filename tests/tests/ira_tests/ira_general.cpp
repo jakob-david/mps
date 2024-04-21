@@ -84,7 +84,7 @@ TEST(SparsityRate, exception_wrong_input) {
 
     ira IRA(2, 23, 8);
 
-    EXPECT_ANY_THROW(IRA.setSparsityRate(1.01));
+    EXPECT_ANY_THROW(IRA.setSparsityRate(0.91));
     EXPECT_ANY_THROW(IRA.setSparsityRate(-0.01));
 }
 
@@ -697,6 +697,31 @@ TEST(setRandomMatrix, sparcity_1){
     double actual_rate = sum / ((double)(n*n));
 
     EXPECT_NEAR(sparsity_rate, actual_rate, 0.05);
+
+    //check if matrix is invertible
+    // check rows
+    for(unsigned long row_idx = 0; row_idx < IRA.getDimension(); row_idx++){
+        bool only_zero_entries = true;
+        for(unsigned long column_idx = 0; column_idx < IRA.getDimension(); column_idx++){
+            if(0 != IRA.getMatrixElement(row_idx * IRA.getDimension() + column_idx).getValue()){
+                only_zero_entries = false;
+                continue;
+            }
+        }
+        EXPECT_FALSE(only_zero_entries);
+    }
+
+    // check columns
+    for(unsigned long column_idx = 0; column_idx < IRA.getDimension(); column_idx++){
+        bool only_zero_entries = true;
+        for(unsigned long row_idx = 0; row_idx < IRA.getDimension(); row_idx++){
+            if(0 != IRA.getMatrixElement(column_idx * IRA.getDimension() + row_idx).getValue()){
+                only_zero_entries = false;
+                continue;
+            }
+        }
+        EXPECT_FALSE(only_zero_entries);
+    }
 }
 
 TEST(setRandomMatrix, sparcity_2){
@@ -720,6 +745,32 @@ TEST(setRandomMatrix, sparcity_2){
     double actual_rate = sum / ((double)(n*n));
 
     EXPECT_NEAR(sparsity_rate, actual_rate, 0.05);
+
+
+    //check if matrix is invertible
+    // check rows
+    for(unsigned long row_idx = 0; row_idx < IRA.getDimension(); row_idx++){
+        bool only_zero_entries = true;
+        for(unsigned long column_idx = 0; column_idx < IRA.getDimension(); column_idx++){
+            if(0 != IRA.getMatrixElement(row_idx * IRA.getDimension() + column_idx).getValue()){
+                only_zero_entries = false;
+                continue;
+            }
+        }
+        EXPECT_FALSE(only_zero_entries);
+    }
+
+    // check columns
+    for(unsigned long column_idx = 0; column_idx < IRA.getDimension(); column_idx++){
+        bool only_zero_entries = true;
+        for(unsigned long row_idx = 0; row_idx < IRA.getDimension(); row_idx++){
+            if(0 != IRA.getMatrixElement(column_idx * IRA.getDimension() + row_idx).getValue()){
+                only_zero_entries = false;
+                continue;
+            }
+        }
+        EXPECT_FALSE(only_zero_entries);
+    }
 }
 
 TEST(setRandomMatrix, sparcity_3){
@@ -743,12 +794,38 @@ TEST(setRandomMatrix, sparcity_3){
     double actual_rate = sum / ((double)(n*n));
 
     EXPECT_NEAR(sparsity_rate, actual_rate, 0.05);
+
+
+    //check if matrix is invertible
+    // check rows
+    for(unsigned long row_idx = 0; row_idx < IRA.getDimension(); row_idx++){
+        bool only_zero_entries = true;
+        for(unsigned long column_idx = 0; column_idx < IRA.getDimension(); column_idx++){
+            if(0 != IRA.getMatrixElement(row_idx * IRA.getDimension() + column_idx).getValue()){
+                only_zero_entries = false;
+                continue;
+            }
+        }
+        EXPECT_FALSE(only_zero_entries);
+    }
+
+    // check columns
+    for(unsigned long column_idx = 0; column_idx < IRA.getDimension(); column_idx++){
+        bool only_zero_entries = true;
+        for(unsigned long row_idx = 0; row_idx < IRA.getDimension(); row_idx++){
+            if(0 != IRA.getMatrixElement(column_idx * IRA.getDimension() + row_idx).getValue()){
+                only_zero_entries = false;
+                continue;
+            }
+        }
+        EXPECT_FALSE(only_zero_entries);
+    }
 }
 
 TEST(setRandomMatrix, sparcity_4){
 
     unsigned long n = 15;
-    double sparsity_rate = 1;
+    double sparsity_rate = 0.9;
 
     unsigned long mantissa_length = 52;
     unsigned long exponent_length = 11;
@@ -766,6 +843,81 @@ TEST(setRandomMatrix, sparcity_4){
     double actual_rate = sum / ((double)(n*n));
 
     EXPECT_NEAR(sparsity_rate, actual_rate, 0.05);
+
+
+    //check if matrix is invertible
+    // check rows
+    for(unsigned long row_idx = 0; row_idx < IRA.getDimension(); row_idx++){
+        bool only_zero_entries = true;
+        for(unsigned long column_idx = 0; column_idx < IRA.getDimension(); column_idx++){
+            if(0 != IRA.getMatrixElement(row_idx * IRA.getDimension() + column_idx).getValue()){
+                only_zero_entries = false;
+                continue;
+            }
+        }
+        EXPECT_FALSE(only_zero_entries);
+    }
+
+    // check columns
+    for(unsigned long column_idx = 0; column_idx < IRA.getDimension(); column_idx++){
+        bool only_zero_entries = true;
+        for(unsigned long row_idx = 0; row_idx < IRA.getDimension(); row_idx++){
+            if(0 != IRA.getMatrixElement(column_idx * IRA.getDimension() + row_idx).getValue()){
+                only_zero_entries = false;
+                continue;
+            }
+        }
+        EXPECT_FALSE(only_zero_entries);
+    }
+}
+
+TEST(setRandomMatrix, sparcity_5){
+
+    unsigned long n = 15;
+    double sparsity_rate = 0.8;
+
+    unsigned long mantissa_length = 52;
+    unsigned long exponent_length = 11;
+
+    ira IRA(n, mantissa_length, exponent_length);
+    IRA.setSparsityRate(sparsity_rate);
+    IRA.setRandomMatrix();
+
+    unsigned long sum = 0;
+    for(unsigned long idx = 0; idx < (n*n); idx++){
+        if(0 == IRA.getMatrixElement(idx).getValue()){
+            sum++;
+        }
+    }
+    double actual_rate = sum / ((double)(n*n));
+
+    EXPECT_NEAR(sparsity_rate, actual_rate, 0.05);
+
+
+    //check if matrix is invertible
+    // check rows
+    for(unsigned long row_idx = 0; row_idx < IRA.getDimension(); row_idx++){
+        bool only_zero_entries = true;
+        for(unsigned long column_idx = 0; column_idx < IRA.getDimension(); column_idx++){
+            if(0 != IRA.getMatrixElement(row_idx * IRA.getDimension() + column_idx).getValue()){
+                only_zero_entries = false;
+                continue;
+            }
+        }
+        EXPECT_FALSE(only_zero_entries);
+    }
+
+    // check columns
+    for(unsigned long column_idx = 0; column_idx < IRA.getDimension(); column_idx++){
+        bool only_zero_entries = true;
+        for(unsigned long row_idx = 0; row_idx < IRA.getDimension(); row_idx++){
+            if(0 != IRA.getMatrixElement(column_idx * IRA.getDimension() + row_idx).getValue()){
+                only_zero_entries = false;
+                continue;
+            }
+        }
+        EXPECT_FALSE(only_zero_entries);
+    }
 }
 
 TEST(setRandomMatrix, sparcity_6){
@@ -789,6 +941,32 @@ TEST(setRandomMatrix, sparcity_6){
     double actual_rate = sum / ((double)(n*n));
 
     EXPECT_NEAR(sparsity_rate, actual_rate, 0.05);
+
+
+    //check if matrix is invertible
+    // check rows
+    for(unsigned long row_idx = 0; row_idx < IRA.getDimension(); row_idx++){
+        bool only_zero_entries = true;
+        for(unsigned long column_idx = 0; column_idx < IRA.getDimension(); column_idx++){
+            if(0 != IRA.getMatrixElement(row_idx * IRA.getDimension() + column_idx).getValue()){
+                only_zero_entries = false;
+                continue;
+            }
+        }
+        EXPECT_FALSE(only_zero_entries);
+    }
+
+    // check columns
+    for(unsigned long column_idx = 0; column_idx < IRA.getDimension(); column_idx++){
+        bool only_zero_entries = true;
+        for(unsigned long row_idx = 0; row_idx < IRA.getDimension(); row_idx++){
+            if(0 != IRA.getMatrixElement(column_idx * IRA.getDimension() + row_idx).getValue()){
+                only_zero_entries = false;
+                continue;
+            }
+        }
+        EXPECT_FALSE(only_zero_entries);
+    }
 }
 
 TEST(getMatrixElement, idx_too_large) {
