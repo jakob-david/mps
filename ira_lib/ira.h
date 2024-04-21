@@ -61,7 +61,9 @@ public:
         unsigned long iterations_needed;
 
         vector<long double> IR_precision_errors;
-        long double IR_precision_error_sum;
+        long double IR_precision_error_sum;     // TODO: RENAME!!!!
+
+        long double IR_absoluteError_sum;
 
     } evaluation{};
     //-------------------------------

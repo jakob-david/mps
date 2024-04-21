@@ -44,6 +44,18 @@ void mpe::setSparsityRate(double new_sparsity_rate) {
     this->parameters.sparsity_rate = new_sparsity_rate;
 }
 
+void mpe::setSparsityPointsAmount(unsigned long new_sparsity_points_amount) {
+
+    this->parameters.sparsity_points_amount = new_sparsity_points_amount;
+}
+
+
+void mpe::setMatrixSizeRange(unsigned long lower_bound, unsigned long upper_bound) {
+
+    this->parameters.matrix_size_lower_limit = lower_bound;
+    this->parameters.matrix_size_upper_limit = upper_bound;
+}
+
 
 void mpe::setDimension(unsigned long new_dimension){
 
@@ -211,6 +223,18 @@ vector<unsigned long> mpe::getWorkingPrecisionExponentAxis() const {
     }
 
     return ret;
+}
+
+
+vector<double> mpe::getSparsityAxis() const{
+
+    vector<double> sparsity_rates;
+    auto sparsity_points_amount = (double) this->parameters.sparsity_points_amount;
+    for(unsigned long i = 0; i <= this->parameters.sparsity_points_amount; i++){
+        sparsity_rates.push_back(((double) i)/sparsity_points_amount);
+    }
+
+    return sparsity_rates;
 }
 //-------------------------------
 
@@ -759,6 +783,44 @@ vector<long double> mpe::evaluateDivisionDouble() const {
 //-------------------------------
 
 
+// evaluate sparsity
+//-------------------------------
+vector<long double> mpe::evaluateSparsity(bool output) const {
+
+    if(output){
+        cout << "STARTING: evaluateArea" << endl;
+    }
+
+    vector<long double> result;
+
+    py::gil_scoped_release release;
+
+    ira IRA(this->parameters.n, this->parameters.ur_m_l, this->parameters.ur_e_l);
+    IRA.setRandomRange(this->parameters.random_lower_bound, this->parameters.random_upper_bound);
+    IRA.setWorkingPrecision(this->parameters.u_m_l, this->parameters.u_e_l);
+    IRA.setLowerPrecision(this->parameters.ul_m_l, this->parameters.ul_e_l);
+
+    auto sparsity_rates = getSparsityAxis();
+
+    for(auto sparsity_rate : sparsity_rates){
+
+        IRA.setSparsityRate(sparsity_rate);
+
+        auto b = IRA.generateRandomLinearSystem();
+
+        IRA.iterativeRefinementLU(b);
+
+        result.push_back(IRA.evaluation.IR_absoluteError_sum);
+    }
+
+    // acquire GIL
+    pybind11::gil_scoped_acquire acquire;
+
+    return result;
+}
+//-------------------------------
+
+
 // iterative refinement evaluation
 //-------------------------------
 vector<vector<long double>> mpe::evaluateArea(bool output) const {
@@ -956,7 +1018,6 @@ vector<vector<vector<long double>>> mpe::evaluateConvergence_2D(bool output) con
 
     return result;
 }
-
 //-------------------------------
 
 

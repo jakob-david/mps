@@ -25,6 +25,10 @@ PYBIND11_MODULE(mpe_library, mpe_handle) {
             .def("setRandomLimits", &mpe::setRandomLimits)
             .def("setUpperRandomLimit", &mpe::setUpperRandomLimit)
             .def("setLowerRandomLimit", &mpe::setLowerRandomLimit)
+            .def("setSparsityRate", &mpe::setSparsityRate)
+            .def("setSparsityPointsAmount", &mpe::setSparsityPointsAmount)
+
+            .def("setMatrixSizeRange", &mpe::setMatrixSizeRange)
 
             .def("setDimension", &mpe::setDimension)
             .def("setIterations", &mpe::setIterations)
@@ -72,6 +76,11 @@ PYBIND11_MODULE(mpe_library, mpe_handle) {
 
             .def("getWorkingPrecisionExponentAxis", [](mpe &self){
                 py::array out = py::cast(self.getWorkingPrecisionExponentAxis());
+                return out;
+            })
+
+            .def("getSparsityAxis", [](mpe &self){
+                py::array out = py::cast(self.getSparsityAxis());
                 return out;
             })
             //-------------------------------
@@ -134,6 +143,12 @@ PYBIND11_MODULE(mpe_library, mpe_handle) {
                 return out;
             })
              */
+            //-------------------------------
+
+
+            // evaluate sparsity
+            //-------------------------------
+            .def("evaluateSparsity", &mpe::evaluateSparsity)
             //-------------------------------
 
 

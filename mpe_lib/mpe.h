@@ -24,7 +24,11 @@ private:
 
         double random_lower_bound;              // the lower bound when getting a random value.
         double random_upper_bound;              // the upper bound when getting a random value.
-        double sparsity_rate;                  // percentage of zeros in the system matrix.
+        double sparsity_rate;                   // percentage of zeros in the system matrix.
+        unsigned long sparsity_points_amount;   // The amount of different sparsities that should be tested.
+
+        unsigned long matrix_size_lower_limit;  // The lower matrix size limit.
+        unsigned long matrix_size_upper_limit;  // The lower matrix size limit.
 
         unsigned long n;                        // the dimension of the system
         unsigned long matrix_1D_size;           // the number of elements of the system matrix
@@ -80,6 +84,9 @@ public:
     void setUpperRandomLimit(double upper_bound);
     void setLowerRandomLimit(double lower_bound);
     void setSparsityRate(double new_sparsity_rate);
+    void setSparsityPointsAmount(unsigned long n);
+
+    void setMatrixSizeRange(unsigned long lower_bound, unsigned long upper_bound);
 
     void setDimension(unsigned long new_dimension);
     void setIterations(unsigned long new_iterations);
@@ -114,6 +121,8 @@ public:
     [[nodiscard]] vector<unsigned long> getUpperPrecisionMantissaAxis() const;
 
     [[nodiscard]] vector<unsigned long> getWorkingPrecisionExponentAxis() const;
+
+    [[nodiscard]] vector<double> getSparsityAxis() const;
     //-------------------------------
 
     // operator evaluation
@@ -137,6 +146,10 @@ public:
     [[nodiscard]] vector<long double> evaluateDivisionDouble() const ;
     //-------------------------------
 
+    // evaluate sparsity
+    //-------------------------------
+    [[nodiscard]] vector<long double> evaluateSparsity(bool output = false) const;
+    //-------------------------------
 
     // iterative refinement evaluation
     //-------------------------------

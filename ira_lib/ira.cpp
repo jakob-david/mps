@@ -635,6 +635,7 @@ void ira::setRandomMatrix(){
         std::mt19937 sparsity_mt(rd());
         std::uniform_real_distribution<double> sparsity_dist(0.0, 1.0);
 
+        // TODO: precalculate 0
         for (unsigned i = 0; i < this->parameters.matrix_1D_size; i++) {
             if(sparsity_dist(sparsity_mt) < this->parameters.sparsity_rate){
                 this->A[i] |= mps(this->parameters.ur_m_l, this->parameters.ur_e_l, 0);
@@ -1645,7 +1646,7 @@ vector<mps> ira::iterativeRefinementLU(const vector<mps> &b) {
         //-------------------------------
         if(this->parameters.expected_result_present) {
 
-            // evaluate using error
+            // evaluate using relative error
             //-------------------------------
             long double sum = 0.0;
             for (unsigned long element_id = 0; element_id < this->parameters.n; element_id++) {
@@ -1672,6 +1673,16 @@ vector<mps> ira::iterativeRefinementLU(const vector<mps> &b) {
             sum = (long double) this->parameters.u_m_l - sum;
             this->evaluation.IR_precision_errors.push_back(sum);
             this->evaluation.IR_precision_error_sum += sum;
+            //-------------------------------
+
+            // evaluate using absolute error
+            //-------------------------------
+            sum = 0.0;
+            for (unsigned long element_id = 0; element_id < this->parameters.n; element_id++) {
+                sum += x[element_id].getAbsoluteError_double(this->parameters.expected_result_double[element_id]);
+            }
+            sum /= (long double) this->parameters.n;
+            this->evaluation.IR_absoluteError_sum += sum;
             //-------------------------------
 
         }

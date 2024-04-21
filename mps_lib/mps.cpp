@@ -363,6 +363,7 @@ std::string mps::to_string(const int precision) const {
 [[nodiscard]] long long int mps::getPrecision(const mps& compare) const {
 
     // TODO: add error handling
+    // TODO: special values?
 
     auto exponent_this = (long long) binaryToInt(this->exponent);
     auto exponent_compare = (long long) binaryToInt(compare.exponent);
