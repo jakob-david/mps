@@ -694,7 +694,7 @@ TEST(setRandomMatrix, sparcity_1){
             sum++;
         }
     }
-    double actual_rate = sum / ((double)(n*n));
+    double actual_rate = (double) sum / ((double)(n*n));
 
     EXPECT_NEAR(sparsity_rate, actual_rate, 0.07);
 
@@ -742,7 +742,7 @@ TEST(setRandomMatrix, sparcity_2){
             sum++;
         }
     }
-    double actual_rate = sum / ((double)(n*n));
+    double actual_rate = (double) sum / ((double)(n*n));
 
     EXPECT_NEAR(sparsity_rate, actual_rate, 0.07);
 
@@ -791,7 +791,7 @@ TEST(setRandomMatrix, sparcity_3){
             sum++;
         }
     }
-    double actual_rate = sum / ((double)(n*n));
+    double actual_rate = (double) sum / ((double)(n*n));
 
     EXPECT_NEAR(sparsity_rate, actual_rate, 0.07);
 
@@ -840,7 +840,7 @@ TEST(setRandomMatrix, sparcity_4){
             sum++;
         }
     }
-    double actual_rate = sum / ((double)(n*n));
+    double actual_rate = (double) sum / ((double)(n*n));
 
     EXPECT_NEAR(sparsity_rate, actual_rate, 0.07);
 
@@ -889,7 +889,7 @@ TEST(setRandomMatrix, sparcity_5){
             sum++;
         }
     }
-    double actual_rate = sum / ((double)(n*n));
+    double actual_rate = (double) sum / ((double)(n*n));
 
     EXPECT_NEAR(sparsity_rate, actual_rate, 0.07);
 
@@ -938,7 +938,7 @@ TEST(setRandomMatrix, sparcity_6){
             sum++;
         }
     }
-    double actual_rate = sum / ((double)(n*n));
+    double actual_rate = (double) sum / ((double)(n*n));
 
     EXPECT_NEAR(sparsity_rate, actual_rate, 0.07);
 

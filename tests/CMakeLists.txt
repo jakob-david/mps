@@ -21,8 +21,10 @@ add_executable(all_tests tests/mps_tests/mps_general.cpp
         tests/mps_tests/mps_comp_smaller.cpp
         tests/ira_tests/ira_algorithms_auto.cpp
         tests/mps_tests/mps_evaluation.cpp
+        tests/iras_tests/iras_operators.cpp
 )
 
 target_link_libraries(all_tests mps_lib)
 target_link_libraries(all_tests ira_lib)
+target_link_libraries(all_tests iras_lib)
 target_link_libraries(all_tests gtest gtest_main)

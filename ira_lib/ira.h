@@ -185,7 +185,7 @@ public:
     [[nodiscard]] vector<mps> solveLU(const vector<mps>& b);
     //-------------------------------
 
-    // algorithms using double data types
+    // algorithms using system data types
     //-------------------------------
     [[nodiscard]] vector<double> solveLU_double(const vector<double>& b);
     //-------------------------------

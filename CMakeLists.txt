@@ -10,7 +10,7 @@ set(CMAKE_CXX_STANDARD 17)
 # Compiler Flags
 ######################################
 set(CMAKE_BUILD_TYPE Release)
-#set(CMAKE_CXX_FLAGS "-Wall -Wextra -Wshadow -Wconversion -Wpedantic -Werror")
+set(CMAKE_CXX_FLAGS "-Wall -Wextra -Wshadow -Wconversion -Wpedantic -Werror")
 set(CMAKE_CXX_FLAGS_DEBUG "-g")
 set(CMAKE_CXX_FLAGS_RELEASE "-O1")
 ######################################
@@ -34,6 +34,10 @@ add_subdirectory(mps_lib)
 include_directories(ira_lib)
 add_subdirectory(ira_lib)
 #target_link_libraries(mps_run ira_lib)
+
+include_directories(iras_lib)
+add_subdirectory(iras_lib)
+#target_link_libraries(mps_run iras_lib)
 
 include_directories(mpe_lib)
 add_subdirectory(mpe_lib)
