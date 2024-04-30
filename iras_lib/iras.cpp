@@ -4,8 +4,47 @@
 
 #include <random>
 #include <vector>
+#include <iostream>
+#include <sstream>
 
 using namespace std;
+
+
+// toString
+//-------------------------------
+template <typename T>
+string toString(const vector<T>& vec, long precision){
+
+    string ret;
+
+    for(unsigned long idx = 0; idx < vec.size(); idx++){
+        std::ostringstream out;
+        out.precision(precision);
+        out << std::fixed << vec[idx];
+
+        ret.append(std::move(out).str());
+        ret.append(", ");
+    }
+
+    ret.pop_back();
+    ret.pop_back();
+
+    return ret;
+}
+
+template <typename T>
+string toString(const vector<vector<T>>& matrix, long precision){
+
+    string ret;
+
+    for(unsigned long idx = 0; idx < matrix.size(); idx++){
+        ret.append(toString<T>(matrix[idx], precision));
+        ret.append("\n");
+    }
+
+    return ret;
+}
+//-------------------------------
 
 
 // generate random vector/matrix
@@ -94,7 +133,7 @@ vector<vector<T>> generateRandomMatrix(unsigned long size, T lower_bound, T uppe
 // dot product
 //-------------------------------
 template <typename T>
-vector<T> dotProduct(const vector<vector<T>> matrix, const vector<T> vec){
+vector<T> dotProduct(const vector<vector<T>>& matrix, const vector<T> vec){
 
     vector<T> ret;
 
@@ -113,7 +152,7 @@ vector<T> dotProduct(const vector<vector<T>> matrix, const vector<T> vec){
 }
 
 template <typename T>
-vector<vector<T>> dotProduct(const vector<vector<T>> A, const vector<vector<T>> B){
+vector<vector<T>> dotProduct(const vector<vector<T>>& A, const vector<vector<T>> B){
 
     vector<vector<T>> ret;
 
@@ -140,7 +179,7 @@ vector<vector<T>> dotProduct(const vector<vector<T>> A, const vector<vector<T>> 
 // converter
 //-------------------------------
 template <typename from, typename to>
-vector<to> convert(const vector<from> vec){
+vector<to> convert(const vector<from>& vec){
 
     vector<to> ret;
 
@@ -152,7 +191,7 @@ vector<to> convert(const vector<from> vec){
 }
 
 template <typename from, typename to>
-vector<vector<to>> convert(const vector<vector<from>> matrix){
+vector<vector<to>> convert(const vector<vector<from>>& matrix){
 
     vector<vector<to>> ret;
 
@@ -165,5 +204,93 @@ vector<vector<to>> convert(const vector<vector<from>> matrix){
     }
 
     return ret;
+}
+//-------------------------------
+
+
+// PLU solver
+//-------------------------------
+template <typename T>
+void interchangeRow(vector<vector<T>>& matrix, unsigned long row_one, unsigned long row_two){
+
+    for(unsigned long idx = 0; idx < matrix.size(); idx++){
+        T tmp = matrix[row_one][idx];
+        matrix[row_one][idx] = matrix[row_two][idx];
+        matrix[row_two][idx] = tmp;
+    }
+}
+
+template <typename T>
+unsigned long get_max_U_idx(const vector<T>& row, unsigned long start){
+
+    unsigned long max_row = start;
+    T value = abs(row[start]);
+
+    for(unsigned long idx = start; idx < row.size(); idx++){
+
+        if(abs(row[idx]) > value){
+            max_row = idx;
+            value = abs(row[idx]);
+        }
+    }
+
+    return max_row;
+}
+
+
+template <typename from, typename to>
+vector<vector<vector<from>>> PLU(const vector<vector<from>>& A, vector<unsigned long>* P){
+
+
+    // set up P
+    //-------------------------------
+    P->resize(A.size());
+    for(unsigned long idx = 0; idx < A.size(); idx++){
+        P->push_back(idx);
+    }
+    //-------------------------------
+
+    // set up L
+    //-------------------------------
+    vector<vector<to>> L;
+    for(unsigned long row_idx = 0; row_idx < A.size(); row_idx++){
+
+        vector<to> new_row;
+        for(unsigned long col_idx = 0; col_idx < A.size(); col_idx++){
+
+            if(row_idx == col_idx){
+                new_row.push_back(1);
+            } else {
+                new_row.push_back(0);
+            }
+        }
+        L.push_back(new_row);
+    }
+    //-------------------------------
+
+    // set up U
+    //-------------------------------
+    vector<vector<to>> U;
+    for(unsigned long row_idx = 0; row_idx < A.size(); row_idx++){
+
+        vector<to> new_row;
+        for(unsigned long col_idx = 0; col_idx < A.size(); col_idx++){
+            new_row.push_back((to) A[row_idx][col_idx]);
+        }
+        L.push_back(new_row);
+    }
+    //-------------------------------
+
+
+    for(unsigned long k = 0; k < A.size(); k++){
+        // cout << "iteration: " << k << "/" << this->n << endl;
+
+        auto max_row = get_max_U_idx(A[k], k);
+
+        interchangeRow(&U, k, max_row, k, A.size());
+        interchangeRow(&L, k, max_row, 0, k);
+
+        auto tmp = (*P)[k]; (*P)[k] = (*P)[max_row]; (*P)[max_row] = tmp;
+    }
 }
 //-------------------------------

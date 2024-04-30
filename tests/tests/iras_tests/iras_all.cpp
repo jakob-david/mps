@@ -8,6 +8,27 @@
 #include "../../../iras_lib/iras.cpp"
 
 
+// to string
+//-------------------------------
+TEST(tS, vector){
+
+    vector<double> test = {1, 2, 3};
+
+    auto result = toString<double>(test, 2);
+
+    EXPECT_EQ("1.00, 2.00, 3.00", result);
+}
+
+TEST(tS, matrix){
+
+    vector<vector<double>> test = {{1,2}, {3,4}};
+
+    auto result = toString<double>(test, 2);
+
+    EXPECT_EQ("1.00, 2.00\n3.00, 4.00\n", result);
+}
+//-------------------------------
+
 // generateRandomVector
 //-------------------------------
 TEST(gRV, simple_double_1){
@@ -327,3 +348,25 @@ TEST(c, matrix){
     }
 }
 //-------------------------------
+
+
+
+TEST(iR, simple_1){
+
+    vector<vector<double>> matrix = {{1,2}, {3,4}};
+
+    EXPECT_EQ("1.00, 2.00\n3.00, 4.00\n", toString(matrix, 2));
+
+    interchangeRow(matrix, 0, 1);
+
+    EXPECT_EQ("3.00, 4.00\n1.00, 2.00\n", toString(matrix, 2));
+}
+
+TEST(gMU_idx, simple_1){
+
+    vector<double> row = {19, 18, 1, 10, 2, 3};
+
+   auto result = get_max_U_idx(row, 2);
+
+    EXPECT_EQ(3, result);
+}
