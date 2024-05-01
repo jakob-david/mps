@@ -211,10 +211,13 @@ vector<vector<to>> convert(const vector<vector<from>>& matrix){
 // PLU solver
 //-------------------------------
 template <typename T>
-void interchangeRow(vector<vector<T>>& matrix, unsigned long row_one, unsigned long row_two){
+void interchangeRow(vector<vector<T>>& matrix, unsigned long row_one, unsigned long row_two, unsigned long start, unsigned long end){
 
-    for(unsigned long idx = 0; idx < matrix.size(); idx++){
+    for(unsigned long idx = start; idx < end; idx++){
+        //cout << "hi" << endl;
+        //cout << row_one << " " << idx << endl;
         T tmp = matrix[row_one][idx];
+        //cout << "hi" << endl;
         matrix[row_one][idx] = matrix[row_two][idx];
         matrix[row_two][idx] = tmp;
     }
@@ -239,14 +242,19 @@ unsigned long get_max_U_idx(const vector<T>& row, unsigned long start){
 
 
 template <typename from, typename to>
-vector<vector<vector<from>>> PLU(const vector<vector<from>>& A, vector<unsigned long>* P){
+vector<vector<vector<to>>> PLU(const vector<vector<from>>& A, vector<unsigned long>* P){
+
+    vector<vector<vector<to>>> ret;
+    //ret.resize(2);
+    //vector<vector<to>>& L = ret[0];
+    //vector<vector<to>>& U = ret[1];
 
 
     // set up P
     //-------------------------------
     P->resize(A.size());
     for(unsigned long idx = 0; idx < A.size(); idx++){
-        P->push_back(idx);
+        (*P)[idx] = idx;
     }
     //-------------------------------
 
@@ -277,20 +285,36 @@ vector<vector<vector<from>>> PLU(const vector<vector<from>>& A, vector<unsigned 
         for(unsigned long col_idx = 0; col_idx < A.size(); col_idx++){
             new_row.push_back((to) A[row_idx][col_idx]);
         }
-        L.push_back(new_row);
+        U.push_back(new_row);
     }
     //-------------------------------
 
-
+    // algorithm
+    //-------------------------------
     for(unsigned long k = 0; k < A.size(); k++){
-        // cout << "iteration: " << k << "/" << this->n << endl;
 
         auto max_row = get_max_U_idx(A[k], k);
 
-        interchangeRow(&U, k, max_row, k, A.size());
-        interchangeRow(&L, k, max_row, 0, k);
+        interchangeRow<to>(U, k, max_row, k, A.size());
+        interchangeRow<to>(L, k, max_row, 0, k);
 
         auto tmp = (*P)[k]; (*P)[k] = (*P)[max_row]; (*P)[max_row] = tmp;
+
+        for(unsigned long j = k+1; j < A.size(); j++){
+
+            L[j][k] = U[j][k]/ U[k][k];
+
+            for(unsigned long i = k; i < A.size(); i++){
+
+                U[j][i]  = U[j][i] - (L[j][k] * U[k][i]);
+            }
+        }
     }
+    //-------------------------------
+
+    ret.push_back(L);
+    ret.push_back(U);
+
+    return ret;
 }
 //-------------------------------

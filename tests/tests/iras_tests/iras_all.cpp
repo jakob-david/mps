@@ -357,9 +357,9 @@ TEST(iR, simple_1){
 
     EXPECT_EQ("1.00, 2.00\n3.00, 4.00\n", toString(matrix, 2));
 
-    interchangeRow(matrix, 0, 1);
+    interchangeRow(matrix, 0, 1, 1, 2);
 
-    EXPECT_EQ("3.00, 4.00\n1.00, 2.00\n", toString(matrix, 2));
+    EXPECT_EQ("1.00, 4.00\n3.00, 2.00\n", toString(matrix, 2));
 }
 
 TEST(gMU_idx, simple_1){
@@ -369,4 +369,22 @@ TEST(gMU_idx, simple_1){
    auto result = get_max_U_idx(row, 2);
 
     EXPECT_EQ(3, result);
+}
+
+TEST(plu, simple_3x3_double_1) {
+
+
+    vector<vector<double>> A {{1,2,3},{4,5,6},{7,8,9}};
+    vector<unsigned long> P;
+    auto LU = PLU<double, float>(A, &P);
+
+    auto L_result = toString(LU[0],2);
+    auto U_result = toString(LU[1],2);
+
+    vector<unsigned long> P_expected = {2, 0, 1};
+
+    EXPECT_EQ(L_result, "1.00, 0.00, 0.00\n0.14, 1.00, 0.00\n0.57, 0.50, 1.00\n");
+    EXPECT_EQ(U_result, "7.00, 8.00, 9.00\n-0.00, 0.86, 1.71\n-0.00, -0.00, 0.00\n");
+    EXPECT_EQ(P, P_expected);
+
 }
