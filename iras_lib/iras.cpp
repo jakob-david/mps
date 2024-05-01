@@ -195,12 +195,12 @@ vector<vector<to>> convert(const vector<vector<from>>& matrix){
 
     vector<vector<to>> ret;
 
+    ret.resize(matrix.size());
     for(unsigned long row_idx = 0; row_idx < matrix.size(); row_idx++){
-        vector<to> new_row;
+        ret[row_idx].resize(matrix.size());
         for(unsigned long col_idx = 0; col_idx < matrix.size(); col_idx++){
-            new_row.push_back((to) matrix[row_idx][col_idx]);
+            ret[row_idx][col_idx] = (to) matrix[row_idx][col_idx];
         }
-        ret.push_back(new_row);
     }
 
     return ret;
@@ -214,10 +214,7 @@ template <typename T>
 void interchangeRow(vector<vector<T>>& matrix, unsigned long row_one, unsigned long row_two, unsigned long start, unsigned long end){
 
     for(unsigned long idx = start; idx < end; idx++){
-        //cout << "hi" << endl;
-        //cout << row_one << " " << idx << endl;
         T tmp = matrix[row_one][idx];
-        //cout << "hi" << endl;
         matrix[row_one][idx] = matrix[row_two][idx];
         matrix[row_two][idx] = tmp;
     }
@@ -245,9 +242,9 @@ template <typename from, typename to>
 vector<vector<vector<to>>> PLU(const vector<vector<from>>& A, vector<unsigned long>* P){
 
     vector<vector<vector<to>>> ret;
-    //ret.resize(2);
-    //vector<vector<to>>& L = ret[0];
-    //vector<vector<to>>& U = ret[1];
+    ret.resize(2);
+    vector<vector<to>>& L = ret[0];
+    vector<vector<to>>& U = ret[1];
 
 
     // set up P
@@ -260,32 +257,30 @@ vector<vector<vector<to>>> PLU(const vector<vector<from>>& A, vector<unsigned lo
 
     // set up L
     //-------------------------------
-    vector<vector<to>> L;
+    L.resize(A.size());
     for(unsigned long row_idx = 0; row_idx < A.size(); row_idx++){
 
-        vector<to> new_row;
+        L[row_idx].resize(A.size());
         for(unsigned long col_idx = 0; col_idx < A.size(); col_idx++){
 
             if(row_idx == col_idx){
-                new_row.push_back(1);
+                L[row_idx][col_idx] = 1;
             } else {
-                new_row.push_back(0);
+                L[row_idx][col_idx] = 0;
             }
         }
-        L.push_back(new_row);
     }
     //-------------------------------
 
     // set up U
     //-------------------------------
-    vector<vector<to>> U;
+    U.resize(A.size());
     for(unsigned long row_idx = 0; row_idx < A.size(); row_idx++){
 
-        vector<to> new_row;
+        U[row_idx].resize(A.size());
         for(unsigned long col_idx = 0; col_idx < A.size(); col_idx++){
-            new_row.push_back((to) A[row_idx][col_idx]);
+            U[row_idx][col_idx] = (to) A[row_idx][col_idx];
         }
-        U.push_back(new_row);
     }
     //-------------------------------
 
@@ -312,8 +307,8 @@ vector<vector<vector<to>>> PLU(const vector<vector<from>>& A, vector<unsigned lo
     }
     //-------------------------------
 
-    ret.push_back(L);
-    ret.push_back(U);
+    //ret.push_back(L);
+    //ret.push_back(U);
 
     return ret;
 }
