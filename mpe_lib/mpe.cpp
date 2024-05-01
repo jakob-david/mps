@@ -3,6 +3,7 @@
 //
 
 #include "mpe.h"
+#include "../iras_lib/iras.cpp"
 
 #include <../pybind11/include/pybind11/pybind11.h>
 namespace py = pybind11;
@@ -159,6 +160,16 @@ void mpe::setExpectedPrecision(long long new_expected_precision, unsigned long m
     this->parameters.ep_mantissa_length = mantissa_length;
     this->parameters.ep_exponent_length = exponent_length;
 }
+
+
+void mpe::setMatrixSizes(vector<unsigned long> matrix_sizes){
+
+    this->parameters.matrix_sizes.resize(matrix_sizes.size());
+
+    for(unsigned long idx = 0; idx < matrix_sizes.size(); idx++){
+        this->parameters.matrix_sizes[idx] = matrix_sizes[idx];
+    }
+}
 //-------------------------------
 
 
@@ -235,6 +246,11 @@ vector<double> mpe::getSparsityAxis() const{
     }
 
     return sparsity_rates;
+}
+
+vector<unsigned long> mpe::getMatrixSizesAxis() const {
+
+    return this->parameters.matrix_sizes;
 }
 //-------------------------------
 
@@ -829,6 +845,86 @@ vector<vector<long double>> mpe::evaluateSparsity(bool output) const {
 }
 //-------------------------------
 
+// compare operators double/float
+//-------------------------------
+vector<vector<long double>> mpe::compareMatrixVectorMultiplication(unsigned long iter_system, unsigned long iter_mps) const {
+
+    // variable for python multithreading.
+    py::gil_scoped_release release;
+
+    auto largest_matrix = this->parameters.matrix_sizes.back();
+    unsigned long number_of_computations_system = (unsigned long) pow(largest_matrix, 2) * iter_system;
+    unsigned long number_of_computations_mps = (unsigned long) pow(largest_matrix, 2) * iter_mps;
+
+    vector<long double> results_system;
+    vector<long double> results_mps;
+
+    for(auto matrix_size : this->parameters.matrix_sizes){
+
+        cout << "matrix_size: " << matrix_size << endl;
+
+        // perform test system
+        //-------------------------------
+        unsigned long iterations = number_of_computations_system / (unsigned long) pow(matrix_size, 2);
+
+        auto A = generateRandomMatrix<double>(matrix_size, this->parameters.random_lower_bound, this->parameters.random_upper_bound);
+        auto x = generateRandomVector<double>(matrix_size, this->parameters.random_lower_bound, this->parameters.random_upper_bound);
+        auto start = std::chrono::high_resolution_clock::now();
+        for(unsigned long i = 0; i < iterations; i++){
+            dotProduct(A, x);
+        }
+        auto finish = std::chrono::high_resolution_clock::now();
+        auto result_d = std::chrono::duration_cast<std::chrono::nanoseconds>(finish-start).count();
+
+        auto A_f = convert<double, float>(A);
+        auto x_f = convert<double, float>(x);
+        start = std::chrono::high_resolution_clock::now();
+        for(unsigned long i = 0; i < iterations; i++){
+            dotProduct(A_f, x_f);
+        }
+        finish = std::chrono::high_resolution_clock::now();
+        auto result_f = std::chrono::duration_cast<std::chrono::nanoseconds>(finish-start).count();
+
+        results_system.push_back((long double) result_d / (long double) result_f);
+        //-------------------------------
+
+        // perform test mps
+        //-------------------------------
+        iterations = number_of_computations_mps / (unsigned long) pow(matrix_size, 2);
+
+        ira IRA(matrix_size, 52, 11);
+        IRA.setRandomRange(this->parameters.random_lower_bound, this->parameters.random_upper_bound);
+        IRA.setRandomMatrix();
+        auto x_mps = IRA.generateRandomVector(52, 11, matrix_size);
+        start = std::chrono::high_resolution_clock::now();
+        for(unsigned long i = 0; i < iterations; i++){
+            IRA.multiplyWithSystemMatrix(x_mps);
+        }
+        finish = std::chrono::high_resolution_clock::now();
+        result_d = std::chrono::duration_cast<std::chrono::nanoseconds>(finish-start).count();
+
+        IRA.castSystemMatrix(23, 8);
+        ira::castVectorElements(23, 8, &x_mps);
+        start = std::chrono::high_resolution_clock::now();
+        for(unsigned long i = 0; i < iterations; i++){
+            IRA.multiplyWithSystemMatrix(x_mps);
+        }
+        finish = std::chrono::high_resolution_clock::now();
+        result_f = std::chrono::duration_cast<std::chrono::nanoseconds>(finish-start).count();
+
+        results_mps.push_back((long double) result_d / (long double) result_f);
+        //-------------------------------
+    }
+
+    vector<vector<long double>> results;
+    results.push_back(results_system);
+    results.push_back(results_mps);
+
+    pybind11::gil_scoped_acquire acquire;
+
+    return results;
+}
+//-------------------------------
 
 // iterative refinement evaluation
 //-------------------------------

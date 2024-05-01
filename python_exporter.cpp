@@ -49,6 +49,8 @@ PYBIND11_MODULE(mpe_library, mpe_handle) {
 
             .def("setExpectedError", &mpe::setExpectedError)
             .def("setExpectedPrecision", &mpe::setExpectedPrecision)
+
+            .def("setMatrixSizes", &mpe::setMatrixSizes)
             //-------------------------------
 
 
@@ -81,6 +83,11 @@ PYBIND11_MODULE(mpe_library, mpe_handle) {
 
             .def("getSparsityAxis", [](mpe &self){
                 py::array out = py::cast(self.getSparsityAxis());
+                return out;
+            })
+
+            .def("getMatrixSizesAxis", [](mpe &self){
+                py::array out = py::cast(self.getMatrixSizesAxis());
                 return out;
             })
             //-------------------------------
@@ -149,6 +156,12 @@ PYBIND11_MODULE(mpe_library, mpe_handle) {
             // evaluate sparsity
             //-------------------------------
             .def("evaluateSparsity", &mpe::evaluateSparsity)
+            //-------------------------------
+
+
+            // compare
+            //-------------------------------
+            .def("compareMatrixVectorMultiplication", &mpe::compareMatrixVectorMultiplication)
             //-------------------------------
 
 

@@ -57,6 +57,8 @@ private:
         unsigned long ep_mantissa_length;       // the mantissa length in which the expected precision should be saved.
         unsigned long ep_exponent_length;       // the mantissa length in which the expected precision should be saved.
 
+        vector<unsigned long> matrix_sizes;     // the matrix sizes which should be examined.
+
     } parameters;
 
     struct {
@@ -107,6 +109,8 @@ public:
 
     void setExpectedError(double new_expected_error);
     void setExpectedPrecision(long long new_expected_precision, unsigned long mantissa_length, unsigned long exponent_length);
+
+    void setMatrixSizes(vector<unsigned long> matrix_sizes);
     //-------------------------------
 
 
@@ -123,6 +127,7 @@ public:
     [[nodiscard]] vector<unsigned long> getWorkingPrecisionExponentAxis() const;
 
     [[nodiscard]] vector<double> getSparsityAxis() const;
+    [[nodiscard]] vector<unsigned long> getMatrixSizesAxis() const;
     //-------------------------------
 
     // operator evaluation
@@ -149,6 +154,11 @@ public:
     // evaluate sparsity
     //-------------------------------
     [[nodiscard]] vector<vector<long double>> evaluateSparsity(bool output = false) const;
+    //-------------------------------
+
+    // compare operators double/float
+    //-------------------------------
+    [[nodiscard]] vector<vector<long double>> compareMatrixVectorMultiplication(unsigned long iter_system, unsigned long iter_mps) const;
     //-------------------------------
 
     // iterative refinement evaluation
