@@ -161,6 +161,7 @@ public:
     [[nodiscard]] vector<vector<long double>> compareMVM(unsigned long iter_system, unsigned long iter_mps) const;
     [[nodiscard]] vector<vector<long double>> compareMMM(unsigned long iter_system, unsigned long iter_mps) const;
     [[nodiscard]] vector<vector<long double>> comparePLU(unsigned long iter_system, unsigned long iter_mps) const;
+    [[nodiscard]] vector<vector<long double>> compareIR(unsigned long max_iter, unsigned long iter_system, unsigned long iter_mps) const;
     //-------------------------------
 
     // iterative refinement evaluation

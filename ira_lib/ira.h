@@ -185,7 +185,7 @@ public:
     [[nodiscard]] vector<mps> forwardSubstitution(const vector<mps>& b) const;
     [[nodiscard]] vector<mps> backwardSubstitution(const vector<mps>& b) const;
     vector<mps> iterativeRefinementLU(const vector<mps> &b);
-    [[nodiscard]] vector<mps> solveLU(const vector<mps>& b);
+    vector<mps> solveLU(const vector<mps>& b);
     //-------------------------------
 
     // algorithms using system data types

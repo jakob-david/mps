@@ -164,6 +164,7 @@ PYBIND11_MODULE(mpe_library, mpe_handle) {
             .def("compareMVM", &mpe::compareMVM)
             .def("compareMMM", &mpe::compareMMM)
             .def("comparePLU", &mpe::comparePLU)
+            .def("compareIR", &mpe::compareIR)
             //-------------------------------
 
 
