@@ -310,4 +310,56 @@ vector<vector<vector<to>>> PLU(const vector<vector<from>>& A, vector<unsigned lo
 
     return ret;
 }
+
+template<typename T>
+vector<T> fS(vector<vector<T>> L, vector<T> b){
+
+    vector<T> x;
+    x.resize(b.size());
+
+
+    x[0] = b[0]/L[0][0];
+
+    T sum = 0;
+
+    for(unsigned long i = 1; i < b.size(); i++){
+
+        sum = 0;
+        for(unsigned long j = 0; j < i; j++){
+            sum += (L[i][j] * x[j]);
+        }
+
+        x[i] = (b[i] - sum) / L[i][i];
+    }
+
+    return x;
+}
+
+template<typename T>
+vector<T> bS(vector<vector<T>> U, vector<T> b){
+
+    vector<T> x;
+    x.resize(b.size());
+
+    auto n_minus_one = b.size()-1;
+
+    x[n_minus_one] = b[n_minus_one]/U[n_minus_one][n_minus_one];
+
+    T sum = 0;
+
+    for(unsigned long i = n_minus_one; i > 0;){
+
+        i--;
+
+        sum = 0;
+        for(unsigned long j = n_minus_one; j > i; j--){
+
+            sum += (U[i][j] * x[j]);
+        }
+
+        x[i] = (b[i] - sum) / U[i][i];
+    }
+
+    return x;
+}
 //-------------------------------

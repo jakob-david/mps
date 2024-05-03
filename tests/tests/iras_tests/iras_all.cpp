@@ -350,8 +350,9 @@ TEST(c, matrix){
 //-------------------------------
 
 
-
-TEST(iR, simple_1){
+// PLU solver
+//-------------------------------
+TEST(interRow, simple_1){
 
     vector<vector<double>> matrix = {{1,2}, {3,4}};
 
@@ -388,3 +389,28 @@ TEST(plu, simple_3x3_double_1) {
     EXPECT_EQ(P, P_expected);
 
 }
+
+TEST(fS, simple_1){
+
+    vector<vector<double>> L = {{-4.3, 0, 0, 0}, {2, -5.2, 0, 0}, {-18, 7.4, -1, 0}, {3, -0.34, 4.2321, 1.98}};
+    vector<double> b = {34.2, 2.4, 24.3, -0.034};
+
+    vector<double> x_should = {-7.9534883720930241, -3.5205724508050094, 92.810554561717368, -186.94650377658519};
+
+    auto x = fS<double>(L, b);
+
+    EXPECT_EQ(x_should, x);
+}
+
+TEST(bS, simple_1){
+
+    vector<vector<double>> U = {{3, -0.34, 4.2321, 1.98}, {0, 7.4, -1, -18}, {0, 0, -5.2, 2}, {0, 0, 0, -4.3}};
+    vector<double> b = {3.2, 2.4, 24.3, -0.034};
+
+    vector<double> x_should = {7.6168809817241199, -0.28752840497026538, -4.670035778175313, 0.0079069767441860474};
+
+    auto x = bS<double>(U, b);
+
+    EXPECT_EQ(x_should, x);
+}
+//-------------------------------
