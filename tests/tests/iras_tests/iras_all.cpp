@@ -377,7 +377,7 @@ TEST(plu, simple_3x3_double_1) {
 
     vector<vector<double>> A {{1,2,3},{4,5,6},{7,8,9}};
     vector<unsigned long> P;
-    auto LU = PLU<double, float>(A, &P);
+    auto LU = PLU<double, float>(A, P);
 
     auto L_result = toString(LU[0],2);
     auto U_result = toString(LU[1],2);

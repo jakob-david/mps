@@ -237,7 +237,7 @@ unsigned long get_max_U_idx(const vector<T>& row, unsigned long start){
 
 
 template <typename from, typename to>
-vector<vector<vector<to>>> PLU(const vector<vector<from>>& A, vector<unsigned long>* P){
+vector<vector<vector<to>>> PLU(const vector<vector<from>>& A, vector<unsigned long>& P){
 
     vector<vector<vector<to>>> ret;
     ret.resize(2);
@@ -247,9 +247,9 @@ vector<vector<vector<to>>> PLU(const vector<vector<from>>& A, vector<unsigned lo
 
     // set up P
     //-------------------------------
-    P->resize(A.size());
+    P.resize(A.size());
     for(unsigned long idx = 0; idx < A.size(); idx++){
-        (*P)[idx] = idx;
+        P[idx] = idx;
     }
     //-------------------------------
 
@@ -291,7 +291,7 @@ vector<vector<vector<to>>> PLU(const vector<vector<from>>& A, vector<unsigned lo
         interchangeRow<to>(U, k, max_row, k, A.size());
         interchangeRow<to>(L, k, max_row, 0, k);
 
-        auto tmp = (*P)[k]; (*P)[k] = (*P)[max_row]; (*P)[max_row] = tmp;
+        auto tmp = P[k]; P[k] = P[max_row]; P[max_row] = tmp;
 
         for(unsigned long j = k+1; j < A.size(); j++){
 
@@ -389,7 +389,7 @@ template<typename T>
 vector<T> directPLU(const vector<vector<T>>& A, const vector<T>& b){
 
     vector<unsigned long> P;
-    auto LU = PLU<T, T>(A, &P);
+    auto LU = PLU<T, T>(A, P);
 
 
     auto x = permuteVector<T>(P, b);
