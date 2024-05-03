@@ -69,20 +69,20 @@ template <typename T>
 vector<vector<T>> generateRandomMatrix(unsigned long size, T lower_bound, T upper_bound, double sparsity_rate = 0){
 
     vector<vector<T>> ret;
+    ret.resize(size);
 
     std::random_device rd;
     std::mt19937 mt(rd());
     std::uniform_real_distribution<T> dist(lower_bound, upper_bound);
 
     if(0 == sparsity_rate){
+
         for(unsigned long i = 0; i < size; i++){
 
-            vector<T> new_row;
+            ret[i].resize(size);
             for(unsigned long j = 0; j < size; j++){
-                new_row.push_back(dist(mt));
+                ret[i][j] = dist(mt);
             }
-
-            ret.push_back(new_row);
         }
     } else {
 
@@ -104,24 +104,23 @@ vector<vector<T>> generateRandomMatrix(unsigned long size, T lower_bound, T uppe
 
         for(unsigned long i = 0; i < size; i++){
 
-            vector<T> new_row;
+            ret[i].resize(size);
             for(unsigned long j = 0; j < size; j++){
 
                 if(j == random_vector[i]){
 
-                    new_row.push_back(dist(mt));
-                    while(new_row.back() == 0){
-                        new_row.back() = dist(mt);
+                    ret[i][j] = dist(mt);
+                    while(ret[i][j] == 0){
+                        ret[i][j] = dist(mt);
                     }
+
                 } else if(sparsity_dist(sparsity_mt) < adapted_sparsity_rate){
-                    new_row.push_back(0.0);
+                    ret[i][j] = 0.0;
                 } else {
-                    new_row.push_back(dist(mt));
+                    ret[i][j] = dist(mt);
                 }
 
             }
-
-            ret.push_back(new_row);
         }
     }
 
