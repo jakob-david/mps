@@ -46,22 +46,6 @@ ira::ira(unsigned long n, unsigned long ur_mantissa_length, unsigned long ur_exp
     this->parameters.expected_error_present = false;    // after construction no expected precision is present.
 
 
-    // set up LU matrices
-    //-------------------------------
-    // TODO: maybe remove
-    this->L.resize(this->parameters.n);
-    for(unsigned long idx = 0; idx < this->parameters.n; idx++){
-        this->L[idx].resize(this->parameters.n);
-    }
-    this->U.resize(this->parameters.n);
-    for(unsigned long idx = 0; idx < this->parameters.n; idx++){
-        this->U[idx].resize(this->parameters.n);
-    }
-
-    // set up permutation vector
-    //-------------------------------
-    this->P.resize(this->parameters.n);
-
     // set up evaluation struct
     //-------------------------------
     this->evaluation.IR_relativeError.resize(0);
@@ -1620,13 +1604,15 @@ void ira::PLU_decomposition(unsigned long mantissa_precision, unsigned long expo
     mps mps_zero(mantissa_precision, exponent_precision, 0);
     mps mps_one(mantissa_precision, exponent_precision, 1);
 
-    for(unsigned long i = 0; i <  this->parameters.n; i++){
-        for(unsigned long j = 0; j < this->parameters.n; j++){
+    this->L.resize(this->parameters.n);
+    for(unsigned long row_idx = 0; row_idx <  this->parameters.n; row_idx++){
+        this->L[row_idx].resize(this->parameters.n);
+        for(unsigned long col_idx = 0; col_idx < this->parameters.n; col_idx++){
 
-            if(i == j){
-                this->L[i][j] |= mps_one;
+            if(row_idx == col_idx){
+                this->L[row_idx][col_idx] |= mps_one;
             } else {
-                this->L[i][j] |= mps_zero;
+                this->L[row_idx][col_idx] |= mps_zero;
             }
         }
     }
@@ -1634,6 +1620,7 @@ void ira::PLU_decomposition(unsigned long mantissa_precision, unsigned long expo
 
     // set up P
     //-------------------------------
+    this->P.resize(this->parameters.n);
     for(unsigned long i = 0; i < this->parameters.n; i++){
         P[i] |= mps(mantissa_precision, exponent_precision, (double) i);
     }
@@ -1642,11 +1629,13 @@ void ira::PLU_decomposition(unsigned long mantissa_precision, unsigned long expo
 
     // set up U
     //-------------------------------
-    for(unsigned long i = 0; i <  this->parameters.n; i++){
-        for(unsigned long j = 0; j < this->parameters.n; j++){
+    this->U.resize(this->parameters.n);
+    for(unsigned long row_idx = 0; row_idx < this->parameters.n; row_idx++){
+        this->U[row_idx].resize(this->parameters.n);
+        for(unsigned long col_idx = 0; col_idx < this->parameters.n; col_idx++){
 
-            this->U[i][j] |= A[i][j];
-            this->U[i][j].cast(mantissa_precision, exponent_precision);
+            this->U[row_idx][col_idx] |= A[row_idx][col_idx];
+            this->U[row_idx][col_idx].cast(mantissa_precision, exponent_precision);
         }
     }
     //-------------------------------
