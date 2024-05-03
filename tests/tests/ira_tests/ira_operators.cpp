@@ -250,7 +250,7 @@ TEST(matrixVectorProduct, exception_D_empty) {
     unsigned long mantissa_length = 23;
     unsigned long exponent_length = 8;
 
-    vector<mps> D;
+    vector<vector<mps>> D;
     vector<double> x_double{2, 2, 2, 2};
     auto x = ira::double_to_mps(mantissa_length, exponent_length, x_double);
 
@@ -262,9 +262,8 @@ TEST(matrixVectorProduct, exception_x_empty) {
     unsigned long mantissa_length = 23;
     unsigned long exponent_length = 8;
 
-    vector<double> D_double{2, 2, 2, 2};
+    vector<vector<double>> D_double{{2, 2}, {2, 2}};
     auto D = ira::double_to_mps(mantissa_length, exponent_length, D_double);
-
     vector<mps> x;
 
     EXPECT_ANY_THROW(auto tmp = ira::matrixVectorProduct(D, x));
@@ -275,7 +274,7 @@ TEST(matrixVectorProduct, exception_dimensions_not_the_same) {
     unsigned long mantissa_length = 23;
     unsigned long exponent_length = 8;
 
-    vector<double> D_double{2, 2, 2, 2};
+    vector<vector<double>> D_double{{2, 2}, {2, 2}};
     auto D = ira::double_to_mps(mantissa_length, exponent_length, D_double);
     vector<double> x_double{2, 2, 2, 2};
     auto x = ira::double_to_mps(mantissa_length, exponent_length, x_double);
@@ -288,7 +287,7 @@ TEST(matrixVectorProduct, exception_mantissas_not_the_same) {
     unsigned long mantissa_length = 23;
     unsigned long exponent_length = 8;
 
-    vector<double> D_double{2, 2, 2, 2};
+    vector<vector<double>> D_double{{2, 2}, {2, 2}};
     auto D = ira::double_to_mps(mantissa_length-1, exponent_length, D_double);
     vector<double> x_double{2, 2};
     auto x = ira::double_to_mps(mantissa_length, exponent_length, x_double);
@@ -301,7 +300,7 @@ TEST(matrixVectorProduct, exception_exponents_not_the_same) {
     unsigned long mantissa_length = 23;
     unsigned long exponent_length = 8;
 
-    vector<double> D_double{2, 2, 2, 2};
+    vector<vector<double>> D_double{{2, 2}, {2, 2}};
     auto D = ira::double_to_mps(mantissa_length, exponent_length, D_double);
     vector<double> x_double{2, 2};
     auto x = ira::double_to_mps(mantissa_length, exponent_length-1, x_double);
@@ -316,7 +315,7 @@ TEST(matrixVectorProduct, simple_1_float) {
     unsigned long mantissa_length = 23;
     unsigned long exponent_length = 8;
 
-    vector<double> D_double{2, 2, 2, 2};
+    vector<vector<double>> D_double{{2, 2}, {2, 2}};
     auto D = ira::double_to_mps(mantissa_length, exponent_length, D_double);
     vector<double> x_double{2, 2};
     auto x = ira::double_to_mps(mantissa_length, exponent_length, x_double);
@@ -333,7 +332,7 @@ TEST(matrixVectorProduct, simple_1_double) {
     unsigned long mantissa_length = 52;
     unsigned long exponent_length = 11;
 
-    vector<double> D_double{2, 2, 2, 2};
+    vector<vector<double>> D_double{{2, 2}, {2, 2}};
     auto D = ira::double_to_mps(mantissa_length, exponent_length, D_double);
     vector<double> x_double{2, 2};
     auto x = ira::double_to_mps(mantissa_length, exponent_length, x_double);
@@ -350,7 +349,7 @@ TEST(matrixVectorProduct, simple_2_float) {
     unsigned long mantissa_length = 23;
     unsigned long exponent_length = 8;
 
-    vector<double> D_double{1, 2, 3, 4};
+    vector<vector<double>> D_double{{1, 2}, {3, 4}};
     auto D = ira::double_to_mps(mantissa_length, exponent_length, D_double);
     vector<double> x_double{2, 3};
     auto x = ira::double_to_mps(mantissa_length, exponent_length, x_double);
@@ -367,7 +366,7 @@ TEST(matrixVectorProduct, simple_2_double) {
     unsigned long mantissa_length = 52;
     unsigned long exponent_length = 11;
 
-    vector<double> D_double{1, 2, 3, 4};
+    vector<vector<double>> D_double{{1, 2}, {3, 4}};
     auto D = ira::double_to_mps(mantissa_length, exponent_length, D_double);
     vector<double> x_double{2, 3};
     auto x = ira::double_to_mps(mantissa_length, exponent_length, x_double);

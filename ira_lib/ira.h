@@ -71,10 +71,10 @@ public:
 
     // variables
     //-------------------------------
-    vector<mps> A;             // the A which should be solved
+    vector<vector<mps>> A;             // the A which should be solved
 
-    vector<mps> L;             // The resulting lower triangular Matrix after PLU decomposition.
-    vector<mps> U;             // The resulting upper triangular Matrix after PLU decomposition.
+    vector<vector<mps>> L;             // The resulting lower triangular Matrix after PLU decomposition.
+    vector<vector<mps>> U;             // The resulting upper triangular Matrix after PLU decomposition.
     vector<mps> P;             // The resulting permutation vector P after PLU decomposition.
     //-------------------------------
 
@@ -130,6 +130,7 @@ public:
 
     // matrix getter
     //-------------------------------
+    [[nodiscard]] mps getMatrixElement(unsigned long row_idx, unsigned long col_idx);
     [[nodiscard]] mps getMatrixElement(unsigned long idx);
     //-------------------------------
 
@@ -151,6 +152,7 @@ public:
     // array converters
     //-------------------------------
     [[nodiscard]] static vector<mps> double_to_mps(unsigned long mantissa_length, unsigned long exponent_length, vector<double> double_vector);
+    [[nodiscard]] static vector<vector<mps>> double_to_mps(unsigned long mantissa_length, unsigned long exponent_length, vector<vector<double>> double_matrix);
     [[nodiscard]] static vector<double> mps_to_double(vector<mps> mps_vector);
     [[nodiscard]] static vector<float> mps_to_float(vector<mps> mps_vector);
     //-------------------------------
@@ -174,7 +176,7 @@ public:
     //-------------------------------
     [[nodiscard]] static vector<mps> vectorAddition(const vector<mps>& a, const vector<mps>& b);
     [[nodiscard]] static vector<mps> vectorSubtraction(const vector<mps>& a, const vector<mps>& b);
-    [[nodiscard]] static vector<mps> matrixVectorProduct(const vector<mps>& D, const vector<mps>& x);
+    [[nodiscard]] static vector<mps> matrixVectorProduct(const vector<vector<mps>>& D, const vector<mps>& x);
     static vector<vector<mps>> matrixMatrixProduct(const vector<vector<mps>>& A, const vector<vector<mps>>& B);
     vector<mps> multiplyWithSystemMatrix(vector<mps> x) const;
     //-------------------------------
@@ -201,7 +203,7 @@ private:
     [[nodiscard]] unsigned long get_idx(unsigned long row, unsigned long column) const;
     [[nodiscard]] static unsigned long get_idx(unsigned long row, unsigned long column, unsigned long n);
     [[nodiscard]] unsigned long get_max_U_idx(unsigned long column, unsigned long start) const;
-    void interchangeRow(vector<mps>* matrix, unsigned long row_one, unsigned long row_two, unsigned long start, unsigned long end) const;
+    void interchangeRow(vector<vector<mps>>* matrix, unsigned long row_one, unsigned long row_two, unsigned long start, unsigned long end) const;
     static vector<mps> permuteVector(const vector<mps> &permutation_vector, const vector<mps> &matrix);
     //-------------------------------
 

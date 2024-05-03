@@ -48,8 +48,15 @@ ira::ira(unsigned long n, unsigned long ur_mantissa_length, unsigned long ur_exp
 
     // set up LU matrices
     //-------------------------------
-    this->L.resize(this->parameters.matrix_1D_size);
-    this->U.resize(this->parameters.matrix_1D_size);
+    // TODO: maybe remove
+    this->L.resize(this->parameters.n);
+    for(unsigned long idx = 0; idx < this->parameters.n; idx++){
+        this->L[idx].resize(this->parameters.n);
+    }
+    this->U.resize(this->parameters.n);
+    for(unsigned long idx = 0; idx < this->parameters.n; idx++){
+        this->U[idx].resize(this->parameters.n);
+    }
 
     // set up permutation vector
     //-------------------------------
@@ -571,17 +578,17 @@ mps ira::getExpectedPrecision() const{
  */
 void ira::setUnitaryMatrix() {
 
-    this->A.resize(this->parameters.matrix_1D_size);
-
     mps zero(this->parameters.ur_m_l, this->parameters.ur_e_l, 0);
     mps one(this->parameters.ur_m_l, this->parameters.ur_e_l, 1);
 
+    this->A.resize(this->parameters.n);
     for(unsigned long i = 0; i <  this->parameters.n; i++){
+        this->A[i].resize(this->parameters.n);
         for(unsigned long j = 0; j < this->parameters.n; j++){
             if(i == j){
-                this->A[get_idx(i, j)] |= one;
+                this->A[i][j] |= one;
             } else {
-                this->A[get_idx(i, j)] |= zero;
+                this->A[i][j] |= zero;
             }
         }
     }
@@ -596,8 +603,6 @@ void ira::setUnitaryMatrix() {
  */
 void ira::setMatrix(vector<double> new_matrix) {
 
-    this->A.resize(this->parameters.matrix_1D_size);
-
     if (new_matrix.size() > this->parameters.matrix_1D_size) {
         throw std::invalid_argument("ERROR: in setMatrix: new_matrix too large");
     }
@@ -605,8 +610,12 @@ void ira::setMatrix(vector<double> new_matrix) {
         throw std::invalid_argument("ERROR: in setMatrix: new_matrix too small");
     }
 
-    for(unsigned i = 0; i < new_matrix.size(); i++){
-        this->A[i] |= mps(this->parameters.ur_m_l, this->parameters.ur_e_l, new_matrix[i]);
+    this->A.resize(this->parameters.n);
+    for(unsigned long row_idx = 0; row_idx < this->parameters.n; row_idx++){
+        this->A[row_idx].resize(this->parameters.n);
+        for(unsigned long col_idx = 0; col_idx < this->parameters.n; col_idx++){
+            this->A[row_idx][col_idx] |= mps(this->parameters.ur_m_l, this->parameters.ur_e_l, new_matrix[get_idx(row_idx, col_idx)]);
+        }
     }
 }
 
@@ -619,16 +628,21 @@ void ira::setMatrix(vector<double> new_matrix) {
  */
 void ira::setRandomMatrix(){
 
-    this->A.resize(this->parameters.matrix_1D_size);
+    this->A.resize(this->parameters.n);
 
     std::random_device rd;
     std::mt19937 mt(rd());
     std::uniform_real_distribution<double> dist(this->parameters.random_lower_bound, this->parameters.random_upper_bound);
 
     if(0 == this->parameters.sparsity_rate) {
-        for (unsigned i = 0; i < this->parameters.matrix_1D_size; i++) {
-            this->A[i] |= mps(this->parameters.ur_m_l, this->parameters.ur_e_l, dist(mt));
+
+        for(unsigned long row_idx = 0; row_idx < this->parameters.n; row_idx++){
+            this->A[row_idx].resize(this->parameters.n);
+            for(unsigned long col_idx = 0; col_idx < this->parameters.n; col_idx++){
+                this->A[row_idx][col_idx] |= mps(this->parameters.ur_m_l, this->parameters.ur_e_l, dist(mt));
+            }
         }
+
     } else {
 
         std::random_device sparsity_device;
@@ -647,15 +661,23 @@ void ira::setRandomMatrix(){
 
         double adapted_sparsity_rate = (this->parameters.sparsity_rate * ((double) this->parameters.n)) / ((double) (this->parameters.n - 1));
         mps zero(this->parameters.ur_m_l, this->parameters.ur_e_l, 0);
-        for (unsigned i = 0; i < this->parameters.matrix_1D_size; i++) {
-            if(random_vector[i / this->parameters.n] == (i % this->parameters.n)){
-                do{
-                    this->A[i] |= mps(this->parameters.ur_m_l, this->parameters.ur_e_l, dist(mt));
-                } while(this->A[i].isZero());
-            } else if(sparsity_dist(sparsity_mt) < adapted_sparsity_rate){
-                this->A[i] |= zero;
-            } else {
-                this->A[i] |= mps(this->parameters.ur_m_l, this->parameters.ur_e_l, dist(mt));
+
+        for(unsigned long row_idx = 0; row_idx < this->parameters.n; row_idx++){
+            this->A[row_idx].resize(this->parameters.n);
+            for(unsigned long col_idx = 0; col_idx < this->parameters.n; col_idx++){
+
+                if(col_idx == random_vector[row_idx]){
+
+                    this->A[row_idx][col_idx] |= mps(this->parameters.ur_m_l, this->parameters.ur_e_l, dist(mt));
+                    while(this->A[row_idx][col_idx].isZero()){
+                        this->A[row_idx][col_idx] |= mps(this->parameters.ur_m_l, this->parameters.ur_e_l, dist(mt));
+                    }
+
+                } else if(sparsity_dist(sparsity_mt) < adapted_sparsity_rate){
+                    this->A[row_idx][col_idx] |= zero;
+                } else {
+                    this->A[row_idx][col_idx] |= mps(this->parameters.ur_m_l, this->parameters.ur_e_l, dist(mt));
+                }
             }
         }
     }
@@ -678,8 +700,12 @@ void ira::setL(vector<double> new_L) {
         throw std::invalid_argument("ERROR: in setL: new_L too small");
     }
 
-    for(unsigned long i = 0; i < new_L.size(); i++){
-        this->L[i] |= mps(this->parameters.ur_m_l, this->parameters.ur_e_l, new_L[i]);
+    this->L.resize(this->parameters.n);
+    for(unsigned long row_idx = 0; row_idx < this->parameters.n; row_idx++){
+        this->L[row_idx].resize(this->parameters.n);
+        for(unsigned long col_idx = 0; col_idx < this->parameters.n; col_idx++){
+            this->L[row_idx][col_idx] |= mps(this->parameters.ur_m_l, this->parameters.ur_e_l, new_L[get_idx(row_idx, col_idx)]);
+        }
     }
 }
 
@@ -700,8 +726,12 @@ void ira::setU(vector<double> new_U) {
         throw std::invalid_argument("ERROR: in setU: new_U too small");
     }
 
-    for(unsigned long i = 0; i < new_U.size(); i++){
-        this->U[i] |= mps(this->parameters.ur_m_l, this->parameters.ur_e_l, new_U[i]);
+    this->U.resize(this->parameters.n);
+    for(unsigned long row_idx = 0; row_idx < this->parameters.n; row_idx++){
+        this->U[row_idx].resize(this->parameters.n);
+        for(unsigned long col_idx = 0; col_idx < this->parameters.n; col_idx++){
+            this->U[row_idx][col_idx] |= mps(this->parameters.ur_m_l, this->parameters.ur_e_l, new_U[get_idx(row_idx, col_idx)]);
+        }
     }
 }
 //-------------------------------
@@ -715,13 +745,25 @@ void ira::setU(vector<double> new_U) {
  * @param idx the index of the element in the array.
  * @return the element at the index.
  */
+mps ira::getMatrixElement(unsigned long row_idx, unsigned long col_idx){
+
+    if (row_idx >= this->parameters.n) {
+        throw std::invalid_argument("ERROR: getMatrixElement: row_idx too large");
+    }
+    if (col_idx >= this->parameters.n) {
+        throw std::invalid_argument("ERROR: getMatrixElement: col_idx too large");
+    }
+
+    return this->A[row_idx][col_idx];
+}
+
 mps ira::getMatrixElement(unsigned long idx){
 
-    if (idx >= this->parameters.matrix_1D_size) {
+    if (idx >= this->parameters.n*this->parameters.n) {
         throw std::invalid_argument("ERROR: getMatrixElement: idx too large");
     }
 
-    return this->A[idx];
+    return this->A[idx / this->parameters.n][idx % this->parameters.n];
 }
 //-------------------------------
 
@@ -745,39 +787,51 @@ string ira::to_string(const char& matrix, const int precision) const {
 
     if('A' == matrix){
 
-        if(this->A.empty() || (this->A[0].exponent_length == 0 && this->A[0].mantissa_length == 0)){
+        if(this->A.empty() || this->A[0].empty() || (this->A[0][0].exponent_length == 0 && this->A[0][0].mantissa_length == 0)){
             throw std::invalid_argument("ERROR: to_string: A is empty");
         }
 
-        ret += this->A[0].to_string(precision);
-        for(unsigned long i = 1; i < this->parameters.matrix_1D_size; i++){
-            ret.append(", ");
-            ret.append(this->A[i].to_string(precision));
+        for(unsigned long row_idx = 0; row_idx < this->parameters.n; row_idx++){
+            for(unsigned long col_idx = 0; col_idx < this->parameters.n; col_idx++){
+                ret.append(this->A[row_idx][col_idx].to_string(precision));
+                ret.append(", ");
+            }
         }
+
+        ret.pop_back();
+        ret.pop_back();
 
     } else if('L' == matrix){
 
-        if(this->L.empty() || (this->L[0].exponent_length == 0 && this->L[0].mantissa_length == 0)){
+        if(this->L.empty() || this->L[0].empty() || (this->L[0][0].exponent_length == 0 && this->L[0][0].mantissa_length == 0)){
             throw std::invalid_argument("ERROR: to_string: L is empty");
         }
 
-        ret += this->L[0].to_string(precision);
-        for(unsigned long i = 1; i < this->parameters.matrix_1D_size; i++){
-            ret.append(", ");
-            ret.append(this->L[i].to_string(precision));
+        for(unsigned long row_idx = 0; row_idx < this->parameters.n; row_idx++){
+            for(unsigned long col_idx = 0; col_idx < this->parameters.n; col_idx++){
+                ret.append(this->L[row_idx][col_idx].to_string(precision));
+                ret.append(", ");
+            }
         }
+
+        ret.pop_back();
+        ret.pop_back();
 
     } else if('U' == matrix) {
 
-        if(this->U.empty() || (this->U[0].exponent_length == 0 && this->U[0].mantissa_length == 0)){
+        if(this->U.empty() || this->U[0].empty() || (this->U[0][0].exponent_length == 0 && this->U[0][0].mantissa_length == 0)){
             throw std::invalid_argument("ERROR: to_string: U is empty");
         }
 
-        ret += this->U[0].to_string(precision);
-        for(unsigned long i = 1; i < this->parameters.matrix_1D_size; i++){
-            ret.append(", ");
-            ret.append(this->U[i].to_string(precision));
+        for(unsigned long row_idx = 0; row_idx < this->parameters.n; row_idx++){
+            for(unsigned long col_idx = 0; col_idx < this->parameters.n; col_idx++){
+                ret.append(this->U[row_idx][col_idx].to_string(precision));
+                ret.append(", ");
+            }
         }
+
+        ret.pop_back();
+        ret.pop_back();
 
     } else if('P' == matrix) {
 
@@ -932,12 +986,14 @@ void ira::castSystemMatrix(unsigned long mantissa_length, unsigned long exponent
         throw std::invalid_argument("ERROR: in castSystemMatrix : exponent size too small");
     }
 
-    if(mantissa_length == this->A[0].mantissa_length && exponent_length == this->A[0].exponent_length){
+    if(mantissa_length == this->A[0][0].mantissa_length && exponent_length == this->A[0][0].exponent_length){
         return;
     }
 
-    for(auto & element : this->A){
-        element.cast(mantissa_length, exponent_length);
+    for(unsigned long row_idx = 0; row_idx < this->parameters.n; row_idx++){
+        for(unsigned long col_idx = 0; col_idx < this->parameters.n; col_idx++){
+            A[row_idx][col_idx].cast(mantissa_length, exponent_length);
+        }
     }
 
 }
@@ -1027,6 +1083,30 @@ vector<mps> ira::double_to_mps(unsigned long mantissa_length, unsigned long expo
 
     for(unsigned long i = 0; i < double_vector.size(); i++){
         ret[i] = double_vector[i];
+    }
+
+    return ret;
+}
+
+vector<vector<mps>> ira::double_to_mps(unsigned long mantissa_length, unsigned long exponent_length, vector<vector<double>> double_matrix){
+
+    if (double_matrix.empty() || double_matrix[0].empty()) {
+        throw std::invalid_argument("ERROR: in double_to_mps: double_vector is empty");
+    }
+    if (mantissa_length <= 0) {
+        throw std::invalid_argument("ERROR: in double_to_mps : mantissa length too small");
+    }
+    if (exponent_length <= 1) {
+        throw std::invalid_argument("ERROR: in double_to_mps : exponent length too small");
+    }
+
+    vector<vector<mps>> ret;
+    ret.resize(double_matrix.size());
+    for(unsigned long row_idx = 0; row_idx < double_matrix.size(); row_idx++){
+        ret[row_idx].resize(double_matrix.size());
+        for(unsigned long col_idx = 0; col_idx < double_matrix.size(); col_idx++){
+            ret[row_idx][col_idx] |= mps(mantissa_length, exponent_length, double_matrix[row_idx][col_idx]);
+        }
     }
 
     return ret;
@@ -1405,7 +1485,7 @@ vector<mps> ira::vectorSubtraction(const vector<mps>& a, const vector<mps>& b) {
  * @param x the vector for the multiplication
  * @return the resulting vector from the multiplication.
  */
-vector<mps> ira::matrixVectorProduct(const vector<mps>& D, const vector<mps>& x) {
+vector<mps> ira::matrixVectorProduct(const vector<vector<mps>>& D, const vector<mps>& x) {
 
     if (D.empty()) {
         throw std::invalid_argument("ERROR: in matrixVectorProduct: D is empty");
@@ -1413,21 +1493,20 @@ vector<mps> ira::matrixVectorProduct(const vector<mps>& D, const vector<mps>& x)
     if (x.empty()) {
         throw std::invalid_argument("ERROR: in matrixVectorProduct: x is empty");
     }
-    if (D.size() != (x.size() * x.size())) {
+    if (D.size() != x.size()) {
         throw std::invalid_argument("ERROR: in matrixVectorProduct: dimensions of D and x do not match");
     }
-    if (D[0].exponent_length != x[0].exponent_length) {
+    if (D[0][0].exponent_length != x[0].exponent_length) {
         throw std::invalid_argument("ERROR: in matrixVectorProduct: exponents do not match");
     }
-    if (D[0].mantissa_length != x[0].mantissa_length) {
+    if (D[0][0].mantissa_length != x[0].mantissa_length) {
         throw std::invalid_argument("ERROR: in matrixVectorProduct: mantissas do not match");
     }
-
-    vector<mps> y(x.size(), mps(D[0].mantissa_length, D[0].exponent_length, 0.0));
+    vector<mps> y(x.size(), mps(D[0][0].mantissa_length, D[0][0].exponent_length, 0.0));
 
     for(unsigned long i = 0; i < x.size(); i++){
         for(unsigned long j = 0; j < x.size(); j++){
-            y[i] = y[i] + (x[j] * D[get_idx(i, j, x.size())]);
+            y[i] = y[i] + (x[j] * D[i][j]);
         }
     }
 
@@ -1503,13 +1582,13 @@ vector<mps> ira::multiplyWithSystemMatrix(vector<mps> x) const {
     if (x.empty()) {
         throw std::invalid_argument("ERROR: in multiplyWithSystemMatrix: x is empty");
     }
-    if (this->A.size() != (x.size() * x.size())) {
+    if (this->A.size() != x.size()) {
         throw std::invalid_argument("ERROR: in multiplyWithSystemMatrix: dimensions of A and x do not match");
     }
-    if (this->A[0].exponent_length != x[0].exponent_length) {
+    if (this->A[0][0].exponent_length != x[0].exponent_length) {
         throw std::invalid_argument("ERROR: in multiplyWithSystemMatrix: exponents do not match");
     }
-    if (this->A[0].mantissa_length != x[0].mantissa_length) {
+    if (this->A[0][0].mantissa_length != x[0].mantissa_length) {
         throw std::invalid_argument("ERROR: in multiplyWithSystemMatrix: mantissas do not match");
     }
 
@@ -1536,8 +1615,6 @@ void ira::PLU_decomposition(unsigned long mantissa_precision, unsigned long expo
         throw std::invalid_argument("ERROR: in PLU_decomposition : exponent size too small");
     }
 
-    unsigned long idx;
-
     // set up L
     //-------------------------------
     mps mps_zero(mantissa_precision, exponent_precision, 0);
@@ -1546,12 +1623,10 @@ void ira::PLU_decomposition(unsigned long mantissa_precision, unsigned long expo
     for(unsigned long i = 0; i <  this->parameters.n; i++){
         for(unsigned long j = 0; j < this->parameters.n; j++){
 
-            idx = get_idx(i, j);
-
             if(i == j){
-                this->L[idx] |= mps_one;
+                this->L[i][j] |= mps_one;
             } else {
-                this->L[idx] |= mps_zero;
+                this->L[i][j] |= mps_zero;
             }
         }
     }
@@ -1570,10 +1645,8 @@ void ira::PLU_decomposition(unsigned long mantissa_precision, unsigned long expo
     for(unsigned long i = 0; i <  this->parameters.n; i++){
         for(unsigned long j = 0; j < this->parameters.n; j++){
 
-            idx = get_idx(i, j);
-
-            this->U[idx] |= A[idx];
-            this->U[idx].cast(mantissa_precision, exponent_precision);
+            this->U[i][j] |= A[i][j];
+            this->U[i][j].cast(mantissa_precision, exponent_precision);
         }
     }
     //-------------------------------
@@ -1593,12 +1666,12 @@ void ira::PLU_decomposition(unsigned long mantissa_precision, unsigned long expo
 
         for(unsigned long j = k+1; j < this->parameters.n; j++){
 
-            idx = get_idx(j, k);
-            this->L[idx] = this->U[idx] / this->U[get_idx(k, k)];
+            //idx = get_idx(j, k);
+            this->L[j][k] = this->U[j][k] / this->U[k][k];
 
             for(unsigned long i = k; i < this->parameters.n; i++){
 
-                this->U[get_idx(j, i)]  = this->U[get_idx(j, i)] - (this->L[idx] * this->U[get_idx(k, i)]);
+                this->U[j][i]  = this->U[j][i] - (this->L[j][k] * this->U[k][i]);
             }
         }
 
@@ -1622,20 +1695,20 @@ vector<mps> ira::forwardSubstitution(const vector<mps>& b) const {
         throw std::invalid_argument("ERROR: in forwardSubstitution: b is empty");
     }
 
-    vector<mps> x(b.size(), mps(this->L[0].mantissa_length, this->L[0].exponent_length));
+    vector<mps> x(b.size(), mps(this->L[0][0].mantissa_length, this->L[0][0].exponent_length));
 
-    x[0] = b[0]/L[get_idx(0, 0)];
+    x[0] = b[0]/L[0][0];
 
-    mps tmp_sum(this->L[0].mantissa_length, this->L[0].exponent_length);
+    mps tmp_sum(this->L[0][0].mantissa_length, this->L[0][0].exponent_length);
 
     for(unsigned long i = 1; i < this->parameters.n; i++){
 
         tmp_sum = 0;
         for(unsigned long j = 0; j < i; j++){
-            tmp_sum =  tmp_sum + (L[get_idx(i,j)] * x[j]);
+            tmp_sum =  tmp_sum + (L[i][j] * x[j]);
         }
 
-        x[i] = (b[i] - tmp_sum) / L[get_idx(i, i)];
+        x[i] = (b[i] - tmp_sum) / L[i][i];
     }
 
     return x;
@@ -1659,11 +1732,11 @@ vector<mps> ira::backwardSubstitution(const vector<mps>& b) const {
 
     auto n_minus_one = this->parameters.n-1;
 
-    vector<mps> x(b.size(), mps(this->U[0].mantissa_length, this->U[0].exponent_length));
+    vector<mps> x(b.size(), mps(this->U[0][0].mantissa_length, this->U[0][0].exponent_length));
 
-    x[n_minus_one] = b[n_minus_one]/U[get_idx(n_minus_one, n_minus_one)];
+    x[n_minus_one] = b[n_minus_one]/U[n_minus_one][n_minus_one];
 
-    mps tmp_sum(this->U[0].mantissa_length, this->U[0].exponent_length);
+    mps tmp_sum(this->U[0][0].mantissa_length, this->U[0][0].exponent_length);
 
     for(unsigned long i = n_minus_one; i > 0;){
 
@@ -1672,10 +1745,10 @@ vector<mps> ira::backwardSubstitution(const vector<mps>& b) const {
         tmp_sum = 0;
         for(unsigned long j = n_minus_one; j > i; j--){
 
-            tmp_sum =  tmp_sum + (U[get_idx(i,j)] * x[j]);
+            tmp_sum =  tmp_sum + (U[i][j] * x[j]);
         }
 
-        x[i] = (b[i] - tmp_sum) / U[get_idx(i, i)];
+        x[i] = (b[i] - tmp_sum) / U[i][i];
     }
 
     return x;
@@ -1998,9 +2071,7 @@ vector<double> ira::solveLU_double(const vector<double>& b){
 
         for(unsigned long j = 0; j < this->parameters.n; j++){
 
-            auto idx = get_idx(i, j);
-
-            row.push_back(this->A[idx].getValue());
+            row.push_back(this->A[i][j].getValue());
         }
 
         U_.push_back(row);
@@ -2127,23 +2198,21 @@ unsigned long ira::get_idx(unsigned long row, unsigned long column, unsigned lon
 unsigned long ira::get_max_U_idx(unsigned long column, unsigned long start) const {
 
     unsigned long max_row = start;
-    mps value = U[get_idx(start, column)];
+    mps value = U[start][column];
 
     for(unsigned long i = start; i < this->parameters.n; i++){
 
-        unsigned long idx = get_idx(i, column);
-
-        if(U[idx].isPositive()){
+        if(U[i][column].isPositive()){
             value.setSign(false);
-            if(U[idx] > value){
+            if(U[i][column] > value){
                 max_row = i;
-                value = U[idx];
+                value = U[i][column];
             }
         } else {
             value.setSign(true);
-            if(U[idx] < value){
+            if(U[i][column] < value){
                 max_row = i;
-                value = U[idx];
+                value = U[i][column];
             }
         }
     }
@@ -2162,12 +2231,12 @@ unsigned long ira::get_max_U_idx(unsigned long column, unsigned long start) cons
  * @param start the index of the starting column
  * @param start the index of the ending column
  */
-void ira::interchangeRow(vector<mps>* matrix, unsigned long row_one, unsigned long row_two, unsigned long start, unsigned long end) const{
+void ira::interchangeRow(vector<vector<mps>>* matrix, unsigned long row_one, unsigned long row_two, unsigned long start, unsigned long end) const{
 
     for(auto i = start; i < end; i++){
-        auto tmp = (*matrix)[get_idx(row_one, i)];
-        (*matrix)[get_idx(row_one, i)] = (*matrix)[get_idx(row_two, i)];
-        (*matrix)[get_idx(row_two, i)] = tmp;
+        auto tmp = (*matrix)[row_one][i];
+        (*matrix)[row_one][i] = (*matrix)[row_two][i];
+        (*matrix)[row_two][i] = tmp;
     }
 }
 
