@@ -1389,11 +1389,11 @@ TEST(IR, get_evaluation_value_IR_area){
     }
     //--------------------------------
 
-    EXPECT_TRUE(IRA.evaluation.IR_area_relativeError > 0);
+    EXPECT_TRUE(IRA.evaluation.IR_relativeError_sum > 0);
 
 }
 
-TEST(IR, get_evaluation_value_microseconds){
+TEST(IR, get_evaluation_value_milliseconds){
 
     //------------------------------------------------------------------------------------------------------
     unsigned long precision = 51;                // the number of  mantissa bits which should be checked.

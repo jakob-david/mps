@@ -48,15 +48,14 @@ ira::ira(unsigned long n, unsigned long ur_mantissa_length, unsigned long ur_exp
 
     // set up evaluation struct
     //-------------------------------
-    this->evaluation.IR_relativeError.resize(0);
-    this->evaluation.IR_area_relativeError = 0.0;
-    this->evaluation.IR_area_precision = 0.0;
+    this->evaluation.IR_relativeErrors.resize(0);
+    this->evaluation.IR_relativeError_sum = 0.0;
     this->evaluation.milliseconds = 0;
 
     this->evaluation.iterations_needed = 0;
 
-    this->evaluation.IR_precision_errors.resize(0);
-    this->evaluation.IR_precision_error_sum = 0;
+    this->evaluation.IR_precisionErrors.resize(0);
+    this->evaluation.IR_precisionError_sum = 0;
 }
 
 /**
@@ -1786,12 +1785,11 @@ vector<mps> ira::iterativeRefinementLU(const vector<mps> &b) {
     // set evaluation parameters to zero
     //-------------------------------
     if(this->parameters.expected_result_present) {
-        this->evaluation.IR_relativeError.clear();
-        this->evaluation.IR_area_relativeError = 0;
-        this->evaluation.IR_area_precision = 0;
+        this->evaluation.IR_relativeErrors.clear();
+        this->evaluation.IR_relativeError_sum = 0;
 
-        this->evaluation.IR_precision_errors.clear();
-        this->evaluation.IR_precision_error_sum = 0;
+        this->evaluation.IR_precisionErrors.clear();
+        this->evaluation.IR_precisionError_sum = 0;
     }
     //-------------------------------
 
@@ -1893,8 +1891,8 @@ vector<mps> ira::iterativeRefinementLU(const vector<mps> &b) {
                 sum += x[element_id].getRelativeError_double(this->parameters.expected_result_double[element_id]);
             }
             sum /= (long double) this->parameters.n;
-            this->evaluation.IR_relativeError.push_back(sum);
-            this->evaluation.IR_area_relativeError += sum;
+            this->evaluation.IR_relativeErrors.push_back(sum);
+            this->evaluation.IR_relativeError_sum += sum;
             //-------------------------------
 
             // evaluate using precision
@@ -1911,8 +1909,8 @@ vector<mps> ira::iterativeRefinementLU(const vector<mps> &b) {
             sum /= (long double) this->parameters.n;
 
             sum = (long double) this->parameters.u_m_l - sum;
-            this->evaluation.IR_precision_errors.push_back(sum);
-            this->evaluation.IR_precision_error_sum += sum;
+            this->evaluation.IR_precisionErrors.push_back(sum);
+            this->evaluation.IR_precisionError_sum += sum;
             //-------------------------------
 
             // evaluate using absolute error
@@ -2220,7 +2218,7 @@ unsigned long ira::get_max_U_idx(unsigned long column, unsigned long start) cons
  * @param start the index of the starting column
  * @param start the index of the ending column
  */
-void ira::interchangeRow(vector<vector<mps>>* matrix, unsigned long row_one, unsigned long row_two, unsigned long start, unsigned long end) const{
+void ira::interchangeRow(vector<vector<mps>>* matrix, unsigned long row_one, unsigned long row_two, unsigned long start, unsigned long end) {
 
     for(auto i = start; i < end; i++){
         auto tmp = (*matrix)[row_one][i];

@@ -830,8 +830,8 @@ vector<vector<long double>> mpe::evaluateSparsity(bool output) const {
 
         IRA.iterativeRefinementLU(b);
 
-        result_relative_error.push_back(IRA.evaluation.IR_area_relativeError);
-        result_precision.push_back(IRA.evaluation.IR_precision_error_sum);
+        result_relative_error.push_back(IRA.evaluation.IR_relativeError_sum);
+        result_precision.push_back(IRA.evaluation.IR_precisionError_sum);
         run_time.push_back(IRA.evaluation.milliseconds);
     }
 
@@ -1195,8 +1195,8 @@ vector<vector<long double>> mpe::evaluateArea(bool output) const {
     // acquire GIL
     pybind11::gil_scoped_acquire acquire;
 
-    ret.push_back(IRA.evaluation.IR_relativeError);
-    ret.push_back(IRA.evaluation.IR_precision_errors);
+    ret.push_back(IRA.evaluation.IR_relativeErrors);
+    ret.push_back(IRA.evaluation.IR_precisionErrors);
 
     return ret;
 }
@@ -1249,11 +1249,11 @@ vector<vector<vector<long double>>> mpe::evaluateArea_2D(bool output) const {
             IRA.iterativeRefinementLU(b);
 
             // save data relative error
-            auto subsubresult_error = IRA.evaluation.IR_area_relativeError * IRA.evaluation.milliseconds;
+            auto subsubresult_error = IRA.evaluation.IR_relativeError_sum * IRA.evaluation.milliseconds;
             subresult_error.push_back(subsubresult_error);
 
             // save data precision error
-            auto subsubresult_precision = IRA.evaluation.IR_precision_error_sum * IRA.evaluation.milliseconds;
+            auto subsubresult_precision = IRA.evaluation.IR_precisionError_sum * IRA.evaluation.milliseconds;
             subresult_precision.push_back(subsubresult_precision);
         }
 
