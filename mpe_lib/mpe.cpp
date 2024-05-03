@@ -826,7 +826,7 @@ vector<vector<long double>> mpe::evaluateSparsity(bool output) const {
 
         auto b = IRA.generateRandomLinearSystem();
 
-        IRA.iterativeRefinementLU(b);
+        IRA.irPLU(b);
 
         result_relative_error.push_back(IRA.evaluation.IR_relativeError_sum);
         result_precision.push_back(IRA.evaluation.IR_precisionError_sum);
@@ -1055,7 +1055,7 @@ vector<vector<long double>> mpe::comparePLU(unsigned long iter_system, unsigned 
 
         start = std::chrono::high_resolution_clock::now();
         for(unsigned long i = 0; i < iterations; i++){
-            IRA.PLU_decomposition(52, 11);
+            IRA.decompPLU(52, 11);
         }
         finish = std::chrono::high_resolution_clock::now();
         result_d = std::chrono::duration_cast<std::chrono::nanoseconds>(finish-start).count();
@@ -1063,7 +1063,7 @@ vector<vector<long double>> mpe::comparePLU(unsigned long iter_system, unsigned 
         IRA.castSystemMatrix(23, 8);
         start = std::chrono::high_resolution_clock::now();
         for(unsigned long i = 0; i < iterations; i++){
-            IRA.PLU_decomposition(23, 8);
+            IRA.decompPLU(23, 8);
         }
         finish = std::chrono::high_resolution_clock::now();
         result_f = std::chrono::duration_cast<std::chrono::nanoseconds>(finish-start).count();
@@ -1144,7 +1144,7 @@ vector<vector<long double>> mpe::compareIR(unsigned long max_iter, unsigned long
 
         start = std::chrono::high_resolution_clock::now();
         for(unsigned long i = 0; i < iterations; i++){
-            IRA.iterativeRefinementLU(b_mps);
+            IRA.irPLU(b_mps);
         }
         finish = std::chrono::high_resolution_clock::now();
         result_f = std::chrono::duration_cast<std::chrono::nanoseconds>(finish-start).count();
@@ -1188,7 +1188,7 @@ vector<vector<long double>> mpe::evaluateArea(bool output) const {
     auto b = IRA.generateRandomLinearSystem();
 
     // perform iterative refinement algorithm
-    IRA.iterativeRefinementLU(b);
+    IRA.irPLU(b);
 
     // acquire GIL
     pybind11::gil_scoped_acquire acquire;
@@ -1244,7 +1244,7 @@ vector<vector<vector<long double>>> mpe::evaluateArea_2D(bool output) const {
 
             // perform iterative refinement algorithm
             IRA.setLowerPrecisionMantissa(ul_mantissa_size);
-            IRA.iterativeRefinementLU(b);
+            IRA.irPLU(b);
 
             // save data relative error
             auto subsubresult_error = IRA.evaluation.IR_relativeError_sum * IRA.evaluation.milliseconds;
@@ -1333,7 +1333,7 @@ vector<vector<vector<long double>>> mpe::evaluateConvergence_2D(bool output) con
 
             // perform iterative refinement algorithm
             IRA.setLowerPrecisionMantissa(ul_mantissa_size);
-            IRA.iterativeRefinementLU(b);
+            IRA.irPLU(b);
 
             // save data iterations
             auto subsubresult_iterations = (double) IRA.evaluation.iterations_needed;

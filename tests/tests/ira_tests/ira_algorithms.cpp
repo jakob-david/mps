@@ -15,7 +15,7 @@ TEST(PLU, exception_mantissa_too_small) {
     ira IRA(3, mantissa_length, exponent_length);
     IRA.setMatrix(new_matrix);
 
-    EXPECT_ANY_THROW(IRA.PLU_decomposition(0, exponent_length));
+    EXPECT_ANY_THROW(IRA.decompPLU(0, exponent_length));
 }
 
 TEST(PLU, exception_exponent_too_small) {
@@ -28,7 +28,7 @@ TEST(PLU, exception_exponent_too_small) {
     ira IRA(3, mantissa_length, exponent_length);
     IRA.setMatrix(new_matrix);
 
-    EXPECT_ANY_THROW(IRA.PLU_decomposition(mantissa_length, 1));
+    EXPECT_ANY_THROW(IRA.decompPLU(mantissa_length, 1));
 }
 
 TEST(PLU, simple_3x3_float_1) {
@@ -40,7 +40,7 @@ TEST(PLU, simple_3x3_float_1) {
 
     ira IRA(3, mantissa_length, exponent_length);
     IRA.setMatrix(new_matrix);
-    IRA.PLU_decomposition(mantissa_length, exponent_length);
+    IRA.decompPLU(mantissa_length, exponent_length);
 
 
     bool test = true;
@@ -76,7 +76,7 @@ TEST(PLU, simple_3x3_float_2) {
 
     ira IRA(3, mantissa_length, exponent_length);
     IRA.setMatrix(new_matrix);
-    IRA.PLU_decomposition(mantissa_length, exponent_length);
+    IRA.decompPLU(mantissa_length, exponent_length);
 
 
     bool test = true;
@@ -112,7 +112,7 @@ TEST(PLU, simple_3x3_double_1) {
 
     ira IRA(3, mantissa_length, exponent_length);
     IRA.setMatrix(new_matrix);
-    IRA.PLU_decomposition(mantissa_length, exponent_length);
+    IRA.decompPLU(mantissa_length, exponent_length);
 
 
     bool test = true;
@@ -148,7 +148,7 @@ TEST(PLU, simple_3x3_double_2) {
 
     ira IRA(3, mantissa_length, exponent_length);
     IRA.setMatrix(new_matrix);
-    IRA.PLU_decomposition(mantissa_length, exponent_length);
+    IRA.decompPLU(mantissa_length, exponent_length);
 
 
     bool test = true;
@@ -184,7 +184,7 @@ TEST(PLU, simple_4x4_float_1) {
 
     ira IRA(4, mantissa_length, exponent_length);
     IRA.setMatrix(new_matrix);
-    IRA.PLU_decomposition(mantissa_length, exponent_length);
+    IRA.decompPLU(mantissa_length, exponent_length);
 
 
     bool test = true;
@@ -220,7 +220,7 @@ TEST(PLU, simple_4x4_float_2) {
 
     ira IRA(4, mantissa_length, exponent_length);
     IRA.setMatrix(new_matrix);
-    IRA.PLU_decomposition(mantissa_length, exponent_length);
+    IRA.decompPLU(mantissa_length, exponent_length);
 
 
     bool test = true;
@@ -256,7 +256,7 @@ TEST(PLU, simple_4x4_double_1) {
 
     ira IRA(4, mantissa_length, exponent_length);
     IRA.setMatrix(new_matrix);
-    IRA.PLU_decomposition(mantissa_length, exponent_length);
+    IRA.decompPLU(mantissa_length, exponent_length);
 
 
     bool test = true;
@@ -292,7 +292,7 @@ TEST(PLU, simple_4x4_double_2) {
 
     ira IRA(4, mantissa_length, exponent_length);
     IRA.setMatrix(new_matrix);
-    IRA.PLU_decomposition(mantissa_length, exponent_length);
+    IRA.decompPLU(mantissa_length, exponent_length);
 
 
     bool test = true;
@@ -1295,7 +1295,7 @@ TEST(IR, simple_3x3_double_1){
     b.emplace_back(mantissa_length, exponent_length, 6);
     b.emplace_back(mantissa_length, exponent_length, 8);
 
-    auto x = IRA.iterativeRefinementLU(b);
+    auto x = IRA.irPLU(b);
 
 
     std::string solution = x[0].to_string(8);
@@ -1329,7 +1329,7 @@ TEST(IR, simple_3x3_double_2){
     b.emplace_back(ur[0], ur[1], 875.357);
     b.emplace_back(ur[0], ur[1], 235.5745);
 
-    auto x = IRA.iterativeRefinementLU(b);
+    auto x = IRA.irPLU(b);
 
     auto x_should = IRA.directPLU(b);
 
@@ -1373,7 +1373,7 @@ TEST(IR, get_evaluation_value_IR_area){
     auto x_should = IRA.directPLU(b);
     IRA.setExpectedResult(x_should);
 
-    auto x = IRA.iterativeRefinementLU(b);
+    auto x = IRA.irPLU(b);
 
     // perform tests
     //--------------------------------
@@ -1418,7 +1418,7 @@ TEST(IR, get_evaluation_value_milliseconds){
     auto x_should = IRA.directPLU(b);
     IRA.setExpectedResult(x_should);
 
-    auto x = IRA.iterativeRefinementLU(b);
+    auto x = IRA.irPLU(b);
 
     // perform tests
     //--------------------------------

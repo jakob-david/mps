@@ -194,12 +194,10 @@ public:
 
     // algorithms
     //-------------------------------
-    // TODO: rename
-    void PLU_decomposition(unsigned long mantissa_precision, unsigned long exponent_precision);
-    [[nodiscard]] vector<mps> forwardSubstitution(const vector<mps>& b) const;
-    [[nodiscard]] vector<mps> backwardSubstitution(const vector<mps>& b) const;
-    // TODO: rename
-    vector<mps> iterativeRefinementLU(const vector<mps> &b);
+    void decompPLU(unsigned long mantissa_precision, unsigned long exponent_precision);
+    vector<mps> forwardSubstitution(const vector<mps>& b) const;
+    vector<mps> backwardSubstitution(const vector<mps>& b) const;
+    vector<mps> irPLU(const vector<mps> &b);
     vector<mps> directPLU(const vector<mps>& b);
     //-------------------------------
 

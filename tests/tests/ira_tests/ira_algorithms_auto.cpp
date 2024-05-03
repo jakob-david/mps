@@ -630,7 +630,7 @@ TEST(directPLU, random_LUcompare_double){
 
 
 
-TEST(iterativeRefinementLU, auto_double){
+TEST(irPLU, auto_double){
 
     //------------------------------------------------------------------------------------------------------
     unsigned long precision = 51;                // the number of  mantissa bits which should be checked.
@@ -685,7 +685,7 @@ TEST(iterativeRefinementLU, auto_double){
 
         // solve system
         //--------------------------------
-        auto x = IRA.iterativeRefinementLU(b);
+        auto x = IRA.irPLU(b);
         auto x_result = ira::mps_to_double(x);
         //--------------------------------
 
@@ -706,7 +706,7 @@ TEST(iterativeRefinementLU, auto_double){
     }
 }
 
-TEST(iterativeRefinementLU, auto_float){
+TEST(irPLU, auto_float){
 
     //------------------------------------------------------------------------------------------------------
     unsigned long precision = 21;                // the number of  mantissa bits which should be checked.
@@ -761,7 +761,7 @@ TEST(iterativeRefinementLU, auto_float){
 
         // solve system
         //--------------------------------
-        auto x = IRA.iterativeRefinementLU(b);
+        auto x = IRA.irPLU(b);
         auto x_result = ira::mps_to_double(x);
         //--------------------------------
 
@@ -782,7 +782,7 @@ TEST(iterativeRefinementLU, auto_float){
     }
 }
 
-TEST(iterativeRefinementLU, random_double){
+TEST(irPLU, random_double){
 
     //------------------------------------------------------------------------------------------------------
     unsigned long n_max = 15;
@@ -836,7 +836,7 @@ TEST(iterativeRefinementLU, random_double){
 
         // solve system
         //--------------------------------
-        auto x = IRA.iterativeRefinementLU(b);
+        auto x = IRA.irPLU(b);
         auto x_result = ira::mps_to_double(x);
         //--------------------------------
 
@@ -857,7 +857,7 @@ TEST(iterativeRefinementLU, random_double){
     }
 }
 
-TEST(iterativeRefinementLU, random_float){
+TEST(irPLU, random_float){
 
     //------------------------------------------------------------------------------------------------------
     unsigned long precision = 11;                // the number of  mantissa bits which should be checked.
@@ -908,7 +908,7 @@ TEST(iterativeRefinementLU, random_float){
 
         // solve system
         //--------------------------------
-        auto x = IRA.iterativeRefinementLU(b);
+        auto x = IRA.irPLU(b);
         auto x_result = ira::mps_to_double(x);
         //--------------------------------
 

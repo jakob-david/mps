@@ -1589,13 +1589,13 @@ vector<mps> ira::multiplyWithSystemMatrix(vector<mps> x) const {
  * @param mantissa_precision the precision of the mantissa for the PLU-decomposition.
  * @param exponent_precision the precision of the exponent for the PLU-decomposition.
  */
-void ira::PLU_decomposition(unsigned long mantissa_precision, unsigned long exponent_precision) {
+void ira::decompPLU(unsigned long mantissa_precision, unsigned long exponent_precision) {
 
     if (mantissa_precision <= 0) {
-        throw std::invalid_argument("ERROR: in PLU_decomposition : mantissa size too small");
+        throw std::invalid_argument("ERROR: in decompPLU : mantissa size too small");
     }
     if (mantissa_precision <= 1) {
-        throw std::invalid_argument("ERROR: in PLU_decomposition : exponent size too small");
+        throw std::invalid_argument("ERROR: in decompPLU : exponent size too small");
     }
 
     // set up L
@@ -1758,7 +1758,7 @@ vector<mps> ira::directPLU(const vector<mps>& b){
         throw std::invalid_argument("ERROR: in directPLU: b is empty");
     }
 
-    this->PLU_decomposition(this->parameters.ur_m_l, this->parameters.ur_e_l);
+    this->decompPLU(this->parameters.ur_m_l, this->parameters.ur_e_l);
     auto tmp_b = b;
     ira::castVectorElements(this->parameters.ur_m_l, this->parameters.ur_e_l, &tmp_b);
 
@@ -1780,7 +1780,7 @@ vector<mps> ira::directPLU(const vector<mps>& b){
  * @param ul the precision in which the LU-decomposition should be performed.
  * @return the approximate solution of the system as an mps object.
  */
-vector<mps> ira::iterativeRefinementLU(const vector<mps> &b) {
+vector<mps> ira::irPLU(const vector<mps> &b) {
 
     // set evaluation parameters to zero
     //-------------------------------
@@ -1807,7 +1807,7 @@ vector<mps> ira::iterativeRefinementLU(const vector<mps> &b) {
 
     // perform PLU decomposition
     //-------------------------------
-    this->PLU_decomposition(ul[0], ul[1]);
+    this->decompPLU(ul[0], ul[1]);
     //-------------------------------
 
     // perform substitution to gain x_0
