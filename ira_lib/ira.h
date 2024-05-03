@@ -144,10 +144,9 @@ public:
 
     // cast functions
     //-------------------------------
-    // TODO: rename
-    static void castVectorElements(unsigned long mantissa_length, unsigned long exponent_length, vector<mps>* vec);
-    // TODO: rename
-    static void castMatrixElements(unsigned long mantissa_length, unsigned long exponent_length, vector<vector<mps>>& matrix);
+    static void cast(vector<mps>* vec, unsigned long mantissa_length, unsigned long exponent_length);
+    static void cast(vector<vector<mps>>& matrix, unsigned long mantissa_length, unsigned long exponent_length);
+
     void castSystemMatrix(unsigned long mantissa_length, unsigned long exponent_length);
     void castExpectedResult(unsigned long mantissa_length, unsigned long exponent_length);
     void castExpectedError(unsigned long mantissa_length, unsigned long exponent_length);

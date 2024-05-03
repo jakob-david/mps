@@ -894,16 +894,16 @@ string ira::to_string(vector<mps> vec, int precision) {
  * @param exponent_length the new exponent length of the mps objects
  * @param vec the vector of mps objects which should be converted
  */
-void ira::castVectorElements(unsigned long mantissa_length, unsigned long exponent_length, vector<mps>* vec){
+void ira::cast(vector<mps>* vec, unsigned long mantissa_length, unsigned long exponent_length){
 
     if ((*vec).empty()) {
-        throw std::invalid_argument("ERROR: in castVectorElements: vector is empty");
+        throw std::invalid_argument("ERROR: in cast: vector is empty");
     }
     if (mantissa_length <= 0) {
-        throw std::invalid_argument("ERROR: in castVectorElements : mantissa size too small");
+        throw std::invalid_argument("ERROR: in cast : mantissa size too small");
     }
     if (exponent_length <= 1) {
-        throw std::invalid_argument("ERROR: in castVectorElements : exponent size too small");
+        throw std::invalid_argument("ERROR: in cast : exponent size too small");
     }
 
 
@@ -923,16 +923,16 @@ void ira::castVectorElements(unsigned long mantissa_length, unsigned long expone
  * @param exponent_length the new exponent length of the mps objects
  * @param matrix the matrix of mps objects which should be converted
  */
-void ira::castMatrixElements(unsigned long mantissa_length, unsigned long exponent_length, vector<vector<mps>>& matrix){
+void ira::cast(vector<vector<mps>>& matrix, unsigned long mantissa_length, unsigned long exponent_length){
 
     if (matrix.empty()) {
-        throw std::invalid_argument("ERROR: in castMatrixElements: matrix is empty");
+        throw std::invalid_argument("ERROR: in cast: matrix is empty");
     }
     if (mantissa_length <= 0) {
-        throw std::invalid_argument("ERROR: in castMatrixElements : mantissa size too small");
+        throw std::invalid_argument("ERROR: in cast : mantissa size too small");
     }
     if (exponent_length <= 1) {
-        throw std::invalid_argument("ERROR: in castMatrixElements : exponent size too small");
+        throw std::invalid_argument("ERROR: in cast : exponent size too small");
     }
 
     if(mantissa_length == matrix[0][0].mantissa_length && exponent_length == matrix[0][0].exponent_length){
@@ -1761,7 +1761,7 @@ vector<mps> ira::directPLU(const vector<mps>& b){
 
     this->decompPLU(this->parameters.ur_m_l, this->parameters.ur_e_l);
     auto tmp_b = b;
-    ira::castVectorElements(this->parameters.ur_m_l, this->parameters.ur_e_l, &tmp_b);
+    ira::cast(&tmp_b, this->parameters.ur_m_l, this->parameters.ur_e_l);
 
 
 
@@ -1814,12 +1814,12 @@ vector<mps> ira::irPLU(const vector<mps> &b) {
     // perform substitution to gain x_0
     //-------------------------------
     auto tmp_b = b;
-    ira::castVectorElements(ul[0], ul[1], &tmp_b);
+    ira::cast(&tmp_b, ul[0], ul[1]);
     auto x = ira::permuteVector(this->P, tmp_b);
 
     x = this->forwardSubstitution(x);
     x = this->backwardSubstitution(x);
-    ira::castVectorElements(u[0], u[1], &x);
+    ira::cast(&x, u[0], u[1]);
     //-------------------------------
 
 
@@ -1829,7 +1829,7 @@ vector<mps> ira::irPLU(const vector<mps> &b) {
         // in precision: ur
         //-------------------------------
         auto x_in_ur = x;
-        ira::castVectorElements(ur[0], ur[1], &x_in_ur);
+        ira::cast(&x_in_ur, ur[0], ur[1]);
         auto b_approx = ira::dotProduct(this->A, x_in_ur);
         auto r = subtract(b, b_approx);
         //-------------------------------
@@ -1866,7 +1866,7 @@ vector<mps> ira::irPLU(const vector<mps> &b) {
         // solve: A * d_i = r_i
         // in precision: ul
         //-------------------------------
-        ira::castVectorElements(ul[0], ul[1], &r);
+        ira::cast(&r, ul[0], ul[1]);
         r = ira::permuteVector(this->P, r);
         auto d = this->forwardSubstitution(r);
         d = this->backwardSubstitution(d);
@@ -1876,7 +1876,7 @@ vector<mps> ira::irPLU(const vector<mps> &b) {
         // calculate: x_i+1 = x_i + d_i i
         // n precision u.
         //-------------------------------
-        ira::castVectorElements(u[0], u[1], &d);
+        ira::cast(&d, u[0], u[1]);
         x = add(x, d);
         //-------------------------------
 

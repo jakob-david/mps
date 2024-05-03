@@ -266,8 +266,8 @@ TEST(ExpectedResult, simple_1) {
 
     vector<double> expected_result_double = ira::mps_to_double(expected_result_mps);
     IRA.setExpectedResult(expected_result_mps);
-    ira::castVectorElements(u_m_l, u_m_e, &expected_result_mps);
-    ira::castVectorElements(mantissa_length, exponent_length, &expected_result_mps);
+    ira::cast(&expected_result_mps, u_m_l, u_m_e);
+    ira::cast(&expected_result_mps, mantissa_length, exponent_length);
 
     EXPECT_EQ(expected_result_mps, IRA.getExpectedResult_mps());
     EXPECT_EQ(expected_result_double, IRA.getExpectedResult_double());
@@ -1211,14 +1211,14 @@ TEST(mps_to_float, simple_1) {
     }
 }
 
-TEST(castVectorElements, exception_vector_empty) {
+TEST(cast, exception_vector_empty) {
 
     vector<mps> mps_vector;
 
-    EXPECT_ANY_THROW(ira::castVectorElements(52, 11, &mps_vector));
+    EXPECT_ANY_THROW(ira::cast(&mps_vector, 52, 11));
 }
 
-TEST(castVectorElements, exception_mantissa_too_small) {
+TEST(cast, exception_mantissa_too_small) {
 
     vector<double> double_vector;
     double_vector.push_back(45.34);
@@ -1228,10 +1228,10 @@ TEST(castVectorElements, exception_mantissa_too_small) {
 
     auto mps_vector = ira::double_to_mps(23, 8, double_vector);
 
-    EXPECT_ANY_THROW(ira::castVectorElements(0, 11, &mps_vector));
+    EXPECT_ANY_THROW(ira::cast(&mps_vector, 0, 11));
 }
 
-TEST(castVectorElements, exception_exponent_too_small) {
+TEST(cast, exception_exponent_too_small) {
 
     vector<double> double_vector;
     double_vector.push_back(45.34);
@@ -1241,10 +1241,10 @@ TEST(castVectorElements, exception_exponent_too_small) {
 
     auto mps_vector = ira::double_to_mps(23, 8, double_vector);
 
-    EXPECT_ANY_THROW(ira::castVectorElements(52, 1, &mps_vector));
+    EXPECT_ANY_THROW(ira::cast(&mps_vector, 52, 1));
 }
 
-TEST(castVectorElements, float_to_double_1) {
+TEST(cast, float_to_double_1) {
 
     vector<double> double_vector;
     double_vector.push_back(45.34);
@@ -1253,14 +1253,14 @@ TEST(castVectorElements, float_to_double_1) {
     double_vector.push_back(-0.34345);
 
     auto mps_vector = ira::double_to_mps(23, 8, double_vector);
-    ira::castVectorElements(52, 11, &mps_vector);
+    ira::cast(&mps_vector, 52, 11);
 
     EXPECT_EQ(ira::to_string(mps_vector, 2), "45.34, -32.00, 3463246.00, -0.34");
     EXPECT_EQ(52, mps_vector[0].mantissa_length);
     EXPECT_EQ(11, mps_vector[0].exponent_length);
 }
 
-TEST(castVectorElements, double_to_float_1) {
+TEST(cast, double_to_float_1) {
 
     vector<double> double_vector;
     double_vector.push_back(45.34);
@@ -1269,21 +1269,21 @@ TEST(castVectorElements, double_to_float_1) {
     double_vector.push_back(-0.34345);
 
     auto mps_vector = ira::double_to_mps(52, 11, double_vector);
-    ira::castVectorElements(23, 8, &mps_vector);
+    ira::cast(&mps_vector, 23, 8);
 
     EXPECT_EQ(ira::to_string(mps_vector, 2), "45.34, -32.00, 3463246.00, -0.34");
     EXPECT_EQ(23, mps_vector[0].mantissa_length);
     EXPECT_EQ(8, mps_vector[0].exponent_length);
 }
 
-TEST(castMatrixElements, double_to_float_1){
+TEST(castVector, double_to_float_1){
 
     ira IRA(4, 52, 11);
     IRA.setRandomRange(-500, 500);
 
     auto matrix = IRA.generateRandomMatrix(4, 52, 11);
 
-    ira::castMatrixElements(23, 8, matrix);
+    ira::cast(matrix, 23, 8);
 
     for(auto row : matrix){
         for(auto element : row){
