@@ -931,8 +931,8 @@ vector<vector<long double>> mpe::compareMMM(unsigned long iter_system, unsigned 
     py::gil_scoped_release release;
 
     auto largest_matrix = this->parameters.matrix_sizes.back();
-    unsigned long number_of_computations_system = (unsigned long) pow(largest_matrix, 2) * iter_system;
-    unsigned long number_of_computations_mps = (unsigned long) pow(largest_matrix, 2) * iter_mps;
+    unsigned long number_of_computations_system = (unsigned long) pow(largest_matrix, 3) * iter_system;
+    unsigned long number_of_computations_mps = (unsigned long) pow(largest_matrix, 3) * iter_mps;
 
     vector<long double> results_system;
     vector<long double> results_mps;
@@ -947,9 +947,10 @@ vector<vector<long double>> mpe::compareMMM(unsigned long iter_system, unsigned 
 
         auto A = generateRandomMatrix<double>(matrix_size, this->parameters.random_lower_bound, this->parameters.random_upper_bound);
         auto B = generateRandomMatrix<double>(matrix_size, this->parameters.random_lower_bound, this->parameters.random_upper_bound);
+
         auto start = std::chrono::high_resolution_clock::now();
         for(unsigned long i = 0; i < iterations; i++){
-            dotProduct(A, B);
+            dotProduct<double>(A, B);
         }
         auto finish = std::chrono::high_resolution_clock::now();
         auto result_d = std::chrono::duration_cast<std::chrono::nanoseconds>(finish-start).count();
@@ -958,7 +959,7 @@ vector<vector<long double>> mpe::compareMMM(unsigned long iter_system, unsigned 
         auto B_f = convert<double, float>(B);
         start = std::chrono::high_resolution_clock::now();
         for(unsigned long i = 0; i < iterations; i++){
-            dotProduct(A_f, B_f);
+            dotProduct<float>(A_f, B_f);
         }
         finish = std::chrono::high_resolution_clock::now();
         auto result_f = std::chrono::duration_cast<std::chrono::nanoseconds>(finish-start).count();
@@ -972,21 +973,99 @@ vector<vector<long double>> mpe::compareMMM(unsigned long iter_system, unsigned 
 
         ira IRA(matrix_size, 52, 11);
         IRA.setRandomRange(this->parameters.random_lower_bound, this->parameters.random_upper_bound);
-        auto A_mps = IRA.generateRandomMatrix(52, 11, matrix_size);
-        auto B_mps = IRA.generateRandomMatrix(52, 11, matrix_size);
+        auto A_mps = IRA.generateRandomMatrix(matrix_size, 52, 11);
+        auto B_mps = IRA.generateRandomMatrix(matrix_size, 52, 11);
         start = std::chrono::high_resolution_clock::now();
         for(unsigned long i = 0; i < iterations; i++){
-            IRA.matrixMatrixProduct(A_mps, B_mps);
+            ira::matrixMatrixProduct(A_mps, B_mps);
         }
         finish = std::chrono::high_resolution_clock::now();
         result_d = std::chrono::duration_cast<std::chrono::nanoseconds>(finish-start).count();
 
-        IRA.castSystemMatrix(23, 8);
         ira::castMatrixElements(23, 8, A_mps);
         ira::castMatrixElements(23, 8, B_mps);
         start = std::chrono::high_resolution_clock::now();
         for(unsigned long i = 0; i < iterations; i++){
             ira::matrixMatrixProduct(A_mps, B_mps);
+        }
+        finish = std::chrono::high_resolution_clock::now();
+        result_f = std::chrono::duration_cast<std::chrono::nanoseconds>(finish-start).count();
+
+        results_mps.push_back((long double) result_d / (long double) result_f);
+        //-------------------------------
+    }
+
+    vector<vector<long double>> results;
+    results.push_back(results_system);
+    results.push_back(results_mps);
+
+    pybind11::gil_scoped_acquire acquire;
+
+    return results;
+}
+
+vector<vector<long double>> mpe::comparePLU(unsigned long iter_system, unsigned long iter_mps) const {
+
+    // variable for python multithreading.
+    py::gil_scoped_release release;
+
+    auto largest_matrix = this->parameters.matrix_sizes.back();
+    unsigned long number_of_computations_system = (unsigned long) pow(largest_matrix, 3) * iter_system;
+    unsigned long number_of_computations_mps = (unsigned long) pow(largest_matrix, 3) * iter_mps;
+
+    vector<long double> results_system;
+    vector<long double> results_mps;
+
+    for(auto matrix_size : this->parameters.matrix_sizes){
+
+        cout << "matrix_size: " << matrix_size << endl;
+
+        // perform test system
+        //-------------------------------
+        unsigned long iterations = number_of_computations_system / (unsigned long) pow(matrix_size, 3);
+
+        auto A = generateRandomMatrix<double>(matrix_size, this->parameters.random_lower_bound, this->parameters.random_upper_bound);
+        vector<unsigned long> P;
+
+        auto start = std::chrono::high_resolution_clock::now();
+        for(unsigned long i = 0; i < iterations; i++){
+            PLU<double, double>(A, P);
+        }
+        auto finish = std::chrono::high_resolution_clock::now();
+        auto result_d = std::chrono::duration_cast<std::chrono::nanoseconds>(finish-start).count();
+
+        auto A_f = convert<double, float>(A);
+        P.clear();
+
+        start = std::chrono::high_resolution_clock::now();
+        for(unsigned long i = 0; i < iterations; i++){
+            PLU<float, float>(A_f, P);
+        }
+        finish = std::chrono::high_resolution_clock::now();
+        auto result_f = std::chrono::duration_cast<std::chrono::nanoseconds>(finish-start).count();
+
+        results_system.push_back((long double) result_d / (long double) result_f);
+        //-------------------------------
+
+        // perform test mps
+        //-------------------------------
+        iterations = number_of_computations_mps / (unsigned long) pow(matrix_size, 3);
+
+        ira IRA(matrix_size, 52, 11);
+        IRA.setRandomRange(this->parameters.random_lower_bound, this->parameters.random_upper_bound);
+        IRA.setRandomMatrix();
+
+        start = std::chrono::high_resolution_clock::now();
+        for(unsigned long i = 0; i < iterations; i++){
+            IRA.PLU_decomposition(52, 11);
+        }
+        finish = std::chrono::high_resolution_clock::now();
+        result_d = std::chrono::duration_cast<std::chrono::nanoseconds>(finish-start).count();
+
+        IRA.castSystemMatrix(23, 8);
+        start = std::chrono::high_resolution_clock::now();
+        for(unsigned long i = 0; i < iterations; i++){
+            IRA.PLU_decomposition(23, 8);
         }
         finish = std::chrono::high_resolution_clock::now();
         result_f = std::chrono::duration_cast<std::chrono::nanoseconds>(finish-start).count();

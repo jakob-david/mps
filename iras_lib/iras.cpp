@@ -157,7 +157,7 @@ vector<T> subtract(const vector<T>& minuend, const vector<T>& subtrahend){
 }
 
 template <typename T>
-vector<T> dotProduct(const vector<vector<T>>& matrix, const vector<T> vec){
+vector<T> dotProduct(const vector<vector<T>>& matrix, const vector<T>& vec){
 
     vector<T> ret;
 
@@ -176,22 +176,22 @@ vector<T> dotProduct(const vector<vector<T>>& matrix, const vector<T> vec){
 }
 
 template <typename T>
-vector<vector<T>> dotProduct(const vector<vector<T>>& A, const vector<vector<T>> B){
+vector<vector<T>> dotProduct(const vector<vector<T>>& A, const vector<vector<T>>& B){
 
     vector<vector<T>> ret;
+    ret.resize(A.size());
 
-    for(unsigned long row_idx = 0; row_idx < A[0].size(); row_idx++){
+    for(unsigned long row_idx = 0; row_idx < A.size(); row_idx++){
 
-        vector<T> new_row;
-        for(unsigned long col_idx = 0; col_idx < A[0].size(); col_idx++){
+        ret[row_idx].resize(A.size());
+        for(unsigned long col_idx = 0; col_idx < A.size(); col_idx++){
 
             T sum = 0;
-            for(unsigned long idx = 0; idx < A[0].size(); idx++){
+            for(unsigned long idx = 0; idx < A.size(); idx++){
                 sum += A[row_idx][idx] * B[idx][col_idx];
             }
-            new_row.push_back(sum);
+            ret[row_idx][col_idx] = sum;
         }
-        ret.push_back(new_row);
     }
 
     return ret;
