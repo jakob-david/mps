@@ -142,6 +142,7 @@ public:
     // cast functions
     //-------------------------------
     static void castVectorElements(unsigned long mantissa_length, unsigned long exponent_length, vector<mps>* vec);
+    static void castMatrixElements(unsigned long mantissa_length, unsigned long exponent_length, vector<vector<mps>>& matrix);
     void castSystemMatrix(unsigned long mantissa_length, unsigned long exponent_length);
     void castExpectedResult(unsigned long mantissa_length, unsigned long exponent_length);
     void castExpectedError(unsigned long mantissa_length, unsigned long exponent_length);
@@ -157,6 +158,7 @@ public:
     // generators
     //-------------------------------
     [[nodiscard]] vector<mps> generateRandomVector(unsigned long mantissa_length, unsigned long exponent_length, unsigned long size) const;
+    [[nodiscard]] vector<vector<mps>> generateRandomMatrix(unsigned long size, unsigned long mantissa_length, unsigned long exponent_length) const;
     [[nodiscard]] vector<mps> generateRandomRHS();
     [[nodiscard]] vector<mps> generateRandomLinearSystem();
     //-------------------------------
@@ -173,6 +175,7 @@ public:
     [[nodiscard]] static vector<mps> vectorAddition(const vector<mps>& a, const vector<mps>& b);
     [[nodiscard]] static vector<mps> vectorSubtraction(const vector<mps>& a, const vector<mps>& b);
     [[nodiscard]] static vector<mps> matrixVectorProduct(const vector<mps>& D, const vector<mps>& x);
+    static vector<vector<mps>> matrixMatrixProduct(const vector<vector<mps>>& A, const vector<vector<mps>>& B);
     vector<mps> multiplyWithSystemMatrix(vector<mps> x) const;
     //-------------------------------
 

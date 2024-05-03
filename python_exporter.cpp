@@ -161,7 +161,8 @@ PYBIND11_MODULE(mpe_library, mpe_handle) {
 
             // compare
             //-------------------------------
-            .def("compareMatrixVectorMultiplication", &mpe::compareMatrixVectorMultiplication)
+            .def("compareMVM", &mpe::compareMVM)
+            .def("compareMMM", &mpe::compareMMM)
             //-------------------------------
 
 

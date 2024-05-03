@@ -855,7 +855,7 @@ string ira::to_string(vector<mps> vec, int precision) {
  *
  * @param mantissa_length the new mantissa length of the mps objects
  * @param exponent_length the new exponent length of the mps objects
- * @param double_vector the vector of mos objects which should be converted
+ * @param vec the vector of mps objects which should be converted
  */
 void ira::castVectorElements(unsigned long mantissa_length, unsigned long exponent_length, vector<mps>* vec){
 
@@ -877,6 +877,37 @@ void ira::castVectorElements(unsigned long mantissa_length, unsigned long expone
     for(auto & i : *vec){
         i.cast(mantissa_length, exponent_length);
     }
+}
+
+/**
+ * Given a matrix of mps objects this function casts all of its elements to new mantissa and exponent sizes.
+ *
+ * @param mantissa_length the new mantissa length of the mps objects
+ * @param exponent_length the new exponent length of the mps objects
+ * @param matrix the matrix of mps objects which should be converted
+ */
+void ira::castMatrixElements(unsigned long mantissa_length, unsigned long exponent_length, vector<vector<mps>>& matrix){
+
+    if (matrix.empty()) {
+        throw std::invalid_argument("ERROR: in castMatrixElements: matrix is empty");
+    }
+    if (mantissa_length <= 0) {
+        throw std::invalid_argument("ERROR: in castMatrixElements : mantissa size too small");
+    }
+    if (exponent_length <= 1) {
+        throw std::invalid_argument("ERROR: in castMatrixElements : exponent size too small");
+    }
+
+    if(mantissa_length == matrix[0][0].mantissa_length && exponent_length == matrix[0][0].exponent_length){
+        return;
+    }
+
+    for(unsigned long row_idx = 0; row_idx < matrix.size(); row_idx++){
+        for(unsigned long col_idx = 0; col_idx < matrix.size(); col_idx++){
+            matrix[row_idx][col_idx].cast(mantissa_length, exponent_length);
+        }
+    }
+
 }
 
 /**
@@ -1080,6 +1111,89 @@ vector<mps> ira::generateRandomVector(unsigned long mantissa_length, unsigned lo
 
     for(unsigned i = 0; i < size; i++){
         ret.emplace_back(mantissa_length, exponent_length, dist(mt));
+    }
+
+    return ret;
+}
+
+/**
+ * Generates a random matrix consisting of mps objects.
+ * The value range can be set by changing the random range parameters.
+ * The sparsity range can be set by changing the sparsity parameter.
+ *
+ * Throws Exception:    When the mantissa length is too small.
+ *                      When the exponent length is too small.
+ *
+ * @param mantissa_length the mantissa length of the mps objects
+ * @param exponent_length the exponent length of the mps objects
+ * @param size the size of the generated vector
+ * @return a randomly created vector consisting of mps objects.
+ */
+vector<vector<mps>> ira::generateRandomMatrix(unsigned long size, unsigned long mantissa_length, unsigned long exponent_length) const {
+
+    if (mantissa_length <= 0) {
+        throw std::invalid_argument("ERROR: in generateRandomMatrix : mantissa size too small");
+    }
+    if (exponent_length <= 1) {
+        throw std::invalid_argument("ERROR: in generateRandomMatrix : exponent size too small");
+    }
+
+    vector<vector<mps>> ret;
+    ret.resize(size);
+
+    std::random_device rd;
+    std::mt19937 mt(rd());
+    std::uniform_real_distribution<double> dist(this->parameters.random_lower_bound, this->parameters.random_upper_bound);
+
+    if(0 == this->parameters.sparsity_rate){
+
+        for(unsigned long i = 0; i < size; i++){
+
+            ret[i].resize(size);
+            for(unsigned long j = 0; j < size; j++){
+                ret[i][j] |= mps(mantissa_length, exponent_length, dist(mt));
+            }
+        }
+    } else {
+
+        mps mps_zero(mantissa_length, exponent_length, 0.0);
+
+        std::random_device sparsity_device;
+        std::mt19937 sparsity_mt(rd());
+        std::uniform_real_distribution<double> sparsity_dist(0.0, 1.0);
+
+        // generate random vector
+        vector<unsigned long> random_vector;
+        for(unsigned long idx = 0; idx < size; idx++){
+            random_vector.push_back(idx);
+        }
+        auto random_dev = std::random_device {};
+        auto rng = std::default_random_engine {random_dev()};
+        std::shuffle(std::begin(random_vector), std::end(random_vector), rng);
+
+        // calculate new sparsity rate
+        double adapted_sparsity_rate = (this->parameters.sparsity_rate * ((double) size)) / ((double) (size - 1));
+
+        for(unsigned long i = 0; i < size; i++){
+
+            ret[i].resize(size);
+            for(unsigned long j = 0; j < size; j++){
+
+                if(j == random_vector[i]){
+
+                    ret[i][j] |= mps(mantissa_length, exponent_length, dist(mt));
+                    while(ret[i][j].isZero()){
+                        ret[i][j] |= mps(mantissa_length, exponent_length, dist(mt));
+                    }
+
+                } else if(sparsity_dist(sparsity_mt) < adapted_sparsity_rate){
+                    ret[i][j] |= mps_zero;
+                } else {
+                    ret[i][j] |= mps(mantissa_length, exponent_length, dist(mt));
+                }
+
+            }
+        }
     }
 
     return ret;
@@ -1318,6 +1432,55 @@ vector<mps> ira::matrixVectorProduct(const vector<mps>& D, const vector<mps>& x)
     }
 
     return y;
+}
+
+/**
+ * Performs a matrix matrix product.
+ * The elements of the matrix and the vector are mps objects.
+ *
+ * @param A the first matrix for the multiplication
+ * @param B the first matrix for the multiplication
+ * @return the resulting vector from the multiplication.
+ */
+vector<vector<mps>> ira::matrixMatrixProduct(const vector<vector<mps>>& A, const vector<vector<mps>>& B){
+
+    if (A.empty()) {
+        throw std::invalid_argument("ERROR: in matrixMatrixProduct: A is empty");
+    }
+    if (B.empty()) {
+        throw std::invalid_argument("ERROR: in matrixMatrixProduct: B is empty");
+    }
+    if (A.size() != B.size()) {
+        throw std::invalid_argument("ERROR: in matrixMatrixProduct: dimensions of A and B do not match");
+    }
+    if (A[0][0].exponent_length != B[0][0].exponent_length) {
+        throw std::invalid_argument("ERROR: in matrixMatrixProduct: exponents do not match");
+    }
+    if (B[0][0].mantissa_length != B[0][0].mantissa_length) {
+        throw std::invalid_argument("ERROR: in matrixMatrixProduct: mantissas do not match");
+    }
+
+    unsigned long mantissa_length = A[0][0].mantissa_length;
+    unsigned long exponent_length = A[0][0].exponent_length;
+
+    vector<vector<mps>> ret;
+    ret.resize(A.size());
+
+
+    for(unsigned long row_idx = 0; row_idx < A[0].size(); row_idx++){
+
+        ret[row_idx].resize(A.size());
+        for(unsigned long col_idx = 0; col_idx < A[0].size(); col_idx++){
+
+            mps sum (mantissa_length, exponent_length, 0.0);
+            for(unsigned long idx = 0; idx < A[0].size(); idx++){
+                sum = sum + ( A[row_idx][idx] * B[idx][col_idx] );
+            }
+            ret[row_idx][col_idx] |= sum;
+        }
+    }
+
+    return ret;
 }
 
 /**

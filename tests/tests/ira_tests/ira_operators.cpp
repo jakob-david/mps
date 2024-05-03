@@ -378,6 +378,61 @@ TEST(matrixVectorProduct, simple_2_double) {
 }
 
 
+TEST(matrixMatrixProduct, simple_1) {
+
+    unsigned long mantissa_length = 52;
+    unsigned long exponent_length = 11;
+
+    vector<vector<mps>> A;
+    vector<mps> A_row_one;
+    A_row_one.emplace_back(mantissa_length, exponent_length, 1);
+    A_row_one.emplace_back(mantissa_length, exponent_length, 2);
+    A_row_one.emplace_back(mantissa_length, exponent_length, 3);
+    vector<mps> A_row_two;
+    A_row_two.emplace_back(mantissa_length, exponent_length, 4);
+    A_row_two.emplace_back(mantissa_length, exponent_length, 5);
+    A_row_two.emplace_back(mantissa_length, exponent_length, 6);
+    vector<mps> A_row_three;
+    A_row_three.emplace_back(mantissa_length, exponent_length, 7);
+    A_row_three.emplace_back(mantissa_length, exponent_length, 8);
+    A_row_three.emplace_back(mantissa_length, exponent_length, 9);
+    A.push_back(A_row_one);
+    A.push_back(A_row_two);
+    A.push_back(A_row_three);
+
+    vector<vector<mps>> B;
+    vector<mps> B_row_one;
+    B_row_one.emplace_back(mantissa_length, exponent_length, 2);
+    B_row_one.emplace_back(mantissa_length, exponent_length, 3);
+    B_row_one.emplace_back(mantissa_length, exponent_length, 4);
+    vector<mps> B_row_two;
+    B_row_two.emplace_back(mantissa_length, exponent_length, 5);
+    B_row_two.emplace_back(mantissa_length, exponent_length, 6);
+    B_row_two.emplace_back(mantissa_length, exponent_length, 7);
+    vector<mps> B_row_three;
+    B_row_three.emplace_back(mantissa_length, exponent_length, 8);
+    B_row_three.emplace_back(mantissa_length, exponent_length, 9);
+    B_row_three.emplace_back(mantissa_length, exponent_length, 1);
+    B.push_back(B_row_one);
+    B.push_back(B_row_two);
+    B.push_back(B_row_three);
+
+    auto result = ira::matrixMatrixProduct(A, B);
+
+    EXPECT_EQ(36, result[0][0].getValue());
+    EXPECT_EQ(42, result[0][1].getValue());
+    EXPECT_EQ(21, result[0][2].getValue());
+
+    EXPECT_EQ(81, result[1][0].getValue());
+    EXPECT_EQ(96, result[1][1].getValue());
+    EXPECT_EQ(57, result[1][2].getValue());
+
+    EXPECT_EQ(126, result[2][0].getValue());
+    EXPECT_EQ(150, result[2][1].getValue());
+    EXPECT_EQ(93, result[2][2].getValue());
+}
+
+
 TEST(multiplyWithSystemMatrix, simple_1){
 
     unsigned long mantissa_length = 52;

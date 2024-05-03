@@ -1276,6 +1276,23 @@ TEST(castVectorElements, double_to_float_1) {
     EXPECT_EQ(8, mps_vector[0].exponent_length);
 }
 
+TEST(castMatrixElements, double_to_float_1){
+
+    ira IRA(4, 52, 11);
+    IRA.setRandomRange(-500, 500);
+
+    auto matrix = IRA.generateRandomMatrix(4, 52, 11);
+
+    ira::castMatrixElements(23, 8, matrix);
+
+    for(auto row : matrix){
+        for(auto element : row){
+            EXPECT_EQ(23, element.mantissa_length);
+            EXPECT_EQ(8, element.exponent_length);
+        }
+    }
+}
+
 TEST(castSystemMatrix, simple_1) {
 
     unsigned long wanted_mantissa = 12;
@@ -1491,6 +1508,235 @@ TEST(generateRandomVector, exception_wrong_input){
     EXPECT_ANY_THROW(auto x = IRA.generateRandomVector(mantissa_length, 12, size));
     EXPECT_ANY_THROW(auto x = IRA.generateRandomVector(12, exponent_length, size));
 }
+
+TEST(generateRandomMatrix, simple_double_1){
+
+    unsigned long mantissa_length = 52;
+    unsigned long exponent_length = 11;
+
+    unsigned long size = 4;
+    double lower_bound = -10;
+    double upper_bound = 10;
+
+    ira IRA(size, mantissa_length, exponent_length);
+    IRA.setRandomRange(lower_bound, upper_bound);
+    IRA.setSparsityRate(0);
+    auto matrix = IRA.generateRandomMatrix(size, mantissa_length, exponent_length);
+
+
+    EXPECT_EQ(mantissa_length, matrix[0][0].mantissa_length);
+    EXPECT_EQ(mantissa_length, matrix[0][0].mantissa_length);
+    EXPECT_EQ(size, matrix.size());
+
+    for(const auto& row : matrix){
+
+        EXPECT_EQ(size, row.size());
+
+        for(const auto& element : row){
+            EXPECT_TRUE(element.getValue() <= upper_bound);
+            EXPECT_TRUE(element.getValue() >= lower_bound);
+        }
+    }
+}
+
+TEST(generateRandomMatrix, simple_float_1){
+
+    unsigned long mantissa_length = 23;
+    unsigned long exponent_length = 8;
+
+    unsigned long size = 4;
+    double lower_bound = -10;
+    double upper_bound = 10;
+
+    ira IRA(size, mantissa_length, exponent_length);
+    IRA.setRandomRange(lower_bound, upper_bound);
+    IRA.setSparsityRate(0);
+    auto matrix = IRA.generateRandomMatrix(size, mantissa_length, exponent_length);
+
+
+    EXPECT_EQ(mantissa_length, matrix[0][0].mantissa_length);
+    EXPECT_EQ(mantissa_length, matrix[0][0].mantissa_length);
+    EXPECT_EQ(size, matrix.size());
+
+    for(const auto& row : matrix){
+
+        EXPECT_EQ(size, row.size());
+
+        for(const auto& element : row){
+            EXPECT_TRUE(element.getValue() <= upper_bound);
+            EXPECT_TRUE(element.getValue() >= lower_bound);
+        }
+    }
+}
+
+TEST(generateRandomMatrix, sparcity_1){
+
+    unsigned long mantissa_length = 52;
+    unsigned long exponent_length = 11;
+
+    unsigned long size = 15;
+    double lower_bound = -10;
+    double upper_bound = 10;
+    double sparsity_rate = 0.25;
+
+
+    ira IRA(size, mantissa_length, exponent_length);
+    IRA.setRandomRange(lower_bound, upper_bound);
+    IRA.setSparsityRate(sparsity_rate);
+    auto matrix = IRA.generateRandomMatrix(size, mantissa_length, exponent_length);
+
+    unsigned long sum = 0;
+    for(unsigned long row_idx = 0; row_idx < size; row_idx++){
+        for(unsigned long col_idx = 0; col_idx < size; col_idx++){
+            if(matrix[row_idx][col_idx].isZero()){
+                sum++;
+            }
+        }
+    }
+
+    double actual_rate = (double) sum / ((double)(size*size));
+
+    EXPECT_NEAR(sparsity_rate, actual_rate, 0.1);
+
+    //check if matrix is invertible
+    // check rows
+    for(unsigned long row_idx = 0; row_idx < size; row_idx++){
+        bool only_zero_entries = true;
+        for(unsigned long column_idx = 0; column_idx < size; column_idx++){
+            if(not matrix[row_idx][column_idx].isZero()){
+                only_zero_entries = false;
+                continue;
+            }
+        }
+        EXPECT_FALSE(only_zero_entries);
+    }
+
+    // check columns
+    for(unsigned long column_idx = 0; column_idx < size; column_idx++){
+        bool only_zero_entries = true;
+        for(unsigned long row_idx = 0; row_idx < size; row_idx++){
+            if(not matrix[row_idx][column_idx].isZero()){
+                only_zero_entries = false;
+                continue;
+            }
+        }
+        EXPECT_FALSE(only_zero_entries);
+    }
+}
+
+TEST(generateRandomMatrix, sparcity_2){
+
+    unsigned long mantissa_length = 52;
+    unsigned long exponent_length = 11;
+
+    unsigned long size = 15;
+    double lower_bound = -10;
+    double upper_bound = 10;
+    double sparsity_rate = 0.5;
+
+
+    ira IRA(size, mantissa_length, exponent_length);
+    IRA.setRandomRange(lower_bound, upper_bound);
+    IRA.setSparsityRate(sparsity_rate);
+    auto matrix = IRA.generateRandomMatrix(size, mantissa_length, exponent_length);
+
+    unsigned long sum = 0;
+    for(unsigned long row_idx = 0; row_idx < size; row_idx++){
+        for(unsigned long col_idx = 0; col_idx < size; col_idx++){
+            if(matrix[row_idx][col_idx].isZero()){
+                sum++;
+            }
+        }
+    }
+
+    double actual_rate = (double) sum / ((double)(size*size));
+
+    EXPECT_NEAR(sparsity_rate, actual_rate, 0.1);
+
+    //check if matrix is invertible
+    // check rows
+    for(unsigned long row_idx = 0; row_idx < size; row_idx++){
+        bool only_zero_entries = true;
+        for(unsigned long column_idx = 0; column_idx < size; column_idx++){
+            if(not matrix[row_idx][column_idx].isZero()){
+                only_zero_entries = false;
+                continue;
+            }
+        }
+        EXPECT_FALSE(only_zero_entries);
+    }
+
+    // check columns
+    for(unsigned long column_idx = 0; column_idx < size; column_idx++){
+        bool only_zero_entries = true;
+        for(unsigned long row_idx = 0; row_idx < size; row_idx++){
+            if(not matrix[row_idx][column_idx].isZero()){
+                only_zero_entries = false;
+                continue;
+            }
+        }
+        EXPECT_FALSE(only_zero_entries);
+    }
+}
+
+TEST(generateRandomMatrix, sparcity_3){
+
+    unsigned long mantissa_length = 52;
+    unsigned long exponent_length = 11;
+
+    unsigned long size = 15;
+    double lower_bound = -10;
+    double upper_bound = 10;
+    double sparsity_rate = 0.75;
+
+
+    ira IRA(size, mantissa_length, exponent_length);
+    IRA.setRandomRange(lower_bound, upper_bound);
+    IRA.setSparsityRate(sparsity_rate);
+    auto matrix = IRA.generateRandomMatrix(size, mantissa_length, exponent_length);
+
+    unsigned long sum = 0;
+    for(unsigned long row_idx = 0; row_idx < size; row_idx++){
+        for(unsigned long col_idx = 0; col_idx < size; col_idx++){
+            if(matrix[row_idx][col_idx].isZero()){
+                sum++;
+            }
+        }
+    }
+
+    double actual_rate = (double) sum / ((double)(size*size));
+
+    EXPECT_NEAR(sparsity_rate, actual_rate, 0.1);
+
+    //check if matrix is invertible
+    // check rows
+    for(unsigned long row_idx = 0; row_idx < size; row_idx++){
+        bool only_zero_entries = true;
+        for(unsigned long column_idx = 0; column_idx < size; column_idx++){
+            if(not matrix[row_idx][column_idx].isZero()){
+                only_zero_entries = false;
+                continue;
+            }
+        }
+        EXPECT_FALSE(only_zero_entries);
+    }
+
+    // check columns
+    for(unsigned long column_idx = 0; column_idx < size; column_idx++){
+        bool only_zero_entries = true;
+        for(unsigned long row_idx = 0; row_idx < size; row_idx++){
+            if(not matrix[row_idx][column_idx].isZero()){
+                only_zero_entries = false;
+                continue;
+            }
+        }
+        EXPECT_FALSE(only_zero_entries);
+    }
+}
+
+
+
+
 
 TEST(generateRandomLinearSystem, simple_1){
     // also tests generateRandomRHS implicitly.
