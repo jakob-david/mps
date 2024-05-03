@@ -268,8 +268,6 @@ double mpe::generatePositiveRandomDouble() const {
 //-------------------------------
 
 
-
-
 // operator evaluation
 //-------------------------------
 vector<long double> mpe::evaluateAddition() const {

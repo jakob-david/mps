@@ -71,11 +71,11 @@ public:
 
     // variables
     //-------------------------------
-    vector<vector<mps>> A;             // the A which should be solved
+    vector<vector<mps>> A;              // the A which should be solved
 
-    vector<vector<mps>> L;             // The resulting lower triangular Matrix after PLU decomposition.
-    vector<vector<mps>> U;             // The resulting upper triangular Matrix after PLU decomposition.
-    vector<mps> P;             // The resulting permutation vector P after PLU decomposition.
+    vector<vector<mps>> L;              // The resulting lower triangular Matrix after PLU decomposition.
+    vector<vector<mps>> U;              // The resulting upper triangular Matrix after PLU decomposition.
+    vector<mps> P;                      // The resulting permutation vector P after PLU decomposition.
     //-------------------------------
 
 public:
@@ -136,13 +136,17 @@ public:
 
     // to_string converters
     //-------------------------------
+    // TODO: rename
     [[nodiscard]] std::string to_string(const char& matrix, int precision = -1) const;
+    // TODO: rename
     [[nodiscard]] static std::string to_string(vector<mps> vec, int precision = -1);
     //-------------------------------
 
     // cast functions
     //-------------------------------
+    // TODO: rename
     static void castVectorElements(unsigned long mantissa_length, unsigned long exponent_length, vector<mps>* vec);
+    // TODO: rename
     static void castMatrixElements(unsigned long mantissa_length, unsigned long exponent_length, vector<vector<mps>>& matrix);
     void castSystemMatrix(unsigned long mantissa_length, unsigned long exponent_length);
     void castExpectedResult(unsigned long mantissa_length, unsigned long exponent_length);
@@ -159,6 +163,7 @@ public:
 
     // generators
     //-------------------------------
+    // TODO: change signature
     [[nodiscard]] vector<mps> generateRandomVector(unsigned long mantissa_length, unsigned long exponent_length, unsigned long size) const;
     [[nodiscard]] vector<vector<mps>> generateRandomMatrix(unsigned long size, unsigned long mantissa_length, unsigned long exponent_length) const;
     [[nodiscard]] vector<mps> generateRandomRHS();
@@ -167,26 +172,35 @@ public:
 
     // evaluators and norms
     //-------------------------------
+    //TODO: rename
     [[nodiscard]] static mps vectorNorm_L1(const vector<mps>& a);
     [[nodiscard]] static mps calculateVectorMean(const vector<mps>& a);
+    // TODO: rename
     [[nodiscard]] mps calculateVectorMeanPrecision(const vector<mps>& is, const vector<mps>& should) const ;
     //-------------------------------
 
     // operators
     //-------------------------------
+    // TODO: rename
     [[nodiscard]] static vector<mps> vectorAddition(const vector<mps>& a, const vector<mps>& b);
+    // TODO: rename
     [[nodiscard]] static vector<mps> vectorSubtraction(const vector<mps>& a, const vector<mps>& b);
+    // TODO: rename
     [[nodiscard]] static vector<mps> matrixVectorProduct(const vector<vector<mps>>& D, const vector<mps>& x);
+    // TODO: rename
     static vector<vector<mps>> matrixMatrixProduct(const vector<vector<mps>>& A, const vector<vector<mps>>& B);
     vector<mps> multiplyWithSystemMatrix(vector<mps> x) const;
     //-------------------------------
 
     // algorithms
     //-------------------------------
+    // TODO: rename
     void PLU_decomposition(unsigned long mantissa_precision, unsigned long exponent_precision);
     [[nodiscard]] vector<mps> forwardSubstitution(const vector<mps>& b) const;
     [[nodiscard]] vector<mps> backwardSubstitution(const vector<mps>& b) const;
+    // TODO: rename
     vector<mps> iterativeRefinementLU(const vector<mps> &b);
+    // TODO: rename
     vector<mps> solveLU(const vector<mps>& b);
     //-------------------------------
 
