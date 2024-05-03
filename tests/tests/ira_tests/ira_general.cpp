@@ -1469,7 +1469,7 @@ TEST(generateRandomVector, simple_1){
 
     ira IRA(2, 54,12);
 
-    auto vec = IRA.generateRandomVector(mantissa_length, exponent_length, size);
+    auto vec = IRA.generateRandomVector(size, mantissa_length, exponent_length);
     auto random_range = IRA.getRandomRange();
     auto lower_limit = random_range[0];
     auto upper_limit = random_range[1];
@@ -1492,7 +1492,7 @@ TEST(generateRandomVector, zero_size){
 
     ira IRA(2, 54,12);
 
-    auto vec = IRA.generateRandomVector(mantissa_length, exponent_length, size);
+    auto vec = IRA.generateRandomVector(size, mantissa_length, exponent_length);
 
     EXPECT_TRUE(vec.empty());
 }
@@ -1505,8 +1505,8 @@ TEST(generateRandomVector, exception_wrong_input){
 
     ira IRA(2, 54,12);
 
-    EXPECT_ANY_THROW(auto x = IRA.generateRandomVector(mantissa_length, 12, size));
-    EXPECT_ANY_THROW(auto x = IRA.generateRandomVector(12, exponent_length, size));
+    EXPECT_ANY_THROW(auto x = IRA.generateRandomVector(size, mantissa_length, 12));
+    EXPECT_ANY_THROW(auto x = IRA.generateRandomVector(size, 12, exponent_length));
 }
 
 TEST(generateRandomMatrix, simple_double_1){
@@ -1914,7 +1914,7 @@ TEST(calculateVectorMean, simple_pos_neg){
     EXPECT_EQ(exponent_length, result.exponent_length);
 }
 
-TEST(calculateVectorMeanPrecision, simple_1){
+TEST(calculateMeanPrecision, simple_1){
 
 
     unsigned long mantissa_length = 5;
@@ -1951,14 +1951,14 @@ TEST(calculateVectorMeanPrecision, simple_1){
     mps expected_precision(ira_mantissa_length, ira_exponent_length, 0.001);
     IRA.setExpectedPrecision(expected_precision);
 
-    auto result = IRA.calculateVectorMeanPrecision(x_is, x_should);
+    auto result = IRA.calculateMeanPrecision(x_is, x_should);
 
     EXPECT_EQ(3.5, result.getValue());
     EXPECT_EQ(ira_mantissa_length, result.mantissa_length);
     EXPECT_EQ(ira_exponent_length, result.exponent_length);
 }
 
-TEST(calculateVectorMeanPrecision, exception_empty_vector){
+TEST(calculateMeanPrecision, exception_empty_vector){
 
 
     unsigned long mantissa_length = 5;
@@ -1977,12 +1977,12 @@ TEST(calculateVectorMeanPrecision, exception_empty_vector){
 
     vector<mps> empty_vector;
 
-    EXPECT_NO_THROW(auto x = IRA.calculateVectorMeanPrecision(not_empty_vector, not_empty_vector));
-    EXPECT_ANY_THROW(auto x_1 = IRA.calculateVectorMeanPrecision(empty_vector, not_empty_vector));
-    EXPECT_ANY_THROW(auto x_2 = IRA.calculateVectorMeanPrecision(not_empty_vector, empty_vector));
+    EXPECT_NO_THROW(auto x = IRA.calculateMeanPrecision(not_empty_vector, not_empty_vector));
+    EXPECT_ANY_THROW(auto x_1 = IRA.calculateMeanPrecision(empty_vector, not_empty_vector));
+    EXPECT_ANY_THROW(auto x_2 = IRA.calculateMeanPrecision(not_empty_vector, empty_vector));
 }
 
-TEST(calculateVectorMeanPrecision, exception_no_working_precision_set){
+TEST(calculateMeanPrecision, exception_no_working_precision_set){
 
 
     unsigned long mantissa_length = 5;
@@ -1997,17 +1997,17 @@ TEST(calculateVectorMeanPrecision, exception_no_working_precision_set){
 
     vector<mps> empty_vector;
 
-    EXPECT_ANY_THROW(auto x = IRA.calculateVectorMeanPrecision(not_empty_vector, not_empty_vector));
+    EXPECT_ANY_THROW(auto x = IRA.calculateMeanPrecision(not_empty_vector, not_empty_vector));
 
     IRA.setWorkingPrecision(ira_mantissa_length, ira_exponent_length);
     auto b = IRA.generateRandomLinearSystem();
     mps expected_precision(ira_mantissa_length, ira_exponent_length, 0.001);
     IRA.setExpectedPrecision(expected_precision);
 
-    EXPECT_NO_THROW(auto x = IRA.calculateVectorMeanPrecision(not_empty_vector, not_empty_vector));
+    EXPECT_NO_THROW(auto x = IRA.calculateMeanPrecision(not_empty_vector, not_empty_vector));
 }
 
-TEST(calculateVectorMeanPrecision, exception_no_expected_precision_set){
+TEST(calculateMeanPrecision, exception_no_expected_precision_set){
 
 
     unsigned long mantissa_length = 5;
@@ -2024,12 +2024,12 @@ TEST(calculateVectorMeanPrecision, exception_no_expected_precision_set){
 
     vector<mps> empty_vector;
 
-    EXPECT_ANY_THROW(auto x = IRA.calculateVectorMeanPrecision(not_empty_vector, not_empty_vector));
+    EXPECT_ANY_THROW(auto x = IRA.calculateMeanPrecision(not_empty_vector, not_empty_vector));
 
     mps expected_precision(ira_mantissa_length, ira_exponent_length, 0.001);
     IRA.setExpectedPrecision(expected_precision);
 
-    EXPECT_NO_THROW(auto x = IRA.calculateVectorMeanPrecision(not_empty_vector, not_empty_vector));
+    EXPECT_NO_THROW(auto x = IRA.calculateMeanPrecision(not_empty_vector, not_empty_vector));
 }
 
 

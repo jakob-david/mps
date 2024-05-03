@@ -163,8 +163,7 @@ public:
 
     // generators
     //-------------------------------
-    // TODO: change signature
-    [[nodiscard]] vector<mps> generateRandomVector(unsigned long mantissa_length, unsigned long exponent_length, unsigned long size) const;
+    [[nodiscard]] vector<mps> generateRandomVector(unsigned long size, unsigned long mantissa_length, unsigned long exponent_length) const;
     [[nodiscard]] vector<vector<mps>> generateRandomMatrix(unsigned long size, unsigned long mantissa_length, unsigned long exponent_length) const;
     [[nodiscard]] vector<mps> generateRandomRHS();
     [[nodiscard]] vector<mps> generateRandomLinearSystem();
@@ -172,22 +171,18 @@ public:
 
     // evaluators and norms
     //-------------------------------
-    //TODO: rename
-    [[nodiscard]] static mps vectorNorm_L1(const vector<mps>& a);
+    [[nodiscard]] static mps calculateNorm_L1(const vector<mps>& a);
     [[nodiscard]] static mps calculateVectorMean(const vector<mps>& a);
-    // TODO: rename
-    [[nodiscard]] mps calculateVectorMeanPrecision(const vector<mps>& is, const vector<mps>& should) const ;
+    [[nodiscard]] mps calculateMeanPrecision(const vector<mps>& is, const vector<mps>& should) const ;
     //-------------------------------
 
     // operators
     //-------------------------------
-    // TODO: rename
-    [[nodiscard]] static vector<mps> vectorAddition(const vector<mps>& a, const vector<mps>& b);
-    // TODO: rename
-    [[nodiscard]] static vector<mps> vectorSubtraction(const vector<mps>& a, const vector<mps>& b);
-    // TODO: rename
-    [[nodiscard]] static vector<mps> matrixVectorProduct(const vector<vector<mps>>& D, const vector<mps>& x);
+    static vector<mps> add(const vector<mps>& a, const vector<mps>& b);
+    static vector<mps> subtract(const vector<mps>& a, const vector<mps>& b);
+    static vector<mps> dotProduct(const vector<vector<mps>>& D, const vector<mps>& x);
     static vector<vector<mps>> dotProduct(const vector<vector<mps>>& A, const vector<vector<mps>>& B);
+
     vector<mps> multiplyWithSystemMatrix(vector<mps> x) const;
     //-------------------------------
 

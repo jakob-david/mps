@@ -1157,7 +1157,7 @@ vector<float> ira::mps_to_float(vector<mps> mps_vector){
  * @param size the size of the generated vector
  * @return a randomly created vector consisting of mps objects.
  */
-vector<mps> ira::generateRandomVector(unsigned long mantissa_length, unsigned long exponent_length, unsigned long size) const {
+vector<mps> ira::generateRandomVector(unsigned long size, unsigned long mantissa_length, unsigned long exponent_length) const {
 
     if (mantissa_length <= 0) {
         throw std::invalid_argument("ERROR: in generateRandomVector : mantissa size too small");
@@ -1270,7 +1270,7 @@ vector<vector<mps>> ira::generateRandomMatrix(unsigned long size, unsigned long 
  */
 vector<mps> ira::generateRandomRHS() {
 
-    auto x = generateRandomVector(this->parameters.ur_m_l, this->parameters.ur_e_l, this->parameters.n);
+    auto x = generateRandomVector(this->parameters.n, this->parameters.ur_m_l, this->parameters.ur_e_l);
     auto b = multiplyWithSystemMatrix(x);
     setExpectedResult(x);
 
@@ -1298,7 +1298,7 @@ vector<mps> ira::generateRandomLinearSystem() {
  * @param a the vector for which the L1 norm should be calculated
  * @return the L1 norm of the vector
  */
-mps ira::vectorNorm_L1(const vector<mps>& a){
+mps ira::calculateNorm_L1(const vector<mps>& a){
 
     if (a.empty()) {
         throw std::invalid_argument("ERROR: in vectorNorm: a is empty");
@@ -1360,19 +1360,19 @@ mps ira::calculateVectorMean(const vector<mps>& a){
  * @param x the vector for the multiplication
  * @return the resulting vector from the multiplication
  */
-mps ira::calculateVectorMeanPrecision(const vector<mps>& is, const vector<mps>& should) const {
+mps ira::calculateMeanPrecision(const vector<mps>& is, const vector<mps>& should) const {
 
     if (is.empty()) {
         throw std::invalid_argument("ERROR: in generateRandomVector : is vector is empty");
     }
     if (should.empty()) {
-        throw std::invalid_argument("ERROR: in calculateVectorMeanPrecision : should vector is empty");
+        throw std::invalid_argument("ERROR: in calculateMeanPrecision : should vector is empty");
     }
     if (not this->parameters.working_precision_set) {
-        throw std::invalid_argument("ERROR: in calculateVectorMeanPrecision : working precision must be set beforehand.");
+        throw std::invalid_argument("ERROR: in calculateMeanPrecision : working precision must be set beforehand.");
     }
     if (not this->parameters.expected_precision_present) {
-        throw std::invalid_argument("ERROR: in calculateVectorMeanPrecision : expected precision must be set beforehand.");
+        throw std::invalid_argument("ERROR: in calculateMeanPrecision : expected precision must be set beforehand.");
     }
 
     mps sum(is[0].mantissa_length, is[0].exponent_length, 0.0);
@@ -1399,22 +1399,22 @@ mps ira::calculateVectorMeanPrecision(const vector<mps>& is, const vector<mps>& 
  * @param b the second vector.
  * @return the resulting vector after the addition.
  */
-vector<mps> ira::vectorAddition(const vector<mps>& a, const vector<mps>& b) {
+vector<mps> ira::add(const vector<mps>& a, const vector<mps>& b) {
 
     if (a.empty()) {
-        throw std::invalid_argument("ERROR: in vectorAddition: a is empty");
+        throw std::invalid_argument("ERROR: in add: a is empty");
     }
     if (b.empty()) {
-        throw std::invalid_argument("ERROR: in vectorAddition: b is empty");
+        throw std::invalid_argument("ERROR: in add: b is empty");
     }
     if (a.size() != b.size()) {
-        throw std::invalid_argument("ERROR: in vectorAddition: dimensions of a and b do not match");
+        throw std::invalid_argument("ERROR: in add: dimensions of a and b do not match");
     }
     if (a[0].exponent_length != b[0].exponent_length) {
-        throw std::invalid_argument("ERROR: in vectorAddition: exponents do not match");
+        throw std::invalid_argument("ERROR: in add: exponents do not match");
     }
     if (a[0].mantissa_length != b[0].mantissa_length) {
-        throw std::invalid_argument("ERROR: in vectorAddition: mantissas do not match");
+        throw std::invalid_argument("ERROR: in add: mantissas do not match");
     }
 
     vector<mps> result(a.size(), mps(a[0].mantissa_length, a[0].exponent_length, 0.0));
@@ -1433,22 +1433,22 @@ vector<mps> ira::vectorAddition(const vector<mps>& a, const vector<mps>& b) {
  * @param b the second vector which is the amount to subtract.
  * @return the resulting vector after the subtraction.
  */
-vector<mps> ira::vectorSubtraction(const vector<mps>& a, const vector<mps>& b) {
+vector<mps> ira::subtract(const vector<mps>& a, const vector<mps>& b) {
 
     if (a.empty()) {
-        throw std::invalid_argument("ERROR: in vectorSubtraction: a is empty");
+        throw std::invalid_argument("ERROR: in subtract: a is empty");
     }
     if (b.empty()) {
-        throw std::invalid_argument("ERROR: in vectorSubtraction: b is empty");
+        throw std::invalid_argument("ERROR: in subtract: b is empty");
     }
     if (a.size() != b.size()) {
-        throw std::invalid_argument("ERROR: in vectorSubtraction: dimensions of a and b do not match");
+        throw std::invalid_argument("ERROR: in subtract: dimensions of a and b do not match");
     }
     if (a[0].exponent_length != b[0].exponent_length) {
-        throw std::invalid_argument("ERROR: in vectorSubtraction: exponents do not match");
+        throw std::invalid_argument("ERROR: in subtract: exponents do not match");
     }
     if (a[0].mantissa_length != b[0].mantissa_length) {
-        throw std::invalid_argument("ERROR: in vectorSubtraction: mantissas do not match");
+        throw std::invalid_argument("ERROR: in subtract: mantissas do not match");
     }
 
     vector<mps> result(a.size(), mps(a[0].mantissa_length, a[0].exponent_length, 0.0));
@@ -1468,22 +1468,23 @@ vector<mps> ira::vectorSubtraction(const vector<mps>& a, const vector<mps>& b) {
  * @param x the vector for the multiplication
  * @return the resulting vector from the multiplication.
  */
-vector<mps> ira::matrixVectorProduct(const vector<vector<mps>>& D, const vector<mps>& x) {
+
+vector<mps> ira::dotProduct(const vector<vector<mps>>& D, const vector<mps>& x) {
 
     if (D.empty()) {
-        throw std::invalid_argument("ERROR: in matrixVectorProduct: D is empty");
+        throw std::invalid_argument("ERROR: in dotProduct: D is empty");
     }
     if (x.empty()) {
-        throw std::invalid_argument("ERROR: in matrixVectorProduct: x is empty");
+        throw std::invalid_argument("ERROR: in dotProduct: x is empty");
     }
     if (D.size() != x.size()) {
-        throw std::invalid_argument("ERROR: in matrixVectorProduct: dimensions of D and x do not match");
+        throw std::invalid_argument("ERROR: in dotProduct: dimensions of D and x do not match");
     }
     if (D[0][0].exponent_length != x[0].exponent_length) {
-        throw std::invalid_argument("ERROR: in matrixVectorProduct: exponents do not match");
+        throw std::invalid_argument("ERROR: in dotProduct: exponents do not match");
     }
     if (D[0][0].mantissa_length != x[0].mantissa_length) {
-        throw std::invalid_argument("ERROR: in matrixVectorProduct: mantissas do not match");
+        throw std::invalid_argument("ERROR: in dotProduct: mantissas do not match");
     }
     vector<mps> y(x.size(), mps(D[0][0].mantissa_length, D[0][0].exponent_length, 0.0));
 
@@ -1575,7 +1576,7 @@ vector<mps> ira::multiplyWithSystemMatrix(vector<mps> x) const {
         throw std::invalid_argument("ERROR: in multiplyWithSystemMatrix: mantissas do not match");
     }
 
-    return matrixVectorProduct(this->A, x);
+    return dotProduct(this->A, x);
 }
 //-------------------------------
 
@@ -1829,14 +1830,14 @@ vector<mps> ira::irPLU(const vector<mps> &b) {
         //-------------------------------
         auto x_in_ur = x;
         ira::castVectorElements(ur[0], ur[1], &x_in_ur);
-        auto b_approx = ira::matrixVectorProduct(this->A, x_in_ur);
-        auto r = vectorSubtraction(b, b_approx);
+        auto b_approx = ira::dotProduct(this->A, x_in_ur);
+        auto r = subtract(b, b_approx);
         //-------------------------------
 
         // check convergence (precision)
         //-------------------------------
         if(this->parameters.expected_precision_present){
-            auto mean_precision = ira::calculateVectorMeanPrecision(b_approx, b);
+            auto mean_precision = ira::calculateMeanPrecision(b_approx, b);
             //cout << "iteration " << i << ":   " << mean_precision << endl;
             if(mean_precision >= this->parameters.expected_precision){
                 this->evaluation.iterations_needed = i+1;
@@ -1850,7 +1851,7 @@ vector<mps> ira::irPLU(const vector<mps> &b) {
         // check convergence (error)
         //-------------------------------
         if(this->parameters.expected_error_present){
-            //auto norm = vectorNorm_L1(r);
+            //auto norm = calculateNorm_L1(r);
             auto norm = calculateVectorMean(r);
             if(norm <= this->parameters.expected_error){
                 this->evaluation.iterations_needed = i+1;
@@ -1876,7 +1877,7 @@ vector<mps> ira::irPLU(const vector<mps> &b) {
         // n precision u.
         //-------------------------------
         ira::castVectorElements(u[0], u[1], &d);
-        x = vectorAddition(x, d);
+        x = add(x, d);
         //-------------------------------
 
 

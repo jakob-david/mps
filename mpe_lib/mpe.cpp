@@ -893,7 +893,7 @@ vector<vector<long double>> mpe::compareMVM(unsigned long iter_system, unsigned 
         ira IRA(matrix_size, 52, 11);
         IRA.setRandomRange(this->parameters.random_lower_bound, this->parameters.random_upper_bound);
         IRA.setRandomMatrix();
-        auto x_mps = IRA.generateRandomVector(52, 11, matrix_size);
+        auto x_mps = IRA.generateRandomVector(matrix_size, 52, 11);
         start = std::chrono::high_resolution_clock::now();
         for(unsigned long i = 0; i < iterations; i++){
             IRA.multiplyWithSystemMatrix(x_mps);
@@ -1132,7 +1132,7 @@ vector<vector<long double>> mpe::compareIR(unsigned long max_iter, unsigned long
         IRA.setWorkingPrecision(52, 11);
         IRA.setLowerPrecision(23, 8);
 
-        auto b_mps = IRA.generateRandomVector(52, 11, matrix_size);
+        auto b_mps = IRA.generateRandomVector(matrix_size, 52, 11);
 
         start = std::chrono::high_resolution_clock::now();
         for(unsigned long i = 0; i < iterations; i++){

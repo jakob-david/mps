@@ -1,14 +1,14 @@
 #include "gtest/gtest.h"
 #include "ira.h"
 
-TEST(vectorNorm_L1, exception_vector_empty) {
+TEST(calculateNorm_L1, exception_vector_empty) {
 
     vector<mps> mps_vector;
 
-    EXPECT_ANY_THROW(auto ret = ira::vectorNorm_L1(mps_vector));
+    EXPECT_ANY_THROW(auto ret = ira::calculateNorm_L1(mps_vector));
 }
 
-TEST(vectorNorm_L1, simple_1_float) {
+TEST(calculateNorm_L1, simple_1_float) {
 
     std::string should = "45.00";
 
@@ -17,13 +17,13 @@ TEST(vectorNorm_L1, simple_1_float) {
 
     vector<double> double_vector{ 1, 2, 3, 4, 5, 6, 7, 8, 9};
     auto mps_vector = ira::double_to_mps(mantissa_length, exponent_length, double_vector);
-    auto result = ira::vectorNorm_L1(mps_vector);
+    auto result = ira::calculateNorm_L1(mps_vector);
 
 
     EXPECT_EQ(should, result.to_string(2));
 }
 
-TEST(vectorNorm_L1, simple_1_double) {
+TEST(calculateNorm_L1, simple_1_double) {
 
     std::string should = "45.00000000";
 
@@ -32,14 +32,14 @@ TEST(vectorNorm_L1, simple_1_double) {
 
     vector<double> double_vector{ 1, 2, 3, 4, 5, 6, 7, 8, 9};
     auto mps_vector = ira::double_to_mps(mantissa_length, exponent_length, double_vector);
-    auto result = ira::vectorNorm_L1(mps_vector);
+    auto result = ira::calculateNorm_L1(mps_vector);
 
 
     EXPECT_EQ(should, result.to_string(8));
 }
 
 
-TEST(vectorAddition, exception_first_vector_empty) {
+TEST(add, exception_first_vector_empty) {
 
     unsigned long mantissa_length = 23;
     unsigned long exponent_length = 8;
@@ -48,10 +48,10 @@ TEST(vectorAddition, exception_first_vector_empty) {
     vector<double> second_double{2, 2, 2, 2};
     auto second = ira::double_to_mps(mantissa_length, exponent_length, second_double);
 
-    EXPECT_ANY_THROW(auto tmp = ira::vectorAddition(first, second));
+    EXPECT_ANY_THROW(auto tmp = ira::add(first, second));
 }
 
-TEST(vectorAddition, exception_second_vector_empty) {
+TEST(add, exception_second_vector_empty) {
 
     unsigned long mantissa_length = 23;
     unsigned long exponent_length = 8;
@@ -61,10 +61,10 @@ TEST(vectorAddition, exception_second_vector_empty) {
 
     vector<mps> second;
 
-    EXPECT_ANY_THROW(auto tmp = ira::vectorAddition(first, second));
+    EXPECT_ANY_THROW(auto tmp = ira::add(first, second));
 }
 
-TEST(vectorAddition, exception_not_same_size) {
+TEST(add, exception_not_same_size) {
 
     unsigned long mantissa_length = 23;
     unsigned long exponent_length = 8;
@@ -74,10 +74,10 @@ TEST(vectorAddition, exception_not_same_size) {
     vector<double> second_double{2, 2, 2, 2};
     auto second = ira::double_to_mps(mantissa_length, exponent_length, second_double);
 
-    EXPECT_ANY_THROW(auto tmp = ira::vectorAddition(first, second));
+    EXPECT_ANY_THROW(auto tmp = ira::add(first, second));
 }
 
-TEST(vectorAddition, exception_exponent_not_same_size) {
+TEST(add, exception_exponent_not_same_size) {
 
     unsigned long mantissa_length = 23;
     unsigned long exponent_length = 8;
@@ -87,10 +87,10 @@ TEST(vectorAddition, exception_exponent_not_same_size) {
     vector<double> second_double{2, 2, 2, 2};
     auto second = ira::double_to_mps(mantissa_length, exponent_length, second_double);
 
-    EXPECT_ANY_THROW(auto tmp = ira::vectorAddition(first, second));
+    EXPECT_ANY_THROW(auto tmp = ira::add(first, second));
 }
 
-TEST(vectorAddition, exception_mantissa_not_same_size) {
+TEST(add, exception_mantissa_not_same_size) {
 
     unsigned long mantissa_length = 23;
     unsigned long exponent_length = 8;
@@ -100,10 +100,10 @@ TEST(vectorAddition, exception_mantissa_not_same_size) {
     vector<double> second_double{2, 2, 2, 2};
     auto second = ira::double_to_mps(mantissa_length-1, exponent_length, second_double);
 
-    EXPECT_ANY_THROW(auto tmp = ira::vectorAddition(first, second));
+    EXPECT_ANY_THROW(auto tmp = ira::add(first, second));
 }
 
-TEST(vectorAddition, simple_1_float) {
+TEST(add, simple_1_float) {
 
     std::string should = "4.00, 4.00, 4.00, 4.00";
 
@@ -116,13 +116,13 @@ TEST(vectorAddition, simple_1_float) {
     auto second = ira::double_to_mps(mantissa_length, exponent_length, second_double);
 
 
-    auto result = ira::vectorAddition(first, second);
+    auto result = ira::add(first, second);
 
 
     EXPECT_EQ(should, ira::to_string(result, 2));
 }
 
-TEST(vectorAddition, simple_1_double) {
+TEST(add, simple_1_double) {
 
     std::string should = "4.00000000, 4.00000000, 4.00000000, 4.00000000";
 
@@ -135,14 +135,14 @@ TEST(vectorAddition, simple_1_double) {
     auto second = ira::double_to_mps(mantissa_length, exponent_length, second_double);
 
 
-    auto result = ira::vectorAddition(first, second);
+    auto result = ira::add(first, second);
 
 
     EXPECT_EQ(should, ira::to_string(result, 8));
 }
 
 
-TEST(vectorSubtraction, exception_first_vector_empty) {
+TEST(subtract, exception_first_vector_empty) {
 
     unsigned long mantissa_length = 23;
     unsigned long exponent_length = 8;
@@ -151,10 +151,10 @@ TEST(vectorSubtraction, exception_first_vector_empty) {
     vector<double> second_double{2, 2, 2, 2};
     auto second = ira::double_to_mps(mantissa_length, exponent_length, second_double);
 
-    EXPECT_ANY_THROW(auto tmp = ira::vectorSubtraction(first, second));
+    EXPECT_ANY_THROW(auto tmp = ira::subtract(first, second));
 }
 
-TEST(vectorSubtraction, exception_second_vector_empty) {
+TEST(subtract, exception_second_vector_empty) {
 
     unsigned long mantissa_length = 23;
     unsigned long exponent_length = 8;
@@ -164,10 +164,10 @@ TEST(vectorSubtraction, exception_second_vector_empty) {
 
     vector<mps> second;
 
-    EXPECT_ANY_THROW(auto tmp = ira::vectorSubtraction(first, second));
+    EXPECT_ANY_THROW(auto tmp = ira::subtract(first, second));
 }
 
-TEST(vectorSubtraction, exception_not_same_size) {
+TEST(subtract, exception_not_same_size) {
 
     unsigned long mantissa_length = 23;
     unsigned long exponent_length = 8;
@@ -177,10 +177,10 @@ TEST(vectorSubtraction, exception_not_same_size) {
     vector<double> second_double{2, 2, 2, 2};
     auto second = ira::double_to_mps(mantissa_length, exponent_length, second_double);
 
-    EXPECT_ANY_THROW(auto tmp = ira::vectorSubtraction(first, second));
+    EXPECT_ANY_THROW(auto tmp = ira::subtract(first, second));
 }
 
-TEST(vectorSubtraction, exception_exponent_not_same_size) {
+TEST(subtract, exception_exponent_not_same_size) {
 
     unsigned long mantissa_length = 23;
     unsigned long exponent_length = 8;
@@ -190,10 +190,10 @@ TEST(vectorSubtraction, exception_exponent_not_same_size) {
     vector<double> second_double{2, 2, 2, 2};
     auto second = ira::double_to_mps(mantissa_length, exponent_length, second_double);
 
-    EXPECT_ANY_THROW(auto tmp = ira::vectorSubtraction(first, second));
+    EXPECT_ANY_THROW(auto tmp = ira::subtract(first, second));
 }
 
-TEST(vectorSubtraction, exception_mantissa_not_same_size) {
+TEST(subtract, exception_mantissa_not_same_size) {
 
     unsigned long mantissa_length = 23;
     unsigned long exponent_length = 8;
@@ -203,10 +203,10 @@ TEST(vectorSubtraction, exception_mantissa_not_same_size) {
     vector<double> second_double{2, 2, 2, 2};
     auto second = ira::double_to_mps(mantissa_length-1, exponent_length, second_double);
 
-    EXPECT_ANY_THROW(auto tmp = ira::vectorSubtraction(first, second));
+    EXPECT_ANY_THROW(auto tmp = ira::subtract(first, second));
 }
 
-TEST(vectorSubtraction, simple_1_float) {
+TEST(subtract, simple_1_float) {
 
     std::string should = "0.00, 0.00, 0.00, 0.00";
 
@@ -219,13 +219,13 @@ TEST(vectorSubtraction, simple_1_float) {
     auto second = ira::double_to_mps(mantissa_length, exponent_length, second_double);
 
 
-    auto result = ira::vectorSubtraction(first, second);
+    auto result = ira::subtract(first, second);
 
 
     EXPECT_EQ(should, ira::to_string(result, 2));
 }
 
-TEST(vectorSubtraction, simple_1_double) {
+TEST(subtract, simple_1_double) {
 
     std::string should = "0.00000000, 0.00000000, 0.00000000, 0.00000000";
 
@@ -238,14 +238,14 @@ TEST(vectorSubtraction, simple_1_double) {
     auto second = ira::double_to_mps(mantissa_length, exponent_length, second_double);
 
 
-    auto result = ira::vectorSubtraction(first, second);
+    auto result = ira::subtract(first, second);
 
 
     EXPECT_EQ(should, ira::to_string(result, 8));
 }
 
 
-TEST(matrixVectorProduct, exception_D_empty) {
+TEST(dotProduct, exception_D_empty) {
 
     unsigned long mantissa_length = 23;
     unsigned long exponent_length = 8;
@@ -254,10 +254,10 @@ TEST(matrixVectorProduct, exception_D_empty) {
     vector<double> x_double{2, 2, 2, 2};
     auto x = ira::double_to_mps(mantissa_length, exponent_length, x_double);
 
-    EXPECT_ANY_THROW(auto tmp = ira::matrixVectorProduct(D, x));
+    EXPECT_ANY_THROW(auto tmp = ira::dotProduct(D, x));
 }
 
-TEST(matrixVectorProduct, exception_x_empty) {
+TEST(dotProduct, exception_x_empty) {
 
     unsigned long mantissa_length = 23;
     unsigned long exponent_length = 8;
@@ -266,10 +266,10 @@ TEST(matrixVectorProduct, exception_x_empty) {
     auto D = ira::double_to_mps(mantissa_length, exponent_length, D_double);
     vector<mps> x;
 
-    EXPECT_ANY_THROW(auto tmp = ira::matrixVectorProduct(D, x));
+    EXPECT_ANY_THROW(auto tmp = ira::dotProduct(D, x));
 }
 
-TEST(matrixVectorProduct, exception_dimensions_not_the_same) {
+TEST(dotProduct, exception_dimensions_not_the_same) {
 
     unsigned long mantissa_length = 23;
     unsigned long exponent_length = 8;
@@ -279,10 +279,10 @@ TEST(matrixVectorProduct, exception_dimensions_not_the_same) {
     vector<double> x_double{2, 2, 2, 2};
     auto x = ira::double_to_mps(mantissa_length, exponent_length, x_double);
 
-    EXPECT_ANY_THROW(auto tmp = ira::matrixVectorProduct(D, x));
+    EXPECT_ANY_THROW(auto tmp = ira::dotProduct(D, x));
 }
 
-TEST(matrixVectorProduct, exception_mantissas_not_the_same) {
+TEST(dotProduct, exception_mantissas_not_the_same) {
 
     unsigned long mantissa_length = 23;
     unsigned long exponent_length = 8;
@@ -292,10 +292,10 @@ TEST(matrixVectorProduct, exception_mantissas_not_the_same) {
     vector<double> x_double{2, 2};
     auto x = ira::double_to_mps(mantissa_length, exponent_length, x_double);
 
-    EXPECT_ANY_THROW(auto tmp = ira::matrixVectorProduct(D, x));
+    EXPECT_ANY_THROW(auto tmp = ira::dotProduct(D, x));
 }
 
-TEST(matrixVectorProduct, exception_exponents_not_the_same) {
+TEST(dotProduct, exception_exponents_not_the_same) {
 
     unsigned long mantissa_length = 23;
     unsigned long exponent_length = 8;
@@ -305,10 +305,10 @@ TEST(matrixVectorProduct, exception_exponents_not_the_same) {
     vector<double> x_double{2, 2};
     auto x = ira::double_to_mps(mantissa_length, exponent_length-1, x_double);
 
-    EXPECT_ANY_THROW(auto tmp = ira::matrixVectorProduct(D, x));
+    EXPECT_ANY_THROW(auto tmp = ira::dotProduct(D, x));
 }
 
-TEST(matrixVectorProduct, simple_1_float) {
+TEST(dotProduct, simple_1_float) {
 
     std::string should = "8.00, 8.00";
 
@@ -320,12 +320,12 @@ TEST(matrixVectorProduct, simple_1_float) {
     vector<double> x_double{2, 2};
     auto x = ira::double_to_mps(mantissa_length, exponent_length, x_double);
 
-   auto result = ira::matrixVectorProduct(D, x);
+   auto result = ira::dotProduct(D, x);
 
     EXPECT_EQ(should, ira::to_string(result, 2));
 }
 
-TEST(matrixVectorProduct, simple_1_double) {
+TEST(dotProduct, simple_1_double) {
 
     std::string should = "8.00000000, 8.00000000";
 
@@ -337,12 +337,12 @@ TEST(matrixVectorProduct, simple_1_double) {
     vector<double> x_double{2, 2};
     auto x = ira::double_to_mps(mantissa_length, exponent_length, x_double);
 
-    auto result = ira::matrixVectorProduct(D, x);
+    auto result = ira::dotProduct(D, x);
 
     EXPECT_EQ(should, ira::to_string(result, 8));
 }
 
-TEST(matrixVectorProduct, simple_2_float) {
+TEST(dotProduct, simple_2_float) {
 
     std::string should = "8.00, 18.00";
 
@@ -354,12 +354,12 @@ TEST(matrixVectorProduct, simple_2_float) {
     vector<double> x_double{2, 3};
     auto x = ira::double_to_mps(mantissa_length, exponent_length, x_double);
 
-    auto result = ira::matrixVectorProduct(D, x);
+    auto result = ira::dotProduct(D, x);
 
     EXPECT_EQ(should, ira::to_string(result, 2));
 }
 
-TEST(matrixVectorProduct, simple_2_double) {
+TEST(dotProduct, simple_2_double) {
 
     std::string should = "8.00000000, 18.00000000";
 
@@ -371,7 +371,7 @@ TEST(matrixVectorProduct, simple_2_double) {
     vector<double> x_double{2, 3};
     auto x = ira::double_to_mps(mantissa_length, exponent_length, x_double);
 
-    auto result = ira::matrixVectorProduct(D, x);
+    auto result = ira::dotProduct(D, x);
 
     EXPECT_EQ(should, ira::to_string(result, 8));
 }
