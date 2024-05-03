@@ -206,7 +206,7 @@ vector<vector<to>> convert(const vector<vector<from>>& matrix){
 //-------------------------------
 
 
-// PLU solver
+// PLU decomposition
 //-------------------------------
 template <typename T>
 void interchangeRow(vector<vector<T>>& matrix, unsigned long row_one, unsigned long row_two, unsigned long start, unsigned long end){
@@ -310,9 +310,13 @@ vector<vector<vector<to>>> PLU(const vector<vector<from>>& A, vector<unsigned lo
 
     return ret;
 }
+//-------------------------------
 
+
+// fw and bw substitution
+//-------------------------------
 template<typename T>
-vector<T> fS(vector<vector<T>> L, vector<T> b){
+vector<T> fS(const vector<vector<T>>& L, const vector<T>& b){
 
     vector<T> x;
     x.resize(b.size());
@@ -336,7 +340,7 @@ vector<T> fS(vector<vector<T>> L, vector<T> b){
 }
 
 template<typename T>
-vector<T> bS(vector<vector<T>> U, vector<T> b){
+vector<T> bS(const vector<vector<T>>& U, const vector<T>& b){
 
     vector<T> x;
     x.resize(b.size());
@@ -359,6 +363,38 @@ vector<T> bS(vector<vector<T>> U, vector<T> b){
 
         x[i] = (b[i] - sum) / U[i][i];
     }
+
+    return x;
+}
+//-------------------------------
+
+
+// solver
+//-------------------------------
+template<typename T>
+vector<T> permuteVector(const vector<unsigned long>& P, const vector<T>& x){
+
+    vector<T> result;
+    result.resize(x.size());
+
+    for(unsigned long idx = 0; idx < x.size(); idx++){
+        result[idx] = x[P[idx]];
+    }
+
+    return result;
+}
+
+
+template<typename T>
+vector<T> directPLU(const vector<vector<T>>& A, const vector<T>& b){
+
+    vector<unsigned long> P;
+    auto LU = PLU<T, T>(A, &P);
+
+
+    auto x = permuteVector<T>(P, b);
+    x = fS<T>(LU[0], x);
+    x = bS<T>(LU[1], x);
 
     return x;
 }

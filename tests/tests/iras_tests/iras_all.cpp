@@ -350,7 +350,7 @@ TEST(c, matrix){
 //-------------------------------
 
 
-// PLU solver
+// PLU sdecomposition
 //-------------------------------
 TEST(interRow, simple_1){
 
@@ -389,7 +389,11 @@ TEST(plu, simple_3x3_double_1) {
     EXPECT_EQ(P, P_expected);
 
 }
+//-------------------------------
 
+
+// fw and bw substitution
+//-------------------------------
 TEST(fS, simple_1){
 
     vector<vector<double>> L = {{-4.3, 0, 0, 0}, {2, -5.2, 0, 0}, {-18, 7.4, -1, 0}, {3, -0.34, 4.2321, 1.98}};
@@ -410,6 +414,34 @@ TEST(bS, simple_1){
     vector<double> x_should = {7.6168809817241199, -0.28752840497026538, -4.670035778175313, 0.0079069767441860474};
 
     auto x = bS<double>(U, b);
+
+    EXPECT_EQ(x_should, x);
+}
+//-------------------------------
+
+
+// solver
+//-------------------------------
+TEST(pV, simple_1){
+
+    vector<unsigned long> P = {0, 2, 1, 3};
+    vector<double> b = {2, 3, 4, 5};
+
+    vector<double> x_should = {2, 4, 3, 5};
+
+    auto x = permuteVector<double>(P, b);
+
+    EXPECT_EQ(x_should, x);
+}
+
+TEST(directPLU, simple_1){
+
+    vector<vector<double>> A = {{5, 1, 3, 4}, {1, 1, 1, 2}, {1, 2, 1, 3}, {4, 2, -1, 3}};
+    vector<double> b = {32, 14, 20, 17};
+
+    vector<double> x_should = {0.99999999999999933, 1.999999999999996, 2.9999999999999982, 4.0000000000000027};
+
+    auto x = directPLU(A, b);
 
     EXPECT_EQ(x_should, x);
 }
