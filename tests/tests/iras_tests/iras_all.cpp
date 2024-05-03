@@ -277,8 +277,32 @@ TEST(gRM, sparcity_3){
 }
 //-------------------------------
 
-// matrix vector product
+// operators
 //-------------------------------
+TEST(add, simple_1){
+
+    vector<double> a = {1, 2, 3, 4};
+    vector<double> b = {2, 3, -4, -5};
+
+    vector<double> x_should = {3, 5, -1, -1};
+
+    auto x = add<double>(a, b);
+
+    EXPECT_EQ(x_should, x);
+}
+
+TEST(sub, simple_1){
+
+    vector<double> a = {1, 2, 3, 4};
+    vector<double> b = {2, 3, -4, -5};
+
+    vector<double> x_should = {-1, -1, 7, 9};
+
+    auto x = subtract<double>(a, b);
+
+    EXPECT_EQ(x_should, x);
+}
+
 TEST(dP, matrix_vector){
 
     vector<double> vec = {1, 2, 3};
@@ -350,7 +374,7 @@ TEST(c, matrix){
 //-------------------------------
 
 
-// PLU sdecomposition
+// PLU decomposition
 //-------------------------------
 TEST(interRow, simple_1){
 
@@ -372,7 +396,7 @@ TEST(gMU_idx, simple_1){
     EXPECT_EQ(3, result);
 }
 
-TEST(plu, simple_3x3_double_1) {
+TEST(plu, simple_1) {
 
 
     vector<vector<double>> A {{1,2,3},{4,5,6},{7,8,9}};
@@ -434,6 +458,7 @@ TEST(pV, simple_1){
     EXPECT_EQ(x_should, x);
 }
 
+
 TEST(directPLU, simple_1){
 
     vector<vector<double>> A = {{5, 1, 3, 4}, {1, 1, 1, 2}, {1, 2, 1, 3}, {4, 2, -1, 3}};
@@ -442,6 +467,18 @@ TEST(directPLU, simple_1){
     vector<double> x_should = {0.99999999999999933, 1.999999999999996, 2.9999999999999982, 4.0000000000000027};
 
     auto x = directPLU(A, b);
+
+    EXPECT_EQ(x_should, x);
+}
+
+TEST(irPLU, simple_1){
+
+    vector<vector<long double>> A = {{5, 1, 3, 4}, {1, 1, 1, 2}, {1, 2, 1, 3}, {4, 2, -1, 3}};
+    vector<long double> b = {32, 14, 20, 17};
+
+    vector<double> x_should = {0.99999999999999889, 1.9999999999999973, 2.9999999999999991, 4.0000000000000027};
+
+    auto x = irPLU<float, double, long double>(A, b, 10);
 
     EXPECT_EQ(x_should, x);
 }

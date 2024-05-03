@@ -128,8 +128,34 @@ vector<vector<T>> generateRandomMatrix(unsigned long size, T lower_bound, T uppe
 //-------------------------------
 
 
-// dot product
+// operators
 //-------------------------------
+template<typename T>
+vector<T> add(const vector<T>& a, const vector<T>& b){
+
+    vector<T> result;
+    result.resize(a.size());
+
+    for(unsigned long idx = 0; idx < result.size(); idx++){
+        result[idx] = a[idx] + b[idx];
+    }
+
+    return result;
+}
+
+template<typename T>
+vector<T> subtract(const vector<T>& minuend, const vector<T>& subtrahend){
+
+    vector<T> result;
+    result.resize(minuend.size());
+
+    for(unsigned long idx = 0; idx < result.size(); idx++){
+        result[idx] = minuend[idx] - subtrahend[idx];
+    }
+
+    return result;
+}
+
 template <typename T>
 vector<T> dotProduct(const vector<vector<T>>& matrix, const vector<T> vec){
 
@@ -397,5 +423,50 @@ vector<T> directPLU(const vector<vector<T>>& A, const vector<T>& b){
     x = bS<T>(LU[1], x);
 
     return x;
+}
+
+template<typename ul, typename u, typename ur>
+vector<u> irPLU(const vector<vector<ur>>& A, const vector<ur>& b, unsigned long max_iter){
+
+    vector<unsigned long> P;
+    auto LU = PLU<ur, ul>(A, P);
+
+    // calculate x_0
+    //-------------------------------
+    auto x_ul = permuteVector<ul>(P, convert<ur, ul>(b));
+    x_ul = fS<ul>(LU[0], x_ul);
+    x_ul = bS<ul>(LU[1], x_ul);
+    auto x_u = convert<ul, u>(x_ul);
+    //-------------------------------
+
+
+    for(unsigned long iter = 0; iter < max_iter; iter++){
+
+        // calculate: r_i = b − A * x_i
+        // in precision: ur
+        //-------------------------------
+        auto x_in_ur = convert<u, ur>(x_u);
+        auto b_approx = dotProduct<ur>(A, x_in_ur);
+        auto r_ur = subtract<ur>(b, b_approx);
+        //-------------------------------
+
+        // solve: A * d_i = r_i
+        // in precision: ul
+        //-------------------------------
+        auto r_ul = convert<ur, ul>(r_ur);
+        r_ul = permuteVector<ul>(P, r_ul);
+        auto d = fS<ul>(LU[0], r_ul);
+        d = bS<ul>(LU[1], d);
+        //-------------------------------
+
+        // calculate: x_i+1 = x_i + d_i i
+        // n precision u.
+        //-------------------------------
+        auto d_u = convert<ul, u>(d);
+        x_u = add<u>(x_u, d_u);
+        //-------------------------------
+    }
+
+    return x_u;
 }
 //-------------------------------
