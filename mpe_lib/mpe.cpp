@@ -1136,7 +1136,7 @@ vector<vector<long double>> mpe::compareIR(unsigned long max_iter, unsigned long
 
         start = std::chrono::high_resolution_clock::now();
         for(unsigned long i = 0; i < iterations; i++){
-            IRA.solveLU(b_mps);
+            IRA.directPLU(b_mps);
         }
         finish = std::chrono::high_resolution_clock::now();
         result_d = std::chrono::duration_cast<std::chrono::nanoseconds>(finish-start).count();

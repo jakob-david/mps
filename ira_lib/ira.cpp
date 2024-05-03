@@ -1752,10 +1752,10 @@ vector<mps> ira::backwardSubstitution(const vector<mps>& b) const {
  * @param b the solution vector of the system.
  * @return the solution of the system as an mps object.
  */
-vector<mps> ira::solveLU(const vector<mps>& b){
+vector<mps> ira::directPLU(const vector<mps>& b){
 
     if (b.empty()) {
-        throw std::invalid_argument("ERROR: in solveLU: b is empty");
+        throw std::invalid_argument("ERROR: in directPLU: b is empty");
     }
 
     this->PLU_decomposition(this->parameters.ur_m_l, this->parameters.ur_e_l);
@@ -2155,21 +2155,6 @@ vector<double> ira::solveLU_double(const vector<double>& b){
  */
 unsigned long ira::get_idx(unsigned long row, unsigned long column) const{
     return this->parameters.n * row + column;
-}
-
-/**
- * Since the matrices are saved as a vector this function converts 2D-coordinates of the matrix to the 1D-index
- * used for the vector.
- *
- * The needed variable n is given via a variable.
- *
- * @param row the row index of the element of the matrix
- * @param column the column index of the element of the matrix
- * @param n the dimension of the matrix.
- * @return the resulting 1D-index.
- */
-unsigned long ira::get_idx(unsigned long row, unsigned long column, unsigned long n){
-    return n * row + column;
 }
 
 /**

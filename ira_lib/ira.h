@@ -200,8 +200,7 @@ public:
     [[nodiscard]] vector<mps> backwardSubstitution(const vector<mps>& b) const;
     // TODO: rename
     vector<mps> iterativeRefinementLU(const vector<mps> &b);
-    // TODO: rename
-    vector<mps> solveLU(const vector<mps>& b);
+    vector<mps> directPLU(const vector<mps>& b);
     //-------------------------------
 
     // algorithms using system data types
@@ -215,7 +214,6 @@ private:
     // helper functions
     //-------------------------------
     [[nodiscard]] unsigned long get_idx(unsigned long row, unsigned long column) const;
-    [[nodiscard]] static unsigned long get_idx(unsigned long row, unsigned long column, unsigned long n);
     [[nodiscard]] unsigned long get_max_U_idx(unsigned long column, unsigned long start) const;
     static void interchangeRow(vector<vector<mps>>* matrix, unsigned long row_one, unsigned long row_two, unsigned long start, unsigned long end) ;
     static vector<mps> permuteVector(const vector<mps> &permutation_vector, const vector<mps> &matrix);
