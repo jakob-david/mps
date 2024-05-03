@@ -377,7 +377,7 @@ TEST(matrixVectorProduct, simple_2_double) {
 }
 
 
-TEST(matrixMatrixProduct, simple_1) {
+TEST(dotProduct, simple_1) {
 
     unsigned long mantissa_length = 52;
     unsigned long exponent_length = 11;
@@ -416,7 +416,7 @@ TEST(matrixMatrixProduct, simple_1) {
     B.push_back(B_row_two);
     B.push_back(B_row_three);
 
-    auto result = ira::matrixMatrixProduct(A, B);
+    auto result = ira::dotProduct(A, B);
 
     EXPECT_EQ(36, result[0][0].getValue());
     EXPECT_EQ(42, result[0][1].getValue());

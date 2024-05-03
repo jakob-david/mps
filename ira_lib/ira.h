@@ -187,8 +187,7 @@ public:
     [[nodiscard]] static vector<mps> vectorSubtraction(const vector<mps>& a, const vector<mps>& b);
     // TODO: rename
     [[nodiscard]] static vector<mps> matrixVectorProduct(const vector<vector<mps>>& D, const vector<mps>& x);
-    // TODO: rename
-    static vector<vector<mps>> matrixMatrixProduct(const vector<vector<mps>>& A, const vector<vector<mps>>& B);
+    static vector<vector<mps>> dotProduct(const vector<vector<mps>>& A, const vector<vector<mps>>& B);
     vector<mps> multiplyWithSystemMatrix(vector<mps> x) const;
     //-------------------------------
 

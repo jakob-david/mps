@@ -1504,22 +1504,22 @@ vector<mps> ira::matrixVectorProduct(const vector<vector<mps>>& D, const vector<
  * @param B the first matrix for the multiplication
  * @return the resulting vector from the multiplication.
  */
-vector<vector<mps>> ira::matrixMatrixProduct(const vector<vector<mps>>& A, const vector<vector<mps>>& B){
+vector<vector<mps>> ira::dotProduct(const vector<vector<mps>>& A, const vector<vector<mps>>& B){
 
     if (A.empty()) {
-        throw std::invalid_argument("ERROR: in matrixMatrixProduct: A is empty");
+        throw std::invalid_argument("ERROR: in dotProduct: A is empty");
     }
     if (B.empty()) {
-        throw std::invalid_argument("ERROR: in matrixMatrixProduct: B is empty");
+        throw std::invalid_argument("ERROR: in dotProduct: B is empty");
     }
     if (A.size() != B.size()) {
-        throw std::invalid_argument("ERROR: in matrixMatrixProduct: dimensions of A and B do not match");
+        throw std::invalid_argument("ERROR: in dotProduct: dimensions of A and B do not match");
     }
     if (A[0][0].exponent_length != B[0][0].exponent_length) {
-        throw std::invalid_argument("ERROR: in matrixMatrixProduct: exponents do not match");
+        throw std::invalid_argument("ERROR: in dotProduct: exponents do not match");
     }
     if (B[0][0].mantissa_length != B[0][0].mantissa_length) {
-        throw std::invalid_argument("ERROR: in matrixMatrixProduct: mantissas do not match");
+        throw std::invalid_argument("ERROR: in dotProduct: mantissas do not match");
     }
 
     unsigned long mantissa_length = A[0][0].mantissa_length;

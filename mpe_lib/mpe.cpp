@@ -975,7 +975,7 @@ vector<vector<long double>> mpe::compareMMM(unsigned long iter_system, unsigned 
         auto B_mps = IRA.generateRandomMatrix(matrix_size, 52, 11);
         start = std::chrono::high_resolution_clock::now();
         for(unsigned long i = 0; i < iterations; i++){
-            ira::matrixMatrixProduct(A_mps, B_mps);
+            ira::dotProduct(A_mps, B_mps);
         }
         finish = std::chrono::high_resolution_clock::now();
         result_d = std::chrono::duration_cast<std::chrono::nanoseconds>(finish-start).count();
@@ -984,7 +984,7 @@ vector<vector<long double>> mpe::compareMMM(unsigned long iter_system, unsigned 
         ira::castMatrixElements(23, 8, B_mps);
         start = std::chrono::high_resolution_clock::now();
         for(unsigned long i = 0; i < iterations; i++){
-            ira::matrixMatrixProduct(A_mps, B_mps);
+            ira::dotProduct(A_mps, B_mps);
         }
         finish = std::chrono::high_resolution_clock::now();
         result_f = std::chrono::duration_cast<std::chrono::nanoseconds>(finish-start).count();
