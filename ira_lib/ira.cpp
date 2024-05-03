@@ -894,9 +894,9 @@ string ira::to_string(vector<mps> vec, int precision) {
  * @param exponent_length the new exponent length of the mps objects
  * @param vec the vector of mps objects which should be converted
  */
-void ira::cast(vector<mps>* vec, unsigned long mantissa_length, unsigned long exponent_length){
+void ira::cast(vector<mps>& vec, unsigned long mantissa_length, unsigned long exponent_length){
 
-    if ((*vec).empty()) {
+    if (vec.empty()) {
         throw std::invalid_argument("ERROR: in cast: vector is empty");
     }
     if (mantissa_length <= 0) {
@@ -907,11 +907,11 @@ void ira::cast(vector<mps>* vec, unsigned long mantissa_length, unsigned long ex
     }
 
 
-    if(mantissa_length == (*vec)[0].mantissa_length && exponent_length == (*vec)[0].exponent_length){
+    if(mantissa_length == vec[0].mantissa_length && exponent_length == vec[0].exponent_length){
         return;
     }
 
-    for(auto & i : *vec){
+    for(auto & i : vec){
         i.cast(mantissa_length, exponent_length);
     }
 }
@@ -1761,7 +1761,7 @@ vector<mps> ira::directPLU(const vector<mps>& b){
 
     this->decompPLU(this->parameters.ur_m_l, this->parameters.ur_e_l);
     auto tmp_b = b;
-    ira::cast(&tmp_b, this->parameters.ur_m_l, this->parameters.ur_e_l);
+    ira::cast(tmp_b, this->parameters.ur_m_l, this->parameters.ur_e_l);
 
 
 
@@ -1814,12 +1814,12 @@ vector<mps> ira::irPLU(const vector<mps> &b) {
     // perform substitution to gain x_0
     //-------------------------------
     auto tmp_b = b;
-    ira::cast(&tmp_b, ul[0], ul[1]);
+    ira::cast(tmp_b, ul[0], ul[1]);
     auto x = ira::permuteVector(this->P, tmp_b);
 
     x = this->forwardSubstitution(x);
     x = this->backwardSubstitution(x);
-    ira::cast(&x, u[0], u[1]);
+    ira::cast(x, u[0], u[1]);
     //-------------------------------
 
 
@@ -1829,7 +1829,7 @@ vector<mps> ira::irPLU(const vector<mps> &b) {
         // in precision: ur
         //-------------------------------
         auto x_in_ur = x;
-        ira::cast(&x_in_ur, ur[0], ur[1]);
+        ira::cast(x_in_ur, ur[0], ur[1]);
         auto b_approx = ira::dotProduct(this->A, x_in_ur);
         auto r = subtract(b, b_approx);
         //-------------------------------
@@ -1866,7 +1866,7 @@ vector<mps> ira::irPLU(const vector<mps> &b) {
         // solve: A * d_i = r_i
         // in precision: ul
         //-------------------------------
-        ira::cast(&r, ul[0], ul[1]);
+        ira::cast(r, ul[0], ul[1]);
         r = ira::permuteVector(this->P, r);
         auto d = this->forwardSubstitution(r);
         d = this->backwardSubstitution(d);
@@ -1876,7 +1876,7 @@ vector<mps> ira::irPLU(const vector<mps> &b) {
         // calculate: x_i+1 = x_i + d_i i
         // n precision u.
         //-------------------------------
-        ira::cast(&d, u[0], u[1]);
+        ira::cast(d, u[0], u[1]);
         x = add(x, d);
         //-------------------------------
 

@@ -144,7 +144,7 @@ public:
 
     // cast functions
     //-------------------------------
-    static void cast(vector<mps>* vec, unsigned long mantissa_length, unsigned long exponent_length);
+    static void cast(vector<mps>& vec, unsigned long mantissa_length, unsigned long exponent_length);
     static void cast(vector<vector<mps>>& matrix, unsigned long mantissa_length, unsigned long exponent_length);
 
     void castSystemMatrix(unsigned long mantissa_length, unsigned long exponent_length);

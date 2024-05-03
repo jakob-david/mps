@@ -902,7 +902,7 @@ vector<vector<long double>> mpe::compareMVM(unsigned long iter_system, unsigned 
         result_d = std::chrono::duration_cast<std::chrono::nanoseconds>(finish-start).count();
 
         IRA.castSystemMatrix(23, 8);
-        ira::cast(&x_mps, 23, 8);
+        ira::cast(x_mps, 23, 8);
         start = std::chrono::high_resolution_clock::now();
         for(unsigned long i = 0; i < iterations; i++){
             IRA.multiplyWithSystemMatrix(x_mps);
@@ -1237,7 +1237,7 @@ vector<vector<vector<long double>>> mpe::evaluateArea_2D(bool output) const {
         // convert the system into the new precision
         IRA.castSystemMatrix(ur_mantissa_size, this->parameters.u_e_l);
         IRA.castExpectedResult(ur_mantissa_size, this->parameters.u_e_l);
-        ira::cast(&b, ur_mantissa_size, this->parameters.u_e_l);
+        ira::cast(b, ur_mantissa_size, this->parameters.u_e_l);
 
         // loop over all different mantissa sizes of u_l
         for(unsigned long ul_mantissa_size = this->parameters.ul_m_r_lower; ul_mantissa_size <= this->parameters.ul_m_r_upper; ul_mantissa_size++){
@@ -1326,7 +1326,7 @@ vector<vector<vector<long double>>> mpe::evaluateConvergence_2D(bool output) con
             IRA.castExpectedError(ur_mantissa_size, this->parameters.u_e_l);
         }
 
-        ira::cast(&b, ur_mantissa_size, this->parameters.u_e_l);
+        ira::cast(b, ur_mantissa_size, this->parameters.u_e_l);
 
         // loop over all different mantissa sizes of u_l
         for(unsigned long ul_mantissa_size = this->parameters.ul_m_r_lower; ul_mantissa_size <= this->parameters.ul_m_r_upper; ul_mantissa_size++){

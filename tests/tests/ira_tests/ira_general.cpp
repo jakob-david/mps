@@ -266,8 +266,8 @@ TEST(ExpectedResult, simple_1) {
 
     vector<double> expected_result_double = ira::mps_to_double(expected_result_mps);
     IRA.setExpectedResult(expected_result_mps);
-    ira::cast(&expected_result_mps, u_m_l, u_m_e);
-    ira::cast(&expected_result_mps, mantissa_length, exponent_length);
+    ira::cast(expected_result_mps, u_m_l, u_m_e);
+    ira::cast(expected_result_mps, mantissa_length, exponent_length);
 
     EXPECT_EQ(expected_result_mps, IRA.getExpectedResult_mps());
     EXPECT_EQ(expected_result_double, IRA.getExpectedResult_double());
@@ -1215,7 +1215,7 @@ TEST(cast, exception_vector_empty) {
 
     vector<mps> mps_vector;
 
-    EXPECT_ANY_THROW(ira::cast(&mps_vector, 52, 11));
+    EXPECT_ANY_THROW(ira::cast(mps_vector, 52, 11));
 }
 
 TEST(cast, exception_mantissa_too_small) {
@@ -1228,7 +1228,7 @@ TEST(cast, exception_mantissa_too_small) {
 
     auto mps_vector = ira::double_to_mps(23, 8, double_vector);
 
-    EXPECT_ANY_THROW(ira::cast(&mps_vector, 0, 11));
+    EXPECT_ANY_THROW(ira::cast(mps_vector, 0, 11));
 }
 
 TEST(cast, exception_exponent_too_small) {
@@ -1241,7 +1241,7 @@ TEST(cast, exception_exponent_too_small) {
 
     auto mps_vector = ira::double_to_mps(23, 8, double_vector);
 
-    EXPECT_ANY_THROW(ira::cast(&mps_vector, 52, 1));
+    EXPECT_ANY_THROW(ira::cast(mps_vector, 52, 1));
 }
 
 TEST(cast, float_to_double_1) {
@@ -1253,7 +1253,7 @@ TEST(cast, float_to_double_1) {
     double_vector.push_back(-0.34345);
 
     auto mps_vector = ira::double_to_mps(23, 8, double_vector);
-    ira::cast(&mps_vector, 52, 11);
+    ira::cast(mps_vector, 52, 11);
 
     EXPECT_EQ(ira::to_string(mps_vector, 2), "45.34, -32.00, 3463246.00, -0.34");
     EXPECT_EQ(52, mps_vector[0].mantissa_length);
@@ -1269,7 +1269,7 @@ TEST(cast, double_to_float_1) {
     double_vector.push_back(-0.34345);
 
     auto mps_vector = ira::double_to_mps(52, 11, double_vector);
-    ira::cast(&mps_vector, 23, 8);
+    ira::cast(mps_vector, 23, 8);
 
     EXPECT_EQ(ira::to_string(mps_vector, 2), "45.34, -32.00, 3463246.00, -0.34");
     EXPECT_EQ(23, mps_vector[0].mantissa_length);
