@@ -1695,7 +1695,6 @@ void mps::setValue(const double value) {
         bool carrier;
         ret.exponent = binaryAddition(dividend.exponent, subtrahend, &carrier);
 
-        // TODO: is there a more intelligent way
         if(carrier || allTrue(ret.exponent)){
             ret.mantissa.resize(ret.mantissa_length, false);
             ret.exponent.resize(ret.exponent_length, false);
