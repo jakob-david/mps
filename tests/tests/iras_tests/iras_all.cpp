@@ -8,6 +8,32 @@
 #include "../../../iras_lib/iras.cpp"
 
 
+
+// round
+//-------------------------------
+TEST(round, number){
+
+    double expected = 1.12;
+
+    double number = 1.12345;
+    EXPECT_NE(expected, number);
+
+    number = round(number, 0.01);
+    EXPECT_EQ(expected, number);
+}
+
+TEST(round, vector){
+
+    vector<double> expected = {1.12, -1.23, 100.02, 0.02, 0.03};
+    vector vec = {1.123542, -1.233523, 100.023523, 0.0235235, 0.027};
+
+    EXPECT_NE(expected, vec);
+
+    vec = round(vec, 0.01);
+    EXPECT_EQ(expected, vec);
+}
+//-------------------------------
+
 // to string
 //-------------------------------
 TEST(tS, vector){
@@ -468,7 +494,7 @@ TEST(directPLU, simple_1){
 
     auto x = directPLU(A, b);
 
-    EXPECT_EQ(x_should, round(x, 1.0000));
+    EXPECT_EQ(x_should, round(x, 0.0001));
 }
 
 TEST(irPLU, simple_1){
@@ -480,6 +506,6 @@ TEST(irPLU, simple_1){
 
     auto x = irPLU<float, double, long double>(A, b, 10);
 
-    EXPECT_EQ(x_should, round(x, 1.0000));
+    EXPECT_EQ(x_should, round(x, 0.0001));
 }
 //-------------------------------

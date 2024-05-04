@@ -11,14 +11,16 @@
 using namespace std;
 
 
+// rounding
+//-------------------------------
 template<typename T>
-T round(T value, T precision = 1.0)
+T round(T value, T precision)
 {
     return std::round(value / precision) * precision;
 }
 
 template<typename T>
-vector<T> round(vector<T> vec, T precision = 1.0)
+vector<T> round(vector<T> vec, T precision)
 {
     vector<T> ret;
     ret.resize(vec.size());
@@ -29,6 +31,7 @@ vector<T> round(vector<T> vec, T precision = 1.0)
 
     return ret;
 }
+//-------------------------------
 
 
 // toString
