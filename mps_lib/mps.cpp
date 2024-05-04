@@ -332,7 +332,6 @@ std::string mps::to_string(const int precision) const {
     vector<bool> max_error_exponent;
     max_error_exponent.reserve(this->exponent_length);
     for(auto i = precision; i > 0; i /= 2){
-        //max_error_exponent.push_back(i % 2);  // TODO: check if it is better if reversed
         max_error_exponent.insert(max_error_exponent.begin(), i % 2);
     }
     for(auto i = max_error_exponent.size(); i < this->exponent_length; i++){
@@ -346,8 +345,12 @@ std::string mps::to_string(const int precision) const {
     mps max_error = mps(this->mantissa_length, this->exponent_length);
     max_error.setZero(false);
 
-    if(not max_error_exponent[0]){ // if overflow happened TODO: check
+    if(not max_error_exponent[0]){ // if overflow happened
         max_error.setExponent(max_error_exponent);
+    } else {
+        cout << "WARNING: checkPrecision: value to small to check precision properly!\n";
+        max_error_exponent.resize(this->exponent_length, false);
+        max_error_exponent.back() = true;
     }
 
     auto diff = *this - compare;

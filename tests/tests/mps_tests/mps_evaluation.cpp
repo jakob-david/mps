@@ -148,7 +148,25 @@ TEST(checkPrecision, simple_5){
     EXPECT_FALSE(MPS_should.checkPrecision(MPS_is, 0));
 }
 
+TEST(checkPrecision, values_too_small){
 
+    mps MPS_1(52, 4, 8);
+    mps MPS_2(52, 4, 8);
+
+    bool result = true;
+    vector<bool> new_exponent = {0, 0, 1, 1};
+    MPS_1.setExponent(new_exponent);
+    MPS_2.setExponent(new_exponent);
+
+    testing::internal::CaptureStdout();
+    EXPECT_TRUE(result = MPS_1.checkPrecision(MPS_2, 3));
+    std::string output = testing::internal::GetCapturedStdout();
+
+    string should;
+    should = "WARNING: checkPrecision: value to small to check precision properly!\n";
+
+    EXPECT_EQ(should, output);
+}
 
 
 
