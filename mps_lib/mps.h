@@ -49,7 +49,7 @@ public:
     [[nodiscard]] bool isNaN() const;
 
     [[nodiscard]] std::string print() const;
-    [[nodiscard]] std::string to_string(int precision = -1) const;
+    [[nodiscard]] std::string toString(int precision = -1) const;
 
     // precision
     //-------------------------------

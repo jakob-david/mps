@@ -249,6 +249,6 @@ PYBIND11_MODULE(mps_library, mps_handle) {
 
             .def("getValue", &mps::getValue)
             .def("print", &mps::print)
-            .def("toString", &mps::to_string)
+            .def("toString", &mps::toString)
             ;
 }

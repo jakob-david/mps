@@ -776,7 +776,7 @@ string ira::toString(const char& matrix, const int precision) const {
 
         for(unsigned long row_idx = 0; row_idx < this->parameters.n; row_idx++){
             for(unsigned long col_idx = 0; col_idx < this->parameters.n; col_idx++){
-                ret.append(this->A[row_idx][col_idx].to_string(precision));
+                ret.append(this->A[row_idx][col_idx].toString(precision));
                 ret.append(", ");
             }
         }
@@ -792,7 +792,7 @@ string ira::toString(const char& matrix, const int precision) const {
 
         for(unsigned long row_idx = 0; row_idx < this->parameters.n; row_idx++){
             for(unsigned long col_idx = 0; col_idx < this->parameters.n; col_idx++){
-                ret.append(this->L[row_idx][col_idx].to_string(precision));
+                ret.append(this->L[row_idx][col_idx].toString(precision));
                 ret.append(", ");
             }
         }
@@ -808,7 +808,7 @@ string ira::toString(const char& matrix, const int precision) const {
 
         for(unsigned long row_idx = 0; row_idx < this->parameters.n; row_idx++){
             for(unsigned long col_idx = 0; col_idx < this->parameters.n; col_idx++){
-                ret.append(this->U[row_idx][col_idx].to_string(precision));
+                ret.append(this->U[row_idx][col_idx].toString(precision));
                 ret.append(", ");
             }
         }
@@ -873,10 +873,10 @@ string ira::toString(vector<mps> vec, int precision) {
         throw std::invalid_argument("ERROR: toString (vector): a is empty");
     }
 
-    auto ret = vec[0].to_string(precision);
+    auto ret = vec[0].toString(precision);
     for(unsigned long i = 1; i < vec.size(); i++) {
         ret.append(", ");
-        ret.append(vec[i].to_string(precision));
+        ret.append(vec[i].toString(precision));
     }
 
     return ret;

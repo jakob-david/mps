@@ -1055,7 +1055,7 @@ TEST(to_string, simple_to_string_1){
 
     mps MPS(52, 11, value);
 
-    EXPECT_EQ(std::to_string(value), MPS.to_string());
+    EXPECT_EQ(std::to_string(value), MPS.toString());
 }
 
 TEST(to_string, simple_to_string_2){
@@ -1064,7 +1064,7 @@ TEST(to_string, simple_to_string_2){
 
     mps MPS(52, 11, value);
 
-    EXPECT_EQ(std::to_string(value), MPS.to_string());
+    EXPECT_EQ(std::to_string(value), MPS.toString());
 }
 
 TEST(to_string, simple_to_string_3){
@@ -1073,7 +1073,7 @@ double value = 0.0000345;
 
 mps MPS(52, 11, value);
 
-EXPECT_EQ(std::to_string(value), MPS.to_string());
+EXPECT_EQ(std::to_string(value), MPS.toString());
 }
 
 TEST(to_string, simple_to_string_4){
@@ -1082,7 +1082,7 @@ TEST(to_string, simple_to_string_4){
 
     mps MPS(52, 11, value);
 
-    EXPECT_EQ(std::to_string(value), MPS.to_string());
+    EXPECT_EQ(std::to_string(value), MPS.toString());
 }
 
 TEST(to_string, round_to_string_1){
@@ -1091,7 +1091,7 @@ TEST(to_string, round_to_string_1){
 
     mps MPS(52, 11, value);
 
-    EXPECT_EQ("355345.34", MPS.to_string(2));
+    EXPECT_EQ("355345.34", MPS.toString(2));
 }
 
 TEST(to_string, round_to_string_2){
@@ -1100,7 +1100,7 @@ TEST(to_string, round_to_string_2){
 
     mps MPS(52, 11, value);
 
-    EXPECT_EQ("-355345.34", MPS.to_string(2));
+    EXPECT_EQ("-355345.34", MPS.toString(2));
 }
 
 

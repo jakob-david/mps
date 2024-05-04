@@ -20,7 +20,7 @@ TEST(calculateNorm_L1, simple_1_float) {
     auto result = ira::calculateNorm_L1(mps_vector);
 
 
-    EXPECT_EQ(should, result.to_string(2));
+    EXPECT_EQ(should, result.toString(2));
 }
 
 TEST(calculateNorm_L1, simple_1_double) {
@@ -35,7 +35,7 @@ TEST(calculateNorm_L1, simple_1_double) {
     auto result = ira::calculateNorm_L1(mps_vector);
 
 
-    EXPECT_EQ(should, result.to_string(8));
+    EXPECT_EQ(should, result.toString(8));
 }
 
 

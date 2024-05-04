@@ -300,7 +300,7 @@ std::string mps::print() const {
  *
  * @return the value as string
  */
-std::string mps::to_string(const int precision) const {
+std::string mps::toString(const int precision) const {
 
     if(precision < 0){
         return std::to_string(this->getValue());

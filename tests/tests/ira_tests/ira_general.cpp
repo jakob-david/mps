@@ -1006,7 +1006,7 @@ TEST(getMatrixElement, simple_1) {
 
     auto tmp = IRA.getMatrixElement(8);
 
-    EXPECT_EQ("90.00", tmp.to_string(2));
+    EXPECT_EQ("90.00", tmp.toString(2));
 }
 
 TEST(setL, simple_1) {

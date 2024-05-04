@@ -372,10 +372,10 @@ TEST(FS, simple_4x4_float_1){
 
     auto x = IRA.forwardSubstitution(b);
 
-    std::string solution = x[0].to_string(2);
+    std::string solution = x[0].toString(2);
     for(unsigned long i = 1; i < b.size(); i++){
         solution += ", ";
-        solution += x[i].to_string(2);
+        solution += x[i].toString(2);
     }
 
     EXPECT_EQ(solution, "1.33, -0.67, 2.67, -1.33");
@@ -401,10 +401,10 @@ TEST(FS, simple_4x4_float_2) {
 
     auto x = IRA.forwardSubstitution(b);
 
-    std::string solution = x[0].to_string(2);
+    std::string solution = x[0].toString(2);
     for (unsigned long i = 1; i < b.size(); i++) {
         solution += ", ";
-        solution += x[i].to_string(2);
+        solution += x[i].toString(2);
     }
 
     EXPECT_EQ(solution, "-7.95, -3.52, 92.81, -186.95");
@@ -430,10 +430,10 @@ TEST(FS, simple_4x4_double_1){
 
     auto x = IRA.forwardSubstitution(b);
 
-    std::string solution = x[0].to_string(8);
+    std::string solution = x[0].toString(8);
     for(unsigned long i = 1; i < b.size(); i++){
         solution += ", ";
-        solution += x[i].to_string(8);
+        solution += x[i].toString(8);
     }
 
     EXPECT_EQ(solution, "1.33333333, -0.66666667, 2.66666667, -1.33333333");
@@ -460,10 +460,10 @@ TEST(FS, simple_4x4_double_2){
 
     auto x = IRA.forwardSubstitution(b);
 
-    std::string solution = x[0].to_string(8);
+    std::string solution = x[0].toString(8);
     for(unsigned long i = 1; i < b.size(); i++){
         solution += ", ";
-        solution += x[i].to_string(8);
+        solution += x[i].toString(8);
     }
 
     EXPECT_EQ(solution, "-7.95348837, -3.52057245, 92.81055456, -186.94650378");
@@ -489,10 +489,10 @@ TEST(FS, simple_5x5_float_1){
 
     auto x = IRA.forwardSubstitution(b);
 
-    std::string solution = x[0].to_string(2);
+    std::string solution = x[0].toString(2);
     for(unsigned long i = 1; i < b.size(); i++){
         solution += ", ";
-        solution += x[i].to_string(2);
+        solution += x[i].toString(2);
     }
 
     EXPECT_EQ(solution, "1.33, -0.67, 2.67, -1.33, 2.33");
@@ -517,10 +517,10 @@ TEST(FS, simple_5x5_float_2){
 
     auto x = IRA.forwardSubstitution(b);
 
-    std::string solution = x[0].to_string(2);
+    std::string solution = x[0].toString(2);
     for(unsigned long i = 1; i < b.size(); i++){
         solution += ", ";
-        solution += x[i].to_string(2);
+        solution += x[i].toString(2);
     }
 
     EXPECT_EQ(solution, "-7.95, -3.52, 92.81, -186.95, 190.03");
@@ -546,10 +546,10 @@ TEST(FS, simple_5x5_double_1){
 
     auto x = IRA.forwardSubstitution(b);
 
-    std::string solution = x[0].to_string(8);
+    std::string solution = x[0].toString(8);
     for(unsigned long i = 1; i < b.size(); i++){
         solution += ", ";
-        solution += x[i].to_string(8);
+        solution += x[i].toString(8);
     }
 
     EXPECT_EQ(solution, "1.33333333, -0.66666667, 2.66666667, -1.33333333, 2.33333333");
@@ -574,10 +574,10 @@ TEST(FS, simple_5x5_double_2){
 
     auto x = IRA.forwardSubstitution(b);
 
-    std::string solution = x[0].to_string(8);
+    std::string solution = x[0].toString(8);
     for(unsigned long i = 1; i < b.size(); i++){
         solution += ", ";
-        solution += x[i].to_string(8);
+        solution += x[i].toString(8);
     }
 
     EXPECT_EQ(solution, "-7.95348837, -3.52057245, 92.81055456, -186.94650378, 190.03327779");
@@ -635,10 +635,10 @@ TEST(BS, simple_4x4_float_1){
 
     auto x = IRA.backwardSubstitution(b);
 
-    std::string solution = x[0].to_string(2);
+    std::string solution = x[0].toString(2);
     for(unsigned long i = 1; i < b.size(); i++){
         solution += ", ";
-        solution += x[i].to_string(2);
+        solution += x[i].toString(2);
     }
 
     EXPECT_EQ(solution, "0.08, -0.08, 1.67, 0.67");
@@ -664,10 +664,10 @@ TEST(BS, simple_4x4_float_2){
 
     auto x = IRA.backwardSubstitution(b);
 
-    std::string solution = x[0].to_string(2);
+    std::string solution = x[0].toString(2);
     for(unsigned long i = 1; i < b.size(); i++){
         solution += ", ";
-        solution += x[i].to_string(2);
+        solution += x[i].toString(2);
     }
 
     EXPECT_EQ(solution, "7.62, -0.29, -4.67, 0.01");
@@ -693,10 +693,10 @@ TEST(BS, simple_4x4_double_1){
 
     auto x = IRA.backwardSubstitution(b);
 
-    std::string solution = x[0].to_string(8);
+    std::string solution = x[0].toString(8);
     for(unsigned long i = 1; i < b.size(); i++){
         solution += ", ";
-        solution += x[i].to_string(8);
+        solution += x[i].toString(8);
     }
 
     EXPECT_EQ(solution, "0.08333333, -0.08333333, 1.66666667, 0.66666667");
@@ -722,10 +722,10 @@ TEST(BS, simple_4x4_double_2){
 
     auto x = IRA.backwardSubstitution(b);
 
-    std::string solution = x[0].to_string(8);
+    std::string solution = x[0].toString(8);
     for(unsigned long i = 1; i < b.size(); i++){
         solution += ", ";
-        solution += x[i].to_string(8);
+        solution += x[i].toString(8);
     }
 
     EXPECT_EQ(solution, "7.61688098, -0.28752840, -4.67003578, 0.00790698");
@@ -752,10 +752,10 @@ TEST(BS, simple_5x5_float_1){
 
     auto x = IRA.backwardSubstitution(b);
 
-    std::string solution = x[0].to_string(2);
+    std::string solution = x[0].toString(2);
     for(unsigned long i = 1; i < b.size(); i++){
         solution += ", ";
-        solution += x[i].to_string(2);
+        solution += x[i].toString(2);
     }
 
     EXPECT_EQ(solution, "0.91, 4.63, -0.03, 0.33, -1.00");
@@ -781,10 +781,10 @@ TEST(BS, simple_5x5_float_2){
 
     auto x = IRA.backwardSubstitution(b);
 
-    std::string solution = x[0].to_string(2);
+    std::string solution = x[0].toString(2);
     for(unsigned long i = 1; i < b.size(); i++){
         solution += ", ";
-        solution += x[i].to_string(2);
+        solution += x[i].toString(2);
     }
 
     EXPECT_EQ(solution, "-17.52, -3.37, -0.87, 5.11, 1.57");
@@ -811,10 +811,10 @@ TEST(BS, simple_5x5_double_1){
 
     auto x = IRA.backwardSubstitution(b);
 
-    std::string solution = x[0].to_string(8);
+    std::string solution = x[0].toString(8);
     for(unsigned long i = 1; i < b.size(); i++){
         solution += ", ";
-        solution += x[i].to_string(8);
+        solution += x[i].toString(8);
     }
 
     EXPECT_EQ(solution, "0.90555556, 4.63333333, -0.03333333, 0.33333333, -1.00000000");
@@ -840,10 +840,10 @@ TEST(BS, simple_5x5_double_2){
 
     auto x = IRA.backwardSubstitution(b);
 
-    std::string solution = x[0].to_string(8);
+    std::string solution = x[0].toString(8);
     for(unsigned long i = 1; i < b.size(); i++){
         solution += ", ";
-        solution += x[i].to_string(8);
+        solution += x[i].toString(8);
     }
 
     EXPECT_EQ(solution, "-17.52297946, -3.37140356, -0.86724477, 5.10549922, 1.56701031");
@@ -1298,10 +1298,10 @@ TEST(IR, simple_3x3_double_1){
     auto x = IRA.irPLU(b);
 
 
-    std::string solution = x[0].to_string(8);
+    std::string solution = x[0].toString(8);
     for(unsigned long i = 1; i < b.size(); i++){
         solution += ", ";
-        solution += x[i].to_string(8);
+        solution += x[i].toString(8);
     }
 
     EXPECT_EQ(solution, "1.00000000, 2.00000000, 3.00000000");
