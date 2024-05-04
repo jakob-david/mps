@@ -29,10 +29,10 @@ TEST(implicit_equal, pos_double){
     EXPECT_EQ(52, MPS_copy.getMantisseLength());
     EXPECT_EQ(11, MPS_copy.getExponentLength());
 
-    EXPECT_EQ(52, MPS.mantissa.size());
-    EXPECT_EQ(11, MPS.exponent.size());
-    EXPECT_EQ(52, MPS_copy.mantissa.size());
-    EXPECT_EQ(11, MPS_copy.exponent.size());
+    EXPECT_EQ(52, MPS.getMantissa().size());
+    EXPECT_EQ(11, MPS.getExponent().size());
+    EXPECT_EQ(52, MPS_copy.getMantissa().size());
+    EXPECT_EQ(11, MPS_copy.getExponent().size());
 
     EXPECT_EQ(test_value, MPS.getValue());
     EXPECT_EQ(should_value(test_value), is_mps(MPS.getBitArray()));
@@ -68,10 +68,10 @@ TEST(implicit_equal, equality_pos_float){
     EXPECT_EQ(23, MPS_copy.getMantisseLength());
     EXPECT_EQ(8, MPS_copy.getExponentLength());
 
-    EXPECT_EQ(23, MPS.mantissa.size());
-    EXPECT_EQ(8, MPS.exponent.size());
-    EXPECT_EQ(23, MPS_copy.mantissa.size());
-    EXPECT_EQ(8, MPS_copy.exponent.size());
+    EXPECT_EQ(23, MPS.getMantissa().size());
+    EXPECT_EQ(8, MPS.getExponent().size());
+    EXPECT_EQ(23, MPS_copy.getMantissa().size());
+    EXPECT_EQ(8, MPS_copy.getExponent().size());
 
     EXPECT_EQ(test_value, MPS.getValue());
     EXPECT_EQ(should_value(test_value), is_mps(MPS.getBitArray()));
@@ -107,10 +107,10 @@ TEST(implicit_equal, equality_neg_double){
     EXPECT_EQ(52, MPS_copy.getMantisseLength());
     EXPECT_EQ(11, MPS_copy.getExponentLength());
 
-    EXPECT_EQ(52, MPS.mantissa.size());
-    EXPECT_EQ(11, MPS.exponent.size());
-    EXPECT_EQ(52, MPS_copy.mantissa.size());
-    EXPECT_EQ(11, MPS_copy.exponent.size());
+    EXPECT_EQ(52, MPS.getMantissa().size());
+    EXPECT_EQ(11, MPS.getExponent().size());
+    EXPECT_EQ(52, MPS_copy.getMantissa().size());
+    EXPECT_EQ(11, MPS_copy.getExponent().size());
 
     EXPECT_EQ(test_value, MPS.getValue());
     EXPECT_EQ(should_value(test_value), is_mps(MPS.getBitArray()));
@@ -146,10 +146,10 @@ TEST(implicit_equal, equality_neg_float){
     EXPECT_EQ(23, MPS_copy.getMantisseLength());
     EXPECT_EQ(8, MPS_copy.getExponentLength());
 
-    EXPECT_EQ(23, MPS.mantissa.size());
-    EXPECT_EQ(8, MPS.exponent.size());
-    EXPECT_EQ(23, MPS_copy.mantissa.size());
-    EXPECT_EQ(8, MPS_copy.exponent.size());
+    EXPECT_EQ(23, MPS.getMantissa().size());
+    EXPECT_EQ(8, MPS.getExponent().size());
+    EXPECT_EQ(23, MPS_copy.getMantissa().size());
+    EXPECT_EQ(8, MPS_copy.getExponent().size());
 
     EXPECT_EQ(test_value, MPS.getValue());
     EXPECT_EQ(should_value(test_value), is_mps(MPS.getBitArray()));
@@ -189,10 +189,10 @@ TEST(equal, pos_double){
     EXPECT_EQ(52, MPS_copy.getMantisseLength());
     EXPECT_EQ(11, MPS_copy.getExponentLength());
 
-    EXPECT_EQ(52, MPS.mantissa.size());
-    EXPECT_EQ(11, MPS.exponent.size());
-    EXPECT_EQ(52, MPS_copy.mantissa.size());
-    EXPECT_EQ(11, MPS_copy.exponent.size());
+    EXPECT_EQ(52, MPS.getMantissa().size());
+    EXPECT_EQ(11, MPS.getExponent().size());
+    EXPECT_EQ(52, MPS_copy.getMantissa().size());
+    EXPECT_EQ(11, MPS_copy.getExponent().size());
 
     EXPECT_EQ(test_value, MPS.getValue());
     EXPECT_EQ(should_value(test_value), is_mps(MPS.getBitArray()));
@@ -229,10 +229,10 @@ TEST(equal, pos_float){
     EXPECT_EQ(23, MPS_copy.getMantisseLength());
     EXPECT_EQ(8, MPS_copy.getExponentLength());
 
-    EXPECT_EQ(23, MPS.mantissa.size());
-    EXPECT_EQ(8, MPS.exponent.size());
-    EXPECT_EQ(23, MPS_copy.mantissa.size());
-    EXPECT_EQ(8, MPS_copy.exponent.size());
+    EXPECT_EQ(23, MPS.getMantissa().size());
+    EXPECT_EQ(8, MPS.getExponent().size());
+    EXPECT_EQ(23, MPS_copy.getMantissa().size());
+    EXPECT_EQ(8, MPS_copy.getExponent().size());
 
     EXPECT_EQ(test_value, MPS.getValue());
     EXPECT_EQ(should_value(test_value), is_mps(MPS.getBitArray()));
@@ -269,10 +269,10 @@ TEST(equal, neg_double){
     EXPECT_EQ(52, MPS_copy.getMantisseLength());
     EXPECT_EQ(11, MPS_copy.getExponentLength());
 
-    EXPECT_EQ(52, MPS.mantissa.size());
-    EXPECT_EQ(11, MPS.exponent.size());
-    EXPECT_EQ(52, MPS_copy.mantissa.size());
-    EXPECT_EQ(11, MPS_copy.exponent.size());
+    EXPECT_EQ(52, MPS.getMantissa().size());
+    EXPECT_EQ(11, MPS.getExponent().size());
+    EXPECT_EQ(52, MPS_copy.getMantissa().size());
+    EXPECT_EQ(11, MPS_copy.getExponent().size());
 
     EXPECT_EQ(test_value, MPS.getValue());
     EXPECT_EQ(should_value(test_value), is_mps(MPS.getBitArray()));
@@ -309,10 +309,10 @@ TEST(equal, neg_float){
     EXPECT_EQ(23, MPS_copy.getMantisseLength());
     EXPECT_EQ(8, MPS_copy.getExponentLength());
 
-    EXPECT_EQ(23, MPS.mantissa.size());
-    EXPECT_EQ(8, MPS.exponent.size());
-    EXPECT_EQ(23, MPS_copy.mantissa.size());
-    EXPECT_EQ(8, MPS_copy.exponent.size());
+    EXPECT_EQ(23, MPS.getMantissa().size());
+    EXPECT_EQ(8, MPS.getExponent().size());
+    EXPECT_EQ(23, MPS_copy.getMantissa().size());
+    EXPECT_EQ(8, MPS_copy.getExponent().size());
 
     EXPECT_EQ(test_value, MPS.getValue());
     EXPECT_EQ(should_value(test_value), is_mps(MPS.getBitArray()));
@@ -368,10 +368,10 @@ TEST(assign, pos_double){
     EXPECT_EQ(52, MPS_copy.getMantisseLength());
     EXPECT_EQ(11, MPS_copy.getExponentLength());
 
-    EXPECT_EQ(52, MPS.mantissa.size());
-    EXPECT_EQ(11, MPS.exponent.size());
-    EXPECT_EQ(52, MPS_copy.mantissa.size());
-    EXPECT_EQ(11, MPS_copy.exponent.size());
+    EXPECT_EQ(52, MPS.getMantissa().size());
+    EXPECT_EQ(11, MPS.getExponent().size());
+    EXPECT_EQ(52, MPS_copy.getMantissa().size());
+    EXPECT_EQ(11, MPS_copy.getExponent().size());
 
     EXPECT_EQ(test_value, MPS.getValue());
     EXPECT_EQ(should_value(test_value), is_mps(MPS.getBitArray()));
@@ -408,10 +408,10 @@ TEST(assign, pos_float){
     EXPECT_EQ(23, MPS_copy.getMantisseLength());
     EXPECT_EQ(8, MPS_copy.getExponentLength());
 
-    EXPECT_EQ(23, MPS.mantissa.size());
-    EXPECT_EQ(8, MPS.exponent.size());
-    EXPECT_EQ(23, MPS_copy.mantissa.size());
-    EXPECT_EQ(8, MPS_copy.exponent.size());
+    EXPECT_EQ(23, MPS.getMantissa().size());
+    EXPECT_EQ(8, MPS.getExponent().size());
+    EXPECT_EQ(23, MPS_copy.getMantissa().size());
+    EXPECT_EQ(8, MPS_copy.getExponent().size());
 
     EXPECT_EQ(test_value, MPS.getValue());
     EXPECT_EQ(should_value(test_value), is_mps(MPS.getBitArray()));
@@ -448,10 +448,10 @@ TEST(assign, neg_double){
     EXPECT_EQ(52, MPS_copy.getMantisseLength());
     EXPECT_EQ(11, MPS_copy.getExponentLength());
 
-    EXPECT_EQ(52, MPS.mantissa.size());
-    EXPECT_EQ(11, MPS.exponent.size());
-    EXPECT_EQ(52, MPS_copy.mantissa.size());
-    EXPECT_EQ(11, MPS_copy.exponent.size());
+    EXPECT_EQ(52, MPS.getMantissa().size());
+    EXPECT_EQ(11, MPS.getExponent().size());
+    EXPECT_EQ(52, MPS_copy.getMantissa().size());
+    EXPECT_EQ(11, MPS_copy.getExponent().size());
 
     EXPECT_EQ(test_value, MPS.getValue());
     EXPECT_EQ(should_value(test_value), is_mps(MPS.getBitArray()));
@@ -488,10 +488,10 @@ TEST(assign, neg_float){
     EXPECT_EQ(23, MPS_copy.getMantisseLength());
     EXPECT_EQ(8, MPS_copy.getExponentLength());
 
-    EXPECT_EQ(23, MPS.mantissa.size());
-    EXPECT_EQ(8, MPS.exponent.size());
-    EXPECT_EQ(23, MPS_copy.mantissa.size());
-    EXPECT_EQ(8, MPS_copy.exponent.size());
+    EXPECT_EQ(23, MPS.getMantissa().size());
+    EXPECT_EQ(8, MPS.getExponent().size());
+    EXPECT_EQ(23, MPS_copy.getMantissa().size());
+    EXPECT_EQ(8, MPS_copy.getExponent().size());
 
     EXPECT_EQ(test_value, MPS.getValue());
     EXPECT_EQ(should_value(test_value), is_mps(MPS.getBitArray()));
@@ -528,10 +528,10 @@ TEST(assign, different_mantissa_double){
     EXPECT_EQ(52, MPS_copy.getMantisseLength());
     EXPECT_EQ(11, MPS_copy.getExponentLength());
 
-    EXPECT_EQ(52, MPS.mantissa.size());
-    EXPECT_EQ(11, MPS.exponent.size());
-    EXPECT_EQ(52, MPS_copy.mantissa.size());
-    EXPECT_EQ(11, MPS_copy.exponent.size());
+    EXPECT_EQ(52, MPS.getMantissa().size());
+    EXPECT_EQ(11, MPS.getExponent().size());
+    EXPECT_EQ(52, MPS_copy.getMantissa().size());
+    EXPECT_EQ(11, MPS_copy.getExponent().size());
 
     EXPECT_EQ(test_value, MPS.getValue());
     EXPECT_EQ(should_value(test_value), is_mps(MPS.getBitArray()));
@@ -568,10 +568,10 @@ TEST(assign, different_mantissa_float){
     EXPECT_EQ(23, MPS_copy.getMantisseLength());
     EXPECT_EQ(8, MPS_copy.getExponentLength());
 
-    EXPECT_EQ(23, MPS.mantissa.size());
-    EXPECT_EQ(8, MPS.exponent.size());
-    EXPECT_EQ(23, MPS_copy.mantissa.size());
-    EXPECT_EQ(8, MPS_copy.exponent.size());
+    EXPECT_EQ(23, MPS.getMantissa().size());
+    EXPECT_EQ(8, MPS.getExponent().size());
+    EXPECT_EQ(23, MPS_copy.getMantissa().size());
+    EXPECT_EQ(8, MPS_copy.getExponent().size());
 
     EXPECT_EQ(test_value, MPS.getValue());
     EXPECT_EQ(should_value(test_value), is_mps(MPS.getBitArray()));
@@ -608,10 +608,10 @@ TEST(assign, different_exponent_double){
     EXPECT_EQ(52, MPS_copy.getMantisseLength());
     EXPECT_EQ(11, MPS_copy.getExponentLength());
 
-    EXPECT_EQ(52, MPS.mantissa.size());
-    EXPECT_EQ(11, MPS.exponent.size());
-    EXPECT_EQ(52, MPS_copy.mantissa.size());
-    EXPECT_EQ(11, MPS_copy.exponent.size());
+    EXPECT_EQ(52, MPS.getMantissa().size());
+    EXPECT_EQ(11, MPS.getExponent().size());
+    EXPECT_EQ(52, MPS_copy.getMantissa().size());
+    EXPECT_EQ(11, MPS_copy.getExponent().size());
 
     EXPECT_EQ(test_value, MPS.getValue());
     EXPECT_EQ(should_value(test_value), is_mps(MPS.getBitArray()));
@@ -648,10 +648,10 @@ TEST(assign, different_exponent_float){
     EXPECT_EQ(23, MPS_copy.getMantisseLength());
     EXPECT_EQ(8, MPS_copy.getExponentLength());
 
-    EXPECT_EQ(23, MPS.mantissa.size());
-    EXPECT_EQ(8, MPS.exponent.size());
-    EXPECT_EQ(23, MPS_copy.mantissa.size());
-    EXPECT_EQ(8, MPS_copy.exponent.size());
+    EXPECT_EQ(23, MPS.getMantissa().size());
+    EXPECT_EQ(8, MPS.getExponent().size());
+    EXPECT_EQ(23, MPS_copy.getMantissa().size());
+    EXPECT_EQ(8, MPS_copy.getExponent().size());
 
     EXPECT_EQ(test_value, MPS.getValue());
     EXPECT_EQ(should_value(test_value), is_mps(MPS.getBitArray()));

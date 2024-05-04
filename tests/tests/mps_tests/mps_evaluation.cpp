@@ -451,7 +451,7 @@ TEST(getPrecision, special_values_NaN){
     MPS_2.setNaN();
 
     result = MPS_1.getPrecision(MPS_2);
-    EXPECT_EQ(MPS_1.mantissa_length, (long long) result);
+    EXPECT_EQ(MPS_1.getMantisseLength(), (long long) result);
 
     MPS_1 = 8;
     testing::internal::CaptureStdout();
@@ -484,7 +484,7 @@ TEST(getPrecision, special_values_Infinity){
     MPS_2.setInf();
 
     result = MPS_1.getPrecision(MPS_2);
-    EXPECT_EQ(MPS_1.mantissa_length, (long long) result);
+    EXPECT_EQ(MPS_1.getMantisseLength(), (long long) result);
 
     MPS_1 = 8;
     testing::internal::CaptureStdout();

@@ -355,8 +355,9 @@ void ira::setExpectedPrecision(const mps& new_expected_precision){
 
     this->parameters.expected_precision_present = true;
 
-    this->parameters.ep_mantissa_length = new_expected_precision.mantissa_length;
-    this->parameters.ep_exponent_length = new_expected_precision.exponent_length;
+
+    this->parameters.ep_mantissa_length = new_expected_precision.getMantisseLength();
+    this->parameters.ep_exponent_length = new_expected_precision.getExponentLength();
 
     this->parameters.expected_precision |= new_expected_precision;
 }
@@ -770,7 +771,7 @@ string ira::toString(const char& matrix, const int precision) const {
 
     if('A' == matrix){
 
-        if(this->A.empty() || this->A[0].empty() || (this->A[0][0].exponent_length == 0 && this->A[0][0].mantissa_length == 0)){
+        if(this->A.empty() || this->A[0].empty() || (this->A[0][0].getExponentLength() == 0 && this->A[0][0].getMantisseLength() == 0)){
             throw std::invalid_argument("ERROR: toString: A is empty");
         }
 
@@ -786,7 +787,7 @@ string ira::toString(const char& matrix, const int precision) const {
 
     } else if('L' == matrix){
 
-        if(this->L.empty() || this->L[0].empty() || (this->L[0][0].exponent_length == 0 && this->L[0][0].mantissa_length == 0)){
+        if(this->L.empty() || this->L[0].empty() || (this->L[0][0].getExponentLength() == 0 && this->L[0][0].getMantisseLength() == 0)){
             throw std::invalid_argument("ERROR: toString: L is empty");
         }
 
@@ -802,7 +803,7 @@ string ira::toString(const char& matrix, const int precision) const {
 
     } else if('U' == matrix) {
 
-        if(this->U.empty() || this->U[0].empty() || (this->U[0][0].exponent_length == 0 && this->U[0][0].mantissa_length == 0)){
+        if(this->U.empty() || this->U[0].empty() || (this->U[0][0].getExponentLength() == 0 && this->U[0][0].getMantisseLength() == 0)){
             throw std::invalid_argument("ERROR: toString: U is empty");
         }
 
@@ -818,7 +819,7 @@ string ira::toString(const char& matrix, const int precision) const {
 
     } else if('P' == matrix) {
 
-        if(this->P.empty() || (this->P[0].exponent_length == 0 && this->P[0].mantissa_length == 0)){
+        if(this->P.empty() || (this->P[0].getExponentLength() == 0 && this->P[0].getMantisseLength() == 0)){
             throw std::invalid_argument("ERROR: toString: P is empty");
         }
 
@@ -907,7 +908,7 @@ void ira::cast(vector<mps>& vec, unsigned long mantissa_length, unsigned long ex
     }
 
 
-    if(mantissa_length == vec[0].mantissa_length && exponent_length == vec[0].exponent_length){
+    if(mantissa_length == vec[0].getMantisseLength() && exponent_length == vec[0].getExponentLength()){
         return;
     }
 
@@ -935,7 +936,7 @@ void ira::cast(vector<vector<mps>>& matrix, unsigned long mantissa_length, unsig
         throw std::invalid_argument("ERROR: in cast : exponent size too small");
     }
 
-    if(mantissa_length == matrix[0][0].mantissa_length && exponent_length == matrix[0][0].exponent_length){
+    if(mantissa_length == matrix[0][0].getMantisseLength() && exponent_length == matrix[0][0].getExponentLength()){
         return;
     }
 
@@ -969,7 +970,7 @@ void ira::castSystemMatrix(unsigned long mantissa_length, unsigned long exponent
         throw std::invalid_argument("ERROR: in castSystemMatrix : exponent size too small");
     }
 
-    if(mantissa_length == this->A[0][0].mantissa_length && exponent_length == this->A[0][0].exponent_length){
+    if(mantissa_length == this->A[0][0].getMantisseLength() && exponent_length == this->A[0][0].getExponentLength()){
         return;
     }
 
@@ -1003,7 +1004,7 @@ void ira::castExpectedResult(unsigned long mantissa_length, unsigned long expone
         throw std::invalid_argument("ERROR: in castExpectedResult : exponent size too small");
     }
 
-    if(mantissa_length == this->parameters.expected_result_mps[0].mantissa_length && exponent_length == this->parameters.expected_result_mps[0].exponent_length){
+    if(mantissa_length == this->parameters.expected_result_mps[0].getMantisseLength() && exponent_length == this->parameters.expected_result_mps[0].getExponentLength()){
         return;
     }
 
@@ -1329,8 +1330,8 @@ mps ira::calculateNorm_L1(const vector<mps>& a){
  */
 mps ira::calculateVectorMean(const vector<mps>& a){
 
-    auto mantissa_length = a[0].mantissa_length;
-    auto exponent_length = a[0].exponent_length;
+    auto mantissa_length = a[0].getMantisseLength();
+    auto exponent_length = a[0].getExponentLength();
 
     mps sum(mantissa_length, exponent_length, 0.0);
     mps size(mantissa_length, exponent_length, (double) a.size());
@@ -1375,12 +1376,12 @@ mps ira::calculateMeanPrecision(const vector<mps>& is, const vector<mps>& should
         throw std::invalid_argument("ERROR: in calculateMeanPrecision : expected precision must be set beforehand.");
     }
 
-    mps sum(is[0].mantissa_length, is[0].exponent_length, 0.0);
+    mps sum(is[0].getMantisseLength(), is[0].getExponentLength(), 0.0);
     mps size(this->parameters.ep_mantissa_length, this->parameters.ep_exponent_length, (double) is.size());
 
     for(unsigned long idx = 0; idx < is.size(); idx++){
 
-        mps precision(is[0].mantissa_length, is[0].exponent_length, (double) is[idx].getPrecision(should[idx]));
+        mps precision(is[0].getMantisseLength(), is[0].getExponentLength(), (double) is[idx].getPrecision(should[idx]));
         sum = sum + precision;
 
     }
@@ -1410,14 +1411,14 @@ vector<mps> ira::add(const vector<mps>& a, const vector<mps>& b) {
     if (a.size() != b.size()) {
         throw std::invalid_argument("ERROR: in add: dimensions of a and b do not match");
     }
-    if (a[0].exponent_length != b[0].exponent_length) {
+    if (a[0].getExponentLength() != b[0].getExponentLength()) {
         throw std::invalid_argument("ERROR: in add: exponents do not match");
     }
-    if (a[0].mantissa_length != b[0].mantissa_length) {
+    if (a[0].getMantisseLength() != b[0].getMantisseLength()) {
         throw std::invalid_argument("ERROR: in add: mantissas do not match");
     }
 
-    vector<mps> result(a.size(), mps(a[0].mantissa_length, a[0].exponent_length, 0.0));
+    vector<mps> result(a.size(), mps(a[0].getMantisseLength(), a[0].getExponentLength(), 0.0));
 
     for(unsigned long i = 0; i < a.size(); i++){
         result[i] = a[i] + b[i];
@@ -1444,14 +1445,14 @@ vector<mps> ira::subtract(const vector<mps>& a, const vector<mps>& b) {
     if (a.size() != b.size()) {
         throw std::invalid_argument("ERROR: in subtract: dimensions of a and b do not match");
     }
-    if (a[0].exponent_length != b[0].exponent_length) {
+    if (a[0].getExponentLength() != b[0].getExponentLength()) {
         throw std::invalid_argument("ERROR: in subtract: exponents do not match");
     }
-    if (a[0].mantissa_length != b[0].mantissa_length) {
+    if (a[0].getMantisseLength() != b[0].getMantisseLength()) {
         throw std::invalid_argument("ERROR: in subtract: mantissas do not match");
     }
 
-    vector<mps> result(a.size(), mps(a[0].mantissa_length, a[0].exponent_length, 0.0));
+    vector<mps> result(a.size(), mps(a[0].getMantisseLength(), a[0].getExponentLength(), 0.0));
 
     for(unsigned long i = 0; i < a.size(); i++){
         result[i] = a[i] - b[i];
@@ -1480,13 +1481,13 @@ vector<mps> ira::dotProduct(const vector<vector<mps>>& D, const vector<mps>& x) 
     if (D.size() != x.size()) {
         throw std::invalid_argument("ERROR: in dotProduct: dimensions of D and x do not match");
     }
-    if (D[0][0].exponent_length != x[0].exponent_length) {
+    if (D[0][0].getExponentLength() != x[0].getExponentLength()) {
         throw std::invalid_argument("ERROR: in dotProduct: exponents do not match");
     }
-    if (D[0][0].mantissa_length != x[0].mantissa_length) {
+    if (D[0][0].getMantisseLength() != x[0].getMantisseLength()) {
         throw std::invalid_argument("ERROR: in dotProduct: mantissas do not match");
     }
-    vector<mps> y(x.size(), mps(D[0][0].mantissa_length, D[0][0].exponent_length, 0.0));
+    vector<mps> y(x.size(), mps(D[0][0].getMantisseLength(), D[0][0].getExponentLength(), 0.0));
 
     for(unsigned long i = 0; i < x.size(); i++){
         for(unsigned long j = 0; j < x.size(); j++){
@@ -1516,15 +1517,15 @@ vector<vector<mps>> ira::dotProduct(const vector<vector<mps>>& A, const vector<v
     if (A.size() != B.size()) {
         throw std::invalid_argument("ERROR: in dotProduct: dimensions of A and B do not match");
     }
-    if (A[0][0].exponent_length != B[0][0].exponent_length) {
+    if (A[0][0].getExponentLength() != B[0][0].getExponentLength()) {
         throw std::invalid_argument("ERROR: in dotProduct: exponents do not match");
     }
-    if (B[0][0].mantissa_length != B[0][0].mantissa_length) {
+    if (B[0][0].getMantisseLength() != B[0][0].getMantisseLength()) {
         throw std::invalid_argument("ERROR: in dotProduct: mantissas do not match");
     }
 
-    unsigned long mantissa_length = A[0][0].mantissa_length;
-    unsigned long exponent_length = A[0][0].exponent_length;
+    unsigned long mantissa_length = A[0][0].getMantisseLength();
+    unsigned long exponent_length = A[0][0].getExponentLength();
 
     vector<vector<mps>> ret;
     ret.resize(A.size());
@@ -1569,10 +1570,10 @@ vector<mps> ira::multiplyWithSystemMatrix(vector<mps> x) const {
     if (this->A.size() != x.size()) {
         throw std::invalid_argument("ERROR: in multiplyWithSystemMatrix: dimensions of A and x do not match");
     }
-    if (this->A[0][0].exponent_length != x[0].exponent_length) {
+    if (this->A[0][0].getExponentLength() != x[0].getExponentLength()) {
         throw std::invalid_argument("ERROR: in multiplyWithSystemMatrix: exponents do not match");
     }
-    if (this->A[0][0].mantissa_length != x[0].mantissa_length) {
+    if (this->A[0][0].getMantisseLength() != x[0].getMantisseLength()) {
         throw std::invalid_argument("ERROR: in multiplyWithSystemMatrix: mantissas do not match");
     }
 
@@ -1684,11 +1685,11 @@ vector<mps> ira::forwardSubstitution(const vector<mps>& b) const {
         throw std::invalid_argument("ERROR: in forwardSubstitution: b is empty");
     }
 
-    vector<mps> x(b.size(), mps(this->L[0][0].mantissa_length, this->L[0][0].exponent_length));
+    vector<mps> x(b.size(), mps(this->L[0][0].getMantisseLength(), this->L[0][0].getExponentLength()));
 
     x[0] = b[0]/L[0][0];
 
-    mps tmp_sum(this->L[0][0].mantissa_length, this->L[0][0].exponent_length);
+    mps tmp_sum(this->L[0][0].getMantisseLength(), this->L[0][0].getExponentLength());
 
     for(unsigned long i = 1; i < this->parameters.n; i++){
 
@@ -1721,11 +1722,11 @@ vector<mps> ira::backwardSubstitution(const vector<mps>& b) const {
 
     auto n_minus_one = this->parameters.n-1;
 
-    vector<mps> x(b.size(), mps(this->U[0][0].mantissa_length, this->U[0][0].exponent_length));
+    vector<mps> x(b.size(), mps(this->U[0][0].getMantisseLength(), this->U[0][0].getExponentLength()));
 
     x[n_minus_one] = b[n_minus_one]/U[n_minus_one][n_minus_one];
 
-    mps tmp_sum(this->U[0][0].mantissa_length, this->U[0][0].exponent_length);
+    mps tmp_sum(this->U[0][0].getMantisseLength(), this->U[0][0].getExponentLength());
 
     for(unsigned long i = n_minus_one; i > 0;){
 

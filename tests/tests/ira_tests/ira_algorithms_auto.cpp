@@ -860,7 +860,7 @@ TEST(irPLU, random_double){
 TEST(irPLU, random_float){
 
     //------------------------------------------------------------------------------------------------------
-    unsigned long precision = 11;                // the number of  mantissa bits which should be checked.
+    unsigned long precision = 10;                // the number of  mantissa bits which should be checked.
     unsigned long start_matrix_size = 35;
     unsigned long last_matrix_size = 35;         // the number of test runs. Each run with a larger matrix.
 

@@ -87,6 +87,18 @@ mps::~mps() = default;
 // getter methods
 //-------------------------------
 
+[[nodiscard]] bool mps::getSign() const{
+    return this->sign;
+}
+
+[[nodiscard]] vector<bool> mps::getMantissa() const{
+    return this->mantissa;
+}
+
+[[nodiscard]] vector<bool> mps::getExponent() const{
+    return this->exponent;
+}
+
 /**
  * Returns the length of the matisse.
  *
@@ -143,9 +155,9 @@ double mps::getValue() const {
     // handle special cases
     if(isZero()){
         return 0;
-    } else if (isInfinity() && isPositive()){
+    } else if (isInf() && isPositive()){
         return numeric_limits<double>::infinity();
-    } else if (isInfinity()){
+    } else if (isInf()){
         return numeric_limits<double>::infinity() * -1;
     } else if (isNaN()){
         return numeric_limits<double>::quiet_NaN();
@@ -215,7 +227,7 @@ bool mps::isZero() const{
  *
  * @return true if pos. or neg. infinity.
  */
-bool mps::isInfinity() const{
+bool mps::isInf() const{
 
 
     for(unsigned long i = 0; i < this->exponent_length; i++){
@@ -392,9 +404,9 @@ std::string mps::toString(const int precision) const {
         return numeric_limits<long long>::max() * -1;
     }
 
-    if(this->isInfinity() && compare.isInfinity() && (this->isPositive() == compare.isPositive())){
+    if(this->isInf() && compare.isInf() && (this->isPositive() == compare.isPositive())){
         return (long long) compare.mantissa_length;
-    } else if(this->isInfinity() || compare.isInfinity()){
+    } else if(this->isInf() || compare.isInf()){
         cout << "WARNING: getPrecision: one value is infinity => returning max negative value\n";
         return numeric_limits<long long>::max() * -1;
     }
@@ -710,7 +722,7 @@ void mps::cast(const unsigned long new_mantissa_size, const unsigned long new_ex
         this->resize_mps_object(new_mantissa_size, new_exponent_size);
         this->setNaN();
         return;
-    } else if(this->isInfinity()){
+    } else if(this->isInf()){
         this->resize_mps_object(new_mantissa_size, new_exponent_size);
         this->setInf(this->sign);
         return;
@@ -935,7 +947,7 @@ mps mps::operator+(const mps& other) const {
         ret.setNaN();
         return ret;
 
-    } else if(this->isInfinity() && other.isInfinity()){
+    } else if(this->isInf() && other.isInf()){
         mps ret(this->mantissa_length, this->exponent_length);
 
         if(this->isPositive() == other.isPositive()){
@@ -945,13 +957,13 @@ mps mps::operator+(const mps& other) const {
         }
 
         return ret;
-    } else if(this->isInfinity()){
+    } else if(this->isInf()){
 
         mps ret(this->mantissa_length, this->exponent_length);
         ret.setInf(!this->isPositive());
         return ret;
 
-    } else if(other.isInfinity()){
+    } else if(other.isInf()){
 
         mps ret(other.mantissa_length, other.exponent_length);
         ret.setInf(!other.isPositive());
@@ -997,7 +1009,7 @@ mps mps::operator-(const mps& other) const {
         ret.setNaN();
         return ret;
 
-    } else if(this->isInfinity() && other.isInfinity()){
+    } else if(this->isInf() && other.isInf()){
         mps ret(this->mantissa_length, this->exponent_length);
 
         if(this->isPositive() == other.isPositive()){
@@ -1007,13 +1019,13 @@ mps mps::operator-(const mps& other) const {
         }
 
         return ret;
-    } else if(this->isInfinity()){
+    } else if(this->isInf()){
 
         mps ret(this->mantissa_length, this->exponent_length);
         ret.setInf(!this->isPositive());
         return ret;
 
-    } else if(other.isInfinity()){
+    } else if(other.isInf()){
 
         mps ret(other.mantissa_length, other.exponent_length);
         ret.setInf(other.isPositive());
@@ -1060,7 +1072,7 @@ mps mps::operator*(const mps& other) const {
         ret.setNaN();
         return ret;
 
-    } else if(this->isInfinity() && other.isInfinity()){
+    } else if(this->isInf() && other.isInf()){
         mps ret(this->mantissa_length, this->exponent_length);
 
         if(this->isPositive() == other.isPositive()){
@@ -1070,13 +1082,13 @@ mps mps::operator*(const mps& other) const {
         }
 
         return ret;
-    } else if(this->isInfinity()){
+    } else if(this->isInf()){
 
         mps ret(this->mantissa_length, this->exponent_length);
         ret.setInf(!this->isPositive());
         return ret;
 
-    } else if(other.isInfinity()){
+    } else if(other.isInf()){
 
         mps ret(other.mantissa_length, other.exponent_length);
         ret.setInf(!other.isPositive());
@@ -1113,7 +1125,7 @@ mps mps::operator/(const mps& other) const {
         ret.setNaN();
         return ret;
 
-    } else if(this->isInfinity() && other.isInfinity()){
+    } else if(this->isInf() && other.isInf()){
         mps ret(this->mantissa_length, this->exponent_length);
 
         if(this->isPositive() == other.isPositive()){
@@ -1123,13 +1135,13 @@ mps mps::operator/(const mps& other) const {
         }
 
         return ret;
-    } else if(this->isInfinity()){
+    } else if(this->isInf()){
 
         mps ret(this->mantissa_length, this->exponent_length);
         ret.setInf(!this->isPositive());
         return ret;
 
-    } else if(other.isInfinity()){
+    } else if(other.isInf()){
 
         mps ret(other.mantissa_length, other.exponent_length);
         if(this->isPositive() == other.isPositive()){

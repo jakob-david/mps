@@ -458,7 +458,7 @@ TEST(get_value_tests, exponent_too_large_positive_float) {
     float test_value = numeric_limits<float>::max();
     mps MPS(23, 4, test_value);
 
-    EXPECT_EQ(true, MPS.isInfinity());
+    EXPECT_EQ(true, MPS.isInf());
     EXPECT_EQ(true, MPS.isPositive());
 }
 
@@ -467,7 +467,7 @@ TEST(get_value_tests, exponent_too_large_double) {
     double test_value = numeric_limits<double>::max();
     mps MPS(52, 10, test_value);
 
-    EXPECT_EQ(true, MPS.isInfinity());
+    EXPECT_EQ(true, MPS.isInf());
     EXPECT_EQ(true, MPS.isPositive());
 }
 
@@ -476,7 +476,7 @@ TEST(get_value_tests, exponent_too_large_negative_float) {
     float test_value = numeric_limits<float>::max() * -1;
     mps MPS(23, 4, test_value);
 
-    EXPECT_EQ(true, MPS.isInfinity());
+    EXPECT_EQ(true, MPS.isInf());
     EXPECT_EQ(false, MPS.isPositive());
 }
 
@@ -485,7 +485,7 @@ TEST(get_value_tests, exponent_too_large_negative_double) {
     double test_value = numeric_limits<double>::max() * -1;
     mps MPS(52, 10, test_value);
 
-    EXPECT_EQ(true, MPS.isInfinity());
+    EXPECT_EQ(true, MPS.isInf());
     EXPECT_EQ(false, MPS.isPositive());
 }
 
@@ -885,7 +885,7 @@ TEST(cast, double_to_float_exponent_too_large){
     EXPECT_EQ(should_value((float) value), is_mps(MPS.getBitArray()));
     EXPECT_EQ(23, MPS.getMantisseLength());
     EXPECT_EQ(8, MPS.getExponentLength());
-    EXPECT_EQ(true, MPS.isInfinity());
+    EXPECT_EQ(true, MPS.isInf());
     EXPECT_EQ(true, isinf((float) value));
 }
 
@@ -900,7 +900,7 @@ TEST(cast, double_to_float_exponent_too_large_2){
     EXPECT_EQ(should_value((float) value), is_mps(MPS.getBitArray()));
     EXPECT_EQ(23, MPS.getMantisseLength());
     EXPECT_EQ(8, MPS.getExponentLength());
-    EXPECT_EQ(true, MPS.isInfinity());
+    EXPECT_EQ(true, MPS.isInf());
     EXPECT_EQ(true, isinf((float) value));
 }
 

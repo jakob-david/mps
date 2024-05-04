@@ -115,9 +115,7 @@ TEST(add, simple_1_float) {
     vector<double> second_double{2, 2, 2, 2};
     auto second = ira::double_to_mps(mantissa_length, exponent_length, second_double);
 
-
     auto result = ira::add(first, second);
-
 
     EXPECT_EQ(should, ira::toString(result, 2));
 }
@@ -451,8 +449,8 @@ TEST(multiplyWithSystemMatrix, simple_1){
     EXPECT_EQ(14, result[0].getValue());
     EXPECT_EQ(32, result[1].getValue());
     EXPECT_EQ(50, result[2].getValue());
-    EXPECT_EQ(mantissa_length, result[0].mantissa_length);
-    EXPECT_EQ(exponent_length, result[0].exponent_length);
+    EXPECT_EQ(mantissa_length, result[0].getMantisseLength());
+    EXPECT_EQ(exponent_length, result[0].getExponentLength());
 }
 
 TEST(multiplyWithSystemMatrix, simple_2){
@@ -474,8 +472,8 @@ TEST(multiplyWithSystemMatrix, simple_2){
     EXPECT_EQ(46, result[0].getValue());
     EXPECT_EQ(-28, result[1].getValue());
     EXPECT_EQ(10, result[2].getValue());
-    EXPECT_EQ(mantissa_length, result[0].mantissa_length);
-    EXPECT_EQ(exponent_length, result[0].exponent_length);
+    EXPECT_EQ(mantissa_length, result[0].getMantisseLength());
+    EXPECT_EQ(exponent_length, result[0].getExponentLength());
 }
 
 TEST(multiplyWithSystemMatrix, exception_A_empty){

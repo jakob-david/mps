@@ -10,7 +10,6 @@ using namespace std;
 class mps {
 
 private:
-public:
 
     // properties of the bit array
     //-------------------------------
@@ -37,14 +36,19 @@ public:
 
     // getter methods
     //-------------------------------
+    // TODO: test
+    [[nodiscard]] bool getSign() const;
+    [[nodiscard]] vector<bool> getMantissa() const;
+    [[nodiscard]] vector<bool> getExponent() const;
+    [[nodiscard]] vector<bool> getBitArray() const;
+
     [[nodiscard]] unsigned long getMantisseLength() const;
     [[nodiscard]] unsigned long getExponentLength() const;
     [[nodiscard]] unsigned long getBitArrayLength() const;
-    [[nodiscard]] vector<bool> getBitArray() const;
     [[nodiscard]] double getValue() const;
 
     [[nodiscard]] bool isZero() const;
-    [[nodiscard]] bool isInfinity() const;
+    [[nodiscard]] bool isInf() const;
     [[nodiscard]] bool isPositive() const;
     [[nodiscard]] bool isNaN() const;
 
@@ -120,8 +124,6 @@ private:
 
     [[nodiscard]] static char compare(const mps& one, const mps& two) ;
 
-
-private:
     // general helper functions
     //-------------------------------
     [[nodiscard]] static vector<bool> binaryAddition(const vector<bool>& one, const vector<bool>& two, bool* carrier_return = nullptr);

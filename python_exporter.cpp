@@ -234,7 +234,7 @@ PYBIND11_MODULE(mps_library, mps_handle) {
             })
 
             .def("isZero", &mps::isZero)
-            .def("isInfinity", &mps::isInfinity)
+            .def("isInf", &mps::isInf)
             .def("isPositive", &mps::isPositive)
             .def("isNaN", &mps::isNaN)
             .def("setInf", &mps::setInf)
