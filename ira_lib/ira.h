@@ -134,12 +134,11 @@ public:
     [[nodiscard]] mps getMatrixElement(unsigned long idx);
     //-------------------------------
 
-    // to_string converters
+    // toString converters
     //-------------------------------
-    // TODO: rename
-    [[nodiscard]] std::string to_string(const char& matrix, int precision = -1) const;
-    // TODO: rename
-    [[nodiscard]] static std::string to_string(vector<mps> vec, int precision = -1);
+    [[nodiscard]] static string toString(vector<mps> vec, int precision = -1);
+
+    [[nodiscard]] string toString(const char& matrix, int precision = -1) const;
     //-------------------------------
 
     // cast functions

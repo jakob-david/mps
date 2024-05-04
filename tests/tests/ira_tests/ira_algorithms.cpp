@@ -50,9 +50,9 @@ TEST(PLU, simple_3x3_float_1) {
 
     try
     {
-        L_result = IRA.to_string('L', 2);
-        U_result = IRA.to_string('U', 2);
-        P_result = IRA.to_string('P', 2);
+        L_result = IRA.toString('L', 2);
+        U_result = IRA.toString('U', 2);
+        P_result = IRA.toString('P', 2);
     }
 
     catch (std::invalid_argument& e)
@@ -86,9 +86,9 @@ TEST(PLU, simple_3x3_float_2) {
 
     try
     {
-        L_result = IRA.to_string('L', 4);
-        U_result = IRA.to_string('U', 4);
-        P_result = IRA.to_string('P', 4);
+        L_result = IRA.toString('L', 4);
+        U_result = IRA.toString('U', 4);
+        P_result = IRA.toString('P', 4);
     }
 
     catch (std::invalid_argument& e)
@@ -122,9 +122,9 @@ TEST(PLU, simple_3x3_double_1) {
 
     try
     {
-        L_result = IRA.to_string('L', 8);
-        U_result = IRA.to_string('U', 8);
-        P_result = IRA.to_string('P', 8);
+        L_result = IRA.toString('L', 8);
+        U_result = IRA.toString('U', 8);
+        P_result = IRA.toString('P', 8);
     }
 
     catch (std::invalid_argument& e)
@@ -158,9 +158,9 @@ TEST(PLU, simple_3x3_double_2) {
 
     try
     {
-        L_result = IRA.to_string('L', 8);
-        U_result = IRA.to_string('U', 8);
-        P_result = IRA.to_string('P', 8);
+        L_result = IRA.toString('L', 8);
+        U_result = IRA.toString('U', 8);
+        P_result = IRA.toString('P', 8);
     }
 
     catch (std::invalid_argument& e)
@@ -194,9 +194,9 @@ TEST(PLU, simple_4x4_float_1) {
 
     try
     {
-        L_result = IRA.to_string('L', 2);
-        U_result = IRA.to_string('U', 2);
-        P_result = IRA.to_string('P', 2);
+        L_result = IRA.toString('L', 2);
+        U_result = IRA.toString('U', 2);
+        P_result = IRA.toString('P', 2);
     }
 
     catch (std::invalid_argument& e)
@@ -230,9 +230,9 @@ TEST(PLU, simple_4x4_float_2) {
 
     try
     {
-        L_result = IRA.to_string('L', 2);
-        U_result = IRA.to_string('U', 2);
-        P_result = IRA.to_string('P', 2);
+        L_result = IRA.toString('L', 2);
+        U_result = IRA.toString('U', 2);
+        P_result = IRA.toString('P', 2);
     }
 
     catch (std::invalid_argument& e)
@@ -266,9 +266,9 @@ TEST(PLU, simple_4x4_double_1) {
 
     try
     {
-        L_result = IRA.to_string('L', 8);
-        U_result = IRA.to_string('U', 8);
-        P_result = IRA.to_string('P', 8);
+        L_result = IRA.toString('L', 8);
+        U_result = IRA.toString('U', 8);
+        P_result = IRA.toString('P', 8);
     }
 
     catch (std::invalid_argument& e)
@@ -302,9 +302,9 @@ TEST(PLU, simple_4x4_double_2) {
 
     try
     {
-        L_result = IRA.to_string('L', 8);
-        U_result = IRA.to_string('U', 8);
-        P_result = IRA.to_string('P', 8);
+        L_result = IRA.toString('L', 8);
+        U_result = IRA.toString('U', 8);
+        P_result = IRA.toString('P', 8);
     }
 
     catch (std::invalid_argument& e)

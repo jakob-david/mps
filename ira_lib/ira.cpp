@@ -751,7 +751,7 @@ mps ira::getMatrixElement(unsigned long idx){
 //-------------------------------
 
 
-// to_string converters
+// toString converters
 //-------------------------------
 /**
  * Takes one of the matrices of the ira object and converts it into an std::string.
@@ -764,14 +764,14 @@ mps ira::getMatrixElement(unsigned long idx){
  * @param precision the precision in which the values should be displayed. (-1 = "normal" precision)
  * @return the matrix in an std::string format
  */
-string ira::to_string(const char& matrix, const int precision) const {
+string ira::toString(const char& matrix, const int precision) const {
 
     std::string ret;
 
     if('A' == matrix){
 
         if(this->A.empty() || this->A[0].empty() || (this->A[0][0].exponent_length == 0 && this->A[0][0].mantissa_length == 0)){
-            throw std::invalid_argument("ERROR: to_string: A is empty");
+            throw std::invalid_argument("ERROR: toString: A is empty");
         }
 
         for(unsigned long row_idx = 0; row_idx < this->parameters.n; row_idx++){
@@ -787,7 +787,7 @@ string ira::to_string(const char& matrix, const int precision) const {
     } else if('L' == matrix){
 
         if(this->L.empty() || this->L[0].empty() || (this->L[0][0].exponent_length == 0 && this->L[0][0].mantissa_length == 0)){
-            throw std::invalid_argument("ERROR: to_string: L is empty");
+            throw std::invalid_argument("ERROR: toString: L is empty");
         }
 
         for(unsigned long row_idx = 0; row_idx < this->parameters.n; row_idx++){
@@ -803,7 +803,7 @@ string ira::to_string(const char& matrix, const int precision) const {
     } else if('U' == matrix) {
 
         if(this->U.empty() || this->U[0].empty() || (this->U[0][0].exponent_length == 0 && this->U[0][0].mantissa_length == 0)){
-            throw std::invalid_argument("ERROR: to_string: U is empty");
+            throw std::invalid_argument("ERROR: toString: U is empty");
         }
 
         for(unsigned long row_idx = 0; row_idx < this->parameters.n; row_idx++){
@@ -819,7 +819,7 @@ string ira::to_string(const char& matrix, const int precision) const {
     } else if('P' == matrix) {
 
         if(this->P.empty() || (this->P[0].exponent_length == 0 && this->P[0].mantissa_length == 0)){
-            throw std::invalid_argument("ERROR: to_string: P is empty");
+            throw std::invalid_argument("ERROR: toString: P is empty");
         }
 
 
@@ -854,7 +854,7 @@ string ira::to_string(const char& matrix, const int precision) const {
 
 
     } else {
-        throw std::invalid_argument("ERROR: in to_string : invalid matrix parameter");
+        throw std::invalid_argument("ERROR: in toString : invalid matrix parameter");
     }
 
     return ret;
@@ -867,10 +867,10 @@ string ira::to_string(const char& matrix, const int precision) const {
  * @param precision the precision in which the values should be displayed. (-1 = "normal" precision)
  * @return the vector in an std::string format.
  */
-string ira::to_string(vector<mps> vec, int precision) {
+string ira::toString(vector<mps> vec, int precision) {
 
     if (vec.empty()) {
-        throw std::invalid_argument("ERROR: to_string (vector): a is empty");
+        throw std::invalid_argument("ERROR: toString (vector): a is empty");
     }
 
     auto ret = vec[0].to_string(precision);

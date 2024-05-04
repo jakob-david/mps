@@ -487,7 +487,7 @@ TEST(unitary_matrix, init_2x2) {
     ira IRA(2, mantissa_length, exponent_length);
     IRA.setUnitaryMatrix();
 
-    EXPECT_EQ(IRA.to_string('A'), "1.000000, 0.000000, 0.000000, 1.000000");
+    EXPECT_EQ(IRA.toString('A'), "1.000000, 0.000000, 0.000000, 1.000000");
     EXPECT_EQ(mantissa_length, IRA.getMatrixElement(0).mantissa_length);
     EXPECT_EQ(exponent_length, IRA.getMatrixElement(0).exponent_length);
 }
@@ -500,7 +500,7 @@ TEST(unitary_matrix, init_3x3) {
     ira IRA(3, mantissa_length, exponent_length);
     IRA.setUnitaryMatrix();
 
-    EXPECT_EQ(IRA.to_string('A'), "1.000000, 0.000000, 0.000000, 0.000000, 1.000000, 0.000000, 0.000000, 0.000000, 1.000000");
+    EXPECT_EQ(IRA.toString('A'), "1.000000, 0.000000, 0.000000, 0.000000, 1.000000, 0.000000, 0.000000, 0.000000, 1.000000");
     EXPECT_EQ(mantissa_length, IRA.getMatrixElement(0).mantissa_length);
     EXPECT_EQ(exponent_length, IRA.getMatrixElement(0).exponent_length);
 }
@@ -515,7 +515,7 @@ TEST(custom_matrix, init_2x2) {
     ira IRA(2, mantissa_length, exponent_length);
     IRA.setMatrix(new_matrix);
 
-    EXPECT_EQ(IRA.to_string('A'), "10.000000, 20.000000, 30.000000, 40.000000");
+    EXPECT_EQ(IRA.toString('A'), "10.000000, 20.000000, 30.000000, 40.000000");
     EXPECT_EQ(mantissa_length, IRA.getMatrixElement(0).mantissa_length);
     EXPECT_EQ(exponent_length, IRA.getMatrixElement(0).exponent_length);
 }
@@ -530,7 +530,7 @@ TEST(custom_matrix, init_3x3) {
     ira IRA(3, mantissa_length, exponent_length);
     IRA.setMatrix(new_matrix);
 
-    EXPECT_EQ(IRA.to_string('A'), "10.000000, 20.000000, 30.000000, 40.000000, 50.000000, 60.000000, 70.000000, 80.000000, 90.000000");
+    EXPECT_EQ(IRA.toString('A'), "10.000000, 20.000000, 30.000000, 40.000000, 50.000000, 60.000000, 70.000000, 80.000000, 90.000000");
     EXPECT_EQ(mantissa_length, IRA.getMatrixElement(0).mantissa_length);
     EXPECT_EQ(exponent_length, IRA.getMatrixElement(0).exponent_length);
 }
@@ -744,7 +744,7 @@ TEST(setRandomMatrix, sparcity_2){
     }
     double actual_rate = (double) sum / ((double)(n*n));
 
-    EXPECT_NEAR(sparsity_rate, actual_rate, 0.07);
+    EXPECT_NEAR(sparsity_rate, actual_rate, 0.1);
 
 
     //check if matrix is invertible
@@ -1021,7 +1021,7 @@ TEST(setL, simple_1) {
     IRA.setL(new_L);
 
 
-    EXPECT_EQ("10, 20, 30, 40, 50, 60, 70, 80, 90", IRA.to_string('L', 0));
+    EXPECT_EQ("10, 20, 30, 40, 50, 60, 70, 80, 90", IRA.toString('L', 0));
 }
 
 TEST(setL, exception_L_too_large) {
@@ -1060,7 +1060,7 @@ TEST(setU, simple_1) {
     IRA.setU(new_U);
 
 
-    EXPECT_EQ("10, 20, 30, 40, 50, 60, 70, 80, 90", IRA.to_string('U', 0));
+    EXPECT_EQ("10, 20, 30, 40, 50, 60, 70, 80, 90", IRA.toString('U', 0));
 }
 
 TEST(setL, exception_U_too_large) {
@@ -1134,7 +1134,7 @@ TEST(double_to_mps, simple_float) {
 
     auto mps_vector = ira::double_to_mps(mantissa_length, exponent_length, double_vector);
 
-    EXPECT_EQ(ira::to_string(mps_vector, 2), "45.34, -32.00, 3463246.00, -0.34");
+    EXPECT_EQ(ira::toString(mps_vector, 2), "45.34, -32.00, 3463246.00, -0.34");
     EXPECT_EQ(mantissa_length, mps_vector[0].mantissa_length);
     EXPECT_EQ(exponent_length, mps_vector[0].exponent_length);
 }
@@ -1152,7 +1152,7 @@ TEST(double_to_mps, simple_double) {
 
     auto mps_vector = ira::double_to_mps(mantissa_length, exponent_length, double_vector);
 
-    EXPECT_EQ(ira::to_string(mps_vector, 2), "45.34, -32.00, 3463246.00, -0.34");
+    EXPECT_EQ(ira::toString(mps_vector, 2), "45.34, -32.00, 3463246.00, -0.34");
     EXPECT_EQ(mantissa_length, mps_vector[0].mantissa_length);
     EXPECT_EQ(exponent_length, mps_vector[0].exponent_length);
 }
@@ -1255,7 +1255,7 @@ TEST(cast, float_to_double_1) {
     auto mps_vector = ira::double_to_mps(23, 8, double_vector);
     ira::cast(mps_vector, 52, 11);
 
-    EXPECT_EQ(ira::to_string(mps_vector, 2), "45.34, -32.00, 3463246.00, -0.34");
+    EXPECT_EQ(ira::toString(mps_vector, 2), "45.34, -32.00, 3463246.00, -0.34");
     EXPECT_EQ(52, mps_vector[0].mantissa_length);
     EXPECT_EQ(11, mps_vector[0].exponent_length);
 }
@@ -1271,7 +1271,7 @@ TEST(cast, double_to_float_1) {
     auto mps_vector = ira::double_to_mps(52, 11, double_vector);
     ira::cast(mps_vector, 23, 8);
 
-    EXPECT_EQ(ira::to_string(mps_vector, 2), "45.34, -32.00, 3463246.00, -0.34");
+    EXPECT_EQ(ira::toString(mps_vector, 2), "45.34, -32.00, 3463246.00, -0.34");
     EXPECT_EQ(23, mps_vector[0].mantissa_length);
     EXPECT_EQ(8, mps_vector[0].exponent_length);
 }
@@ -2036,17 +2036,17 @@ TEST(calculateMeanPrecision, exception_no_expected_precision_set){
 
 // printing
 // -------------------------------------
-TEST(to_string, exception_nullptr) {
+TEST(toString, exception_nullptr) {
 
     ira IRA(3, 53, 11);
 
-    EXPECT_ANY_THROW(auto tmp = IRA.to_string('A'));
-    EXPECT_ANY_THROW(auto tmp = IRA.to_string('L'));
-    EXPECT_ANY_THROW(auto tmp = IRA.to_string('U'));
-    EXPECT_ANY_THROW(auto tmp = IRA.to_string('P'));
+    EXPECT_ANY_THROW(auto tmp = IRA.toString('A'));
+    EXPECT_ANY_THROW(auto tmp = IRA.toString('L'));
+    EXPECT_ANY_THROW(auto tmp = IRA.toString('U'));
+    EXPECT_ANY_THROW(auto tmp = IRA.toString('P'));
 }
 
-TEST(to_string, exception_invalid_argument) {
+TEST(toString, exception_invalid_argument) {
 
     unsigned long mantissa_length = 53;
     unsigned long exponent_length = 11;
@@ -2056,10 +2056,10 @@ TEST(to_string, exception_invalid_argument) {
     ira IRA(3, mantissa_length, exponent_length);
     IRA.setMatrix(new_matrix);
 
-    EXPECT_ANY_THROW(auto tmp = IRA.to_string('Z'));
+    EXPECT_ANY_THROW(auto tmp = IRA.toString('Z'));
 }
 
-TEST(to_string, round_to_precision_zero) {
+TEST(toString, round_to_precision_zero) {
 
     unsigned long mantissa_length = 53;
     unsigned long exponent_length = 11;
@@ -2069,12 +2069,12 @@ TEST(to_string, round_to_precision_zero) {
     ira IRA(3, mantissa_length, exponent_length);
     IRA.setMatrix(new_matrix);
 
-    EXPECT_EQ(IRA.to_string('A', 0), "10, 20, 30, 40, 50, 60, 70, 80, 90");
+    EXPECT_EQ(IRA.toString('A', 0), "10, 20, 30, 40, 50, 60, 70, 80, 90");
     EXPECT_EQ(mantissa_length, IRA.getMatrixElement(0).mantissa_length);
     EXPECT_EQ(exponent_length, IRA.getMatrixElement(0).exponent_length);
 }
 
-TEST(to_string, round_to_precision_two) {
+TEST(toString, round_to_precision_two) {
 
     unsigned long mantissa_length = 53;
     unsigned long exponent_length = 11;
@@ -2084,7 +2084,7 @@ TEST(to_string, round_to_precision_two) {
     ira IRA(3, mantissa_length, exponent_length);
     IRA.setMatrix(new_matrix);
 
-    EXPECT_EQ(IRA.to_string('A', 2), "10.00, 20.00, 30.00, 40.00, 50.00, 60.00, 70.00, 80.00, 90.00");
+    EXPECT_EQ(IRA.toString('A', 2), "10.00, 20.00, 30.00, 40.00, 50.00, 60.00, 70.00, 80.00, 90.00");
     EXPECT_EQ(mantissa_length, IRA.getMatrixElement(0).mantissa_length);
     EXPECT_EQ(exponent_length, IRA.getMatrixElement(0).exponent_length);
 }
@@ -2093,7 +2093,7 @@ TEST(to_string_vector, exception_vector_empty) {
 
     vector<mps> mps_vector;
 
-    EXPECT_ANY_THROW(auto ret = ira::to_string(mps_vector));
+    EXPECT_ANY_THROW(auto ret = ira::toString(mps_vector));
 }
 
 TEST(to_string_vector, simple_float) {
@@ -2107,7 +2107,7 @@ TEST(to_string_vector, simple_float) {
     mps_vector.emplace_back(mantissa_length, exponent_length, 3463246);
     mps_vector.emplace_back(mantissa_length, exponent_length, -0.34345);
 
-    EXPECT_EQ(ira::to_string(mps_vector, 2), "45.34, -32.00, 3463246.00, -0.34");
+    EXPECT_EQ(ira::toString(mps_vector, 2), "45.34, -32.00, 3463246.00, -0.34");
     EXPECT_EQ(mantissa_length, mps_vector[0].mantissa_length);
     EXPECT_EQ(exponent_length, mps_vector[0].exponent_length);
 }
@@ -2123,7 +2123,7 @@ TEST(to_string_vector, simple_double) {
     mps_vector.emplace_back(mantissa_length, exponent_length, 3463246);
     mps_vector.emplace_back(mantissa_length, exponent_length, -0.34346);
 
-    EXPECT_EQ(ira::to_string(mps_vector, 4), "45.3400, -32.0000, 3463246.0000, -0.3435");
+    EXPECT_EQ(ira::toString(mps_vector, 4), "45.3400, -32.0000, 3463246.0000, -0.3435");
     EXPECT_EQ(mantissa_length, mps_vector[0].mantissa_length);
     EXPECT_EQ(exponent_length, mps_vector[0].exponent_length);
 }

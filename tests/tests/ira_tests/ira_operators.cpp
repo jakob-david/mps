@@ -119,7 +119,7 @@ TEST(add, simple_1_float) {
     auto result = ira::add(first, second);
 
 
-    EXPECT_EQ(should, ira::to_string(result, 2));
+    EXPECT_EQ(should, ira::toString(result, 2));
 }
 
 TEST(add, simple_1_double) {
@@ -138,7 +138,7 @@ TEST(add, simple_1_double) {
     auto result = ira::add(first, second);
 
 
-    EXPECT_EQ(should, ira::to_string(result, 8));
+    EXPECT_EQ(should, ira::toString(result, 8));
 }
 
 
@@ -222,7 +222,7 @@ TEST(subtract, simple_1_float) {
     auto result = ira::subtract(first, second);
 
 
-    EXPECT_EQ(should, ira::to_string(result, 2));
+    EXPECT_EQ(should, ira::toString(result, 2));
 }
 
 TEST(subtract, simple_1_double) {
@@ -241,7 +241,7 @@ TEST(subtract, simple_1_double) {
     auto result = ira::subtract(first, second);
 
 
-    EXPECT_EQ(should, ira::to_string(result, 8));
+    EXPECT_EQ(should, ira::toString(result, 8));
 }
 
 
@@ -322,7 +322,7 @@ TEST(dotProduct, simple_1_float) {
 
    auto result = ira::dotProduct(D, x);
 
-    EXPECT_EQ(should, ira::to_string(result, 2));
+    EXPECT_EQ(should, ira::toString(result, 2));
 }
 
 TEST(dotProduct, simple_1_double) {
@@ -339,7 +339,7 @@ TEST(dotProduct, simple_1_double) {
 
     auto result = ira::dotProduct(D, x);
 
-    EXPECT_EQ(should, ira::to_string(result, 8));
+    EXPECT_EQ(should, ira::toString(result, 8));
 }
 
 TEST(dotProduct, simple_2_float) {
@@ -356,7 +356,7 @@ TEST(dotProduct, simple_2_float) {
 
     auto result = ira::dotProduct(D, x);
 
-    EXPECT_EQ(should, ira::to_string(result, 2));
+    EXPECT_EQ(should, ira::toString(result, 2));
 }
 
 TEST(dotProduct, simple_2_double) {
@@ -373,7 +373,7 @@ TEST(dotProduct, simple_2_double) {
 
     auto result = ira::dotProduct(D, x);
 
-    EXPECT_EQ(should, ira::to_string(result, 8));
+    EXPECT_EQ(should, ira::toString(result, 8));
 }
 
 
