@@ -12,7 +12,7 @@
 
 class ira {
 
-public:
+private:
 
     // parameters struct
     //-------------------------------
@@ -51,6 +51,8 @@ public:
     //-------------------------------
 
 
+public:
+
     // evaluation struct
     //-------------------------------
     struct {
@@ -68,6 +70,7 @@ public:
     } evaluation{};
     //-------------------------------
 
+private:
 
     // variables
     //-------------------------------
