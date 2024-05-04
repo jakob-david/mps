@@ -409,7 +409,7 @@ TEST(plu, simple_1) {
     vector<unsigned long> P_expected = {2, 0, 1};
 
     EXPECT_EQ(L_result, "1.00, 0.00, 0.00\n0.14, 1.00, 0.00\n0.57, 0.50, 1.00\n");
-    EXPECT_EQ(U_result, "7.00, 8.00, 9.00\n-0.00, 0.86, 1.71\n-0.00, -0.00, 0.00\n");
+    EXPECT_EQ(U_result, "7.00, 8.00, 9.00\n0.00, 0.86, 1.71\n0.00, 0.00, 0.00\n");
     EXPECT_EQ(P, P_expected);
 
 }

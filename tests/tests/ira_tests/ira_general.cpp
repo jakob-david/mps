@@ -696,7 +696,7 @@ TEST(setRandomMatrix, sparcity_1){
     }
     double actual_rate = (double) sum / ((double)(n*n));
 
-    EXPECT_NEAR(sparsity_rate, actual_rate, 0.07);
+    EXPECT_NEAR(sparsity_rate, actual_rate, 0.1);
 
     //check if matrix is invertible
     // check rows

@@ -16,14 +16,32 @@ template <typename T>
 string toString(const vector<T>& vec, long precision){
 
     string ret;
-
     for(unsigned long idx = 0; idx < vec.size(); idx++){
+
         std::ostringstream out;
         out.precision(precision);
         out << std::fixed << vec[idx];
 
-        ret.append(std::move(out).str());
+        //ret.append(std::move(out).str());
+
+        auto number= std::move(out).str();
+        bool negative_zero = false;
+        if('-' == number[0] && '0' == number[1] && '.' == number[2]){
+            negative_zero = true;
+            for(long pos = 0; pos < precision; pos++){
+                if('0' != number[3+pos]){
+                    negative_zero = false;
+                    break;
+                }
+            }
+        }
+        if(negative_zero){
+            number = number.substr(1);
+        }
+
+        ret.append(number);
         ret.append(", ");
+
     }
 
     ret.pop_back();
