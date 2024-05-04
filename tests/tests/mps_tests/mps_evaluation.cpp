@@ -154,7 +154,7 @@ TEST(checkPrecision, values_too_small){
     mps MPS_2(52, 4, 8);
 
     bool result = true;
-    vector<bool> new_exponent = {0, 0, 1, 1};
+    vector<bool> new_exponent = {0, 0, 1, 1}; // NOLINT
     MPS_1.setExponent(new_exponent);
     MPS_2.setExponent(new_exponent);
 
@@ -417,6 +417,97 @@ TEST(getPrecision, negative_precision_4){
 
     EXPECT_EQ(-3, MPS_is.getPrecision(MPS_should));
     EXPECT_EQ(0, MPS_should.getPrecision(MPS_is));
+}
+
+TEST(getPrecision, exceptions){
+
+    bool ret = true;
+
+    mps MPS_1(51, 11, 8);
+    mps MPS_2(52, 11, 8);
+
+    EXPECT_ANY_THROW(ret = MPS_1.getPrecision(MPS_2));
+
+    mps MPS_3(52, 10, 8);
+    mps MPS_4(52, 11, 8);
+
+    EXPECT_ANY_THROW(ret = MPS_3.getPrecision(MPS_4));
+
+    EXPECT_TRUE(ret);
+}
+
+TEST(getPrecision, special_values_NaN){
+
+    std::string output;
+
+    string should = "WARNING: getPrecision: one value is NaN => returning max negative value\n";
+
+    long long result;
+
+    mps MPS_1(52, 11, 8);
+    mps MPS_2(52, 11, 8);
+
+    MPS_1.setNaN();
+    MPS_2.setNaN();
+
+    result = MPS_1.getPrecision(MPS_2);
+    EXPECT_EQ(MPS_1.mantissa_length, (long long) result);
+
+    MPS_1 = 8;
+    testing::internal::CaptureStdout();
+    result = MPS_1.getPrecision(MPS_2);
+    output = testing::internal::GetCapturedStdout();
+    EXPECT_EQ(should, output);
+    EXPECT_EQ(numeric_limits<long long>::max() * -1, result);
+
+    MPS_1.setNaN();
+    MPS_2 = 8;
+    testing::internal::CaptureStdout();
+    result = MPS_1.getPrecision(MPS_2);
+    output = testing::internal::GetCapturedStdout();
+    EXPECT_EQ(should, output);
+    EXPECT_EQ(numeric_limits<long long>::max() * -1, result);
+}
+
+TEST(getPrecision, special_values_Infinity){
+
+    std::string output;
+
+    string should = "WARNING: getPrecision: one value is infinity => returning max negative value\n";
+
+    long long result;
+
+    mps MPS_1(52, 11, 8);
+    mps MPS_2(52, 11, 8);
+
+    MPS_1.setInf();
+    MPS_2.setInf();
+
+    result = MPS_1.getPrecision(MPS_2);
+    EXPECT_EQ(MPS_1.mantissa_length, (long long) result);
+
+    MPS_1 = 8;
+    testing::internal::CaptureStdout();
+    result = MPS_1.getPrecision(MPS_2);
+    output = testing::internal::GetCapturedStdout();
+    EXPECT_EQ(should, output);
+    EXPECT_EQ(numeric_limits<long long>::max() * -1, result);
+
+    MPS_1.setInf();
+    MPS_2 = 8;
+    testing::internal::CaptureStdout();
+    result = MPS_1.getPrecision(MPS_2);
+    output = testing::internal::GetCapturedStdout();
+    EXPECT_EQ(should, output);
+    EXPECT_EQ(numeric_limits<long long>::max() * -1, result);
+
+    MPS_1.setInf();
+    MPS_2.setInf(true);
+    testing::internal::CaptureStdout();
+    result = MPS_1.getPrecision(MPS_2);
+    output = testing::internal::GetCapturedStdout();
+    EXPECT_EQ(should, output);
+    EXPECT_EQ(numeric_limits<long long>::max() * -1, result);
 }
 
 

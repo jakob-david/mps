@@ -363,17 +363,46 @@ std::string mps::to_string(const int precision) const {
     }
 }
 
+/**
+ * Gets the precision of two mps objects.
+ * A lax definition of the precision is the number of matching mantissa bits from left to write.
+ * However, this is not a completely correct definition.
+ *
+ * Prints a WARNING when NaNs or Infinities are involved expect if both mps objects are the same.
+ *
+ * Throws Exception:    When the mantissas do not match.
+ *                      When the exponents do not match.
+ *
+ * @param compare the mps object which which this mps object should be compared
+ * @return the matching mantissa bits
+ */
 [[nodiscard]] long long int mps::getPrecision(const mps& compare) const {
 
-    // TODO: add error handling
-    // TODO: special values?
+    if (this->exponent_length != compare.exponent_length) {
+        throw std::invalid_argument("ERROR: in getPrecision : Exponents do not match");
+    }
+    if (this->mantissa_length != compare.mantissa_length) {
+        throw std::invalid_argument("ERROR: in getPrecision : Mantissas do not match");
+    }
+
+    if(this->isNaN() && compare.isNaN()){
+        return (long long) compare.mantissa_length;
+    } else if(this->isNaN() || compare.isNaN()){
+        cout << "WARNING: getPrecision: one value is NaN => returning max negative value\n";
+        return numeric_limits<long long>::max() * -1;
+    }
+
+    if(this->isInfinity() && compare.isInfinity() && (this->isPositive() == compare.isPositive())){
+        return (long long) compare.mantissa_length;
+    } else if(this->isInfinity() || compare.isInfinity()){
+        cout << "WARNING: getPrecision: one value is infinity => returning max negative value\n";
+        return numeric_limits<long long>::max() * -1;
+    }
 
     auto exponent_this = (long long) binaryToInt(this->exponent);
     auto exponent_compare = (long long) binaryToInt(compare.exponent);
 
-
     long long precision_error = 0;
-
 
     if(exponent_this == exponent_compare){
 
