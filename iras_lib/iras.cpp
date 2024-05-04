@@ -10,6 +10,27 @@
 
 using namespace std;
 
+
+template<typename T>
+T round(T value, T precision = 1.0)
+{
+    return std::round(value / precision) * precision;
+}
+
+template<typename T>
+vector<T> round(vector<T> vec, T precision = 1.0)
+{
+    vector<T> ret;
+    ret.resize(vec.size());
+
+    for(unsigned long idx = 0; idx < vec.size(); idx++){
+        ret[idx] = round(vec[idx], precision);
+    }
+
+    return ret;
+}
+
+
 // toString
 //-------------------------------
 template <typename T>

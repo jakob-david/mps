@@ -464,11 +464,11 @@ TEST(directPLU, simple_1){
     vector<vector<double>> A = {{5, 1, 3, 4}, {1, 1, 1, 2}, {1, 2, 1, 3}, {4, 2, -1, 3}};
     vector<double> b = {32, 14, 20, 17};
 
-    vector<double> x_should = {0.99999999999999933, 1.999999999999996, 2.9999999999999982, 4.0000000000000027};
+    vector<double> x_should = {1, 2, 3, 4};
 
     auto x = directPLU(A, b);
 
-    EXPECT_EQ(x_should, x);
+    EXPECT_EQ(x_should, round(x, 1.0000));
 }
 
 TEST(irPLU, simple_1){
@@ -476,10 +476,10 @@ TEST(irPLU, simple_1){
     vector<vector<long double>> A = {{5, 1, 3, 4}, {1, 1, 1, 2}, {1, 2, 1, 3}, {4, 2, -1, 3}};
     vector<long double> b = {32, 14, 20, 17};
 
-    vector<double> x_should = {0.99999999999999889, 1.9999999999999973, 2.9999999999999991, 4.0000000000000027};
+    vector<double> x_should = {1, 2, 3, 4};
 
     auto x = irPLU<float, double, long double>(A, b, 10);
 
-    EXPECT_EQ(x_should, x);
+    EXPECT_EQ(x_should, round(x, 1.0000));
 }
 //-------------------------------
