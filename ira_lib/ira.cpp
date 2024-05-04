@@ -1648,8 +1648,8 @@ void ira::decompPLU(unsigned long mantissa_precision, unsigned long exponent_pre
 
         auto max_row = get_max_U_idx(k, k);
 
-        interchangeRow(&this->U, k, max_row, k, this->parameters.n);
-        interchangeRow(&this->L, k, max_row, 0, k);
+        interchangeRow(this->U, k, max_row, k, this->parameters.n);
+        interchangeRow(this->L, k, max_row, 0, k);
 
         auto tmp = P[k]; P[k] = P[max_row]; P[max_row] = tmp;
 
@@ -2204,12 +2204,12 @@ unsigned long ira::get_max_U_idx(unsigned long column, unsigned long start) cons
  * @param start the index of the starting column
  * @param start the index of the ending column
  */
-void ira::interchangeRow(vector<vector<mps>>* matrix, unsigned long row_one, unsigned long row_two, unsigned long start, unsigned long end) {
+void ira::interchangeRow(vector<vector<mps>>& matrix, unsigned long row_one, unsigned long row_two, unsigned long start, unsigned long end) {
 
     for(auto i = start; i < end; i++){
-        auto tmp = (*matrix)[row_one][i];
-        (*matrix)[row_one][i] = (*matrix)[row_two][i];
-        (*matrix)[row_two][i] = tmp;
+        auto tmp = matrix[row_one][i];
+        matrix[row_one][i] = matrix[row_two][i];
+        matrix[row_two][i] = tmp;
     }
 }
 
