@@ -9,6 +9,7 @@
 #define MPS_IRA_H
 
 #include <chrono>
+#include <algorithm>
 
 class ira {
 
