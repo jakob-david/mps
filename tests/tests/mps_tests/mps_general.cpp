@@ -252,6 +252,41 @@ TEST(converter_tests, test_null_float) {
 // ######################
 // Get Value Tests
 // ######################
+TEST(get_value_tests, sign){
+
+    mps MPS(52, 11, 8);
+    MPS.setSign(true);
+    EXPECT_EQ(true, MPS.getSign());
+    MPS.setSign(false);
+    EXPECT_EQ(false, MPS.getSign());
+}
+
+TEST(get_value_tests, mantissa){
+
+    mps MPS(5, 11, 8);
+
+    vector<bool> new_mantissa = {0,0,1,1,0};
+    MPS.setMantissa(new_mantissa);
+    EXPECT_EQ(new_mantissa, MPS.getMantissa());
+
+    new_mantissa = {0,1,0,1,1};
+    MPS.setMantissa(new_mantissa);
+    EXPECT_EQ(new_mantissa, MPS.getMantissa());
+}
+
+TEST(get_value_tests, exponent){
+
+    mps MPS(52, 5, 5);
+
+    vector<bool> new_exponent = {0,0,1,1,0};
+    MPS.setExponent(new_exponent);
+    EXPECT_EQ(new_exponent, MPS.getExponent());
+
+    new_exponent = {0,1,0,1,1};
+    MPS.setExponent(new_exponent);
+    EXPECT_EQ(new_exponent, MPS.getExponent());
+}
+
 TEST(get_value_tests, get_one_double) {
 
     double test_value = 1;

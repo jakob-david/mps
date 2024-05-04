@@ -36,7 +36,6 @@ public:
 
     // getter methods
     //-------------------------------
-    // TODO: test
     [[nodiscard]] bool getSign() const;
     [[nodiscard]] vector<bool> getMantissa() const;
     [[nodiscard]] vector<bool> getExponent() const;
