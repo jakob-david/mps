@@ -289,6 +289,9 @@ vector<long double> mpe::evaluateAddition() const {
     double a = generatePositiveRandomDouble();
     double b = generatePositiveRandomDouble();
 
+    a = 0.001;
+    b = 100;
+
     cout << "A: " << a << endl;
     cout << "B: " << b << endl;
     cout << "-----------------" << endl;
