@@ -560,7 +560,7 @@ vector<long double> mpe::evaluateAdditionDouble() const {
     float sum_f = 0;
     auto start = std::chrono::high_resolution_clock::now();
     for(unsigned long test = 0; test < this->parameters.iterations; test++){
-        (A_f + B_f);
+        sum_f += (A_f + B_f);
     }
     auto finish = std::chrono::high_resolution_clock::now();
 
@@ -576,7 +576,7 @@ vector<long double> mpe::evaluateAdditionDouble() const {
     double sum_d = 0;
     start = std::chrono::high_resolution_clock::now();
     for(unsigned long test = 0; test < this->parameters.iterations; test++){
-        (A_d + B_d);
+        sum_d += (A_d + B_d);
     }
     finish = std::chrono::high_resolution_clock::now();
 
@@ -592,7 +592,7 @@ vector<long double> mpe::evaluateAdditionDouble() const {
     long double sum_ld = 0;
     start = std::chrono::high_resolution_clock::now();
     for(unsigned long test = 0; test < this->parameters.iterations; test++){
-        (A_ld + B_ld);
+        sum_ld += (A_ld + B_ld);
     }
     finish = std::chrono::high_resolution_clock::now();
 
@@ -626,7 +626,7 @@ vector<long double> mpe::evaluateSubtractionDouble() const {
     float sum_f = 0;
     auto start = std::chrono::high_resolution_clock::now();
     for(unsigned long test = 0; test < this->parameters.iterations; test++){
-        (A_f - B_f);
+        sum_f *= (A_f - B_f);
     }
     auto finish = std::chrono::high_resolution_clock::now();
 
@@ -642,7 +642,7 @@ vector<long double> mpe::evaluateSubtractionDouble() const {
     double sum_d = 0;
     start = std::chrono::high_resolution_clock::now();
     for(unsigned long test = 0; test < this->parameters.iterations; test++){
-        (A_d - B_d);
+        sum_d *= (A_d - B_d);
     }
     finish = std::chrono::high_resolution_clock::now();
 
@@ -658,7 +658,7 @@ vector<long double> mpe::evaluateSubtractionDouble() const {
     long double sum_ld = 0;
     start = std::chrono::high_resolution_clock::now();
     for(unsigned long test = 0; test < this->parameters.iterations; test++){
-        (A_ld - B_ld);
+        sum_ld *= (A_ld - B_ld);
     }
     finish = std::chrono::high_resolution_clock::now();
 
@@ -690,7 +690,7 @@ vector<long double> mpe::evaluateMultiplicationDouble() const {
     float sum_f = 0;
     auto start = std::chrono::high_resolution_clock::now();
     for(unsigned long test = 0; test < this->parameters.iterations; test++){
-        (A_f * B_f);
+        sum_f *= (A_f * B_f);
     }
     auto finish = std::chrono::high_resolution_clock::now();
 
@@ -706,7 +706,7 @@ vector<long double> mpe::evaluateMultiplicationDouble() const {
     double sum_d = 0;
     start = std::chrono::high_resolution_clock::now();
     for(unsigned long test = 0; test < this->parameters.iterations; test++){
-        (A_d * B_d);
+        sum_d *= (A_d * B_d);
     }
     finish = std::chrono::high_resolution_clock::now();
 
@@ -722,7 +722,7 @@ vector<long double> mpe::evaluateMultiplicationDouble() const {
     long double sum_ld = 0;
     start = std::chrono::high_resolution_clock::now();
     for(unsigned long test = 0; test < this->parameters.iterations; test++){
-        (A_ld * B_ld);
+        sum_ld *= (A_ld * B_ld);
     }
     finish = std::chrono::high_resolution_clock::now();
 
@@ -754,7 +754,7 @@ vector<long double> mpe::evaluateDivisionDouble() const {
     float sum_f = 0;
     auto start = std::chrono::high_resolution_clock::now();
     for(unsigned long test = 0; test < this->parameters.iterations; test++){
-        (A_f / B_f);
+        sum_f /= (A_f / B_f);
     }
     auto finish = std::chrono::high_resolution_clock::now();
 
@@ -770,7 +770,7 @@ vector<long double> mpe::evaluateDivisionDouble() const {
     double sum_d = 0;
     start = std::chrono::high_resolution_clock::now();
     for(unsigned long test = 0; test < this->parameters.iterations; test++){
-        (A_d / B_d);
+        sum_d /= (A_d / B_d);
     }
     finish = std::chrono::high_resolution_clock::now();
 
@@ -786,7 +786,7 @@ vector<long double> mpe::evaluateDivisionDouble() const {
     long double sum_ld = 0;
     start = std::chrono::high_resolution_clock::now();
     for(unsigned long test = 0; test < this->parameters.iterations; test++){
-        (A_ld / B_ld);
+        sum_ld /=(A_ld / B_ld);
     }
     finish = std::chrono::high_resolution_clock::now();
 
