@@ -547,7 +547,7 @@ vector<long double> mpe::evaluateAdditionDouble() const {
     py::gil_scoped_release release;
 
     std::vector<long double> ret;
-    long long result_in_nanoseconds;
+    long long result_in_milliseconds;
 
     double a = generatePositiveRandomDouble();
     double b = generatePositiveRandomDouble();
@@ -560,15 +560,12 @@ vector<long double> mpe::evaluateAdditionDouble() const {
     float sum_f = 0;
     auto start = std::chrono::high_resolution_clock::now();
     for(unsigned long test = 0; test < this->parameters.iterations; test++){
-        //#pragma GCC diagnostic push
-        //#pragma GCC diagnostic ignored "-Wunused-value"
         sum_f += (A_f + B_f);
-        //#pragma GCC diagnostic pop
     }
     auto finish = std::chrono::high_resolution_clock::now();
 
-    result_in_nanoseconds = std::chrono::duration_cast<std::chrono::nanoseconds>(finish-start).count();
-    ret.push_back(((long double) result_in_nanoseconds) / 1000);
+    result_in_milliseconds = std::chrono::duration_cast<std::chrono::milliseconds>(finish - start).count();
+    ret.push_back(((long double) result_in_milliseconds) / 1000);
     //-------------------------------
 
 
@@ -583,8 +580,8 @@ vector<long double> mpe::evaluateAdditionDouble() const {
     }
     finish = std::chrono::high_resolution_clock::now();
 
-    result_in_nanoseconds = std::chrono::duration_cast<std::chrono::nanoseconds>(finish-start).count();
-    ret.push_back(((long double) result_in_nanoseconds) / 1000);
+    result_in_milliseconds = std::chrono::duration_cast<std::chrono::milliseconds>(finish - start).count();
+    ret.push_back(((long double) result_in_milliseconds) / 1000);
     //-------------------------------
 
 
@@ -599,8 +596,8 @@ vector<long double> mpe::evaluateAdditionDouble() const {
     }
     finish = std::chrono::high_resolution_clock::now();
 
-    result_in_nanoseconds = std::chrono::duration_cast<std::chrono::nanoseconds>(finish-start).count();
-    ret.push_back(((long double) result_in_nanoseconds) / 1000);
+    result_in_milliseconds = std::chrono::duration_cast<std::chrono::milliseconds>(finish - start).count();
+    ret.push_back(((long double) result_in_milliseconds) / 1000);
     //-------------------------------
 
     cout << sum_f + sum_d + sum_ld << endl;
@@ -616,7 +613,7 @@ vector<long double> mpe::evaluateSubtractionDouble() const {
     py::gil_scoped_release release;
 
     std::vector<long double> ret;
-    long long result_in_nanoseconds;
+    long long result_in_milliseconds;
 
     double a = generatePositiveRandomDouble();
     double b = generatePositiveRandomDouble();
@@ -633,8 +630,8 @@ vector<long double> mpe::evaluateSubtractionDouble() const {
     }
     auto finish = std::chrono::high_resolution_clock::now();
 
-    result_in_nanoseconds = std::chrono::duration_cast<std::chrono::nanoseconds>(finish-start).count();
-    ret.push_back(((long double) result_in_nanoseconds) / 1000);
+    result_in_milliseconds = std::chrono::duration_cast<std::chrono::milliseconds>(finish - start).count();
+    ret.push_back(((long double) result_in_milliseconds) / 1000);
     //-------------------------------
 
 
@@ -649,8 +646,8 @@ vector<long double> mpe::evaluateSubtractionDouble() const {
     }
     finish = std::chrono::high_resolution_clock::now();
 
-    result_in_nanoseconds = std::chrono::duration_cast<std::chrono::nanoseconds>(finish-start).count();
-    ret.push_back(((long double) result_in_nanoseconds) / 1000);
+    result_in_milliseconds = std::chrono::duration_cast<std::chrono::milliseconds>(finish - start).count();
+    ret.push_back(((long double) result_in_milliseconds) / 1000);
     //-------------------------------
 
 
@@ -665,8 +662,8 @@ vector<long double> mpe::evaluateSubtractionDouble() const {
     }
     finish = std::chrono::high_resolution_clock::now();
 
-    result_in_nanoseconds = std::chrono::duration_cast<std::chrono::nanoseconds>(finish-start).count();
-    ret.push_back(((long double) result_in_nanoseconds) / 1000);
+    result_in_milliseconds = std::chrono::duration_cast<std::chrono::milliseconds>(finish - start).count();
+    ret.push_back(((long double) result_in_milliseconds) / 1000);
     //-------------------------------
 
     cout << sum_f + sum_d + sum_ld << endl;
@@ -681,7 +678,7 @@ vector<long double> mpe::evaluateMultiplicationDouble() const {
     py::gil_scoped_release release;
 
     std::vector<long double> ret;
-    long long result_in_nanoseconds;
+    long long result_in_milliseconds;
 
     double a = generatePositiveRandomDouble();
     double b = generatePositiveRandomDouble();
@@ -697,8 +694,8 @@ vector<long double> mpe::evaluateMultiplicationDouble() const {
     }
     auto finish = std::chrono::high_resolution_clock::now();
 
-    result_in_nanoseconds = std::chrono::duration_cast<std::chrono::nanoseconds>(finish-start).count();
-    ret.push_back(((long double) result_in_nanoseconds) / 1000);
+    result_in_milliseconds = std::chrono::duration_cast<std::chrono::milliseconds>(finish-start).count();
+    ret.push_back(((long double) result_in_milliseconds) / 1000);
     //-------------------------------
 
 
@@ -713,8 +710,8 @@ vector<long double> mpe::evaluateMultiplicationDouble() const {
     }
     finish = std::chrono::high_resolution_clock::now();
 
-    result_in_nanoseconds = std::chrono::duration_cast<std::chrono::nanoseconds>(finish-start).count();
-    ret.push_back(((long double) result_in_nanoseconds) / 1000);
+    result_in_milliseconds = std::chrono::duration_cast<std::chrono::milliseconds>(finish-start).count();
+    ret.push_back(((long double) result_in_milliseconds) / 1000);
     //-------------------------------
 
 
@@ -729,8 +726,8 @@ vector<long double> mpe::evaluateMultiplicationDouble() const {
     }
     finish = std::chrono::high_resolution_clock::now();
 
-    result_in_nanoseconds = std::chrono::duration_cast<std::chrono::nanoseconds>(finish-start).count();
-    ret.push_back(((long double) result_in_nanoseconds) / 1000);
+    result_in_milliseconds = std::chrono::duration_cast<std::chrono::milliseconds>(finish-start).count();
+    ret.push_back(((long double) result_in_milliseconds) / 1000);
     //-------------------------------
 
     cout << sum_f + sum_d + sum_ld << endl;
@@ -745,7 +742,7 @@ vector<long double> mpe::evaluateDivisionDouble() const {
     py::gil_scoped_release release;
 
     std::vector<long double> ret;
-    long long result_in_nanoseconds;
+    long long result_in_milliseconds;
 
     double a = generatePositiveRandomDouble();
     double b = generatePositiveRandomDouble();
@@ -761,8 +758,8 @@ vector<long double> mpe::evaluateDivisionDouble() const {
     }
     auto finish = std::chrono::high_resolution_clock::now();
 
-    result_in_nanoseconds = std::chrono::duration_cast<std::chrono::nanoseconds>(finish-start).count();
-    ret.push_back(((long double) result_in_nanoseconds) / 1000);
+    result_in_milliseconds = std::chrono::duration_cast<std::chrono::milliseconds>(finish - start).count();
+    ret.push_back(((long double) result_in_milliseconds) / 1000);
     //-------------------------------
 
 
@@ -777,8 +774,8 @@ vector<long double> mpe::evaluateDivisionDouble() const {
     }
     finish = std::chrono::high_resolution_clock::now();
 
-    result_in_nanoseconds = std::chrono::duration_cast<std::chrono::nanoseconds>(finish-start).count();
-    ret.push_back(((long double) result_in_nanoseconds) / 1000);
+    result_in_milliseconds = std::chrono::duration_cast<std::chrono::milliseconds>(finish - start).count();
+    ret.push_back(((long double) result_in_milliseconds) / 1000);
     //-------------------------------
 
 
@@ -793,8 +790,8 @@ vector<long double> mpe::evaluateDivisionDouble() const {
     }
     finish = std::chrono::high_resolution_clock::now();
 
-    result_in_nanoseconds = std::chrono::duration_cast<std::chrono::nanoseconds>(finish-start).count();
-    ret.push_back(((long double) result_in_nanoseconds) / 1000);
+    result_in_milliseconds = std::chrono::duration_cast<std::chrono::milliseconds>(finish - start).count();
+    ret.push_back(((long double) result_in_milliseconds) / 1000);
     //-------------------------------
 
     cout << sum_f + sum_d + sum_ld << endl;
