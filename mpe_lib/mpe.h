@@ -58,6 +58,7 @@ private:
         unsigned long ep_exponent_length;       // the mantissa length in which the expected precision should be saved.
 
         vector<unsigned long> matrix_sizes;     // the matrix sizes which should be examined.
+        unsigned long mantissa_step_size;
 
     } parameters;
 
@@ -68,6 +69,8 @@ private:
 
         bool expected_error_set;
         bool expected_precision_set;
+
+        bool gil;
 
     } controllers;
 
@@ -111,6 +114,7 @@ public:
     void setExpectedPrecision(long long new_expected_precision, unsigned long mantissa_length, unsigned long exponent_length);
 
     void setMatrixSizes(vector<unsigned long> matrix_sizes);
+    void setMantissaStepSize(unsigned long new_step_size);
     //-------------------------------
 
 
@@ -154,6 +158,7 @@ public:
     // evaluate sparsity
     //-------------------------------
     [[nodiscard]] vector<vector<long double>> evaluateSparsity(bool output = false) const;
+    [[nodiscard]] vector<vector<long double>> evaluateSparsity_2D(bool output = false) const;
     //-------------------------------
 
     // compare operators double/float
@@ -162,6 +167,7 @@ public:
     [[nodiscard]] vector<vector<long double>> compareMMM(unsigned long iter_system, unsigned long iter_mps) const;
     [[nodiscard]] vector<vector<long double>> comparePLU(unsigned long iter_system, unsigned long iter_mps) const;
     [[nodiscard]] vector<vector<long double>> compareIR(unsigned long max_iter, unsigned long iter_system, unsigned long iter_mps) const;
+    [[nodiscard]] vector<vector<vector<long double>>> compareMultipleIR(vector<unsigned long> iterations, unsigned long iter_system, unsigned long iter_mps);
     //-------------------------------
 
     // iterative refinement evaluation

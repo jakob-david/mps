@@ -51,6 +51,7 @@ PYBIND11_MODULE(mpe_library, mpe_handle) {
             .def("setExpectedPrecision", &mpe::setExpectedPrecision)
 
             .def("setMatrixSizes", &mpe::setMatrixSizes)
+            .def("setMantissaStepSize", &mpe::setMantissaStepSize)
             //-------------------------------
 
 
@@ -104,24 +105,6 @@ PYBIND11_MODULE(mpe_library, mpe_handle) {
             .def("evaluateSubtractionExponent", &mpe::evaluateSubtractionExponent)
             .def("evaluateMultiplicationExponent", &mpe::evaluateMultiplicationExponent)
             .def("evaluateDivisionExponent", &mpe::evaluateDivisionExponent)
-
-            /*
-            .def("evaluateAddition", [](mpe &self){
-                py::array out = py::cast(self.evaluateAddition());
-                return out;
-            })
-            .def("evaluateSubtraction", [](mpe &self){
-                py::array out = py::cast(self.evaluateSubtraction());
-                return out;
-            })
-            .def("evaluateMultiplication", [](mpe &self){
-                py::array out = py::cast(self.evaluateMultiplication());
-                return out;
-            })
-            .def("evaluateDivision", [](mpe &self){
-                py::array out = py::cast(self.evaluateDivision());
-                return out;
-            })*/
             //-------------------------------
 
 
@@ -131,31 +114,13 @@ PYBIND11_MODULE(mpe_library, mpe_handle) {
             .def("evaluateSubtractionDouble", &mpe::evaluateSubtractionDouble)
             .def("evaluateMultiplicationDouble", &mpe::evaluateMultiplicationDouble)
             .def("evaluateDivisionDouble", &mpe::evaluateDivisionDouble)
-
-            /*
-            .def("evaluateAdditionDouble", [](mpe &self){
-                py::array out = py::cast(self.evaluateAdditionDouble());
-                return out;
-            })
-            .def("evaluateSubtractionDouble", [](mpe &self){
-                py::array out = py::cast(self.evaluateSubtractionDouble());
-                return out;
-            })
-            .def("evaluateMultiplicationDouble", [](mpe &self){
-                py::array out = py::cast(self.evaluateMultiplicationDouble());
-                return out;
-            })
-            .def("evaluateDivisionDouble", [](mpe &self){
-                py::array out = py::cast(self.evaluateDivisionDouble());
-                return out;
-            })
-             */
             //-------------------------------
 
 
             // evaluate sparsity
             //-------------------------------
             .def("evaluateSparsity", &mpe::evaluateSparsity)
+            .def("evaluateSparsity_2D", &mpe::evaluateSparsity_2D)
             //-------------------------------
 
 
@@ -165,6 +130,7 @@ PYBIND11_MODULE(mpe_library, mpe_handle) {
             .def("compareMMM", &mpe::compareMMM)
             .def("comparePLU", &mpe::comparePLU)
             .def("compareIR", &mpe::compareIR)
+            .def("compareMultipleIR", &mpe::compareMultipleIR)
             //-------------------------------
 
 

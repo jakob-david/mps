@@ -19,6 +19,10 @@ mpe::mpe() {
 
     this->controllers.expected_error_set = false;
     this->controllers.expected_precision_set = false;
+
+    this->controllers.gil = true;
+
+    this->parameters.mantissa_step_size = 1;
 }
 //-------------------------------
 
@@ -170,6 +174,11 @@ void mpe::setMatrixSizes(vector<unsigned long> matrix_sizes){
         this->parameters.matrix_sizes[idx] = matrix_sizes[idx];
     }
 }
+
+void mpe::setMantissaStepSize(unsigned long new_step_size){
+
+    this->parameters.mantissa_step_size = new_step_size;
+}
 //-------------------------------
 
 
@@ -217,7 +226,7 @@ vector<unsigned long> mpe::getUpperPrecisionMantissaAxis() const {
 
     vector<unsigned long> ret;
 
-    for(unsigned long m_size = this->parameters.ur_m_r_lower; m_size <= this->parameters.ur_m_r_upper; m_size++){
+    for(unsigned long m_size = this->parameters.ur_m_r_lower; m_size <= this->parameters.ur_m_r_upper; m_size+=this->parameters.mantissa_step_size){
         ret.push_back(m_size);
     }
 
@@ -817,6 +826,7 @@ vector<vector<long double>> mpe::evaluateSparsity(bool output) const {
     IRA.setRandomRange(this->parameters.random_lower_bound, this->parameters.random_upper_bound);
     IRA.setWorkingPrecision(this->parameters.u_m_l, this->parameters.u_e_l);
     IRA.setLowerPrecision(this->parameters.ul_m_l, this->parameters.ul_e_l);
+    IRA.setMaxIter(this->parameters.iter_max);
 
     auto sparsity_rates = getSparsityAxis();
 
@@ -833,12 +843,63 @@ vector<vector<long double>> mpe::evaluateSparsity(bool output) const {
         run_time.push_back(IRA.evaluation.milliseconds);
     }
 
-    // acquire GIL
-    pybind11::gil_scoped_acquire acquire;
-
     result.push_back(result_relative_error);
     result.push_back(result_precision);
     result.push_back(run_time);
+
+    // acquire GIL
+    pybind11::gil_scoped_acquire acquire;
+
+    return result;
+}
+
+vector<vector<long double>> mpe::evaluateSparsity_2D(bool output) const {
+
+    if(output){
+        cout << "STARTING: evaluateArea_2D" << endl;
+    }
+
+    vector<vector<long double>> result;
+
+    py::gil_scoped_release release;
+
+    for(unsigned long m_size = this->parameters.ur_m_r_lower; m_size <= this->parameters.ur_m_r_upper; m_size += this->parameters.mantissa_step_size){
+
+        if(output){
+            cout << "\tevaluating mantissa: " << m_size << endl;
+        }
+
+        vector<long double> sub_result;
+
+        ira IRA(this->parameters.n, m_size, this->parameters.ur_e_l);
+        IRA.setRandomRange(this->parameters.random_lower_bound, this->parameters.random_upper_bound);
+        IRA.setWorkingPrecision(this->parameters.u_m_l, this->parameters.u_e_l);
+        IRA.setLowerPrecision(this->parameters.ul_m_l, this->parameters.ul_e_l);
+        IRA.setMaxIter(this->parameters.iterations);
+
+        auto sparsity_rates = getSparsityAxis();
+
+        for(auto sparsity_rate : sparsity_rates){
+
+            if(output){
+                cout << "\t\tevaluating sparsity: " << sparsity_rate << endl;
+            }
+
+            IRA.setSparsityRate(sparsity_rate);
+
+            auto b = IRA.generateRandomLinearSystem();
+
+            IRA.irPLU(b);
+
+            sub_result.push_back(IRA.evaluation.milliseconds);
+        }
+
+        result.push_back(sub_result);
+    }
+
+    // acquire GIL
+    pybind11::gil_scoped_acquire acquire;
+
     return result;
 }
 //-------------------------------
@@ -1084,7 +1145,9 @@ vector<vector<long double>> mpe::comparePLU(unsigned long iter_system, unsigned 
 vector<vector<long double>> mpe::compareIR(unsigned long max_iter, unsigned long iter_system, unsigned long iter_mps) const {
 
     // variable for python multithreading.
-    py::gil_scoped_release release;
+    if(this->controllers.gil){
+        py::gil_scoped_release release;
+    }
 
     auto largest_matrix = this->parameters.matrix_sizes.back();
     unsigned long number_of_computations_system = (unsigned long) pow(largest_matrix, 3) * iter_system;
@@ -1157,10 +1220,30 @@ vector<vector<long double>> mpe::compareIR(unsigned long max_iter, unsigned long
     results.push_back(results_system);
     results.push_back(results_mps);
 
+    if(this->controllers.gil){
+        pybind11::gil_scoped_acquire acquire;
+    }
+
+    return results;
+}
+
+vector<vector<vector<long double>>> mpe::compareMultipleIR(vector<unsigned long> iterations, unsigned long iter_system, unsigned long iter_mps) {
+
+    this->controllers.gil = false;
+    vector<vector<vector<long double>>> results;
+
+
+    py::gil_scoped_release release;
+
+    for(auto iter : iterations){
+        results.push_back(compareIR(iter, iter_system, iter_mps));
+    }
+
     pybind11::gil_scoped_acquire acquire;
 
     return results;
 }
+
 //-------------------------------
 
 // iterative refinement evaluation
