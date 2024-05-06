@@ -936,7 +936,7 @@ vector<vector<long double>> mpe::evaluateSparsity_2D_system(bool output) const {
         auto finish = std::chrono::high_resolution_clock::now();
 
         result_in_microseconds = std::chrono::duration_cast<std::chrono::microseconds>(finish - start).count();
-        results_f.push_back(((long double) result_in_microseconds) / 1000 );
+        results_d.push_back(((long double) result_in_microseconds) / 1000 );
     }
 
 
@@ -957,7 +957,7 @@ vector<vector<long double>> mpe::evaluateSparsity_2D_system(bool output) const {
         auto finish = std::chrono::high_resolution_clock::now();
 
         result_in_microseconds = std::chrono::duration_cast<std::chrono::microseconds>(finish - start).count();
-        results_f.push_back(((long double) result_in_microseconds) / 1000 );
+        results_ld.push_back(((long double) result_in_microseconds) / 1000 );
     }
 
 
