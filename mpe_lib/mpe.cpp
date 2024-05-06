@@ -547,7 +547,7 @@ vector<long double> mpe::evaluateAdditionDouble() const {
     py::gil_scoped_release release;
 
     std::vector<long double> ret;
-    long long result_in_milliseconds;
+    long long result_in_microseconds;
 
     double a = generatePositiveRandomDouble();
     double b = generatePositiveRandomDouble();
@@ -563,8 +563,8 @@ vector<long double> mpe::evaluateAdditionDouble() const {
     }
     auto finish = std::chrono::high_resolution_clock::now();
 
-    result_in_milliseconds = std::chrono::duration_cast<std::chrono::milliseconds>(finish - start).count();
-    ret.push_back(((long double) result_in_milliseconds) / 1000);
+    result_in_microseconds = std::chrono::duration_cast<std::chrono::microseconds>(finish - start).count();
+    ret.push_back(((long double) result_in_microseconds) / 1000);
     //-------------------------------
 
 
@@ -578,8 +578,8 @@ vector<long double> mpe::evaluateAdditionDouble() const {
     }
     finish = std::chrono::high_resolution_clock::now();
 
-    result_in_milliseconds = std::chrono::duration_cast<std::chrono::milliseconds>(finish - start).count();
-    ret.push_back(((long double) result_in_milliseconds) / 1000);
+    result_in_microseconds = std::chrono::duration_cast<std::chrono::microseconds>(finish - start).count();
+    ret.push_back(((long double) result_in_microseconds) / 1000);
     //-------------------------------
 
 
@@ -593,8 +593,8 @@ vector<long double> mpe::evaluateAdditionDouble() const {
     }
     finish = std::chrono::high_resolution_clock::now();
 
-    result_in_milliseconds = std::chrono::duration_cast<std::chrono::milliseconds>(finish - start).count();
-    ret.push_back(((long double) result_in_milliseconds) / 1000);
+    result_in_microseconds = std::chrono::duration_cast<std::chrono::microseconds>(finish - start).count();
+    ret.push_back(((long double) result_in_microseconds) / 1000);
     //-------------------------------
 
     pybind11::gil_scoped_acquire acquire;
@@ -608,7 +608,7 @@ vector<long double> mpe::evaluateSubtractionDouble() const {
     py::gil_scoped_release release;
 
     std::vector<long double> ret;
-    long long result_in_milliseconds;
+    long long result_in_microseconds;
 
     double a = generatePositiveRandomDouble();
     double b = generatePositiveRandomDouble();
@@ -624,8 +624,8 @@ vector<long double> mpe::evaluateSubtractionDouble() const {
     }
     auto finish = std::chrono::high_resolution_clock::now();
 
-    result_in_milliseconds = std::chrono::duration_cast<std::chrono::milliseconds>(finish - start).count();
-    ret.push_back(((long double) result_in_milliseconds) / 1000);
+    result_in_microseconds = std::chrono::duration_cast<std::chrono::microseconds>(finish - start).count();
+    ret.push_back(((long double) result_in_microseconds) / 1000);
     //-------------------------------
 
 
@@ -639,8 +639,8 @@ vector<long double> mpe::evaluateSubtractionDouble() const {
     }
     finish = std::chrono::high_resolution_clock::now();
 
-    result_in_milliseconds = std::chrono::duration_cast<std::chrono::milliseconds>(finish - start).count();
-    ret.push_back(((long double) result_in_milliseconds) / 1000);
+    result_in_microseconds = std::chrono::duration_cast<std::chrono::microseconds>(finish - start).count();
+    ret.push_back(((long double) result_in_microseconds) / 1000);
     //-------------------------------
 
 
@@ -654,8 +654,8 @@ vector<long double> mpe::evaluateSubtractionDouble() const {
     }
     finish = std::chrono::high_resolution_clock::now();
 
-    result_in_milliseconds = std::chrono::duration_cast<std::chrono::milliseconds>(finish - start).count();
-    ret.push_back(((long double) result_in_milliseconds) / 1000);
+    result_in_microseconds = std::chrono::duration_cast<std::chrono::microseconds>(finish - start).count();
+    ret.push_back(((long double) result_in_microseconds) / 1000);
     //-------------------------------
 
     pybind11::gil_scoped_acquire acquire;
@@ -668,7 +668,7 @@ vector<long double> mpe::evaluateMultiplicationDouble() const {
     py::gil_scoped_release release;
 
     std::vector<long double> ret;
-    long long result_in_milliseconds;
+    long long result_in_microseconds;
 
     double a = generatePositiveRandomDouble();
     double b = generatePositiveRandomDouble();
@@ -683,8 +683,8 @@ vector<long double> mpe::evaluateMultiplicationDouble() const {
     }
     auto finish = std::chrono::high_resolution_clock::now();
 
-    result_in_milliseconds = std::chrono::duration_cast<std::chrono::milliseconds>(finish-start).count();
-    ret.push_back(((long double) result_in_milliseconds) / 1000);
+    result_in_microseconds = std::chrono::duration_cast<std::chrono::microseconds>(finish - start).count();
+    ret.push_back(((long double) result_in_microseconds) / 1000);
     //-------------------------------
 
 
@@ -698,8 +698,8 @@ vector<long double> mpe::evaluateMultiplicationDouble() const {
     }
     finish = std::chrono::high_resolution_clock::now();
 
-    result_in_milliseconds = std::chrono::duration_cast<std::chrono::milliseconds>(finish-start).count();
-    ret.push_back(((long double) result_in_milliseconds) / 1000);
+    result_in_microseconds = std::chrono::duration_cast<std::chrono::microseconds>(finish - start).count();
+    ret.push_back(((long double) result_in_microseconds) / 1000);
     //-------------------------------
 
 
@@ -713,8 +713,8 @@ vector<long double> mpe::evaluateMultiplicationDouble() const {
     }
     finish = std::chrono::high_resolution_clock::now();
 
-    result_in_milliseconds = std::chrono::duration_cast<std::chrono::milliseconds>(finish-start).count();
-    ret.push_back(((long double) result_in_milliseconds) / 1000);
+    result_in_microseconds = std::chrono::duration_cast<std::chrono::microseconds>(finish - start).count();
+    ret.push_back(((long double) result_in_microseconds) / 1000);
     //-------------------------------
 
     pybind11::gil_scoped_acquire acquire;
@@ -727,7 +727,7 @@ vector<long double> mpe::evaluateDivisionDouble() const {
     py::gil_scoped_release release;
 
     std::vector<long double> ret;
-    long long result_in_milliseconds;
+    long long result_in_microseconds;
 
     double a = generatePositiveRandomDouble();
     double b = generatePositiveRandomDouble();
@@ -742,8 +742,8 @@ vector<long double> mpe::evaluateDivisionDouble() const {
     }
     auto finish = std::chrono::high_resolution_clock::now();
 
-    result_in_milliseconds = std::chrono::duration_cast<std::chrono::milliseconds>(finish - start).count();
-    ret.push_back(((long double) result_in_milliseconds) / 1000);
+    result_in_microseconds = std::chrono::duration_cast<std::chrono::microseconds>(finish - start).count();
+    ret.push_back(((long double) result_in_microseconds) / 1000);
     //-------------------------------
 
 
@@ -757,8 +757,8 @@ vector<long double> mpe::evaluateDivisionDouble() const {
     }
     finish = std::chrono::high_resolution_clock::now();
 
-    result_in_milliseconds = std::chrono::duration_cast<std::chrono::milliseconds>(finish - start).count();
-    ret.push_back(((long double) result_in_milliseconds) / 1000);
+    result_in_microseconds = std::chrono::duration_cast<std::chrono::microseconds>(finish - start).count();
+    ret.push_back(((long double) result_in_microseconds) / 1000);
     //-------------------------------
 
 
@@ -772,8 +772,8 @@ vector<long double> mpe::evaluateDivisionDouble() const {
     }
     finish = std::chrono::high_resolution_clock::now();
 
-    result_in_milliseconds = std::chrono::duration_cast<std::chrono::milliseconds>(finish - start).count();
-    ret.push_back(((long double) result_in_milliseconds) / 1000);
+    result_in_microseconds = std::chrono::duration_cast<std::chrono::microseconds>(finish - start).count();
+    ret.push_back(((long double) result_in_microseconds) / 1000);
     //-------------------------------
 
     pybind11::gil_scoped_acquire acquire;
@@ -850,8 +850,8 @@ vector<vector<long double>> mpe::evaluateSparsity_2D(bool output) const {
 
         ira IRA(this->parameters.n, m_size, this->parameters.ur_e_l);
         IRA.setRandomRange(this->parameters.random_lower_bound, this->parameters.random_upper_bound);
-        IRA.setWorkingPrecision(this->parameters.u_m_l, this->parameters.u_e_l);
-        IRA.setLowerPrecision(this->parameters.ul_m_l, this->parameters.ul_e_l);
+        IRA.setWorkingPrecision(m_size, this->parameters.u_e_l);
+        IRA.setLowerPrecision(m_size, this->parameters.ul_e_l);
         IRA.setMaxIter(this->parameters.iterations);
 
         auto sparsity_rates = getSparsityAxis();
@@ -878,6 +878,97 @@ vector<vector<long double>> mpe::evaluateSparsity_2D(bool output) const {
     pybind11::gil_scoped_acquire acquire;
 
     return result;
+}
+
+vector<vector<long double>> mpe::evaluateSparsity_2D_system(bool output) const {
+
+    if(output){
+        cout << "STARTING: evaluateArea_2D" << endl;
+    }
+
+    py::gil_scoped_release release;
+
+    vector<vector<long double>> results;
+    vector<long double> results_f;
+    vector<long double> results_d;
+    vector<long double> results_ld;
+
+    long long result_in_microseconds;
+
+    auto sparsity_rates = getSparsityAxis();
+
+
+    if(output){
+            cout << "\tevaluating float" << endl;
+        }
+    for(auto sparsity_rate : sparsity_rates){
+
+        if(output){
+            cout << "\t\tevaluating sparsity: " << sparsity_rate << endl;
+        }
+
+        auto A = generateRandomMatrix<float>(this->parameters.n, this->parameters.random_lower_bound, this->parameters.random_upper_bound, sparsity_rate);
+        auto b = generateRandomVector<float>(this->parameters.n, this->parameters.random_lower_bound, this->parameters.random_upper_bound);
+
+        auto start = std::chrono::high_resolution_clock::now();
+        auto x = irPLU<float, float, float>(A, b, this->parameters.iter_max);
+        auto finish = std::chrono::high_resolution_clock::now();
+
+        result_in_microseconds = std::chrono::duration_cast<std::chrono::microseconds>(finish - start).count();
+        results_f.push_back(((long double) result_in_microseconds) / 1000);
+    }
+
+
+    if(output){
+        cout << "\tevaluating double" << endl;
+    }
+    for(auto sparsity_rate : sparsity_rates){
+
+        if(output){
+            cout << "\t\tevaluating sparsity: " << sparsity_rate << endl;
+        }
+
+        auto A = generateRandomMatrix<double>(this->parameters.n, this->parameters.random_lower_bound, this->parameters.random_upper_bound, sparsity_rate);
+        auto b = generateRandomVector<double>(this->parameters.n, this->parameters.random_lower_bound, this->parameters.random_upper_bound);
+
+        auto start = std::chrono::high_resolution_clock::now();
+        auto x = irPLU<double, double, double>(A, b, this->parameters.iter_max);
+        auto finish = std::chrono::high_resolution_clock::now();
+
+        result_in_microseconds = std::chrono::duration_cast<std::chrono::microseconds>(finish - start).count();
+        results_f.push_back(((long double) result_in_microseconds) / 1000 );
+    }
+
+
+    if(output){
+        cout << "\tevaluating long double" << endl;
+    }
+    for(auto sparsity_rate : sparsity_rates){
+
+        if(output){
+            cout << "\t\tevaluating sparsity: " << sparsity_rate << endl;
+        }
+
+        auto A = generateRandomMatrix<long double>(this->parameters.n, this->parameters.random_lower_bound, this->parameters.random_upper_bound, sparsity_rate);
+        auto b = generateRandomVector<long double>(this->parameters.n, this->parameters.random_lower_bound, this->parameters.random_upper_bound);
+
+        auto start = std::chrono::high_resolution_clock::now();
+        auto x = irPLU<long double, long double, long double>(A, b, this->parameters.iter_max);
+        auto finish = std::chrono::high_resolution_clock::now();
+
+        result_in_microseconds = std::chrono::duration_cast<std::chrono::microseconds>(finish - start).count();
+        results_f.push_back(((long double) result_in_microseconds) / 1000 );
+    }
+
+
+    results.push_back(results_f);
+    results.push_back(results_d);
+    results.push_back(results_ld);
+
+    // acquire GIL
+    pybind11::gil_scoped_acquire acquire;
+
+    return results;
 }
 //-------------------------------
 

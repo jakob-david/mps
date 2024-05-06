@@ -159,6 +159,7 @@ public:
     //-------------------------------
     [[nodiscard]] vector<vector<long double>> evaluateSparsity(bool output = false) const;
     [[nodiscard]] vector<vector<long double>> evaluateSparsity_2D(bool output = false) const;
+    [[nodiscard]] vector<vector<long double>> evaluateSparsity_2D_system(bool output = false) const;
     //-------------------------------
 
     // compare operators double/float

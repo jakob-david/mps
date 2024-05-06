@@ -116,11 +116,11 @@ PYBIND11_MODULE(mpe_library, mpe_handle) {
             .def("evaluateDivisionDouble", &mpe::evaluateDivisionDouble)
             //-------------------------------
 
-
             // evaluate sparsity
             //-------------------------------
             .def("evaluateSparsity", &mpe::evaluateSparsity)
             .def("evaluateSparsity_2D", &mpe::evaluateSparsity_2D)
+            .def("evaluateSparsity_2D_system", &mpe::evaluateSparsity_2D_system)
             //-------------------------------
 
 
