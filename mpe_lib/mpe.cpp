@@ -293,7 +293,7 @@ vector<long double> mpe::evaluateAddition() const {
 
     cout << "A: " << a << endl;
     cout << "B: " << b << endl;
-    cout << mps::larger(Q.getExponent(), W.getExponent()) << endl;
+    cout << int(mps::larger(Q.getExponent(), W.getExponent())) << endl;
     cout << "---------------------" << endl;
 
     for(unsigned long m_size = this->parameters.u_m_r_lower; m_size <= this->parameters.u_m_r_upper; m_size++){
