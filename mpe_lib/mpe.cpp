@@ -288,10 +288,13 @@ vector<long double> mpe::evaluateAddition() const {
 
     double a = generatePositiveRandomDouble();
     double b = generatePositiveRandomDouble();
+    mps Q(52, 8, a);
+    mps W(52, 8, b);
 
     cout << "A: " << a << endl;
     cout << "B: " << b << endl;
-    cout << "---------------------" << b << endl;
+    cout << mps::larger(Q.getExponent(), W.getExponent()) << endl;
+    cout << "---------------------" << endl;
 
     for(unsigned long m_size = this->parameters.u_m_r_lower; m_size <= this->parameters.u_m_r_upper; m_size++){
 

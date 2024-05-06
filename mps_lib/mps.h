@@ -136,7 +136,9 @@ private:
     [[nodiscard]] static vector<bool> intToBinary(unsigned long value);
 
     [[nodiscard]] long getBias() const;
+public:
     [[nodiscard]] static char larger(const vector<bool>& a, const vector<bool>& b, bool division_case = false);
+private:
     static void shiftLeft(vector<bool>* vec);
     static bool addOneToBinary(vector<bool>* vector);
     static bool subtractOneFromBinary(vector<bool>* vector);
