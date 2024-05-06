@@ -289,7 +289,7 @@ vector<long double> mpe::evaluateAddition() const {
     double a = generatePositiveRandomDouble();
     double b = generatePositiveRandomDouble();
 
-    a = 0.001;
+    a = 100;
     b = 100;
 
     for(unsigned long m_size = this->parameters.u_m_r_lower; m_size <= this->parameters.u_m_r_upper; m_size++){
