@@ -296,15 +296,16 @@ vector<long double> mpe::evaluateAddition() const {
     cout << int(mps::larger(Q.getExponent(), W.getExponent())) << endl;
     cout << "---------------------" << endl;
 
-    vector<bool> new_exponent = {1, 0, 0, 0, 0, 1, 1, 0 , 0, 1, 0};
+    vector<bool> new_exponent_1 = {1, 0, 0, 0, 0, 1, 1, 0 , 0, 1, 0};
+    vector<bool> new_exponent_2 = {1, 0, 0, 0, 0, 1, 1, 0 , 0, 1, 1};
 
     for(unsigned long m_size = this->parameters.u_m_r_lower; m_size <= this->parameters.u_m_r_upper; m_size++){
 
         mps A(m_size, this->parameters.u_e_l, a);
         mps B(m_size, this->parameters.u_e_l, b);
 
-        A.setExponent(new_exponent);
-        B.setExponent(new_exponent);
+        A.setExponent(new_exponent_1);
+        B.setExponent(new_exponent_2);
 
         const auto start = std::chrono::high_resolution_clock::now();
 
