@@ -557,10 +557,9 @@ vector<long double> mpe::evaluateAdditionDouble() const {
     //-------------------------------
     auto A_f = (float) a;
     auto B_f = (float) b;
-    float sum_f = 0;
     auto start = std::chrono::high_resolution_clock::now();
     for(unsigned long test = 0; test < this->parameters.iterations; test++){
-        sum_f += (A_f + B_f);
+        (A_f + B_f);
     }
     auto finish = std::chrono::high_resolution_clock::now();
 
@@ -573,10 +572,9 @@ vector<long double> mpe::evaluateAdditionDouble() const {
     //-------------------------------
     auto A_d = (double) a;
     auto B_d = (double) b;
-    double sum_d = 0;
     start = std::chrono::high_resolution_clock::now();
     for(unsigned long test = 0; test < this->parameters.iterations; test++){
-        sum_d += (A_d + B_d);
+        (A_d + B_d);
     }
     finish = std::chrono::high_resolution_clock::now();
 
@@ -589,18 +587,15 @@ vector<long double> mpe::evaluateAdditionDouble() const {
     //-------------------------------
     auto A_ld = (long double) a;
     auto B_ld = (long double) b;
-    long double sum_ld = 0;
     start = std::chrono::high_resolution_clock::now();
     for(unsigned long test = 0; test < this->parameters.iterations; test++){
-        sum_ld += (A_ld + B_ld);
+        (A_ld + B_ld);
     }
     finish = std::chrono::high_resolution_clock::now();
 
     result_in_milliseconds = std::chrono::duration_cast<std::chrono::milliseconds>(finish - start).count();
     ret.push_back(((long double) result_in_milliseconds) / 1000);
     //-------------------------------
-
-    cout << sum_f + sum_d + sum_ld << endl;
 
     pybind11::gil_scoped_acquire acquire;
 
@@ -623,10 +618,9 @@ vector<long double> mpe::evaluateSubtractionDouble() const {
     //-------------------------------
     auto A_f = (float) a;
     auto B_f = (float) b;
-    float sum_f = 0;
     auto start = std::chrono::high_resolution_clock::now();
     for(unsigned long test = 0; test < this->parameters.iterations; test++){
-        sum_f *= (A_f - B_f);
+        (A_f - B_f);
     }
     auto finish = std::chrono::high_resolution_clock::now();
 
@@ -639,10 +633,9 @@ vector<long double> mpe::evaluateSubtractionDouble() const {
     //-------------------------------
     auto A_d = (double) a;
     auto B_d = (double) b;
-    double sum_d = 0;
     start = std::chrono::high_resolution_clock::now();
     for(unsigned long test = 0; test < this->parameters.iterations; test++){
-        sum_d *= (A_d - B_d);
+        (A_d - B_d);
     }
     finish = std::chrono::high_resolution_clock::now();
 
@@ -655,18 +648,15 @@ vector<long double> mpe::evaluateSubtractionDouble() const {
     //-------------------------------
     auto A_ld = (long double) a;
     auto B_ld = (long double) b;
-    long double sum_ld = 0;
     start = std::chrono::high_resolution_clock::now();
     for(unsigned long test = 0; test < this->parameters.iterations; test++){
-        sum_ld *= (A_ld - B_ld);
+        (A_ld - B_ld);
     }
     finish = std::chrono::high_resolution_clock::now();
 
     result_in_milliseconds = std::chrono::duration_cast<std::chrono::milliseconds>(finish - start).count();
     ret.push_back(((long double) result_in_milliseconds) / 1000);
     //-------------------------------
-
-    cout << sum_f + sum_d + sum_ld << endl;
 
     pybind11::gil_scoped_acquire acquire;
 
@@ -687,10 +677,9 @@ vector<long double> mpe::evaluateMultiplicationDouble() const {
     //-------------------------------
     auto A_f = (float) a;
     auto B_f = (float) b;
-    float sum_f = 0;
     auto start = std::chrono::high_resolution_clock::now();
     for(unsigned long test = 0; test < this->parameters.iterations; test++){
-        sum_f *= (A_f * B_f);
+        (A_f * B_f);
     }
     auto finish = std::chrono::high_resolution_clock::now();
 
@@ -703,10 +692,9 @@ vector<long double> mpe::evaluateMultiplicationDouble() const {
     //-------------------------------
     auto A_d = (double) a;
     auto B_d = (double) b;
-    double sum_d = 0;
     start = std::chrono::high_resolution_clock::now();
     for(unsigned long test = 0; test < this->parameters.iterations; test++){
-        sum_d *= (A_d * B_d);
+        (A_d * B_d);
     }
     finish = std::chrono::high_resolution_clock::now();
 
@@ -719,18 +707,15 @@ vector<long double> mpe::evaluateMultiplicationDouble() const {
     //-------------------------------
     auto A_ld = (long double) a;
     auto B_ld = (long double) b;
-    long double sum_ld = 0;
     start = std::chrono::high_resolution_clock::now();
     for(unsigned long test = 0; test < this->parameters.iterations; test++){
-        sum_ld *= (A_ld * B_ld);
+        (A_ld * B_ld);
     }
     finish = std::chrono::high_resolution_clock::now();
 
     result_in_milliseconds = std::chrono::duration_cast<std::chrono::milliseconds>(finish-start).count();
     ret.push_back(((long double) result_in_milliseconds) / 1000);
     //-------------------------------
-
-    cout << sum_f + sum_d + sum_ld << endl;
 
     pybind11::gil_scoped_acquire acquire;
 
@@ -751,10 +736,9 @@ vector<long double> mpe::evaluateDivisionDouble() const {
     //-------------------------------
     auto A_f = (float) a;
     auto B_f = (float) b;
-    float sum_f = 0;
     auto start = std::chrono::high_resolution_clock::now();
     for(unsigned long test = 0; test < this->parameters.iterations; test++){
-        sum_f /= (A_f / B_f);
+        (A_f / B_f);
     }
     auto finish = std::chrono::high_resolution_clock::now();
 
@@ -767,10 +751,9 @@ vector<long double> mpe::evaluateDivisionDouble() const {
     //-------------------------------
     auto A_d = (double) a;
     auto B_d = (double) b;
-    double sum_d = 0;
     start = std::chrono::high_resolution_clock::now();
     for(unsigned long test = 0; test < this->parameters.iterations; test++){
-        sum_d /= (A_d / B_d);
+        (A_d / B_d);
     }
     finish = std::chrono::high_resolution_clock::now();
 
@@ -783,18 +766,15 @@ vector<long double> mpe::evaluateDivisionDouble() const {
     //-------------------------------
     auto A_ld = (long double) a;
     auto B_ld = (long double) b;
-    long double sum_ld = 0;
     start = std::chrono::high_resolution_clock::now();
     for(unsigned long test = 0; test < this->parameters.iterations; test++){
-        sum_ld /=(A_ld / B_ld);
+        (A_ld / B_ld);
     }
     finish = std::chrono::high_resolution_clock::now();
 
     result_in_milliseconds = std::chrono::duration_cast<std::chrono::milliseconds>(finish - start).count();
     ret.push_back(((long double) result_in_milliseconds) / 1000);
     //-------------------------------
-
-    cout << sum_f + sum_d + sum_ld << endl;
 
     pybind11::gil_scoped_acquire acquire;
 
