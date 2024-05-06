@@ -292,10 +292,6 @@ vector<long double> mpe::evaluateAddition() const {
     a = 0.001;
     b = 100;
 
-    cout << "A: " << a << endl;
-    cout << "B: " << b << endl;
-    cout << "-----------------" << endl;
-
     for(unsigned long m_size = this->parameters.u_m_r_lower; m_size <= this->parameters.u_m_r_upper; m_size++){
 
         mps A(m_size, this->parameters.u_e_l, a);
