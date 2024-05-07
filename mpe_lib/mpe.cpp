@@ -996,18 +996,22 @@ vector<vector<long double>> mpe::compareMVM(unsigned long iter_system, unsigned 
 
         auto A = generateRandomMatrix<double>(matrix_size, this->parameters.random_lower_bound, this->parameters.random_upper_bound);
         auto x = generateRandomVector<double>(matrix_size, this->parameters.random_lower_bound, this->parameters.random_upper_bound);
+
+        auto b = dotProduct(A, x);
         auto start = std::chrono::high_resolution_clock::now();
         for(unsigned long i = 0; i < iterations; i++){
-            dotProduct(A, x);
+            b = add(dotProduct(A, x), b);
         }
         auto finish = std::chrono::high_resolution_clock::now();
         auto result_d = std::chrono::duration_cast<std::chrono::nanoseconds>(finish-start).count();
 
         auto A_f = convert<double, float>(A);
         auto x_f = convert<double, float>(x);
+
+        auto b_f = dotProduct(A_f, x_f);
         start = std::chrono::high_resolution_clock::now();
         for(unsigned long i = 0; i < iterations; i++){
-            dotProduct(A_f, x_f);
+            b_f = add(dotProduct(A_f, x_f), b_f);
         }
         finish = std::chrono::high_resolution_clock::now();
         auto result_f = std::chrono::duration_cast<std::chrono::nanoseconds>(finish-start).count();
