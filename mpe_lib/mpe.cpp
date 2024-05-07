@@ -1271,6 +1271,7 @@ vector<vector<long double>> mpe::compareSPLU(unsigned long iter_system, unsigned
 
         IRA.castSystemMatrix(23, 8);
         ira::cast(b_mps, 23, 8);
+        IRA.setUpperPrecision(23, 8);
 
         start = std::chrono::high_resolution_clock::now();
         for(unsigned long i = 0; i < iterations; i++){
