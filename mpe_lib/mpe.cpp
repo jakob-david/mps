@@ -1210,6 +1210,88 @@ vector<vector<long double>> mpe::comparePLU(unsigned long iter_system, unsigned 
     return results;
 }
 
+vector<vector<long double>> mpe::compareSPLU(unsigned long iter_system, unsigned long iter_mps) const {
+
+    // variable for python multithreading.
+    py::gil_scoped_release release;
+
+    auto largest_matrix = this->parameters.matrix_sizes.back();
+    unsigned long number_of_computations_system = (unsigned long) pow(largest_matrix, 3) * iter_system;
+    unsigned long number_of_computations_mps = (unsigned long) pow(largest_matrix, 3) * iter_mps;
+
+    vector<long double> results_system;
+    vector<long double> results_mps;
+
+    for(auto matrix_size : this->parameters.matrix_sizes){
+
+        cout << "matrix_size: " << matrix_size << endl;
+
+        // perform test system
+        //-------------------------------
+        unsigned long iterations = number_of_computations_system / (unsigned long) pow(matrix_size, 3);
+
+        auto A = generateRandomMatrix<double>(matrix_size, this->parameters.random_lower_bound, this->parameters.random_upper_bound);
+        auto b = generateRandomVector<double>(matrix_size, this->parameters.random_lower_bound, this->parameters.random_upper_bound);
+
+        auto start = std::chrono::high_resolution_clock::now();
+        for(unsigned long i = 0; i < iterations; i++){
+            directPLU<double>(A, b);
+        }
+        auto finish = std::chrono::high_resolution_clock::now();
+        auto result_d = std::chrono::duration_cast<std::chrono::nanoseconds>(finish-start).count();
+
+        auto A_f = convert<double, float>(A);
+        auto b_f = convert<double, float>(b);
+
+        start = std::chrono::high_resolution_clock::now();
+        for(unsigned long i = 0; i < iterations; i++){
+            directPLU<float>(A_f, b_f);
+        }
+        finish = std::chrono::high_resolution_clock::now();
+        auto result_f = std::chrono::duration_cast<std::chrono::nanoseconds>(finish-start).count();
+
+        results_system.push_back((long double) result_d / (long double) result_f);
+        //-------------------------------
+
+        // perform test mps
+        //-------------------------------
+        iterations = number_of_computations_mps / (unsigned long) pow(matrix_size, 3);
+
+        ira IRA(matrix_size, 52, 11);
+        IRA.setRandomRange(this->parameters.random_lower_bound, this->parameters.random_upper_bound);
+        IRA.setRandomMatrix();
+        auto b_mps = IRA.generateRandomVector(matrix_size, 52, 11);
+
+        start = std::chrono::high_resolution_clock::now();
+        for(unsigned long i = 0; i < iterations; i++){
+            IRA.directPLU(b_mps);
+        }
+        finish = std::chrono::high_resolution_clock::now();
+        result_d = std::chrono::duration_cast<std::chrono::nanoseconds>(finish-start).count();
+
+        IRA.castSystemMatrix(23, 8);
+        ira::cast(b_mps, 23, 8);
+
+        start = std::chrono::high_resolution_clock::now();
+        for(unsigned long i = 0; i < iterations; i++){
+            IRA.directPLU(b_mps);
+        }
+        finish = std::chrono::high_resolution_clock::now();
+        result_f = std::chrono::duration_cast<std::chrono::nanoseconds>(finish-start).count();
+
+        results_mps.push_back((long double) result_d / (long double) result_f);
+        //-------------------------------
+    }
+
+    vector<vector<long double>> results;
+    results.push_back(results_system);
+    results.push_back(results_mps);
+
+    pybind11::gil_scoped_acquire acquire;
+
+    return results;
+}
+
 vector<vector<long double>> mpe::compareIR(unsigned long max_iter, unsigned long iter_system, unsigned long iter_mps) const {
 
     // variable for python multithreading.

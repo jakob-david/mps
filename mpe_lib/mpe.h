@@ -167,6 +167,7 @@ public:
     [[nodiscard]] vector<vector<long double>> compareMVM(unsigned long iter_system, unsigned long iter_mps) const;
     [[nodiscard]] vector<vector<long double>> compareMMM(unsigned long iter_system, unsigned long iter_mps) const;
     [[nodiscard]] vector<vector<long double>> comparePLU(unsigned long iter_system, unsigned long iter_mps) const;
+    [[nodiscard]] vector<vector<long double>> compareSPLU(unsigned long iter_system, unsigned long iter_mps) const;
     [[nodiscard]] vector<vector<long double>> compareIR(unsigned long max_iter, unsigned long iter_system, unsigned long iter_mps) const;
     [[nodiscard]] vector<vector<vector<long double>>> compareMultipleIR(vector<unsigned long> iterations, unsigned long iter_system, unsigned long iter_mps);
     //-------------------------------
