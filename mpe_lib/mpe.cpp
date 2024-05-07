@@ -1017,6 +1017,9 @@ vector<vector<long double>> mpe::compareMVM(unsigned long iter_system, unsigned 
         auto result_f = std::chrono::duration_cast<std::chrono::nanoseconds>(finish-start).count();
 
         results_system.push_back((long double) result_d / (long double) result_f);
+
+        toString(b, 1);
+        toString(b_f, 1);
         //-------------------------------
 
         // perform test mps
