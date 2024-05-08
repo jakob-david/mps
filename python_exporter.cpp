@@ -137,20 +137,9 @@ PYBIND11_MODULE(mpe_library, mpe_handle) {
 
             // iterative refinement evaluation
             //-------------------------------
-            .def("evaluateArea", [](mpe &self, bool output = false){
-                py::array out = py::cast(self.evaluateArea(output));
-                return out;
-            })
-
-            .def("evaluateArea_2D", [](mpe &self, bool output = false){
-                py::array out = py::cast(self.evaluateArea_2D(output));
-                return out;
-            })
-
-            .def("evaluateConvergence_2D", [](mpe &self, bool output = false){
-                py::array out = py::cast(self.evaluateConvergence_2D(output));
-                return out;
-            })
+            .def("evaluateArea", &mpe::evaluateArea)
+            .def("evaluateArea_2D", &mpe::evaluateArea_2D)
+            .def("evaluateConvergence_2D", &mpe::evaluateConvergence_2D)
             //-------------------------------
 
             ;
