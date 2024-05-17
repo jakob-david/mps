@@ -251,7 +251,8 @@ vector<double> mpe::getSparsityAxis() const{
     vector<double> sparsity_rates;
     auto sparsity_points_amount = (double) this->parameters.sparsity_points_amount;
     for(unsigned long i = 0; i <= this->parameters.sparsity_points_amount; i++){
-        sparsity_rates.push_back((((double) i)/(sparsity_points_amount)) * 0.9);
+        //sparsity_rates.push_back((((double) i)/(sparsity_points_amount)) * 0.9);
+        sparsity_rates.push_back((((double) i)/(sparsity_points_amount)) * (1 - (1/(double) this->parameters.n)));
     }
 
     return sparsity_rates;

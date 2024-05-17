@@ -95,7 +95,8 @@ void ira::setRandomRange(double lower_bound, double upper_bound){
  */
 void ira::setSparsityRate(double new_sparsity_rate) {
 
-    if(new_sparsity_rate < 0 || new_sparsity_rate > 0.9){
+    // TODO: check
+    if(new_sparsity_rate < 0 || new_sparsity_rate > (1 - (1/(double) this->parameters.n))){
         throw std::invalid_argument("ERROR: setSparsityRate: sparsity rate must be between 0 and 0.9 ");
     }
 
