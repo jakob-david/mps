@@ -2011,6 +2011,7 @@ vector<mps> ira::irPLU_2(const vector<mps> &b) {
         d = this->backwardSubstitution(d);
         const auto c2 = std::chrono::high_resolution_clock::now();
         this->evaluation.sum_milliseconds_ul += (long double) std::chrono::duration_cast<std::chrono::nanoseconds>(c2 - c1).count();
+        cout << this->evaluation.sum_milliseconds_ul << endl;
         //-------------------------------
 
 
