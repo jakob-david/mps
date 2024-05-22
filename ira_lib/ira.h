@@ -68,6 +68,10 @@ public:
         vector<long double> IR_precisionErrors;
         long double IR_precisionError_sum;
 
+        long double sum_milliseconds_ul;
+        long double sum_milliseconds_u;
+        long double sum_milliseconds_ur;
+
     } evaluation{};
     //-------------------------------
 
@@ -194,6 +198,7 @@ public:
     vector<mps> forwardSubstitution(const vector<mps>& b) const;
     vector<mps> backwardSubstitution(const vector<mps>& b) const;
     vector<mps> irPLU(const vector<mps> &b);
+    vector<mps> irPLU_2(const vector<mps> &b);
     vector<mps> directPLU(const vector<mps>& b);
     //-------------------------------
 

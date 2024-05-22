@@ -1510,6 +1510,76 @@ vector<vector<vector<long double>>> mpe::evaluateArea_2D(bool output) const {
     return result;
 }
 
+vector<vector<vector<long double>>> mpe::evaluateArea_2D_partitioned(bool output) const {
+
+    vector<vector<vector<long double>>> result;
+
+    if(output){
+        cout << "STARTING: evaluateArea_2D" << endl;
+    }
+
+    // release GIL
+    py::gil_scoped_release release;
+
+    // init ira object.
+    ira IRA(this->parameters.n, this->parameters.ur_m_r_upper, this->parameters.ur_e_l);
+    IRA.setRandomRange(this->parameters.random_lower_bound, this->parameters.random_upper_bound);
+    IRA.setMaxIter(this->parameters.iterations);
+    IRA.setLowerPrecisionExponent(this->parameters.ul_e_l);
+    IRA.setWorkingPrecision(this->parameters.u_m_l, this->parameters.u_e_l);
+
+    // generate linear system
+    auto b = IRA.generateRandomLinearSystem();
+
+    // loop over all different mantissa sizes of u_r
+    for(unsigned long ur_mantissa_size = this->parameters.ur_m_r_upper; ur_mantissa_size >= this->parameters.ur_m_r_lower; ur_mantissa_size--){
+
+        if(output){
+            cout << "\t ur_mantissa_size: " << ur_mantissa_size;
+        }
+
+        vector<vector<long double>> subresult;
+
+        IRA.setUpperPrecisionMantissa(ur_mantissa_size);
+
+        // convert the system into the new precision
+        IRA.castSystemMatrix(ur_mantissa_size, this->parameters.u_e_l);
+        IRA.castExpectedResult(ur_mantissa_size, this->parameters.u_e_l);
+        ira::cast(b, ur_mantissa_size, this->parameters.u_e_l);
+
+        // loop over all different mantissa sizes of u_l
+        for(unsigned long ul_mantissa_size = this->parameters.ul_m_r_lower; ul_mantissa_size <= this->parameters.ul_m_r_upper; ul_mantissa_size++){
+
+            vector<long double> single_result;
+
+            // perform iterative refinement algorithm
+            IRA.setLowerPrecisionMantissa(ul_mantissa_size);
+            IRA.irPLU(b);
+
+            // save part times
+            single_result.push_back(IRA.evaluation.sum_milliseconds_ul);
+            single_result.push_back(IRA.evaluation.sum_milliseconds_u);
+            single_result.push_back(IRA.evaluation.sum_milliseconds_ur);
+
+            // save data relative error
+            auto subsubresult_error = IRA.evaluation.IR_relativeError_sum * IRA.evaluation.milliseconds;
+            single_result.push_back(subsubresult_error);
+
+            subresult.push_back(single_result);
+        }
+
+        result.push_back(subresult);
+        if(output){
+            cout << "\tdone\t\tlast: " << this->parameters.ur_m_r_lower << endl;
+        }
+    }
+
+    // acquire GIL
+    pybind11::gil_scoped_acquire acquire;
+
+    return result;
+}
+
 vector<vector<vector<long double>>> mpe::evaluateConvergence_2D(bool output) const {
 
     vector<vector<vector<long double>>> result;

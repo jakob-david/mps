@@ -139,6 +139,7 @@ PYBIND11_MODULE(mpe_library, mpe_handle) {
             //-------------------------------
             .def("evaluateArea", &mpe::evaluateArea)
             .def("evaluateArea_2D", &mpe::evaluateArea_2D)
+            .def("evaluateArea_2D_partitioned", &mpe::evaluateArea_2D_partitioned)
             .def("evaluateConvergence_2D", &mpe::evaluateConvergence_2D)
             //-------------------------------
 

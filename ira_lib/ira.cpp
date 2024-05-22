@@ -1939,6 +1939,124 @@ vector<mps> ira::irPLU(const vector<mps> &b) {
 
     return x;
 }
+
+vector<mps> ira::irPLU_2(const vector<mps> &b) {
+
+    // set evaluation parameters to zero
+    //-------------------------------
+    if(this->parameters.expected_result_present) {
+        this->evaluation.IR_relativeErrors.clear();
+        this->evaluation.IR_relativeError_sum = 0;
+
+        this->evaluation.sum_milliseconds_ul = 0.0;
+        this->evaluation.sum_milliseconds_u = 0.0;
+        this->evaluation.sum_milliseconds_ur = 0.0;
+    }
+    //-------------------------------
+
+    // set precisions (for easier naming)
+    //-------------------------------
+    vector<unsigned long> ur{this->parameters.ur_m_l, this->parameters.ur_e_l};
+    vector<unsigned long> u{this->parameters.u_m_l, this->parameters.u_e_l};
+    vector<unsigned long> ul{this->parameters.ul_m_l, this->parameters.ul_e_l};
+    //-------------------------------
+
+    // start timer
+    //-------------------------------
+    const auto start = std::chrono::high_resolution_clock::now();
+    //-------------------------------
+
+    // perform PLU decomposition
+    //-------------------------------
+    const auto a1 = std::chrono::high_resolution_clock::now();
+    this->decompPLU(ul[0], ul[1]);
+    //-------------------------------
+
+    // perform substitution to gain x_0
+    //-------------------------------
+    auto tmp_b = b;
+    ira::cast(tmp_b, ul[0], ul[1]);
+    auto x = ira::permuteVector(this->P, tmp_b);
+
+    x = this->forwardSubstitution(x);
+    x = this->backwardSubstitution(x);
+    ira::cast(x, u[0], u[1]);
+    const auto a2 = std::chrono::high_resolution_clock::now();
+    this->evaluation.sum_milliseconds_ul += (long double) std::chrono::duration_cast<std::chrono::microseconds>(a2 - a1).count();
+    //-------------------------------
+
+
+    for(unsigned long i = 0; i < this->parameters.max_iter; i++){
+
+        // calculate: r_i = b − A * x_i
+        // in precision: ur
+        //-------------------------------
+        const auto b1 = std::chrono::high_resolution_clock::now();
+        auto x_in_ur = x;
+        ira::cast(x_in_ur, ur[0], ur[1]);
+        auto b_approx = ira::dotProduct(this->A, x_in_ur);
+        auto r = subtract(b, b_approx);
+        const auto b2 = std::chrono::high_resolution_clock::now();
+        this->evaluation.sum_milliseconds_ur += (long double) std::chrono::duration_cast<std::chrono::microseconds>(b2 - b1).count();
+        //-------------------------------
+
+
+        // solve: A * d_i = r_i
+        // in precision: ul
+        //-------------------------------
+        const auto c1 = std::chrono::high_resolution_clock::now();
+        ira::cast(r, ul[0], ul[1]);
+        r = ira::permuteVector(this->P, r);
+        auto d = this->forwardSubstitution(r);
+        d = this->backwardSubstitution(d);
+        const auto c2 = std::chrono::high_resolution_clock::now();
+        this->evaluation.sum_milliseconds_ul += (long double) std::chrono::duration_cast<std::chrono::microseconds>(c2 - c1).count();
+        //-------------------------------
+
+
+        // calculate: x_i+1 = x_i + d_i i
+        // n precision u.
+        //-------------------------------
+        const auto d1 = std::chrono::high_resolution_clock::now();
+        ira::cast(d, u[0], u[1]);
+        x = add(x, d);
+        const auto d2 = std::chrono::high_resolution_clock::now();
+        this->evaluation.sum_milliseconds_u += (long double) std::chrono::duration_cast<std::chrono::microseconds>(d2 - d1).count();
+        //-------------------------------
+
+
+        // evaluation
+        //-------------------------------
+        if(this->parameters.expected_result_present) {
+
+            // evaluate using relative error
+            //-------------------------------
+            long double sum = 0.0;
+            for (unsigned long element_id = 0; element_id < this->parameters.n; element_id++) {
+                sum += x[element_id].getRelativeError_double(this->parameters.expected_result_double[element_id]);
+            }
+            sum /= (long double) this->parameters.n;
+            this->evaluation.IR_relativeErrors.push_back(sum);
+            this->evaluation.IR_relativeError_sum += sum;
+            //------------------------------
+
+        }
+        //-------------------------------
+
+
+    }
+
+    const auto finish = std::chrono::high_resolution_clock::now();
+
+    auto result_in_microseconds = (std::chrono::duration_cast<std::chrono::microseconds>(finish - start).count());
+    this->evaluation.milliseconds = ((long double) result_in_microseconds) / 1000;
+
+    this->evaluation.sum_milliseconds_ul /= 1000;
+    this->evaluation.sum_milliseconds_u /= 1000;
+    this->evaluation.sum_milliseconds_ur /= 1000;
+
+    return x;
+}
 //-------------------------------
 
 
