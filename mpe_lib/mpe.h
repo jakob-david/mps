@@ -121,6 +121,7 @@ public:
     // getters
     //-------------------------------
     [[nodiscard]] unsigned long getIterations() const;
+    [[nodiscard]] unsigned long getWorkingPrecisionMantissa() const;
 
     [[nodiscard]] vector<unsigned long> getIterationAxis() const;
 

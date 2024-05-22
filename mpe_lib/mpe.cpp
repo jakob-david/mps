@@ -189,6 +189,10 @@ unsigned long mpe::getIterations() const {
     return this->parameters.iterations;
 }
 
+unsigned long mpe::getWorkingPrecisionMantissa() const{
+    return this->parameters.u_m_l;
+}
+
 vector<unsigned long> mpe::getIterationAxis() const {
 
     vector<unsigned long> ret;

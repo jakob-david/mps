@@ -1982,7 +1982,7 @@ vector<mps> ira::irPLU_2(const vector<mps> &b) {
     x = this->backwardSubstitution(x);
     ira::cast(x, u[0], u[1]);
     const auto a2 = std::chrono::high_resolution_clock::now();
-    this->evaluation.sum_milliseconds_ul += (long double) std::chrono::duration_cast<std::chrono::microseconds>(a2 - a1).count();
+    this->evaluation.sum_milliseconds_ul += (long double) std::chrono::duration_cast<std::chrono::nanoseconds>(a2 - a1).count();
     //-------------------------------
 
 
@@ -1997,7 +1997,7 @@ vector<mps> ira::irPLU_2(const vector<mps> &b) {
         auto b_approx = ira::dotProduct(this->A, x_in_ur);
         auto r = subtract(b, b_approx);
         const auto b2 = std::chrono::high_resolution_clock::now();
-        this->evaluation.sum_milliseconds_ur += (long double) std::chrono::duration_cast<std::chrono::microseconds>(b2 - b1).count();
+        this->evaluation.sum_milliseconds_ur += (long double) std::chrono::duration_cast<std::chrono::nanoseconds>(b2 - b1).count();
         //-------------------------------
 
 
@@ -2010,7 +2010,7 @@ vector<mps> ira::irPLU_2(const vector<mps> &b) {
         auto d = this->forwardSubstitution(r);
         d = this->backwardSubstitution(d);
         const auto c2 = std::chrono::high_resolution_clock::now();
-        this->evaluation.sum_milliseconds_ul += (long double) std::chrono::duration_cast<std::chrono::microseconds>(c2 - c1).count();
+        this->evaluation.sum_milliseconds_ul += (long double) std::chrono::duration_cast<std::chrono::nanoseconds>(c2 - c1).count();
         //-------------------------------
 
 
@@ -2021,7 +2021,7 @@ vector<mps> ira::irPLU_2(const vector<mps> &b) {
         ira::cast(d, u[0], u[1]);
         x = add(x, d);
         const auto d2 = std::chrono::high_resolution_clock::now();
-        this->evaluation.sum_milliseconds_u += (long double) std::chrono::duration_cast<std::chrono::microseconds>(d2 - d1).count();
+        this->evaluation.sum_milliseconds_u += (long double) std::chrono::duration_cast<std::chrono::nanoseconds>(d2 - d1).count();
         //-------------------------------
 
 
@@ -2051,9 +2051,9 @@ vector<mps> ira::irPLU_2(const vector<mps> &b) {
     auto result_in_microseconds = (std::chrono::duration_cast<std::chrono::microseconds>(finish - start).count());
     this->evaluation.milliseconds = ((long double) result_in_microseconds) / 1000;
 
-    this->evaluation.sum_milliseconds_ul /= 1000;
-    this->evaluation.sum_milliseconds_u /= 1000;
-    this->evaluation.sum_milliseconds_ur /= 1000;
+    this->evaluation.sum_milliseconds_ul /= 1000000;
+    this->evaluation.sum_milliseconds_u /= 1000000;
+    this->evaluation.sum_milliseconds_ur /= 1000000;
 
     return x;
 }

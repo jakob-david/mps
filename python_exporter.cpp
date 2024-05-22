@@ -58,6 +58,7 @@ PYBIND11_MODULE(mpe_library, mpe_handle) {
             // getters
             //-------------------------------
             .def_property_readonly("iterations", &mpe::getIterations)
+            .def_property_readonly("getWorkingPrecisionMantissa", &mpe::getWorkingPrecisionMantissa)
 
             .def("getIterationAxis", [](mpe &self){
                 py::array out = py::cast(self.getIterationAxis());
