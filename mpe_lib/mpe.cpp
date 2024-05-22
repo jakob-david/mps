@@ -1558,7 +1558,7 @@ vector<vector<vector<long double>>> mpe::evaluateArea_2D_partitioned(bool output
 
             // perform iterative refinement algorithm
             IRA.setLowerPrecisionMantissa(ul_mantissa_size);
-            IRA.irPLU(b);
+            IRA.irPLU_2(b);
 
             // save part times
             single_result.push_back(IRA.evaluation.sum_milliseconds_ul);
