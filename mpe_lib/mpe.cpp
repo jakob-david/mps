@@ -548,6 +548,9 @@ vector<long double> mpe::evaluateDivisionExponent() const {
 //-------------------------------
 vector<long double> mpe::evaluateAdditionDouble() const {
 
+    printf("%lu\n", sizeof(double));
+    printf("%lu\n", sizeof(long double));
+
     // variable for python multithreading.
     py::gil_scoped_release release;
 
