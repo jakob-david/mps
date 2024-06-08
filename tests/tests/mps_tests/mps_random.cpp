@@ -36,6 +36,8 @@ TEST(random, double_pp){
             EXPECT_EQ(one + two, ADD.getValue()) << endl << "one: " << one << "   two: " << two << i;
             EXPECT_EQ(should_value(one+two), is_mps(ADD.getBitArray()))
             << endl << "one: " << one << "   two: " << two << "   value: " << ADD.getValue() << endl;
+        } else {
+            cout << "subnormal number" << endl;
         }
         if( (one - two) >= numeric_limits<double>::min() ||
             (one - two) <= (numeric_limits<double>::min() * -1)
@@ -43,6 +45,8 @@ TEST(random, double_pp){
             EXPECT_EQ(one - two, SUB.getValue()) << endl << "one: " << one << "   two: " << two << i;
             EXPECT_EQ(should_value(one-two), is_mps(SUB.getBitArray()))
             << endl << "one: " << one << "   two: " << two << "   value: " << SUB.getValue() << endl;
+        } else {
+            cout << "subnormal number" << endl;
         }
         if( (one * two) >= numeric_limits<double>::min() ||
             (one * two) <= (numeric_limits<double>::min() * -1)
@@ -50,6 +54,8 @@ TEST(random, double_pp){
             EXPECT_EQ(one * two, MUL.getValue()) << endl << "one: " << one << "   two: " << two << i;
             EXPECT_EQ(should_value(one*two), is_mps(MUL.getBitArray()))
             << endl << "one: " << one << "   two: " << two << "   value: " << MUL.getValue() << endl;
+        } else {
+            cout << "subnormal number" << endl;
         }
         if( (one / two) >= numeric_limits<double>::min() ||
             (one / two) <= (numeric_limits<double>::min() * -1)
@@ -57,6 +63,8 @@ TEST(random, double_pp){
             EXPECT_EQ(one / two, DIV.getValue()) << endl << "one: " << one << "   two: " << two << i;
             EXPECT_EQ(should_value(one/two), is_mps(DIV.getBitArray()))
             << endl << "one: " << one << "   two: " << two  << "   value: " << DIV.getValue() << endl;
+        } else {
+            cout << "subnormal number" << endl;
         }
     }
 }
@@ -91,6 +99,8 @@ TEST(random, double_nn){
             EXPECT_EQ(one + two, ADD.getValue()) << endl << "one: " << one << "   two: " << two << i;
             EXPECT_EQ(should_value(one+two), is_mps(ADD.getBitArray()))
             << endl << "one: " << one << "   two: " << two << "   value: " << ADD.getValue() << endl;
+        } else {
+            cout << "subnormal number" << endl;
         }
         if( (one - two) >= numeric_limits<double>::min() ||
             (one - two) <= (numeric_limits<double>::min() * -1)
@@ -98,6 +108,8 @@ TEST(random, double_nn){
             EXPECT_EQ(one - two, SUB.getValue()) << endl << "one: " << one << "   two: " << two << i;
             EXPECT_EQ(should_value(one-two), is_mps(SUB.getBitArray()))
             << endl << "one: " << one << "   two: " << two << "   value: " << SUB.getValue() << endl;
+        } else {
+            cout << "subnormal number" << endl;
         }
         if( (one * two) >= numeric_limits<double>::min() ||
             (one * two) <= (numeric_limits<double>::min() * -1)
@@ -106,6 +118,8 @@ TEST(random, double_nn){
             EXPECT_EQ(should_value(one*two), is_mps(MUL.getBitArray()))
             << endl << "one: " << one << "   two: " << two << "   value: " << MUL.getValue() << endl;
 
+        } else {
+            cout << "subnormal number" << endl;
         }
         if( (one / two) >= numeric_limits<double>::min() ||
             (one / two) <= (numeric_limits<double>::min() * -1)
@@ -114,6 +128,8 @@ TEST(random, double_nn){
             EXPECT_EQ(one / two, DIV.getValue()) << endl << "one: " << one << "   two: " << two << i;
             EXPECT_EQ(should_value(one/two), is_mps(DIV.getBitArray()))
             << endl << "one: " << one << "   two: " << two << "   value: " << DIV.getValue() << endl;
+        } else {
+            cout << "subnormal number" << endl;
         }
     }
 }
@@ -147,6 +163,8 @@ TEST(random, double_pn){
             EXPECT_EQ(one + two, ADD.getValue()) << endl << "one: " << one << "   two: " << two << i;
             EXPECT_EQ(should_value(one+two), is_mps(ADD.getBitArray()))
                                 << endl << "one: " << one << "   two: " << two << "   value: " << ADD.getValue() << endl;
+        } else {
+            cout << "subnormal number" << endl;
         }
         if( (one - two) >= numeric_limits<double>::min() ||
             (one - two) <= (numeric_limits<double>::min() * -1)
@@ -154,6 +172,8 @@ TEST(random, double_pn){
             EXPECT_EQ(one - two, SUB.getValue()) << endl << "one: " << one << "   two: " << two << i;
             EXPECT_EQ(should_value(one-two), is_mps(SUB.getBitArray()))
                                 << endl << "one: " << one << "   two: " << two << "   value: " << SUB.getValue() << endl;
+        } else {
+            cout << "subnormal number" << endl;
         }
         if( (one * two) >= numeric_limits<double>::min() ||
             (one * two) <= (numeric_limits<double>::min() * -1)
@@ -161,6 +181,8 @@ TEST(random, double_pn){
             EXPECT_EQ(one * two, MUL.getValue()) << endl << "one: " << one << "   two: " << two << i;
             EXPECT_EQ(should_value(one*two), is_mps(MUL.getBitArray()))
                                 << endl << "one: " << one << "   two: " << two << "   value: " << MUL.getValue() << endl;
+        } else {
+            cout << "subnormal number" << endl;
         }
         if( (one / two) >= numeric_limits<double>::min() ||
             (one / two) <= (numeric_limits<double>::min() * -1)
@@ -168,6 +190,8 @@ TEST(random, double_pn){
             EXPECT_EQ(one / two, DIV.getValue()) << endl << "one: " << one << "   two: " << two << i;
             EXPECT_EQ(should_value(one/two), is_mps(DIV.getBitArray()))
                                 << endl << "one: " << one << "   two: " << two  << "   value: " << DIV.getValue() << endl;
+        } else {
+            cout << "subnormal number" << endl;
         }
     }
 }
@@ -201,6 +225,8 @@ TEST(random, double_np){
             EXPECT_EQ(one + two, ADD.getValue()) << endl << "one: " << one << "   two: " << two << i;
             EXPECT_EQ(should_value(one+two), is_mps(ADD.getBitArray()))
                                 << endl << "one: " << one << "   two: " << two << "   value: " << ADD.getValue() << endl;
+        } else {
+            cout << "subnormal number" << endl;
         }
         if( (one - two) >= numeric_limits<double>::min() ||
             (one - two) <= (numeric_limits<double>::min() * -1)
@@ -208,6 +234,8 @@ TEST(random, double_np){
             EXPECT_EQ(one - two, SUB.getValue()) << endl << "one: " << one << "   two: " << two << i;
             EXPECT_EQ(should_value(one-two), is_mps(SUB.getBitArray()))
                                 << endl << "one: " << one << "   two: " << two << "   value: " << SUB.getValue() << endl;
+        } else {
+            cout << "subnormal number" << endl;
         }
         if( (one * two) >= numeric_limits<double>::min() ||
             (one * two) <= (numeric_limits<double>::min() * -1)
@@ -215,6 +243,8 @@ TEST(random, double_np){
             EXPECT_EQ(one * two, MUL.getValue()) << endl << "one: " << one << "   two: " << two << i;
             EXPECT_EQ(should_value(one*two), is_mps(MUL.getBitArray()))
                                 << endl << "one: " << one << "   two: " << two << "   value: " << MUL.getValue() << endl;
+        } else {
+            cout << "subnormal number" << endl;
         }
         if( (one / two) >= numeric_limits<double>::min() ||
             (one / two) <= (numeric_limits<double>::min() * -1)
@@ -222,6 +252,8 @@ TEST(random, double_np){
             EXPECT_EQ(one / two, DIV.getValue()) << endl << "one: " << one << "   two: " << two << i;
             EXPECT_EQ(should_value(one/two), is_mps(DIV.getBitArray()))
                                 << endl << "one: " << one << "   two: " << two  << "   value: " << DIV.getValue() << endl;
+        } else {
+            cout << "subnormal number" << endl;
         }
     }
 }
@@ -256,6 +288,8 @@ TEST(random, float_pp){
             EXPECT_EQ(one + two, ADD.getValue()) << endl << "one: " << one << "   two: " << two << i;
             EXPECT_EQ(should_value(one+two), is_mps(ADD.getBitArray()))
                                 << endl << "one: " << one << "   two: " << two << "   value: " << ADD.getValue() << endl;
+        } else {
+            cout << "subnormal number" << endl;
         }
         if( (one - two) >= numeric_limits<float>::min() ||
             (one - two) <= (numeric_limits<float>::min() * -1)
@@ -263,6 +297,8 @@ TEST(random, float_pp){
             EXPECT_EQ(one - two, SUB.getValue()) << endl << "one: " << one << "   two: " << two << i;
             EXPECT_EQ(should_value(one-two), is_mps(SUB.getBitArray()))
                                 << endl << "one: " << one << "   two: " << two << "   value: " << SUB.getValue() << endl;
+        } else {
+            cout << "subnormal number" << endl;
         }
         if( (one * two) >= numeric_limits<float>::min() ||
             (one * two) <= (numeric_limits<float>::min() * -1)
@@ -270,6 +306,8 @@ TEST(random, float_pp){
             EXPECT_EQ(one * two, MUL.getValue()) << endl << "one: " << one << "   two: " << two << i;
             EXPECT_EQ(should_value(one*two), is_mps(MUL.getBitArray()))
                                 << endl << "one: " << one << "   two: " << two << "   value: " << MUL.getValue() << endl;
+        } else {
+            cout << "subnormal number" << endl;
         }
         if( (one / two) >= numeric_limits<float>::min() ||
             (one / two) <= (numeric_limits<float>::min() * -1)
@@ -277,6 +315,8 @@ TEST(random, float_pp){
             EXPECT_EQ(one / two, DIV.getValue()) << endl << "one: " << one << "   two: " << two << i;
             EXPECT_EQ(should_value(one/two), is_mps(DIV.getBitArray()))
                                 << endl << "one: " << one << "   two: " << two  << "   value: " << DIV.getValue() << endl;
+        } else {
+            cout << "subnormal number" << endl;
         }
     }
 }
@@ -310,6 +350,8 @@ TEST(random, float_nn){
             EXPECT_EQ(one + two, ADD.getValue()) << endl << "one: " << one << "   two: " << two << i;
             EXPECT_EQ(should_value(one+two), is_mps(ADD.getBitArray()))
                                 << endl << "one: " << one << "   two: " << two << "   value: " << ADD.getValue() << endl;
+        } else {
+            cout << "subnormal number" << endl;
         }
         if( (one - two) >= numeric_limits<float>::min() ||
             (one - two) <= (numeric_limits<float>::min() * -1)
@@ -317,6 +359,8 @@ TEST(random, float_nn){
             EXPECT_EQ(one - two, SUB.getValue()) << endl << "one: " << one << "   two: " << two << i;
             EXPECT_EQ(should_value(one-two), is_mps(SUB.getBitArray()))
                                 << endl << "one: " << one << "   two: " << two << "   value: " << SUB.getValue() << endl;
+        } else {
+            cout << "subnormal number" << endl;
         }
         if( (one * two) >= numeric_limits<float>::min() ||
             (one * two) <= (numeric_limits<float>::min() * -1)
@@ -324,6 +368,8 @@ TEST(random, float_nn){
             EXPECT_EQ(one * two, MUL.getValue()) << endl << "one: " << one << "   two: " << two << i;
             EXPECT_EQ(should_value(one*two), is_mps(MUL.getBitArray()))
                                 << endl << "one: " << one << "   two: " << two << "   value: " << MUL.getValue() << endl;
+        } else {
+            cout << "subnormal number" << endl;
         }
         if( (one / two) >= numeric_limits<float>::min() ||
             (one / two) <= (numeric_limits<float>::min() * -1)
@@ -331,6 +377,8 @@ TEST(random, float_nn){
             EXPECT_EQ(one / two, DIV.getValue()) << endl << "one: " << one << "   two: " << two << i;
             EXPECT_EQ(should_value(one/two), is_mps(DIV.getBitArray()))
                                 << endl << "one: " << one << "   two: " << two  << "   value: " << DIV.getValue() << endl;
+        } else {
+            cout << "subnormal number" << endl;
         }
     }
 }
@@ -364,6 +412,8 @@ TEST(random, float_pn){
             EXPECT_EQ(one + two, ADD.getValue()) << endl << "one: " << one << "   two: " << two << i;
             EXPECT_EQ(should_value(one+two), is_mps(ADD.getBitArray()))
                                 << endl << "one: " << one << "   two: " << two << "   value: " << ADD.getValue() << endl;
+        } else {
+            cout << "subnormal number" << endl;
         }
         if( (one - two) >= numeric_limits<float>::min() ||
             (one - two) <= (numeric_limits<float>::min() * -1)
@@ -371,6 +421,8 @@ TEST(random, float_pn){
             EXPECT_EQ(one - two, SUB.getValue()) << endl << "one: " << one << "   two: " << two << i;
             EXPECT_EQ(should_value(one-two), is_mps(SUB.getBitArray()))
                                 << endl << "one: " << one << "   two: " << two << "   value: " << SUB.getValue() << endl;
+        } else {
+            cout << "subnormal number" << endl;
         }
         if( (one * two) >= numeric_limits<float>::min() ||
             (one * two) <= (numeric_limits<float>::min() * -1)
@@ -378,6 +430,8 @@ TEST(random, float_pn){
             EXPECT_EQ(one * two, MUL.getValue()) << endl << "one: " << one << "   two: " << two << i;
             EXPECT_EQ(should_value(one*two), is_mps(MUL.getBitArray()))
                                 << endl << "one: " << one << "   two: " << two << "   value: " << MUL.getValue() << endl;
+        } else {
+            cout << "subnormal number" << endl;
         }
         if( (one / two) >= numeric_limits<float>::min() ||
             (one / two) <= (numeric_limits<float>::min() * -1)
@@ -385,6 +439,8 @@ TEST(random, float_pn){
             EXPECT_EQ(one / two, DIV.getValue()) << endl << "one: " << one << "   two: " << two << i;
             EXPECT_EQ(should_value(one/two), is_mps(DIV.getBitArray()))
                                 << endl << "one: " << one << "   two: " << two  << "   value: " << DIV.getValue() << endl;
+        } else {
+            cout << "subnormal number" << endl;
         }
     }
 }
@@ -418,6 +474,8 @@ TEST(random, float_np){
             EXPECT_EQ(one + two, ADD.getValue()) << endl << "one: " << one << "   two: " << two << i;
             EXPECT_EQ(should_value(one+two), is_mps(ADD.getBitArray()))
                                 << endl << "one: " << one << "   two: " << two << "   value: " << ADD.getValue() << endl;
+        } else {
+            cout << "subnormal number" << endl;
         }
         if( (one - two) >= numeric_limits<float>::min() ||
             (one - two) <= (numeric_limits<float>::min() * -1)
@@ -425,6 +483,8 @@ TEST(random, float_np){
             EXPECT_EQ(one - two, SUB.getValue()) << endl << "one: " << one << "   two: " << two << i;
             EXPECT_EQ(should_value(one-two), is_mps(SUB.getBitArray()))
                                 << endl << "one: " << one << "   two: " << two << "   value: " << SUB.getValue() << endl;
+        } else {
+            cout << "subnormal number" << endl;
         }
         if( (one * two) >= numeric_limits<float>::min() ||
             (one * two) <= (numeric_limits<float>::min() * -1)
@@ -432,6 +492,8 @@ TEST(random, float_np){
             EXPECT_EQ(one * two, MUL.getValue()) << endl << "one: " << one << "   two: " << two << i;
             EXPECT_EQ(should_value(one*two), is_mps(MUL.getBitArray()))
                                 << endl << "one: " << one << "   two: " << two << "   value: " << MUL.getValue() << endl;
+        } else {
+            cout << "subnormal number" << endl;
         }
         if( (one / two) >= numeric_limits<float>::min() ||
             (one / two) <= (numeric_limits<float>::min() * -1)
@@ -439,6 +501,8 @@ TEST(random, float_np){
             EXPECT_EQ(one / two, DIV.getValue()) << endl << "one: " << one << "   two: " << two << i;
             EXPECT_EQ(should_value(one/two), is_mps(DIV.getBitArray()))
                                 << endl << "one: " << one << "   two: " << two  << "   value: " << DIV.getValue() << endl;
+        } else {
+            cout << "subnormal number" << endl;
         }
     }
 }
