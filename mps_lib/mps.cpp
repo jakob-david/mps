@@ -10,9 +10,9 @@
 /**
  * Constructor for a multiprecision simulator object using values.
  *
- * @param mantisse Mantisse of the floating point representation.
- * @param exponent Exponent of the floating point representation.
- * @param value Value of the floating point number.
+ * @param mantissa_length Mantisse of the floating point representation
+ * @param exponent_length Exponent of the floating point representation
+ * @param value Value of the floating point number
  */
 mps::mps(unsigned long mantissa_length, unsigned long exponent_length, double value) {
 
@@ -39,10 +39,10 @@ mps::mps(unsigned long mantissa_length, unsigned long exponent_length, double va
 
 /**
  * Constructor for a multiprecision simulator object. The value is set to NAN.
- * Info: That the value is set to NAN is probably not necessary but it maybe prevents errors because of false use.
+ * Info: Having the value set to NAN is probably not necessary, but it may prevent errors because of false use.
  *
- * @param mantisse Mantisse of the floating point representation.
- * @param exponent Exponent of the floating point representation.
+ * @param mantissa_length Mantisse of the floating point representation
+ * @param exponent_length Exponent of the floating point representation
  */
 mps::mps(unsigned long mantissa_length, unsigned long exponent_length) {
 
@@ -87,10 +87,20 @@ mps::~mps() = default;
 // getter methods
 //-------------------------------
 
+/**
+ * Returns the sign.
+ *
+ * @return the sign
+ */
 [[nodiscard]] bool mps::getSign() const{
     return this->sign;
 }
 
+/**
+ * Returns the mantissa.
+ *
+ * @return the mantissa
+ */
 [[nodiscard]] vector<bool> mps::getMantissa() const{
     return this->mantissa;
 }
@@ -100,9 +110,9 @@ mps::~mps() = default;
 }
 
 /**
- * Returns the length of the matisse.
+ * Returns the length of the mantissa.
  *
- * @return length matisse
+ * @return length of the mantissa
  */
 unsigned long mps::getMantisseLength() const {
     return this->mantissa_length;
@@ -111,7 +121,7 @@ unsigned long mps::getMantisseLength() const {
 /**
  * Returns the length of the exponent.
  *
- * @return length exponent
+ * @return length of the exponent
  */
 unsigned long mps::getExponentLength() const {
     return this->exponent_length;
@@ -119,9 +129,9 @@ unsigned long mps::getExponentLength() const {
 
 /**
  * Returns the length of the whole bit array.
- * (sign + matisse + exponent)
+ * Info: bit array = sign + matisse + exponent
  *
- * @return length matisse
+ * @return length of the total bit array
  */
 unsigned long mps::getBitArrayLength() const {
     return this->exponent.size() + this->mantissa.size() + 1;
@@ -129,9 +139,10 @@ unsigned long mps::getBitArrayLength() const {
 
 /**
  * Concatenates the sign bit with the exponent vector and the mantissa vector.
- * The resulting vector is representing the floating point number in memory.
+ * The resulting vector represents the floating point number in memory.
+ * Info: bit array = sign + matisse + exponent
  *
- * @return vector representing the floating point number.
+ * @return vector representing the floating point number
  */
 vector<bool> mps::getBitArray() const {
 
@@ -148,7 +159,7 @@ vector<bool> mps::getBitArray() const {
 /**
  * Calculates the value of the floating point object as double.
  *
- * @return value as double.
+ * @return value as double
  */
 double mps::getValue() const {
 
@@ -203,7 +214,7 @@ double mps::getValue() const {
  * Returns true if the mps object is zero.
  * The sign bit is irrelevant.
  *
- * @return true if zero.
+ * @return true if zero
  */
 bool mps::isZero() const{
 
@@ -225,7 +236,7 @@ bool mps::isZero() const{
 /**
  * Returns true if the mps object is positive or negative infinity.
  *
- * @return true if pos. or neg. infinity.
+ * @return true if pos. or neg. infinity
  */
 bool mps::isInf() const{
 
@@ -248,7 +259,7 @@ bool mps::isInf() const{
 /**
  * Returns true if the mps object is positive.
  *
- * @return true if positive.
+ * @return true if positive
  */
 bool mps::isPositive() const{
 
@@ -260,10 +271,10 @@ bool mps::isPositive() const{
 }
 
 /**
- * Returns true if the mps object is representing a NaN value.
+ * Returns true if the mps object represents a NaN value.
  * The sign bit is irrelevant since some implementations differ between -NaN and +NaN.
  *
- * @return true if NaN.
+ * @return true if NaN
  */
 bool mps::isNaN() const{
 
@@ -289,9 +300,10 @@ bool mps::isNaN() const{
 }
 
 /**
- * Returns a string which represents the floating point number as bit array. (sign + exponent + mantissa)
+ * Returns a string that represents the floating point number as a bit array.
+ * Info: bit array = sign + matisse + exponent
  *
- * @return the fpn as string consisting of 1s and 0s.
+ * @return the FPN as a string consisting of 1s and 0s
  */
 std::string mps::print() const {
 
@@ -310,7 +322,7 @@ std::string mps::print() const {
 /**
  * Returns the (double) value of the mps object as a string instead of a double.
  *
- * @return the value as string
+ * @return the value as a string
  */
 std::string mps::toString(const int precision) const {
 
@@ -330,14 +342,14 @@ std::string mps::toString(const int precision) const {
 //-------------------------------
 /**
  * Compares the mantissa of two mps objects up to a specified precision.
- * So if the two mantissas are different of a magnitude smaller than the precision specified the function returns true.
+ * So if the two mantissas are different of a magnitude smaller than the precision specified, the function returns true.
  *
  *
  * The two mps objects must have the same mantissa length and exponent length.
  *
- * @param compare the mps object to which "this" mps object should be compared to.
- * @param precision up to which precision the mps objects should be compared.
- * @return true if the mps objects are the same up to the given accuracy.
+ * @param compare the mps object to which "this" mps object should be compared to
+ * @param precision up to which precision the mps objects should be compared
+ * @return true if the mps objects are the same up to the given accuracy
  */
 [[nodiscard]] bool mps::checkPrecision(const mps& compare, unsigned long precision) const {
 
@@ -377,10 +389,10 @@ std::string mps::toString(const int precision) const {
 
 /**
  * Gets the precision of two mps objects.
- * A lax definition of the precision is the number of matching mantissa bits from left to write.
+ * A high level definition of the precision is the number of matching mantissa bits from left to right.
  * However, this is not a completely correct definition.
  *
- * Prints a WARNING when NaNs or Infinities are involved expect if both mps objects are the same.
+ * Prints a WARNING when NaNs or Infinities are involved except if both mps objects are the same.
  *
  * Throws Exception:    When the mantissas do not match.
  *                      When the exponents do not match.
@@ -481,8 +493,8 @@ std::string mps::toString(const int precision) const {
 /**
  * Calculates the absolute error between two mps objects using operators from the mps class.
  *
- * @param compare the mps object to which "this" mps object should be compared to.
- * @return the absolute error.
+ * @param compare the mps object to which "this" mps object should be compared to
+ * @return the absolute error
  */
 [[nodiscard]] mps mps::getAbsoluteError(const mps& compare) const{
 
@@ -495,8 +507,8 @@ std::string mps::toString(const int precision) const {
 /**
  * Calculates the relative error between two mps objects using operators from the mps class.
  *
- * @param compare the mps object to which "this" mps object should be compared to.
- * @return the relative error.
+ * @param compare the mps object to which "this" mps object should be compared to
+ * @return the relative error
  */
 [[nodiscard]] mps mps::getRelativeError(const mps& compare) const {
 
@@ -507,10 +519,10 @@ std::string mps::toString(const int precision) const {
 }
 
 /**
- * Calculates the absolute error between two mps objects using the built in operators for double.
+ * Calculates the absolute error between two mps objects using the built-in operators for double.
  *
- * @param compare the mps object to which "this" mps object should be compared to.
- * @return the absolute error.
+ * @param compare the mps object to which "this" mps object should be compared to
+ * @return the absolute error
  */
 [[nodiscard]] double mps::getAbsoluteError_double(const mps& compare) const {
 
@@ -521,10 +533,10 @@ std::string mps::toString(const int precision) const {
 }
 
 /**
- * Calculates the relative error between two mps objects using the built in operators for double.
+ * Calculates the relative error between two mps objects using the built-in operators for double.
  *
- * @param compare the mps object to which "this" mps object should be compared to.
- * @return the relative error.
+ * @param compare the mps object to which "this" mps object should be compared to
+ * @return the relative error
  */
 [[nodiscard]] double mps::getRelativeError_double(const mps& compare) const {
 
@@ -535,10 +547,10 @@ std::string mps::toString(const int precision) const {
 }
 
 /**
- * Calculates the absolute error between one mps object and a double value using the built in operators for double.
+ * Calculates the absolute error between one mps object and a double value using the built-in operators for double.
  *
- * @param compare the mps object to which "this" mps object should be compared to.
- * @return the absolute error.
+ * @param compare the mps object to which "this" mps object should be compared to
+ * @return the absolute error
  */
 [[nodiscard]] double mps::getAbsoluteError_double(const double& compare) const {
 
@@ -547,10 +559,10 @@ std::string mps::toString(const int precision) const {
 }
 
 /**
- * Calculates the relative error between one mps object and a double value using the built in operators for double.
+ * Calculates the relative error between one mps object and a double value using the built-in operators for double.
  *
- * @param compare the mps object to which "this" mps object should be compared to.
- * @return the relative error.
+ * @param compare the mps object to which "this" mps object should be compared to
+ * @return the relative error
  */
 [[nodiscard]] double mps::getRelativeError_double(const double& compare) const {
 
@@ -566,7 +578,7 @@ std::string mps::toString(const int precision) const {
 /**
  * Sets the floating point number to infinity.
  *
- * @param negative set to true for negative infinity. (default false)
+ * @param negative set to true for negative infinity (default false)
  */
 void mps::setInf(bool negative) {
 
@@ -593,7 +605,7 @@ void mps::setInf(bool negative) {
 /**
  * Sets the floating point number to zero.
  *
- * @param negative set to true for negative zero. (default false)
+ * @param negative set to true for negative zero (default false)
  */
 void mps::setZero(bool negative){
 
@@ -617,7 +629,7 @@ void mps::setZero(bool negative){
  *
  * The sign bit can be set individually using the parameter.
  *
- * @param negative sets the sign bit of the NaN value.
+ * @param negative sets the sign bit of the NaN value
  */
 void mps::setNaN(bool negative){
 
@@ -645,17 +657,18 @@ void mps::setNaN(bool negative){
 /**
  * Sets the sign bit of the mps object to a new value.
  *
- * @param negative the value to which the sign bit should be set. (true for negative)
+ * @param negative the value to which the sign bit should be set (true for negative)
  */
 void mps::setSign(bool negative){
     this->sign = negative;
 }
 
 /**
- * Sets the Mantissa to a new Mantissa.
- * Throws an error if the new Mantissa has the same size as the olf mantissa.
+ * Sets the mantissa to a new mantissa.
  *
- * @param new_mantissa the vector to which the mantissa should be set.
+ * Throws Exception:    When mantissa sizes do not match.
+ *
+ * @param new_mantissa the vector to which the mantissa should be set
  */
 void mps::setMantissa(vector<bool>& new_mantissa){
 
@@ -670,9 +683,10 @@ void mps::setMantissa(vector<bool>& new_mantissa){
 
 /**
  * Sets the Exponent to a new Exponent.
- * Throws an error if the new exponent has the same size as the old exponent.
  *
- * @param new_mantissa the vector to which the mantissa should be set.
+ * Throws Exception:    When exponent sizes do not match.
+ *
+ * @param new_mantissa the vector to which the mantissa should be set
  */
 void mps::setExponent(vector<bool>& new_exponent){
 
@@ -690,11 +704,11 @@ void mps::setExponent(vector<bool>& new_exponent){
 // cast
 //-------------------------------
 /**
- * Casts the mps object to the size to which it should be casted.
+ * Casts the mps object to a new size.
  *
- * If the size is larger than before the value is not changed and the new elements are just filled with the appropriate
- * values. If the new size is smaller the value is rounded to be accurate for this new size. If needed the object will
- * be set to a special value.
+ * If the size is larger than before, the value is not changed, and the new elements are just filled with the
+ * appropriate values. If the new size is smaller, the value is rounded to be accurate for this new size.
+ * If needed, the object will be set to a special value.
  *
  * Info: Does check for correct input and special values.
  *
@@ -753,7 +767,7 @@ void mps::cast(const unsigned long new_mantissa_size, const unsigned long new_ex
     } else if(new_exponent_size < this->exponent_length) {
 
 
-        // check if exponent is too large or too small
+        // check if the exponent is too large or too small
         // ------------------------------------------------------
         if(!this->isZero()) {
             // "normal case"
@@ -818,8 +832,8 @@ void mps::cast(const unsigned long new_mantissa_size, const unsigned long new_ex
 }
 
 /**
- * Resizes the mps object to the size to which it should be casted. It does not care for the value of the object
- * but just sets the size of the vectors and the value of the variables containing the sizes.
+ * Resizes the mps object to the a new size. It does not care for the value of the object
+ * but sets the size of the vectors and the value of the variables containing the sizes.
  * Info: Does not check for correct input.
  *
  * @param new_mantissa_size the new size of the mantissa
@@ -866,7 +880,7 @@ mps& mps::operator=(double value){
 }
 
 /**
- * Sets one mps object equal to an other mps object.
+ * Sets one mps object equal to another mps object.
  */
 mps& mps::operator=(const mps& other) {
 
@@ -893,12 +907,12 @@ mps& mps::operator=(const mps& other) {
 }
 
 /**
- * Sets one mps object equal to an other mps object.
+ * Sets one mps object equal to another mps object.
  *
- * The the mantissa or the exponent do not match this operator does not throw an exception
+ * If the mantissas or the exponents do not match, this operator does not throw an exception
  * but reformats the object instead.
  *
- * This operator should be used with caution since in this way implicit casts are possible.
+ * This operator should be used with caution since, in this way, implicit casts are possible.
  */
 mps& mps::operator|=(const mps& other) {
 
@@ -927,9 +941,12 @@ mps& mps::operator|=(const mps& other) {
 }
 
 /**
- * Performs am addition to two mps floating point values.
+ * Performs an addition of two mps floating point values.
  *
- * It is responsible for error handling, special values and choosing with "calculation" to use.
+ * It is responsible for special values and choosing which "calculation" to use.
+ *
+ * Throws Exception:    When the mantissas do not match.
+ *                      When the exponents do not match.
  */
 mps mps::operator+(const mps& other) const {
 
@@ -989,9 +1006,12 @@ mps mps::operator+(const mps& other) const {
 }
 
 /**
- * Performs a subtraction to two mps floating point values.
+ * Performs a subtraction of two mps floating point values.
  *
- * It is responsible for error handling, special values and choosing with "calculation" to use.
+ * It is responsible for special values and choosing which "calculation" to use.
+ *
+ * Throws Exception:    When the mantissas do not match.
+ *                      When the exponents do not match.
  */
 mps mps::operator-(const mps& other) const {
 
@@ -1052,9 +1072,12 @@ mps mps::operator-(const mps& other) const {
 }
 
 /**
- * Performs a multiplication to two mps floating point values.
+ * Performs a multiplication of two mps floating point values.
  *
- * It is responsible for error handling, special values and choosing with "calculation" to use.
+ * It is responsible for special values and choosing which "calculation" to use.
+ *
+ * Throws Exception:    When the mantissas do not match.
+ *                      When the exponents do not match.
  */
 mps mps::operator*(const mps& other) const {
 
@@ -1105,9 +1128,12 @@ mps mps::operator*(const mps& other) const {
 }
 
 /**
- * Performs a division to two mps floating point values.
+ * Performs a division of two mps floating point values.
  *
- * It is responsible for error handling, special values and choosing with "calculation" to use.
+ * It is responsible for special values and choosing which "calculation" to use.
+ *
+ * Throws Exception:    When the mantissas do not match.
+ *                      When the exponents do not match.
  */
 mps mps::operator/(const mps& other) const {
 
@@ -1173,7 +1199,7 @@ mps mps::operator/(const mps& other) const {
 /**
  * Calculates the binary floating point representation of the given value and saves it inside the mps object.
  *
- * @param value the value to which the bit array should be set.
+ * @param value the value to which the bit array should be set
  */
 void mps::setValue(const double value) {
 
@@ -1213,7 +1239,7 @@ void mps::setValue(const double value) {
     // calculate the exponent
     long mantissa_shift;
     if(abs(value) > numeric_limits<float>::max()){
-        // When the value is too large rounding problems occur using log2.
+        // When the value is too large, rounding problems occur using log2.
         // (At least I think that is the problem)
         double tmp_value = abs(value);
         long tmp_count = 0;
@@ -1239,7 +1265,7 @@ void mps::setValue(const double value) {
     } else if(exponent.size() == exponent_length){
         value_too_large = allTrue(this->exponent);
     }
-    // Fill not used but available bits with zero.
+
     if  (value_too_large){
 
         exponent.resize(exponent_length);
@@ -1280,12 +1306,12 @@ void mps::setValue(const double value) {
 }
 
 /**
- * Performs an addition on two mps objects which have the same sign.
+ * Performs an addition on two mps objects that have the same sign.
  *
  * @param one reference to the first addend
  * @param two reference to the second addend
- * @param set_sign the sign to which the final result should be set.
- * @return the resulting mps object.
+ * @param set_sign the sign to which the final result should be set
+ * @return the resulting mps object
  */
 [[nodiscard]] mps mps::addition(const mps &one, const mps &two, const bool set_sign) {
 
@@ -1323,7 +1349,7 @@ void mps::setValue(const double value) {
         if(exponent_diff <= one.mantissa.size()){
             ret.mantissa = add(two.mantissa, one.mantissa, exponent_diff, &carrier);
         } else if(one.mantissa.back() && (exponent_diff == one.mantissa.size()+1) && allFalse(two.mantissa)){
-            // special case where the rounding distance is the same, and the rounded number therefore must be even.
+            // special case where the rounding distance is the same, and the rounded number, therefore, must be even.
             ret.mantissa = one.mantissa;
             if(addOneToBinary(&ret.mantissa)){
                 addOneToBinary(&ret.exponent);
@@ -1343,7 +1369,7 @@ void mps::setValue(const double value) {
         if(exponent_diff <= one.mantissa.size()){
             ret.mantissa = add(one.mantissa, two.mantissa, exponent_diff, &carrier);
         } else if(two.mantissa.back() && (exponent_diff == two.mantissa.size()+1) && allFalse(one.mantissa)){
-            // special case where the rounding distance is the same, and the rounded number therefore must be even.
+            // special case where the rounding distance is the same, and the rounded number, therefore, must be even.
             ret.mantissa = two.mantissa;
             if(addOneToBinary(&ret.mantissa)){
                 addOneToBinary(&ret.exponent);
@@ -1389,12 +1415,12 @@ void mps::setValue(const double value) {
 }
 
 /**
- * Performs a subtraction on two mps objects which have the same sign.
+ * Performs a subtraction on two mps objects that have the same sign.
  *
- * @param minued reference to the minued number.
+ * @param minued reference to the minued number
  * @param subtrahend reference to the subtracted number
- * @param set_sign the sign to which the final result should be set.
- * @return the resulting mps object.
+ * @param set_sign the sign to which the final result should be set
+ * @return the resulting mps object
  */
 [[nodiscard]] mps mps::subtraction(const mps &minued, const mps &subtrahend, bool set_sign) {
 
@@ -1423,7 +1449,7 @@ void mps::setValue(const double value) {
     //-------------------------------
 
 
-    // set exponent and do calculation.
+    // set exponent and does calculation.
     //-------------------------------
     char larger_tmp = larger(minued.exponent, subtrahend.exponent);
     if(1 == larger_tmp){
@@ -1500,7 +1526,7 @@ void mps::setValue(const double value) {
             break;
         }
 
-        // for every "right shift" pull one zero form the right.
+        // for every "right shift", pull one zero from the right.
         ret.mantissa.push_back(false);
     }
 
@@ -1521,12 +1547,12 @@ void mps::setValue(const double value) {
 }
 
 /**
- * Performs a multiplication on two mps objects which have the same sign.
+ * Performs a multiplication on two mps objects that have the same sign.
  *
- * @param one reference to the first multiplicand.
- * @param two reference to the second multiplicand.
- * @param set_sign the sign to which the final result should be set.
- * @return the resulting mps object.
+ * @param one reference to the first multiplicand
+ * @param two reference to the second multiplicand
+ * @param set_sign the sign to which the final result should be set
+ * @return the resulting mps object
  */
 [[nodiscard]] mps mps::multiplication(const mps& one, const mps& two, bool set_sign) {
 
@@ -1656,12 +1682,12 @@ void mps::setValue(const double value) {
 }
 
 /**
- * Performs a division on two mps objects which have the same sign.
+ * Performs a division on two mps objects that have the same sign.
  *
- * @param dividend reference to the dividend of the division.
- * @param divisor reference to the divisor of the division.
- * @param set_sign the sign to which the final result should be set.
- * @return the resulting mps object.
+ * @param dividend reference to the dividend of the division
+ * @param divisor reference to the divisor of the division
+ * @param set_sign the sign to which the final result should be set
+ * @return the resulting mps object
  */
 [[nodiscard]] mps mps::division(const mps& dividend, const mps& divisor, bool set_sign) {
 
@@ -1805,7 +1831,7 @@ void mps::setValue(const double value) {
  * Checks whether two mps objects are the same.
  * Info: handles exceptions and special values.
  *
- * @return true if they are the same, false otherwise.
+ * @return true if they are the same, false otherwise
  */
 bool mps::operator==(const mps& other) const{
 
@@ -1831,7 +1857,7 @@ bool mps::operator==(const mps& other) const{
  * Checks whether two mps objects are not the same.
  * Info: handles exceptions and special values.
  *
- * @return true if they are not the same, false otherwise.
+ * @return true if they are not the same, false otherwise
  */
 bool mps::operator!=(const mps& other) const{
 
@@ -1857,7 +1883,7 @@ bool mps::operator!=(const mps& other) const{
  * Checks whether the first mps object is larger than the other mps object.
  * Info: handles exceptions and special values.
  *
- * @return true if it is larger, false otherwise.
+ * @return true if it is larger, false otherwise
  */
 bool mps::operator>(const mps& other) const{
 
@@ -1887,7 +1913,7 @@ bool mps::operator>(const mps& other) const{
  * Checks whether the first mps object is smaller than the other mps object.
  * Info: handles exceptions and special values.
  *
- * @return true if it is smaller, false otherwise.
+ * @return true if it is smaller, false otherwise
  */
 bool mps::operator<(const mps& other) const{
 
@@ -1914,10 +1940,10 @@ bool mps::operator<(const mps& other) const{
 }
 
 /**
- * Checks whether the first mps object is larger or equal than the other mps object.
+ * Checks whether the first mps object is larger than or equal to than the other mps object.
  * Info: handles exceptions and special values.
  *
- * @return true if it is larger or equal, false otherwise.
+ * @return true if it is larger or equal, false otherwise
  */
 bool mps::operator>=(const mps& other) const {
 
@@ -1944,10 +1970,10 @@ bool mps::operator>=(const mps& other) const {
 }
 
 /**
- * Checks whether the first mps object is smaller or equal than the other mps object.
+ * Checks whether the first mps object is smaller than or equal to the other mps object.
  * Info: handles exceptions and special values.
  *
- * @return true if it is larger, false otherwise.
+ * @return true if it is larger, false otherwise
  */
 bool mps::operator<=(const mps& other) const {
 
@@ -1975,12 +2001,12 @@ bool mps::operator<=(const mps& other) const {
 
 
 /**
- * Performs the actual check whether two mps objects are the same.
+ * Performs the actual check of whether two mps objects are the same.
  * Info: Does not check for correct input or special values.
  *
  * @param one first mps object
- * @param two second mps object.
- * @return true if they are the same, false otherwise.
+ * @param two second mps object
+ * @return true if they are the same, false otherwise
  */
 [[nodiscard]] bool mps::equal(const mps& one, const mps& two){
 
@@ -1998,8 +2024,8 @@ bool mps::operator<=(const mps& other) const {
  * Info: Does not check for correct input or special values.
  *
  * @param one first mps object
- * @param two second mps object.
- * @return true if they are not the same, false otherwise.
+ * @param two second mps object
+ * @return true if they are not the same, false otherwise
  */
 [[nodiscard]] bool mps::notEqual(const mps& one, const mps& two){
 
@@ -2051,7 +2077,7 @@ bool mps::operator<=(const mps& other) const {
 }
 
 /**
- * Performs the actual check whether the first mps object is larger or equal than the second mps object.
+ * Performs the actual check whether the first mps object is larger than or equal to the second mps object.
  * Info: Does not check for correct input or special values.
  *
  * @param one first mps object
@@ -2070,7 +2096,7 @@ bool mps::operator<=(const mps& other) const {
 }
 
 /**
- * Performs the actual check whether the first mps object is smaller or equal than the second mps object.
+ * Performs the actual check whether the first mps object is smaller than or equal to the second mps object.
  * Info: Does not check for correct input or special values.
  *
  * @param one first mps object
@@ -2131,13 +2157,13 @@ bool mps::operator<=(const mps& other) const {
 
 /**
  * Performs a binary addition using a full adder.
- * The binary numbers are represented as vector containing booleans.
+ * The binary numbers are represented as vectors containing booleans.
  *
  * @param a reference to the first addend
  * @param b reference to the second addend
  * @param carry set to true if an adjustment is wanted when the carrier bit of the last iteration is 1
- * @param carrier_return pointer to a boolean where the last state of the carrier bit can be save
- * @return the result as binary number.
+ * @param carrier_return pointer to a boolean where the last state of the carrier bit can be saved
+ * @return the result as a binary number
  */
 vector<bool> mps::binaryAddition(const vector<bool>& a, const vector<bool>& b, bool* carrier_return){
 
@@ -2169,11 +2195,11 @@ vector<bool> mps::binaryAddition(const vector<bool>& a, const vector<bool>& b, b
 
 /**
  * Performs a binary subtraction.
- * The binary numbers are represented as vector containing booleans.
+ * The binary numbers are represented as vectors containing booleans.
  *
- * @param minuend reference to the vector which should be reduced
- * @param subtrahend reference to the vector which should be subtracted.
- * @return the result as a binary number.
+ * @param minuend reference to the vector, which should be reduced
+ * @param subtrahend reference to the vector which should be subtracted
+ * @return the result as a binary number
  */
 vector<bool> mps::binarySubtraction(const vector<bool>& minuend, const vector<bool>& subtrahend){
 
@@ -2181,7 +2207,7 @@ vector<bool> mps::binarySubtraction(const vector<bool>& minuend, const vector<bo
     auto tmp = invertAndAddOne(subtrahend, &carrie);
 
     if(carrie){
-        return minuend; // if there is a carrier bit present at the end the subtrahend is zero.
+        return minuend; // If there is a carrier bit present at the end, the subtrahend is zero.
     }
 
     return binaryAddition(minuend, tmp);
@@ -2189,10 +2215,10 @@ vector<bool> mps::binarySubtraction(const vector<bool>& minuend, const vector<bo
 
 /**
  * Performs an addition but adds directly to the summand. The addend can be smaller.
- * If so the addend will be "virtually" shifted to the left so the the first bits match.
+ * If so, the addend will be "virtually" shifted to the left so the the first bits match.
  *
  * ATTENTION: The function does not check whether a carrier bit is present at the end,
- * since it is expected that the vectors either have an appropriate structure or actually a subtraction is performed.
+ * since it is expected that the vectors either have an appropriate structure or that a subtraction is performed.
  *
  * @param summand pointer to the vector to which the addend is added.
  * @param addend reference to the addend which is going to be added to the summand.
@@ -2227,31 +2253,21 @@ void mps::binarySummation(vector<bool> *summand, const vector<bool> &addend, con
         (*summand)[j] = (*summand)[j] ^ carrier;
     }
 
-    /*
-    j = 0; // = start
-    while(carrier && j > 0){
-        j--;
-        if(!(*summand)[j]){
-            (*summand)[j] = true;
-            carrier = false;
-        }
-    }
-     */
 }
 
 /**
- * Performs an addition of a floating point mantissa where also an offset can be set.
+ * Performs an addition of two floating point mantissas where an offset can also be set.
  *
- * If an offset is set the first vector argument is shifted to the right (and padded on the left) and
- * the second vector argument is shifted to the left (and padded on the right).
+ * If an offset is set, the first vector argument is shifted to the right (and padded on the left),
+ * and the second vector argument is shifted to the left (and padded on the right).
  *
  * The padding can be set individually.
  *
- * It can be decided whether a carrier step should be made at the and. This is is at the end of the addition a carrier
- * bit is present, an extra element (bool) will be added at the beginning of the resulting vector.
+ * It can be decided whether a carrier step should be made at the and. This is at the end of the addition of a carrier
+ * bit is present, and an extra element (bool) will be added at the beginning of the resulting vector.
  *
- * Since this is an addition for floating point mantissas it considers the hidden digit. This is the first bit left of
- * the decimal point which is not saved since it is there by definition. To be able to use the code for inverted vectors
+ * Since this is an addition for floating point mantissas, it considers the hidden digit. This is the first bit left of
+ * the decimal point, which is not saved since it is there by definition. To be able to use the code for inverted vectors
  * (which is needed for subtraction) the value of the hidden digit can be set individually.
  *
  * The last value of the carrier bit can be returned via cr.
@@ -2259,7 +2275,7 @@ void mps::binarySummation(vector<bool> *summand, const vector<bool> &addend, con
  * @param lp the vector which is padded on the left (and therefore shifted to the right)
  * @param rp the vector which is padded on the right (and therefore shifted to the left)
  * @param off_set the offset which can be set
- * @param c whether a carrier set should be made.
+ * @param c whether a carrier bit should be added at the beginning if present
  * @param p first: padding for lp, second: padding for rp
  * @param hd first: hidden digit for lp, second: hidden digit for rp
  * @param cr pointer to a bool where the last value of the carrier bit can be saved (default: nullptr)
@@ -2267,11 +2283,11 @@ void mps::binarySummation(vector<bool> *summand, const vector<bool> &addend, con
  */
 vector<bool> mps::binaryOffsetAddition(const vector<bool>& lp, const vector<bool>& rp, unsigned long off_set, bool c, const bool p[2], const bool hd[2],  bool* cr){
 
-    // Setting up basic variable.
+    // setting up basic variable.
     vector<bool> ret;
     bool carrier = false;
 
-    // Calculate right padding part.
+    // calculate the right padding part.
     //-------------------------------
     for(auto i = lp.size(); i > lp.size()-off_set;){
         i--;
@@ -2283,7 +2299,7 @@ vector<bool> mps::binaryOffsetAddition(const vector<bool>& lp, const vector<bool
     //-------------------------------
 
 
-    // Calculate part between the padding.
+    // calculate the part between the padding.
     //-------------------------------
     unsigned long j = rp.size();
     for(auto i = lp.size()-off_set; i > 0;){
@@ -2297,13 +2313,13 @@ vector<bool> mps::binaryOffsetAddition(const vector<bool>& lp, const vector<bool
 
     if(off_set > 0){
 
-        // Calculate left parts hidden digit.
+        // calculate the left parts hidden digit.
         j--;
         ret.insert(ret.begin(), (hd[0] ^ rp[j]) ^ carrier);
         carrier = ((hd[0] && rp[j]) || (hd[0] && carrier)) || (rp[j] && carrier);
 
 
-        // Calculate left padding part.
+        // calculate the left padding part.
         //-------------------------------
         for(; j > 0;){
             j--;
@@ -2315,25 +2331,23 @@ vector<bool> mps::binaryOffsetAddition(const vector<bool>& lp, const vector<bool
         //-------------------------------
 
 
-        // Calculate right parts hidden digit.
-        // ret.insert(ret.begin(), hd[1] ^ carrier);
-        // carrier = (hd[1] && carrier);
+        // calculate right parts hidden digit
         ret.insert(ret.begin(), (p[0] ^ hd[1]) ^ carrier);
         carrier = ((p[0]  && hd[1]) || (p[0]  && carrier)) || (hd[1] && carrier);
 
     } else {
 
-        // Calculate hidden digit of both variables.
+        // calculate the hidden digit of both variables
         ret.insert(ret.begin(), (hd[0] ^ hd[1]) ^ carrier);
         carrier = ((hd[0] && hd[1]) || (hd[0] && carrier)) || (hd[1] && carrier);
     }
 
-    // Perform carrier step if wanted.
+    // perform carrier step if wanted.
     if(c && carrier){
         ret.insert(ret.begin(), true);
     }
 
-    // Save carrier bit if wanted.
+    // save carrier bit if wanted.
     if(cr != nullptr) {
         *cr = carrier;
     }
@@ -2345,8 +2359,8 @@ vector<bool> mps::binaryOffsetAddition(const vector<bool>& lp, const vector<bool
 /**
  * Performs the rounding of the mantissa according to IEEE754.
  *
- * @param mantissa Pointer to the mantissa which should be rounded.
- * @param mantissa_len The length to which the mantissa should be rounded.
+ * @param mantissa pointer to the mantissa that should be rounded
+ * @param mantissa_len The length to which the mantissa should be rounded
  */
 bool mps::round(vector<bool> *mantissa, unsigned long mantissa_len) {
 
@@ -2391,7 +2405,7 @@ bool mps::round(vector<bool> *mantissa, unsigned long mantissa_len) {
  * The binary number is stored in a vector of booleans.
  *
  * @param vector vector containing the binary number
- * @return the binary number as integer
+ * @return the binary number as an integer
  */
 unsigned long mps::binaryToInt(vector<bool> vector){
 
@@ -2410,8 +2424,8 @@ unsigned long mps::binaryToInt(vector<bool> vector){
  * Converts an integer to a binary number.
  * The binary number is stored in a vector of booleans.
  *
- * @param value the value of the integer.
- * @return the value as binary number.
+ * @param value the value of the integer
+ * @return the value as a binary number
  */
 vector<bool> mps::intToBinary(unsigned long value) {
 
@@ -2435,18 +2449,21 @@ long mps::getBias() const{
 }
 
 /**
- * To be read: Is the bit value a represents larger than the one of b.
+ * Compares the size of a to the size of b.
+ *
+ * The return value is defined as values:
  * 1 if a > b
  * 0 if a == b
  * -1 if a < b
  *
- * Only works for vectors of same size. ATTENTION: Does not check for same length!
+ * ATTENTION: Does not check for same length!
+ * Only works for vectors of the same size.
  *
- * Division Case: In the case of a division the routine must account for "hidden" bits.
+ * Division Case: In the case of a division, the routine must account for "hidden" bits.
  *
  * @param a reference to the vector containing the first binary number
  * @param b reference to the vector containing the second binary number
- * @param division_case whether the division case is wanted or not.
+ * @param division_case whether the division case is wanted or not
  * @return 1 if a > b, 0 if a == b, -1 if a < b
  */
 char mps::larger(const vector<bool>& a, const vector<bool>& b, const bool division_case){
@@ -2479,7 +2496,7 @@ char mps::larger(const vector<bool>& a, const vector<bool>& b, const bool divisi
 
 /**
  * Adds one to a binary number saved inside a vector.
- * The vector consists of booleans which represents a binary number.
+ * The vector consists of booleans, which represent a binary number.
  *
  * @param vector pointer to the vector containing the binary number where one should be added
  * @return true if a carrier bit was present in the last iteration, false otherwise
@@ -2499,7 +2516,7 @@ bool mps::addOneToBinary(vector<bool>* vector){
 
 /**
  * Subtracts one to a binary number saved inside a vector.
- * The vector consists of booleans which represents a binary number.
+ * The vector consists of booleans, which represent a binary number.
  *
  * @param vector pointer to the vector containing the binary number where one should be subtracted
  * @return true if a carrier bit was present in the last iteration, false otherwise
@@ -2518,11 +2535,11 @@ bool mps::subtractOneFromBinary(vector<bool> *vector){
 }
 
 /**
- * Creates a copy of the vector vec. Then inverts the copy, adds one to it and returns it afterwards.
+ * Creates a copy of the vector vec. Then, it inverts the copy, adds one to it, and returns it afterward.
  *
- * @param vec reference to the vector which copy should be inverted and added one to it.
- * @param carrie pointer to a boolean value which will be set to true if a carrier bit is present at the end.
- * @return the resulting copied and tempered vector.
+ * @param vec reference to the vector which copy should be inverted, and added one to it
+ * @param carrie pointer to a boolean value, which will be set to true if a carrier bit is present at the end
+ * @return the resulting copied and tempered vector
  */
 vector<bool> mps::invertAndAddOne(const vector<bool> &vec, bool *carrie, const bool division_case){
 
@@ -2554,20 +2571,20 @@ vector<bool> mps::invertAndAddOne(const vector<bool> &vec, bool *carrie, const b
 }
 
 /**
- * Checks if a vector consisting of only true booleans.
+ * Checks if a vector only consists of true booleans.
  *
- * @param vector reference to the vector which should be checked.
- * @return true is all entries of the vector are true.
+ * @param vector reference to the vector, which should be checked
+ * @return true if all entries of the vector are true
  */
 [[nodiscard]] bool mps::allTrue(const vector<bool>& vector) {
     return std::all_of(vector.begin(), vector.end(), [](bool i){return i;});
 }
 
 /**
- * Checks if a vector consisting of only false booleans.
+ * Checks if a vector only consists of false booleans.
  *
- * @param vector reference to the vector which should be checked.
- * @return true is all entries of the vector are false.
+ * @param vector reference to the vector, which should be checked
+ * @return true if all entries of the vector are false
  */
 [[nodiscard]] bool mps::allFalse(const vector<bool>& vector) {
     return std::all_of(vector.begin(), vector.end(), [](bool i){return !i;});
@@ -2576,7 +2593,7 @@ vector<bool> mps::invertAndAddOne(const vector<bool> &vec, bool *carrie, const b
 /**
  * Shifts a vector to the left.
  *
- * @param vector pointer to the vector which should be shifted to the left.
+ * @param vector pointer to the vector, which should be shifted to the left
  */
 void mps::shiftLeft(vector<bool>* vec){
 
