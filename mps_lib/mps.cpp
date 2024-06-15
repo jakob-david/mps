@@ -1633,16 +1633,13 @@ void mps::setValue(const double value) {
     P.push_back(false);
 
     // main loop
-    //unsigned long sum = 0;
     for(unsigned long i = 0; i < two.mantissa_length+2; i++){
 
 
         if(!P.end()[-2] && P.back()){
             binarySummation(&P, one.mantissa, true);
-            //sum++;
         } else if(P.end()[-2] && !P.back()) {
             binarySummation(&P, S);
-            //sum++;
         }
 
         P.pop_back();
@@ -1677,7 +1674,6 @@ void mps::setValue(const double value) {
     }
     //-------------------------------
 
-    // cout << "Sum: " << sum << endl;
     return ret;
 }
 
