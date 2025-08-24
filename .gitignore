@@ -1,0 +1,10 @@
+build*/
+Testing/
+.vscode/
+unit_tests_python/.venv/
+unit_tests_python/__pycache__/
+.DS_Store
+
+mps_run
+mps_test
+mps_lib.so
