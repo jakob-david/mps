@@ -13,8 +13,8 @@ To build the project, run:
 ```
 
 This script will:
- - Compiles `main.cpp` into the executable `run_main`
- - Build the C++ unit test binary `run_tests`
+ - Compiles `main.cpp` into the executable `mps_run`
+ - Build the C++ unit test binary `mps_test`
  - Generates `mps_lib.so`, which can be imported as a Python module
 
 Once the build is complete, you can run the full test suite with:
