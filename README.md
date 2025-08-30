@@ -41,7 +41,7 @@ If you are using VS Code, you don’t need to run the run_build.sh script manual
 
 ## Results 
 
-In this section, you will find two short excerpts from the results of my master’s thesis. All results shown here were conducted on a server with $256$ CPUs distributed on $ 4$ `AMD EPYC 9534 64-core` processors, compiled with `-O3`.
+In this section, you will find two short excerpts from the results of my master’s thesis. All results shown here were conducted on a server with $256$ CPUs distributed on $4$ `AMD EPYC 9534 64-core` processors, compiled with `-O3`.
 
 ### Time Requirements for Different Mantissa Sizes
 
