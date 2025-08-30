@@ -29,4 +29,12 @@ This will execute all tests, which are divided into:
 
 If all tests complete successfully, it is safe to either:
  - Run the compiled binary: `run_main`
- - Import the Python module in your code: `from mps_lib import mps` 
+ - Import the Python module in your code: `from mps_lib import mps`
+
+### VS Code 
+
+If you are using VS Code, you don’t need to run the run_build.sh script manually. Instead, you can use the built-in CMake Tools extension:
+
+ - Open the Command Palette (`Ctrl + Shift + P`).
+ - Run `CMake: Configure`.
+ - Run `CMake: Build`.
