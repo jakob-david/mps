@@ -38,3 +38,15 @@ If you are using VS Code, you don’t need to run the run_build.sh script manual
  - Open the Command Palette (`Ctrl + Shift + P`).
  - Run `CMake: Configure`.
  - Run `CMake: Build`.
+
+## Results 
+
+In this section, you will find two short excerpts from the results of my master’s thesis.
+
+### Time Requirements for Different Mantissa Sizes
+
+<div style="display: flex; justify-content: space-between;" align="center"> 
+    <img src="./pictures/1_add_sub_evaluation.png" alt="Explicit Finite Difference Method" width="45%"/>
+    <img src="./pictures/mul_div_evaluation.png" alt="Implicit Finite Difference Method" width="45%"/><br>
+    <em>Figure 8: The absolute difference between the analytical solution of the the explicit finite difference method (left) and the implicit finite difference method (right).</em>
+</div>
