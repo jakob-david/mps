@@ -77,9 +77,9 @@ FetchContent_Declare(
 FetchContent_MakeAvailable(pybind11)
 
 # Bindings
-add_library(mps_lib MODULE ./python_bindings.cpp)  # renamed to mps_lib
+add_library(mps_lib MODULE ./python_bindings.cpp)
 target_link_libraries(mps_lib PRIVATE mps pybind11::module)
-set_target_properties(mps_lib PROPERTIES PREFIX "")  # remove 'lib' prefix for Python
+set_target_properties(mps_lib PROPERTIES PREFIX "")
 
 target_include_directories(mps_lib PRIVATE mps_lib/include)
 
