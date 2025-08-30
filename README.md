@@ -59,7 +59,7 @@ On modern CPUs, *multiplication* is essentially as fast as *addition* and *subtr
 
 ### Evaluation Iterative Refinement
 
-As a use-case example of the optimization, Figure 2 shows the cost surface of an iterative refinement algorithm under different precisions. Since the mps framework replicates the time requirements of the underlying algorithms, this measurement can effectively be performed with nothing more than a stopwatch.
+As a use-case example of the optimization, Figure 2 shows the cost surface of an iterative refinement algorithm under different precisions. Since the mps framework replicates the time requirements of the underlying algorithms, this measurement can effectively be performed with nothing more than a stopwatch. As we can imediately see whe have an optimum at `ul=12` and `ur=24`
 
 <p align="center">
     <img width="500" src="./pictures/3_IR_evaluation.png" alt="Cost Surface Evaluation of an Iterative Refinement Algorithm."><br>
