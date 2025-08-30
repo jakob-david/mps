@@ -45,12 +45,14 @@ In this section, you will find two short excerpts from the results of my master�
 
 ### Time Requirements for Different Mantissa Sizes
 
-As shown in Figure 1, *addition* and *subtraction* show linear behavior, which is expected since the underlying algorithm has a complexity of $\mathcal{O}(n)$. *Subtraction*, however, requires slightly more time than *addition* since it involves computing the two’s complement of the subtrahend before performing the addition. This extra step — bitwise inversion followed by adding one — adds a small overhead, which explains the slightly higher execution time for subtraction compared to addition. *Multiplication* and *division* on the other hand show a more quadratic behavior, and have a noticeably higher time requirements than addition and subtraction. This is expected, since their algorithmic complexity is $\mathcal{O}(n^2)$.
+Figure 1 shows the computation times of basic arithmetic operations for different mantissa sizes on a server, compiled with `-O3`.
+
+*Addition* and *subtraction* show linear behavior, which is expected since the underlying algorithm has a complexity of $\mathcal{O}(n)$. *Subtraction*, however, requires slightly more time than *addition* since it involves computing the two’s complement of the subtrahend before performing the addition. This extra step — bitwise inversion followed by adding one — adds a small overhead, which explains the slightly higher execution time for subtraction compared to addition. *Multiplication* and *division* on the other hand show a more quadratic behavior, and have a noticeably higher time requirements than addition and subtraction. This is expected, since their algorithmic complexity is $\mathcal{O}(n^2)$.
 
 On modern CPUs, *multiplication* is essentially as fast as *addition* and *subtraction*, and even division is only slightly slower. This is achieved through hardware-level optimizations such as pipelining, parallelism, and dedicated arithmetic units—optimizations that cannot be replicated efficiently in plain C++. These improvements, however, do not eliminate the underlying $\mathcal{O}(n^2)$ complexity; instead, they shift the cost from time to hardware resources (silicon area, power, and execution units). From a computational standpoint, it is therefore meaningful to measure the raw computational effort as provided by this framework, rather than relying solely on wall-clock timing.
 
 <div style="display: flex; justify-content: space-between;" align="center"> 
     <img src="./pictures/1_add_sub_evaluation.png" alt="Time Requirement Addition and Subtraction" width="45%"/>
     <img src="./pictures/2_mul_div_evaluation.png" alt="Time Requirement Multiplication and Division" width="45%"/><br>
-    <em>Figure 1: The time requirement for different mantissa sizes for addition and subtraction (left) and multiplication and division (right) compiled using `-O3`.</em>
+    <em>Figure 1: The time requirement for different mantissa sizes for addition and subtraction (left) and multiplication and division (right).</em>
 </div>
