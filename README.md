@@ -13,9 +13,9 @@ To build the project, run:
 ```
 
 This script will:
- - Compile main.cpp into an executable
- - Build the C++ unit test binary
- - Generate mps_lib.so, which can be imported as a Python module
+ - Compiles `main.cpp` into the executable `run_main`
+ - Build the C++ unit test binary `run_tests`
+ - Generates `mps_lib.so`, which can be imported as a Python module
 
 After the project is built the over $1000$ unit tests can be run by running the following script. This inclued $1078$ tests for the `c++` code and $17$ tests for the python module. : 
 
