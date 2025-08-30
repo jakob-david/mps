@@ -52,5 +52,5 @@ On modern CPUs, *multiplication* is essentially as fast as *addition* and *subtr
 <div style="display: flex; justify-content: space-between;" align="center"> 
     <img src="./pictures/1_add_sub_evaluation.png" alt="Time Requirement Addition and Subtraction" width="45%"/>
     <img src="./pictures/2_mul_div_evaluation.png" alt="Time Requirement Multiplication and Division" width="45%"/><br>
-    <em>Figure 1: The time requirement for different mantissa sizes for addition and subtraction (left) and multiplication and division (right).</em>
+    <em>Figure 1: The time requirement for different mantissa sizes for addition and subtraction (left) and multiplication and division (right) compiled using `-O3`.</em>
 </div>
