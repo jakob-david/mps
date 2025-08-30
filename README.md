@@ -17,8 +17,13 @@ This script will:
  - Build the C++ unit test binary `run_tests`
  - Generates `mps_lib.so`, which can be imported as a Python module
 
-After the project is built the over $1000$ unit tests can be run by running the following script. This inclued $1078$ tests for the `c++` code and $17$ tests for the python module. : 
+Once the build is complete, you can run the full test suite with:
 
 ```
 ./run_tests.sh
 ```
+
+This will execute all tests which are:
+
+ - 1,078 tests for the C++ code
+ - 17 tests for the Python module
