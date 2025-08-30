@@ -45,7 +45,7 @@ In this section, you will find two short excerpts from the results of my master�
 
 ### Time Requirements for Different Mantissa Sizes
 
-As shown in Figure 1, addition and subtraction exhibit a linear behavior, which is expected since the underlying algorithm has a complexity of $O(n)$. Subtraction requires slightly more time than addition because it involves computing the two’s complement of the subtrahend before performing the addition. This extra step—bitwise inversion followed by adding one—adds a small overhead, which explains the slightly higher execution time for subtraction compared to addition.
+As shown in Figure 1, addition and subtraction exhibit a linear behavior, which is expected since the underlying algorithm has a complexity of $\mathcal{O}(n)$. Subtraction requires slightly more time than addition because it involves computing the two’s complement of the subtrahend before performing the addition. This extra step—bitwise inversion followed by adding one—adds a small overhead, which explains the slightly higher execution time for subtraction compared to addition.
 
 <div style="display: flex; justify-content: space-between;" align="center"> 
     <img src="./pictures/1_add_sub_evaluation.png" alt="Time Requirement Addition and Subtraction" width="45%"/>
