@@ -6,8 +6,8 @@ The code shown here represents the main implementations used in my Master’s th
 
 ## Usage 
 
-To build the project run the following script: 
+To build the project run the following script using: 
 
 ```
-run_build.sh
+./run_build.sh
 ```
