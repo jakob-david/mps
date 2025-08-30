@@ -45,7 +45,8 @@ In this section, you will find two short excerpts from the results of my master�
 
 ### Time Requirements for Different Mantissa Sizes
 
-Figure 1 shows the computation times of basic arithmetic operations for different mantissa sizes on a server, compiled with `-O3`.
+Figure 1 shows the computation times of basic arithmetic operations for different mantissa sizes on a server with 256 CPUs distributed on four AMD EPYC 9534 64-core
+processors, compiled with `-O3`.
 
 *Addition* and *subtraction* show linear behavior, which is expected since the underlying algorithm has a complexity of $\mathcal{O}(n)$. *Subtraction*, however, requires slightly more time than *addition* since it involves computing the two’s complement of the subtrahend before performing the addition. This extra step — bitwise inversion followed by adding one — adds a small overhead, which explains the slightly higher execution time for subtraction compared to addition. *Multiplication* and *division* on the other hand show a more quadratic behavior, and have a noticeably higher time requirements than addition and subtraction. This is expected, since their algorithmic complexity is $\mathcal{O}(n^2)$.
 
