@@ -47,6 +47,8 @@ In this section, you will find two short excerpts from the results of my master�
 
 As shown in Figure 1, *addition* and *subtraction* show linear behavior, which is expected since the underlying algorithm has a complexity of $\mathcal{O}(n)$. *Subtraction*, however, requires slightly more time than *addition* since it involves computing the two’s complement of the subtrahend before performing the addition. This extra step — bitwise inversion followed by adding one — adds a small overhead, which explains the slightly higher execution time for subtraction compared to addition.
 
+*Multiplication* and *division* also show an almost linear behavior, but with noticeably higher time requirements than addition and subtraction. This is expected, since their algorithmic complexity is $\mathcal{O}(n^2)$. The reason the curves do not appear quadratic is due to aggressive compiler optimizations used by specifying `-O3`.
+
 <div style="display: flex; justify-content: space-between;" align="center"> 
     <img src="./pictures/1_add_sub_evaluation.png" alt="Time Requirement Addition and Subtraction" width="45%"/>
     <img src="./pictures/2_mul_div_evaluation.png" alt="Time Requirement Multiplication and Division" width="45%"/><br>
