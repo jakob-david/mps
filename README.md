@@ -67,3 +67,28 @@ As a use-case example of the optimization, Figure 2 shows the cost surface of an
     Figure 2: The cost surface evaluation of an Iterative Refinement algorithm.
     </em>
 </p>
+
+
+## Iterative Refinement using PLU Factorization
+
+**Input:**
+- A non-singular matrix \( A \in \mathbb{R}^{n \times n} \)  
+- A vector \( b \in \mathbb{R}^{n} \)  
+- Three precisions \( u_{r} \leq u \leq u_{l} \) (in terms of *unit roundoff*)  
+
+**Output:**  
+- Approximate solution \( x \in \mathbb{R}^{n} \)
+
+---
+
+**Algorithm:**
+
+1. Initialize \( x^{(0)} = \vec{0} \).  
+2. Compute the factorization \( PA = LU \) using precision \( u_{l} \).  
+3. Solve \( LUx_{0} = Pb \) by substitution using precision \( u_{l} \).  
+4. For \( i = 0, 1, \dots, i_{\text{max}} \) (or until converged):  
+   - Compute the residual \( r^{(i)} = b - Ax^{(i)} \) in precision \( u_{r} \).  
+   - Solve \( LU d^{(i)} = r^{(i)} \) by substitution using precision \( u_{l} \).  
+   - Update \( x^{(i+1)} = x^{(i)} + d^{(i)} \) using precision \( u \).  
+
+---
