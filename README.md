@@ -46,7 +46,7 @@ In this section, you will find two short excerpts from the results of my masterâ
 ### Time Requirements for Different Mantissa Sizes
 
 <div style="display: flex; justify-content: space-between;" align="center"> 
-    <img src="./pictures/1_add_sub_evaluation.png" alt="Explicit Finite Difference Method" width="45%"/>
-    <img src="./pictures/mul_div_evaluation.png" alt="Implicit Finite Difference Method" width="45%"/><br>
-    <em>Figure 8: The absolute difference between the analytical solution of the the explicit finite difference method (left) and the implicit finite difference method (right).</em>
+    <img src="./pictures/1_add_sub_evaluation.png" alt="Time Requirement Addition and Subtraction" width="45%"/>
+    <img src="./pictures/2_mul_div_evaluation.png" alt="Time Requirement Multiplication and Division" width="45%"/><br>
+    <em>Figure 1: The time requirement for different mantissa sizes for addition and subtraction (left) and multiplication and division (right).</em>
 </div>
