@@ -56,3 +56,7 @@ On modern CPUs, *multiplication* is essentially as fast as *addition* and *subtr
     <img src="./pictures/2_mul_div_evaluation.png" alt="Time Requirement Multiplication and Division" width="45%"/><br>
     <em>Figure 1: The time requirement for different mantissa sizes for addition and subtraction (left) and multiplication and division (right).</em>
 </div>
+
+### Evaluation Iterative Refinement
+
+As a use-case example of the optimization, Figure 2 shows the cost surface of an iterative refinement algorithm under different precisions. Since the mps framework replicates the time requirements of the underlying algorithms, this measurement can effectively be performed with nothing more than a stopwatch.
