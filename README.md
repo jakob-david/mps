@@ -17,19 +17,15 @@ This script will:
  - Build the C++ unit test binary `run_tests`
  - Generates `mps_lib.so`, which can be imported as a Python module
 
-Once the build is complete, you can run the full test suite with:
+Once the build is complete, you can run the tests with:
 
 ```
 ./run_tests.sh
 ```
 
-This will execute all tests, which are divided into:
- - $1,078$ tests for the C++ code
- - $17$ tests for the Python module
-
 If all tests complete successfully, it is safe to either:
  - Run the compiled binary: `run_main`
- - Import the Python module in your code: `from mps_lib import mps`
+ - Import the Python module in your code: `from eis_lib import eis`
 
 ### VS Code 
 
