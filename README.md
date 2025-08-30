@@ -49,7 +49,7 @@ Figure 1 shows the computation times of basic arithmetic operations for differen
 
 *Addition* and *subtraction* show linear behavior, which is expected since the underlying algorithm has a complexity of $\mathcal{O}(n)$. *Subtraction*, however, requires slightly more time than *addition* since it involves computing the two’s complement of the subtrahend before performing the addition. This extra step — bitwise inversion followed by adding one — adds a small overhead, which explains the slightly higher execution time for subtraction compared to addition. *Multiplication* and *division* on the other hand show a more quadratic behavior, and have a noticeably higher time requirements than addition and subtraction. This is expected, since their algorithmic complexity is $\mathcal{O}(n^2)$.
 
-On modern CPUs, *multiplication* is essentially as fast as *addition* and *subtraction*, and even division is only slightly slower. This is achieved through hardware-level optimizations (Stine, 2004) such as pipelining, parallelism, and dedicated arithmetic units—optimizations that cannot be replicated efficiently in plain C++. These improvements, however, do not eliminate the underlying $\mathcal{O}(n^2)$ complexity; instead, they shift the cost from time to hardware resources (silicon area, power, and execution units). From a computational standpoint, it is therefore meaningful to measure the raw computational effort as provided by this framework, rather than relying solely on wall-clock timing.
+On modern CPUs, *multiplication* is essentially as fast as *addition* and *subtraction*, and even division is only slightly slower. This is achieved through hardware-level optimizations (Stine, 2004) (Intel Corporation, 2024) such as pipelining, parallelism, and dedicated arithmetic units—optimizations that cannot be replicated efficiently in plain C++. These improvements, however, do not eliminate the underlying $\mathcal{O}(n^2)$ complexity; instead, they shift the cost from time to hardware resources (silicon area, power, and execution units). From a computational standpoint, it is therefore meaningful to measure the raw computational effort as provided by this framework, rather than relying solely on wall-clock timing.
 
 <div style="display: flex; justify-content: space-between;" align="center"> 
     <img src="./pictures/1_add_sub_evaluation.png" alt="Time Requirement Addition and Subtraction" width="45%"/>
@@ -75,6 +75,10 @@ Mixed-Precision Arithmetic’. In: The International Journal of High Performance
 Computing Applications 35.4 (2021), pp. 344–369.
 - N. J. Higham and T. Mary. ‘Mixed Precision Algorithms in Numerical Linear
 Algebra’. In: Acta Numerica 31 (2022), pp. 347–414.
+- Intel Corporation. Intel®64 and IA-32 Architectures Optimization Reference
+Manual. url: https://www.intel.com/content/www/us/en/content-details/
+671488 / intel - 64 - and - ia - 32 - architectures - optimization - reference -
+manual-volume-1.html (visited on 03/01/2024).
 - J. E. Stine. Digital Computer Arithmetic Datapath Design Using Verilog HDL.
 Boston, MA: Springer US, 2004.
 
