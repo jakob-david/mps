@@ -2,7 +2,7 @@
 
 MPS (Multi Precision Simulator) is a tool designed to simulate multi-precision floating-point numbers while capturing differences in computation time. The core idea is to reimplement all binary floating-point operations at the bit level, using boolean values in C++. 
 
-The code shown here represents the main implementations used in my Master’s thesis in Computational Science at the [University of Vienna](https://www.univie.ac.at/en/).
+The code shown here represents the main implementations used in my Master’s thesis in Computational Science at the [University of Vienna](https://www.univie.ac.at/en/). <a href="[https://github.com](https://www.univie.ac.at/en/)" target="_blank">University of Vienna</a>
 
 ## Usage 
 
