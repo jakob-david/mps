@@ -41,14 +41,11 @@ If you are using VS Code, you don’t need to run the run_build.sh script manual
 
 ## Results 
 
-In this section, you will find two short excerpts from the results of my master’s thesis.
+In this section, you will find two short excerpts from the results of my master’s thesis. All results shown here were conducted on a server with 256 CPUs distributed on four AMD EPYC 9534 64-core processors, compiled with -O3.
 
 ### Time Requirements for Different Mantissa Sizes
 
-Figure 1 shows the computation times of basic arithmetic operations for different mantissa sizes on a server with 256 CPUs distributed on four AMD EPYC 9534 64-core
-processors, compiled with `-O3`.
-
-*Addition* and *subtraction* show linear behavior, which is expected since the underlying algorithm has a complexity of $\mathcal{O}(n)$. *Subtraction*, however, requires slightly more time than *addition* since it involves computing the two’s complement of the subtrahend before performing the addition. This extra step — bitwise inversion followed by adding one — adds a small overhead, which explains the slightly higher execution time for subtraction compared to addition. *Multiplication* and *division* on the other hand show a more quadratic behavior, and have a noticeably higher time requirements than addition and subtraction. This is expected, since their algorithmic complexity is $\mathcal{O}(n^2)$.
+Figure 1 shows the computation times of basic arithmetic operations for different mantissa sizes. *Addition* and *subtraction* show linear behavior, which is expected since the underlying algorithm has a complexity of $\mathcal{O}(n)$. *Subtraction*, however, requires slightly more time than *addition* since it involves computing the two’s complement of the subtrahend before performing the addition. This extra step — bitwise inversion followed by adding one — adds a small overhead, which explains the slightly higher execution time for subtraction compared to addition. *Multiplication* and *division* on the other hand show a more quadratic behavior, and have a noticeably higher time requirements than addition and subtraction. This is expected, since their algorithmic complexity is $\mathcal{O}(n^2)$.
 
 On modern CPUs, *multiplication* is essentially as fast as *addition* and *subtraction*, and even division is only slightly slower. This is achieved through hardware-level optimizations (Stine, 2004) such as pipelining, parallelism, and dedicated arithmetic units—optimizations that cannot be replicated efficiently in plain C++. These improvements, however, do not eliminate the underlying $\mathcal{O}(n^2)$ complexity; instead, they shift the cost from time to hardware resources (silicon area, power, and execution units). From a computational standpoint, it is therefore meaningful to measure the raw computational effort as provided by this framework, rather than relying solely on wall-clock timing.
 
