@@ -59,7 +59,7 @@ On modern CPUs, *multiplication* is essentially as fast as *addition* and *subtr
 
 ### Evaluation Iterative Refinement
 
-As a use-case example of the optimization, Figure 2 shows the cost surface of an iterative refinement algorithm under different precisions. An implementation can be found in (Higham & Mary, 2022). Since the *mps* framework replicates the time requirements of the underlying algorithms, this measurement can effectively be performed with nothing more than a stopwatch. As we can immediately see, the optimum occurs arround $u_l = 12$ and $u_r = 24$. Note that this procedure can be applied just as easily to arbitrary algorithms, provided they are implemented using the *mps* data type.
+As a use-case example of the optimization, Figure 2 shows the cost surface of an iterative refinement algorithm under different precisions. An implementation can be found in (Abdelfattah et al., 2021) and (Higham & Mary, 2022). Since the *mps* framework replicates the time requirements of the underlying algorithms, this measurement can effectively be performed with nothing more than a stopwatch. As we can immediately see, the optimum occurs arround $u_l = 12$ and $u_r = 24$. Note that this procedure can be applied just as easily to arbitrary algorithms, provided they are implemented using the *mps* data type.
 
 <p align="center">
     <img width="500" src="./pictures/3_IR_evaluation.png" alt="Cost Surface Evaluation of an Iterative Refinement Algorithm."><br>
@@ -70,6 +70,9 @@ As a use-case example of the optimization, Figure 2 shows the cost surface of an
 
 ## Bibliographie 
 
+- A. Abdelfattah et al. ‘A Survey of Numerical Linear Algebra Methods Utilizing
+Mixed-Precision Arithmetic’. In: The International Journal of High Performance
+Computing Applications 35.4 (2021), pp. 344–369.
 - N. J. Higham and T. Mary. ‘Mixed Precision Algorithms in Numerical Linear
 Algebra’. In: Acta Numerica 31 (2022), pp. 347–414.
 - J. E. Stine. Digital Computer Arithmetic Datapath Design Using Verilog HDL.
