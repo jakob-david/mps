@@ -6,13 +6,18 @@ The code shown here represents the main implementations used in my Master’s th
 
 ## Usage 
 
-To build the project run the following script using: 
+To build the project, run:
 
 ```
 ./run_build.sh
 ```
 
-After the project is built the over $1000$ unit tests can be run by running the following script: 
+This script will:
+ - Compile main.cpp into an executable
+ - Build the C++ unit test binary
+ - Generate mps_lib.so, which can be imported as a Python module
+
+After the project is built the over $1000$ unit tests can be run by running the following script. This inclued $1078$ tests for the `c++` code and $17$ tests for the python module. : 
 
 ```
 ./run_tests.sh
