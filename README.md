@@ -8,6 +8,6 @@ The code shown here represents the main implementations used in my Master’s th
 
 To build the project run the following script: 
 
-'''
+```
 ./run_build.sh
-'''
+```
