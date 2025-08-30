@@ -26,3 +26,7 @@ Once the build is complete, you can run the full test suite with:
 This will execute all tests, which are divided into:
  - $1,078$ tests for the C++ code
  - $17$ tests for the Python module
+
+If all tests complete successfully, it is safe to either:
+ - Run the compiled binary: `run_main`
+ - Import the Python module in your code: `from mps_lib import mps` 
