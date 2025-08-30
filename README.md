@@ -68,3 +68,8 @@ As a use-case example of the optimization, Figure 2 shows the cost surface of an
     </em>
 </p>
 
+## Bibliographie 
+
+- J. E. Stine. Digital Computer Arithmetic Datapath Design Using Verilog HDL.
+Boston, MA: Springer US, 2004.
+
